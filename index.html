@@ -574,10 +574,39 @@
   }
   @media(max-width:980px){ #latestList{grid-template-columns:1fr 1fr !important} }
   @media(max-width:640px){ #latestList{grid-template-columns:1fr !important} }
+  /* ── polish · Lab Notebook No.01 — keeps tokens, adds finesse ── */
+  nav a.active{color:var(--ink);border-bottom-color:var(--ink);background:rgba(255,212,0,.18)}
+  header.scrolled{box-shadow:0 6px 24px rgba(11,18,32,.08)}
+  header.scrolled .head-top{opacity:.9}
+  @media(max-width:760px){
+    nav{
+      -webkit-mask-image:linear-gradient(to right, transparent, black 14px, black calc(100% - 14px), transparent);
+              mask-image:linear-gradient(to right, transparent, black 14px, black calc(100% - 14px), transparent);
+    }
+  }
+  #faq details{transition:border-color .15s var(--ease)}
+  #faq details[open]{border-color:var(--ink)!important}
+  #faq summary{position:relative;padding-right:22px;user-select:none}
+  #faq summary::-webkit-details-marker{display:none}
+  #faq summary::after{content:"›";position:absolute;right:2px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:14px;color:var(--muted);transition:transform .2s var(--ease2)}
+  #faq details[open]>summary::after{transform:translateY(-50%) rotate(90deg);color:var(--ink)}
+  .skeleton{height:96px;border:1px solid var(--line);background:linear-gradient(90deg,var(--paper-2) 25%,var(--sheet) 37%,var(--paper-2) 63%);background-size:400% 100%;animation:shimmer 1.25s infinite}
+  @keyframes shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
+  #cgrid .cell{transition:filter .12s var(--ease), transform .12s var(--ease)}
+  #cgrid .cell:hover{filter:brightness(1.08);transform:scale(1.04)}
+  #cgrid .cell:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+  .repo-card:focus-visible,.svc:focus-visible,.clink:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
   @media(prefers-reduced-motion:reduce){
     *,*::before,*::after{animation:none!important;transition:none!important}
     [data-reveal]{opacity:1!important;transform:none!important}
     #prog{display:none}
+    .skeleton{animation:none}
+  }
+  @media print{
+    header,.marginalia,#prog,.avail,.contrib .legend,#latest-logs a[href*="feed.xml"]{display:none!important}
+    body{background:#fff;background-image:none}
+    .page{box-shadow:none}
+    a{text-decoration:underline}
   }
 </style>
 </head>
@@ -830,8 +859,9 @@
         <h2 id="latestTitle">Latest <em>logs</em></h2>
         <span class="tag">Daily logs & articles · <a href="blog.html" style="text-decoration:underline;color:var(--ink)">View all →</a></span>
       </div>
-      <div id="latestList" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px" data-reveal>
-        <div style="grid-column:1/-1;background:var(--sheet);border:1px dashed var(--line-2);padding:18px;font-family:var(--mono);font-size:12px;color:var(--muted)">Loading latest logs… · <a href="blog.html" style="color:var(--blue);text-decoration:underline">open blog</a> · <a href="feed.xml" style="color:var(--blue);text-decoration:underline">RSS</a></div>
+      <div id="latestList" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px" data-reveal aria-live="polite" aria-busy="true">
+        <div class="skeleton" aria-hidden="true"></div><div class="skeleton" aria-hidden="true"></div><div class="skeleton" aria-hidden="true"></div>
+        <span class="sr-only" style="position:absolute;left:-9999px">Loading latest logs</span>
       </div>
       <noscript>
         <div style="margin-top:12px;background:var(--sheet);border:1px solid var(--ink);padding:14px;display:grid;gap:8px">
@@ -1182,26 +1212,32 @@
     document.getElementById('contribYear').textContent=(data.stats[0]?data.stats[0].value:0)+' contributions / year';
     document.getElementById('yr').textContent=new Date().getFullYear();
 
-    // latest logs strip — free static blog (posts.json → 3 cards)
+    // latest logs strip — free static blog (posts.json → 3 cards) · polish: skeleton + error + a11y
     try{
       fetch('posts.json',{cache:'no-store'}).then(function(r){ if(!r.ok) throw new Error(); return r.json();}).then(function(posts){
         var box=document.getElementById('latestList'); if(!box) return;
+        box.setAttribute('aria-busy','false');
         posts = (posts||[]).slice(0,3);
-        if(!posts.length){ box.innerHTML='<div style="grid-column:1/-1;background:var(--sheet);border:1px dashed var(--line-2);padding:18px;font-family:var(--mono);font-size:12px;color:var(--muted)">No posts yet — create <code>posts/*.md</code> and run <code>node scripts/generate-blog.js</code>.</div>'; return; }
+        if(!posts.length){ box.innerHTML='<div style="grid-column:1/-1;background:var(--sheet);border:1px dashed var(--line-2);padding:18px;font-family:var(--mono);font-size:12px;color:var(--muted)">No posts yet — create <code>posts/*.md</code> and run <code>node scripts/generate-blog.js</code> · <a href="blog.html" style="color:var(--blue);text-decoration:underline">open blog</a></div>'; return; }
         box.innerHTML = posts.map(function(p){
           var isLog=(p.tags||[]).join(' ').toLowerCase().indexOf('daily-log')!==-1;
           var badge=isLog? '<span style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:var(--signal);border:1px solid var(--ink);padding:3px 7px">◎ Daily log</span>' : '<span style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:rgba(0,80,255,.08);border:1px solid var(--blue);color:var(--blue);padding:3px 7px">✎ Article</span>';
           var href=p.url||('blog/p/'+p.slug+'/');
           var dstr=(function(d){ try{ return new Date(d+'T00:00:00+05:30').toLocaleDateString('en-GB',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric'}).toUpperCase(); }catch(e){ return d; } })(p.date);
-          return '<a href="'+href+'" style="background:var(--sheet);border:1px solid var(--ink);padding:16px 14px;display:flex;flex-direction:column;gap:8px;position:relative"><span style="position:absolute;top:-9px;left:14px;width:64px;height:12px;background:rgba(255,255,255,.78);border:1px solid rgba(11,18,32,.06);transform:rotate(-1deg)"></span><span style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">'+badge+'<span>'+dstr+'</span><span>·</span><span>'+(p.readingMinutes||3)+' min</span></span><span style="font-family:var(--display);font-weight:800;letter-spacing:-.02em;text-transform:uppercase;line-height:1;font-size:1.15rem">'+p.title+'</span><span style="color:#475569;font-size:13px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">'+(p.description||'')+'</span><span style="margin-top:auto;font-family:var(--mono);font-size:11px;color:var(--ink);font-weight:600">Open →</span></a>';
+          return '<a href="'+href+'" aria-label="'+p.title.replace(/"/g,'&quot;')+' — '+dstr+'" style="background:var(--sheet);border:1px solid var(--ink);padding:16px 14px;display:flex;flex-direction:column;gap:8px;position:relative;transition:transform .15s var(--ease), box-shadow .15s var(--ease)"><span style="position:absolute;top:-9px;left:14px;width:64px;height:12px;background:rgba(255,255,255,.78);border:1px solid rgba(11,18,32,.06);transform:rotate(-1deg)"></span><span style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">'+badge+'<span>'+dstr+'</span><span>·</span><span>'+(p.readingMinutes||3)+' min</span></span><span style="font-family:var(--display);font-weight:800;letter-spacing:-.02em;text-transform:uppercase;line-height:1;font-size:1.15rem">'+p.title+'</span><span style="color:#475569;font-size:13px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">'+(p.description||'')+'</span><span style="margin-top:auto;font-family:var(--mono);font-size:11px;color:var(--ink);font-weight:600">Open →</span></a>';
         }).join('');
+        box.querySelectorAll('a').forEach(function(a){ a.addEventListener('mouseenter',function(){ if(!reduced) a.style.transform='translateY(-2px)'; a.style.boxShadow='0 8px 18px rgba(11,18,32,.08)';}); a.addEventListener('mouseleave',function(){ a.style.transform=''; a.style.boxShadow='';});});
         if('IntersectionObserver' in window && !reduced){
           var obs=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); }}) },{threshold:.12});
           box.querySelectorAll('a').forEach(function(el,i){ el.setAttribute('data-reveal',''); el.style.transitionDelay=(Math.min(i,3)*60)+'ms'; obs.observe(el); });
         } else {
           box.querySelectorAll('a').forEach(function(el){ el.classList.add('in'); });
         }
-      }).catch(function(){});
+      }).catch(function(){
+        var box=document.getElementById('latestList'); if(!box) return;
+        box.setAttribute('aria-busy','false');
+        box.innerHTML='<div style="grid-column:1/-1;background:var(--sheet);border:1px dashed var(--line-2);padding:18px;font-family:var(--mono);font-size:12px;color:var(--muted)">Couldn’t load logs — <a href="blog.html" style="color:var(--blue);text-decoration:underline">open blog</a> · <a href="feed.xml" style="color:var(--blue);text-decoration:underline">RSS</a> · <button onclick="location.reload()" style="margin-left:8px;font-family:var(--mono);font-size:11px;border:1px solid var(--ink);background:var(--paper);padding:4px 8px;cursor:pointer">Retry</button></div>';
+      });
     }catch(e){}
 
     armObservers();
@@ -1305,7 +1341,8 @@
           lv=n===0?0:n<3?1:n<6?2:n<10?3:4;
         }
         var div=document.createElement('div'); div.className='cell'; div.style.background=levels[lv];
-        div.title=(c.date||'')+' — '+(c.count||0)+' contribution'+((c.count||0)!==1?'s':'');
+        var label2=(c.date||'').replace(/T.*$/,'')+' — '+(c.count||0)+' contribution'+((c.count||0)!==1?'s':'');
+        div.title=label2; div.setAttribute('aria-label', label2); div.setAttribute('tabindex','0'); div.setAttribute('role','img');
         frag.appendChild(div);
       });
       grid.appendChild(frag);
@@ -1361,6 +1398,7 @@
       queued=false;
       var h=document.documentElement.scrollHeight-window.innerHeight;
       prog.style.width=(h>0?(window.scrollY/h)*100:0)+'%';
+      if(header) header.classList.toggle('scrolled', window.scrollY > 8);
     });
   }
   window.addEventListener('scroll',onScroll,{passive:true}); onScroll();

@@ -122,6 +122,31 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
 html.js [data-reveal]{opacity:0;transform:translateY(14px);transition:opacity .55s var(--ease2),transform .55s var(--ease2)}
 html.js [data-reveal].in{opacity:1;transform:none}
 html:not(.js) [data-reveal]{opacity:1;transform:none}
+/* ── polish · No.01 keeps tokens ── */
+header.scrolled{box-shadow:0 6px 24px rgba(11,18,32,.08)}
+header.scrolled .head-top{opacity:.9}
+.search:focus-within{border-color:var(--ink);box-shadow:0 0 0 3px rgba(0,80,255,.10)}
+.search input::placeholder{color:#94a3b8}
+.clear-btn{font-family:var(--mono);font-size:11px;border:1px solid var(--line);background:var(--paper-2);padding:6px 8px;cursor:pointer;display:none}
+.clear-btn.show{display:inline-flex;align-items:center}
+.clear-btn:hover{border-color:var(--ink)}
+@media(max-width:760px){
+  .filters{
+    -webkit-mask-image:linear-gradient(to right, transparent, black 14px, black calc(100% - 14px), transparent);
+            mask-image:linear-gradient(to right, transparent, black 14px, black calc(100% - 14px), transparent);
+  }
+}
+.skeleton{height:168px;border:1px solid var(--line);background:linear-gradient(90deg,var(--paper-2) 25%,var(--sheet) 37%,var(--paper-2) 63%);background-size:400% 100%;animation:shimmer 1.25s infinite}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
+mark.hl{background:var(--signal);padding:0 2px;border-radius:2px;color:var(--ink)}
+.card:focus-within{outline:2px solid var(--blue);outline-offset:2px}
+.page-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important} .skeleton{animation:none}}
+@media print{
+  header,.marginalia,.toolbar,.tag-row,.pagination,.rss-box{ display:none!important}
+  body{background:#fff;background-image:none}
+  .card{break-inside:avoid;box-shadow:none}
+}
 @media(max-width:980px){ .grid{grid-template-columns:1fr} }
 @media(max-width:760px){
   nav{display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:2px}
@@ -165,7 +190,7 @@ html:not(.js) [data-reveal]{opacity:1;transform:none}
   </div>
 
   <div class="toolbar" data-reveal>
-    <label class="search" aria-label="Search posts"><span>⌕</span><input id="q" type="search" placeholder="Search title, description, tags…" autocomplete="off" spellcheck="false" /><span id="qCount" style="min-width:36px;text-align:right">—</span></label>
+    <label class="search" aria-label="Search posts"><span>⌕</span><input id="q" type="search" placeholder="Search title, description, tags…" autocomplete="off" spellcheck="false" /><button id="qClear" class="clear-btn" type="button" aria-label="Clear search">✕</button><span id="qCount" style="min-width:36px;text-align:right">—</span></label>
     <div class="filters" role="group" aria-label="Filter by type">
       <button class="pill hl" data-filter="all" aria-pressed="true">All</button>
       <button class="pill" data-filter="daily-log" aria-pressed="false">Daily logs</button>
@@ -174,7 +199,7 @@ html:not(.js) [data-reveal]{opacity:1;transform:none}
   </div>
   <div class="tag-row" id="tagRow" aria-label="Tags" data-reveal></div>
 
-  <div id="list" class="grid" aria-live="polite"></div>
+  <div id="list" class="grid" aria-live="polite" aria-busy="true"><div class="skeleton" aria-hidden="true"></div><div class="skeleton" aria-hidden="true"></div><div class="skeleton" aria-hidden="true"></div><div class="skeleton" aria-hidden="true"></div></div>
 
   <div class="pagination" id="pagination" data-reveal>
     <span style="font-family:var(--mono);font-size:11px;color:var(--muted)" id="pageInfo"></span>
@@ -225,16 +250,25 @@ html:not(.js) [data-reveal]{opacity:1;transform:none}
 
   // progress
   var prog=document.getElementById('prog'), qd=false;
-  function onScroll(){ if(qd) return; qd=true; requestAnimationFrame(function(){ qd=false; var h=document.documentElement.scrollHeight-window.innerHeight; prog.style.width=(h>0?(window.scrollY/h)*100:0)+'%'; }); }
+  var hdr=document.querySelector('header');
+  function onScroll(){ if(qd) return; qd=true; requestAnimationFrame(function(){ qd=false; var h=document.documentElement.scrollHeight-window.innerHeight; prog.style.width=(h>0?(window.scrollY/h)*100:0)+'%'; if(hdr) hdr.classList.toggle('scrolled', window.scrollY>8); }); }
   window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
 
   var POSTS=[], VIEW=[], PER=12, PAGE=1, Q="", FILTER="all", TAG="";
 
-  var qEl=document.getElementById('q'), tagRow=document.getElementById('tagRow'), listEl=document.getElementById('list');
+  var qEl=document.getElementById('q'), qClear=document.getElementById('qClear'), tagRow=document.getElementById('tagRow'), listEl=document.getElementById('list');
   var qCount=document.getElementById('qCount'), metaRow=document.getElementById('metaRow'), pageInfo=document.getElementById('pageInfo'), pageNums=document.getElementById('pageNums');
   var prevBtn=document.getElementById('prevBtn'), nextBtn=document.getElementById('nextBtn');
+  var searchTimer=null;
 
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function hl(s, q){
+    if(!q) return esc(s);
+    try{
+      var re=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig');
+      return esc(s).replace(re,'<mark class="hl">$1</mark>');
+    }catch(e){ return esc(s); }
+  }
   function fmt(d){
     try{ return new Date(d+'T00:00:00+05:30').toLocaleDateString('en-GB',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric'}).toUpperCase(); }catch(e){ return d; }
   }
@@ -297,18 +331,21 @@ html:not(.js) [data-reveal]{opacity:1;transform:none}
     if(PAGE<1) PAGE=1;
     var start=(PAGE-1)*PER, slice=VIEW.slice(start, start+PER);
     qCount.textContent = VIEW.length + '/' + POSTS.length;
+    if(qClear) qClear.classList.toggle('show', !!(Q && Q.length));
+    listEl.setAttribute('aria-busy','false');
     metaRow.innerHTML = '<span><b>'+POSTS.length+'</b> posts</span><span>·</span><span><b>'+VIEW.length+'</b> shown</span><span>·</span><span>page <b>'+PAGE+' / '+pages+'</b></span>'+(TAG?' <span>·</span> <span>tag <b>'+esc(TAG)+'</b> <a href="#" id="clearTag" style="color:var(--blue);text-decoration:underline">clear</a></span>':'')+(Q?' <span>·</span> <span>search <b>"'+esc(Q)+'"</b></span>':'');
     var ct=document.getElementById('clearTag'); if(ct) ct.addEventListener('click', function(e){ e.preventDefault(); TAG=''; location.hash=FILTER!=='all'?'#filter='+FILTER:''; PAGE=1; render(); buildTags(); });
     if(slice.length===0){
       listEl.innerHTML='<div class="empty">No posts match — try a different search or <a href="#" id="clearAll" style="color:var(--blue);text-decoration:underline">clear filters</a>.</div>';
-      var ca=document.getElementById('clearAll'); if(ca) ca.addEventListener('click', function(e){ e.preventDefault(); Q=''; TAG=''; FILTER='all'; qEl.value=''; location.hash=''; document.querySelectorAll('.pill').forEach(function(b){ b.setAttribute('aria-pressed', String(b.getAttribute('data-filter')==='all')); }); PAGE=1; render(); buildTags(); });
+      var ca=document.getElementById('clearAll'); if(ca) ca.addEventListener('click', function(e){ e.preventDefault(); Q=''; TAG=''; FILTER='all'; qEl.value=''; if(qClear) qClear.classList.remove('show'); location.hash=''; document.querySelectorAll('.pill').forEach(function(b){ b.setAttribute('aria-pressed', String(b.getAttribute('data-filter')==='all')); }); PAGE=1; render(); buildTags(); });
     } else {
+      var qLower=(Q||'').toLowerCase().trim();
       listEl.innerHTML = slice.map(function(p){
         var t=typeOf(p);
         var badge = t==='daily-log' ? '<span class="badge log">◎ Daily log</span>' : '<span class="badge article">✎ Article</span>';
         var href = p.url || ('/blog/p/'+p.slug+'/');
         var tags = (p.tags||[]).slice(0,4).map(function(x){ return '<span>'+esc(x)+'</span>'; }).join('');
-        return '<article class="card" data-reveal><div class="card-top">'+badge+'<span>'+fmt(p.date)+'</span><span>·</span><span>'+(p.readingMinutes||3)+' min</span></div><h2><a href="'+esc(href)+'">'+esc(p.title)+'</a></h2><p>'+esc(p.description||'')+'</p><div class="chips">'+tags+'</div><div class="card-meta"><span>'+esc(p.date)+'</span><a href="'+esc(href)+'">Open →</a></div></article>';
+        return '<article class="card" data-reveal><div class="card-top">'+badge+'<span>'+fmt(p.date)+'</span><span>·</span><span>'+(p.readingMinutes||3)+' min</span></div><h2><a href="'+esc(href)+'">'+hl(p.title, qLower)+'</a></h2><p>'+hl(p.description||'', qLower)+'</p><div class="chips">'+tags+'</div><div class="card-meta"><span>'+esc(p.date)+'</span><a href="'+esc(href)+'">Open →</a></div></article>';
       }).join('');
       if('IntersectionObserver' in window && !reduced){
         var io2=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io2.unobserve(e.target); } }) },{threshold:.12});
@@ -331,8 +368,10 @@ html:not(.js) [data-reveal]{opacity:1;transform:none}
   }
 
   // events
-  qEl.addEventListener('input', function(){ Q=qEl.value.trim(); PAGE=1; render(); });
-  qEl.addEventListener('keydown', function(e){ if(e.key==='Escape'){ Q=''; qEl.value=''; PAGE=1; render(); }});
+  function scheduleRender(){ clearTimeout(searchTimer); searchTimer=setTimeout(function(){ PAGE=1; render(); }, 140); }
+  qEl.addEventListener('input', function(){ Q=qEl.value.trim(); if(qClear) qClear.classList.toggle('show', !!Q); scheduleRender(); });
+  qEl.addEventListener('keydown', function(e){ if(e.key==='Escape'){ Q=''; qEl.value=''; if(qClear) qClear.classList.remove('show'); PAGE=1; render(); }});
+  if(qClear) qClear.addEventListener('click', function(){ Q=''; qEl.value=''; qClear.classList.remove('show'); qEl.focus(); PAGE=1; render(); });
   document.querySelectorAll('.pill').forEach(function(b){
     b.addEventListener('click', function(){
       FILTER=b.getAttribute('data-filter');

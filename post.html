@@ -20,8 +20,10 @@
 body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px}
 a{color:inherit}
 a:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+#prog{position:fixed;top:0;left:0;height:3px;width:0;background:var(--signal);z-index:90}
 .wrap{max-width:var(--max);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
 header{position:sticky;top:0;z-index:40;background:rgba(255,254,251,.92);backdrop-filter:saturate(150%) blur(10px);border-bottom:1px solid var(--line)}
+header.scrolled{box-shadow:0 6px 24px rgba(11,18,32,.08)}
 .head-top{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px dashed var(--line);font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .head-main{display:flex;align-items:center;justify-content:space-between;gap:18px;height:56px}
 .logo{font-family:var(--mono);font-size:13px;font-weight:500;display:flex;gap:10px;align-items:center;text-decoration:none}
@@ -29,6 +31,11 @@ header{position:sticky;top:0;z-index:40;background:rgba(255,254,251,.92);backdro
 nav{display:flex;gap:18px;overflow-x:auto;scrollbar-width:none}
 nav a{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:6px 0;border-bottom:2px solid transparent;white-space:nowrap;text-decoration:none}
 nav a:hover{color:var(--ink);border-bottom-color:var(--signal)}
+@media(max-width:760px){
+  nav{display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:2px;-webkit-mask-image:linear-gradient(to right, transparent, black 14px, black calc(100% - 14px), transparent);mask-image:linear-gradient(to right, transparent, black 14px, black calc(100% - 14px), transparent)}
+  nav::-webkit-scrollbar{display:none}
+  nav a{padding:10px 6px;min-height:44px;display:grid;place-items:center}
+}
 .breadcrumb{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:14px 0;display:flex;gap:8px;flex-wrap:wrap}
 .breadcrumb a{color:var(--muted);text-decoration:none}
 .breadcrumb a:hover{color:var(--ink)}
@@ -49,11 +56,16 @@ h1{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-height:
 .prose pre{background:#0B1220;color:#E8EEFB;padding:14px;overflow:auto;border:1px solid var(--ink);font-family:var(--mono);font-size:12px;line-height:1.6;margin:14px 0}
 .prose code{font-family:var(--mono);font-size:.9em;background:var(--paper-2);border:1px solid var(--line);padding:1px 4px}
 .prose pre code{background:none;border:none;padding:0;color:inherit}
+.skeleton{height:22px;border:1px solid var(--line);background:linear-gradient(90deg,var(--paper-2) 25%,var(--sheet) 37%,var(--paper-2) 63%);background-size:400% 100%;animation:shimmer 1.2s infinite;margin:8px 0}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
+@media(prefers-reduced-motion:reduce){.skeleton{animation:none}}
+@media print{ header,.breadcrumb,#post-comments,footer{display:none!important} body{background:#fff;background-image:none} .paper{box-shadow:none}}
 footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)}
 .foot-in{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:18px 0;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 </style>
 </head>
 <body>
+<div id="prog" aria-hidden="true" style="position:fixed;top:0;left:0;height:3px;width:0;background:var(--signal);z-index:90"></div>
 <header id="top">
   <div class="wrap">
     <div class="head-top"><span>LAB NOTEBOOK <b>No.01</b> · POST · INDIA — UTC+5:30</span><span id="hdrDate" style="color:var(--muted)">—</span></div>
@@ -100,6 +112,12 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
 <script>
 (function(){
   "use strict";
+  // header + progress — polish: scrolled shadow + prog
+  (function(){
+    var hdr=document.querySelector('header'), prog=document.getElementById('prog'), qd=false;
+    function onScroll(){ if(qd) return; qd=true; requestAnimationFrame(function(){ qd=false; var h=document.documentElement.scrollHeight-window.innerHeight; if(prog) prog.style.width=(h>0?(window.scrollY/h)*100:0)+'%'; if(hdr) hdr.classList.toggle('scrolled', window.scrollY>8); }); }
+    window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
+  })();
   document.getElementById('yr').textContent = new Date().getFullYear();
   try{
     document.getElementById('hdrDate').textContent = new Date().toLocaleDateString('en-GB',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric'}).toUpperCase();
