@@ -20,12 +20,14 @@ description: "Built multi-head attention forward/backward in NumPy — 1 file, 0
 tags: ["daily-log", "Transformers", "NumPy"]
 slug: day-041-transformer-block   # optional — defaults to filename without date
 draft: false
+cover: /og/day-041-transformer-block.svg   # optional — og:image. If blank, generator makes og/<slug>.svg for free
 ---
 ```
 
 - `date` drives sort order (newest first) and URL date.
 - `tags` — use `daily-log` for daily logs, plus topic tags.
-- `draft: true` → hidden until you flip it.
+- `draft: true` → hidden until you flip it. Free scheduler: set a future `date` + `draft: true`, push, and `.github/workflows/schedule-posts.yml` flips it at 05:47 IST daily (no $) — or flip by hand.
+- `cover` — optional per-post OG image URL (absolute or `/path`). If omitted, `og/<slug>.svg` is auto-generated (1200×630 Lab Notebook chrome, no deps) and used as `og:image` + JSON-LD `image`. Put real covers in `/public` or `/posts/assets` and point here.
 - Body below is plain Markdown (headings, lists, code fences, links, images).
 
 ## 3) Preview locally
@@ -80,5 +82,15 @@ Blog posts have a “Discuss” section powered by GitHub Discussions. Until you
 6. Run `node scripts/generate-blog.js` locally to regenerate `blog/p/*/index.html` with Giscus, preview `blog/p/<slug>/`, commit + push when ready.
 
 Until you paste IDs, posts use Utterances automatically (comments stored as Issues, still free, no extra config). After you paste, it switches to Giscus (Discussions). Your 4 static pages were manually patched with the IDs so they already match the generator — future posts auto-pick up the same IDs on next `node scripts/generate-blog.js`.
+
+### Newsletter + analytics — $0 (optional, 2 min)
+
+- **Newsletter (free):** index.html + blog.html already wired to `hariomlohar` at `buttondown.com/hariomlohar` (`https://buttondown.email/api/emails/embed-subscribe/hariomlohar`). Test it with your own email after next push. RSS `/feed.xml` stays as backup. To swap to Substack use `https://YOURNAME.substack.com` instead.
+- **Analytics (free, no cookies):** Search `REPLACE_WITH_YOUR_CLOUDFLARE_TOKEN` in `index.html`, `blog.html`, `post.html`, and `scripts/generate-blog.js`. Get a free token at `dash.cloudflare.com` → Web Analytics → Add site `hariomlohardev.github.io` → paste into `data-cf-beacon='{"token":"..."}'` and uncomment the `<script>` line. Or use GoatCounter (`goatcounter.com`, free) — comment right there shows the fallback snippet.
+- **Contact form (free):** `#contact` FormSubmit → `YOUR_EMAIL_HERE` to your real email; `_honey` + `_captcha=false` + `_next=thanks.html` already wired. Or swap to Formspree `https://formspree.io/f/XXXX`.
+
+### OG images — per-post, $0 (auto)
+
+Generator emits `og/<slug>.svg` (1200×630) per post from title/desc/date/tag with Lab Notebook chrome (no deps). If you set `cover:` in frontmatter, that wins as `og:image`. SVG is committed to the repo so Pages serves it with no build. Verify `<meta property="og:image">` in `blog/p/<slug>/` after `node scripts/generate-blog.js`.
 
 — Lab Notebook No.01

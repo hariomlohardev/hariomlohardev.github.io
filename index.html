@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#FFD400" />
+<meta name="color-scheme" content="light" />
 <title>Hariom Lohar — Python · Django · Flutter × AGI Research | GitHub hariomlohardev</title>
 <meta name="description" content="Hariom Lohar (hariomlohardev on GitHub) — Harvard CS50P certified 2026. Python, Django, FastAPI & Flutter developer, AGI researcher rebuilding intelligence from first principles since 1 July 2026. India. Verified certificate, open notebook." />
 <meta name="author" content="Hariom Lohar" />
@@ -878,6 +879,26 @@
     </div>
   </section>
 
+  <!-- NEWSLETTER — $0 Buttondown free + RSS -->
+  <section id="newsletter" aria-labelledby="nlTitle">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <span class="kicker"><i></i> 05c — Newsletter</span>
+        <h2 id="nlTitle">Stay <em>posted</em></h2>
+        <span class="tag">free · RSS → email</span>
+      </div>
+      <div style="background:var(--sheet);border:1px solid var(--ink);padding:18px;position:relative" data-reveal>
+        <span style="position:absolute;top:-9px;left:14px;width:64px;height:12px;background:rgba(255,255,255,.78);border:1px solid rgba(11,18,32,.06);transform:rotate(-1deg)"></span>
+        <p style="color:#475569">Daily logs by email — free via <a href="https://buttondown.com" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:underline">Buttondown</a> (or Substack) + RSS. No spam, unsubscribe anytime.</p>
+        <form action="https://buttondown.email/api/emails/embed-subscribe/hariomlohar" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.email/hariomlohar','popupwindow')" style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+          <label style="flex:1;min-width:220px;display:grid;gap:6px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">Email <input type="email" name="email" required placeholder="your@email.com" style="font-family:var(--sans);font-size:14px;padding:10px 12px;border:1px solid var(--line);background:var(--paper);color:var(--ink)" /></label>
+          <button type="submit" style="align-self:end;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;background:var(--ink);color:var(--paper);padding:11px 14px;border:1px solid var(--ink);cursor:pointer">Subscribe — free →</button>
+        </form>
+        <p style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5">Live on <a href="https://buttondown.com/hariomlohar" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:underline">buttondown.com/hariomlohar</a> · or RSS: <a href="/feed.xml" style="color:var(--blue);text-decoration:underline">/feed.xml</a> in any reader. Zero backend, zero $.</p>
+      </div>
+    </div>
+  </section>
+
   <!-- CONTACT -->
   <section id="contact">
     <div class="wrap">
@@ -894,6 +915,28 @@
         </div>
       </div>
       <div class="clinks" id="clinks" data-reveal></div>
+      <!-- Contact form — $0 FormSubmit free, no backend, honeypot -->
+      <form id="contactForm" action="https://formsubmit.co/YOUR_EMAIL_HERE" method="POST" data-reveal style="margin-top:18px;background:var(--sheet);border:1px solid var(--ink);padding:18px;position:relative;box-shadow:0 1px 0 rgba(11,18,32,.06)">
+        <span style="position:absolute;top:-9px;left:14px;width:64px;height:12px;background:rgba(255,255,255,.78);border:1px solid rgba(11,18,32,.06);transform:rotate(-1deg)"></span>
+        <div style="font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><span>Send a note — free, no tracking</span><span style="text-transform:none;letter-spacing:0;color:var(--muted)">replies via email · usually &lt;24h</span></div>
+        <div style="margin-top:12px;display:grid;gap:12px">
+          <!-- honeypot — leave empty -->
+          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_subject" value="New note — hariomlohardev.github.io" />
+          <input type="hidden" name="_next" value="https://hariomlohardev.github.io/thanks.html" />
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+            <label style="display:grid;gap:6px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">Name <input name="name" required placeholder="Ada Lovelace" style="font-family:var(--sans);font-size:14px;padding:10px 12px;border:1px solid var(--line);background:var(--paper);color:var(--ink)" /></label>
+            <label style="display:grid;gap:6px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">Email <input name="email" type="email" required placeholder="ada@example.com" style="font-family:var(--sans);font-size:14px;padding:10px 12px;border:1px solid var(--line);background:var(--paper);color:var(--ink)" /></label>
+          </div>
+          <label style="display:grid;gap:6px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">Message <textarea name="message" required rows="4" placeholder="Hi Hariom — I’d like to talk about …" style="font-family:var(--sans);font-size:14px;padding:10px 12px;border:1px solid var(--line);background:var(--paper);color:var(--ink);resize:vertical"></textarea></label>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+            <button type="submit" style="font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;background:var(--ink);color:var(--paper);padding:11px 14px;border:1px solid var(--ink);cursor:pointer">Send →</button>
+            <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">or email <a href="mailto:hello@hariomlohardev.github.io" style="color:var(--blue);text-decoration:underline">hello@hariomlohardev.github.io</a> · 1st submit needs email confirm (FormSubmit free)</span>
+          </div>
+          <p style="font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.5">Replace <code>YOUR_EMAIL_HERE</code> in this form’s <code>action</code> with your real email (e.g. your Gmail). First send triggers a confirm email — click it once, then it’s open. No key, no $ — <a href="https://formsubmit.co/" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:underline">formsubmit.co</a>. Or swap to Formspree free: <code>action="https://formspree.io/f/XXXX"</code>.</p>
+        </div>
+      </form>
     </div>
   </section>
 
@@ -1415,7 +1458,7 @@
   if('IntersectionObserver' in window){
     var spy=new IntersectionObserver(function(entries){
       entries.forEach(function(e){
-        if(e.isIntersecting) navLinks.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href')==='#'+e.target.id); });
+        if(e.isIntersecting) navLinks.forEach(function(a){ var is=a.getAttribute('href')==='#'+e.target.id; a.classList.toggle('active', is); if(is) a.setAttribute('aria-current','location'); else a.removeAttribute('aria-current'); });
       });
     },{rootMargin:'-45% 0px -50% 0px'});
     ['about','work','services','stack','credentials','mission','contact','faq'].forEach(function(id){ var s=document.getElementById(id); if(s) spy.observe(s); });
@@ -1436,5 +1479,9 @@
   })();
 })();
 </script>
+<!-- Analytics — $0 free. Pick ONE and replace the placeholder token before you commit. No cookie, No.01 intact. -->
+<!-- Cloudflare Web Analytics (recommended, free): dash.cloudflare.com → Web Analytics → Add site → copy token -->
+<!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "REPLACE_WITH_YOUR_CLOUDFLARE_TOKEN"}'></script> -->
+<!-- Fallback (if you prefer): GoatCounter free — https://www.goatcounter.com → <script data-goatcounter="https://YOURCODE.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script> -->
 </body>
 </html>

@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#FFD400" />
+<meta name="color-scheme" content="light" />
 <title>Hariom Lohar — Blog & Daily Logs | Lab Notebook No.01 | hariomlohardev</title>
 <meta name="description" content="Blog & daily logs by Hariom Lohar (hariomlohardev) — Harvard CS50P 2026. AGI from first principles, CNNs, Transformers, PyTorch and shipped builds — one log at a time, since 1 July 2026." />
 <meta name="author" content="Hariom Lohar" />
@@ -159,6 +160,8 @@ mark.hl{background:var(--signal);padding:0 2px;border-radius:2px;color:var(--ink
 </style>
 </head>
 <body>
+<a href="#main" class="skip" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden">Skip to content</a>
+<style>.skip:focus{left:16px;top:10px;width:auto;height:auto;padding:8px 12px;background:var(--ink);color:var(--paper);z-index:100;border:1px solid var(--signal);font-family:var(--mono);font-size:12px}</style>
 <div id="prog" aria-hidden="true"></div>
 <header id="top">
   <div class="wrap">
@@ -218,6 +221,22 @@ mark.hl{background:var(--signal);padding:0 2px;border-radius:2px;color:var(--ink
       <p style="margin-top:12px;font-family:var(--mono);font-size:11px;color:var(--muted)">All posts as static HTML: <code>/blog/p/&lt;slug&gt;/</code> · RSS at <a href="/feed.xml" style="text-decoration:underline;color:var(--blue)">/feed.xml</a> · Enable JS for search & filters.</p>
     </div>
   </noscript>
+
+  <section aria-labelledby="nlTitle" style="margin-top:22px;background:var(--sheet);border:1px solid var(--ink);padding:18px;position:relative" data-reveal>
+    <span style="position:absolute;top:-9px;left:14px;width:64px;height:12px;background:rgba(255,255,255,.78);border:1px solid rgba(11,18,32,.06);transform:rotate(-1deg)" aria-hidden="true"></span>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:baseline;justify-content:space-between">
+      <h2 id="nlTitle" style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;letter-spacing:-.02em;text-transform:uppercase;font-size:1.05rem;margin:0">Stay <em style="font-family:'Instrument Serif',serif;font-weight:400;letter-spacing:-.02em;text-transform:none;font-size:1.18em">posted</em> <span style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:400">· free via RSS → email</span></h2>
+      <a href="/feed.xml" style="font-family:var(--mono);font-size:11px;color:var(--blue);text-decoration:underline">RSS /feed.xml ↗</a>
+    </div>
+    <p style="margin-top:8px;color:#475569;font-size:13px;line-height:1.5">New Daily logs + Articles as email. Free via <a href="https://buttondown.com" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:underline">Buttondown</a> (no spam) — or just use the RSS above.</p>
+    <form action="https://buttondown.email/api/emails/embed-subscribe/hariomlohar" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.email/hariomlohar','popupwindow')" style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:end">
+      <label style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;flex-direction:column;gap:6px;flex:1;min-width:220px">Email
+        <input type="email" name="email" required placeholder="your@email.com" style="font-family:var(--mono);font-size:13px;border:1px solid var(--line);background:var(--paper-2);padding:11px 12px;min-height:44px" />
+      </label>
+      <button type="submit" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:var(--ink);color:#FFFEFB;border:1px solid var(--ink);padding:11px 14px;min-height:44px;cursor:pointer;white-space:nowrap">Subscribe — free →</button>
+    </form>
+    <p style="margin-top:8px;font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--muted);line-height:1.5">Live on <a href="https://buttondown.com/hariomlohar" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:underline">buttondown.com/hariomlohar</a> · RSS still works: <a href="/feed.xml" style="color:var(--blue);text-decoration:underline">/feed.xml</a></p>
+  </section>
 
   <div class="rss-box" data-reveal>
     <span>Subscribe: <a href="/feed.xml" style="color:var(--blue);text-decoration:underline">/feed.xml</a> · New post = new file in <code>posts/</code> — committed daily.</span>
@@ -395,5 +414,7 @@ mark.hl{background:var(--signal);padding:0 2px;border-radius:2px;color:var(--ink
   });
 })();
 </script>
+<!-- Analytics — $0. Enable when ready: replace token. See index.html comment. -->
+<!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "REPLACE_WITH_YOUR_CLOUDFLARE_TOKEN"}'></script> -->
 </body>
 </html>
