@@ -76,9 +76,9 @@ Blog posts have a “Discuss” section powered by GitHub Discussions. Until you
    - Discussion Category: **General** (or Announcements)
    - Features: enable reactions, input bottom, theme Light
 4. Copy the two IDs it shows: `data-repo-id="R_kgDO…"` and `data-category-id="DIC_kwDO…"`
-5. Paste them into `scripts/generate-blog.js` (search `data-repo-id`) — two empty strings `''` → your IDs. Commit that file.
+5. Paste them into `scripts/generate-blog.js` (search `data-repo-id`) — two empty strings `''` → your IDs. Commit that file. *(Already done for you: `R_kgDOTkm3vQ` / `DIC_kwDOTkm3vc4DDAjC` + `preferred_color_scheme` — just verify on giscus.app they match.)*
 6. Run `node scripts/generate-blog.js` locally to regenerate `blog/p/*/index.html` with Giscus, preview `blog/p/<slug>/`, commit + push when ready.
 
-Until you paste IDs, posts use Utterances automatically (comments stored as Issues, still free, no extra config). After you paste, it switches to Giscus (Discussions).
+Until you paste IDs, posts use Utterances automatically (comments stored as Issues, still free, no extra config). After you paste, it switches to Giscus (Discussions). Your 4 static pages were manually patched with the IDs so they already match the generator — future posts auto-pick up the same IDs on next `node scripts/generate-blog.js`.
 
 — Lab Notebook No.01

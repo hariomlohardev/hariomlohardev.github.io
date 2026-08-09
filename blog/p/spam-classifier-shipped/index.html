@@ -122,6 +122,43 @@ Try it: <a href="/projects/spam_classifier.html" rel="noopener">/projects/spam_c
 <p>— Hariom · Lab Notebook No.01</p>
     </div>
   </article>
+  <!-- Giscus — free comments via GitHub Discussions (no DB, no cost) -->
+  <section style="margin-top:22px;background:var(--sheet);border:1px solid var(--ink);padding:16px;position:relative" aria-label="Comments">
+    <div style="font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap"><span>Discuss — powered by GitHub</span><span style="text-transform:none;letter-spacing:0;color:var(--muted);font-size:11px">free · no tracking · GitHub login to comment</span></div>
+    <div id="giscus-root" style="margin-top:14px;min-height:80px"></div>
+    <noscript><p style="font-family:var(--mono);font-size:12px;color:var(--muted)">Enable JavaScript to load comments. Or <a href="https://github.com/hariomlohardev/hariomlohardev.github.io/discussions" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:underline">open Discussions →</a></p></noscript>
+    <p id="giscus-setup" style="display:none;margin-top:10px;font-family:var(--mono);font-size:11px;line-height:1.6;color:var(--muted);background:var(--paper-2);border:1px dashed var(--line);padding:10px">Giscus not yet configured — <a href="https://giscus.app" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:underline">giscus.app</a> → pick <b>hariomlohardev/hariomlohardev.github.io</b> → enable Discussions → copy <code>data-repo-id</code> &amp; <code>data-category-id</code> into this page's script. See <code>posts/README.md</code>.</p>
+  </section>
+  <script>
+  (function(){
+    var s=document.createElement('script');
+    s.src='https://giscus.app/client.js';
+    s.async=true; s.crossOrigin='anonymous';
+    s.setAttribute('data-repo','hariomlohardev/hariomlohardev.github.io');
+    s.setAttribute('data-repo-id','R_kgDOTkm3vQ');
+    s.setAttribute('data-category','General');
+    s.setAttribute('data-category-id','DIC_kwDOTkm3vc4DDAjC');
+    s.setAttribute('data-mapping','pathname');
+    s.setAttribute('data-strict','0');
+    s.setAttribute('data-reactions-enabled','1');
+    s.setAttribute('data-emit-metadata','0');
+    s.setAttribute('data-input-position','bottom');
+    s.setAttribute('data-theme','preferred_color_scheme');
+    s.setAttribute('data-lang','en');
+    var hasIds = s.getAttribute('data-repo-id') && s.getAttribute('data-category-id');
+    if(!hasIds){
+      var note=document.getElementById('giscus-setup');
+      if(note) note.style.display='block';
+      s.src='https://utteranc.es/client.js';
+      s.setAttribute('repo','hariomlohardev/hariomlohardev.github.io');
+      s.setAttribute('issue-term','pathname');
+      s.setAttribute('theme','github-light');
+      s.removeAttribute('data-repo'); s.removeAttribute('data-repo-id'); s.removeAttribute('data-category'); s.removeAttribute('data-category-id');
+      s.removeAttribute('data-mapping'); s.removeAttribute('data-strict'); s.removeAttribute('data-reactions-enabled'); s.removeAttribute('data-emit-metadata'); s.removeAttribute('data-input-position'); s.removeAttribute('data-lang');
+    }
+    document.getElementById('giscus-root').appendChild(s);
+  })();
+  </script>
   <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
     <a href="/blog.html" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--ink);padding:11px 14px;background:white;text-decoration:none">← Back to blog</a>
     <a href="https://github.com/hariomlohardev" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:var(--ink);color:white;padding:11px 14px;border:1px solid var(--ink);text-decoration:none">Follow on GitHub ↗</a>
