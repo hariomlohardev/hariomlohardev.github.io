@@ -87,7 +87,7 @@ Until you paste IDs, posts use Utterances automatically (comments stored as Issu
 
 - **Newsletter (free):** index.html + blog.html already wired to `hariomlohar` at `buttondown.com/hariomlohar` (`https://buttondown.email/api/emails/embed-subscribe/hariomlohar`). Test it with your own email after next push. RSS `/feed.xml` stays as backup. To swap to Substack use `https://YOURNAME.substack.com` instead.
 - **Analytics (free, no cookies):** Search `REPLACE_WITH_YOUR_CLOUDFLARE_TOKEN` in `index.html`, `blog.html`, `post.html`, and `scripts/generate-blog.js`. Get a free token at `dash.cloudflare.com` → Web Analytics → Add site `hariomlohardev.github.io` → paste into `data-cf-beacon='{"token":"..."}'` and uncomment the `<script>` line. Or use GoatCounter (`goatcounter.com`, free) — comment right there shows the fallback snippet.
-- **Contact form (free):** `#contact` FormSubmit → `YOUR_EMAIL_HERE` to your real email; `_honey` + `_captcha=false` + `_next=thanks.html` already wired. Or swap to Formspree `https://formspree.io/f/XXXX`.
+- **Contact form (free):** `#contact` FormSubmit → `hariomlohar.new@gmail.com` live (honeypot `_honey` + `_captcha=false` + `_next=thanks.html`). Or swap to Formspree `https://formspree.io/f/XXXX`.
 
 ### OG images — per-post, $0 (auto)
 
