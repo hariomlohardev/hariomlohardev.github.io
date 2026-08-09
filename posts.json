@@ -1,5 +1,22 @@
 [
   {
+    "slug": "day-040-multi-head-residual",
+    "title": "Day 040 — Multi-Head, Residual & Layernorm by Hand",
+    "date": "2026-08-10",
+    "description": "Stacked 4-head attention + residual + layernorm forward/backward in NumPy — same mask, new choreography, grads checked at 1e-4.",
+    "tags": [
+      "daily-log",
+      "Transformers",
+      "attention",
+      "NumPy"
+    ],
+    "readingMinutes": 2,
+    "wordCount": 259,
+    "url": "https://hariomlohardev.github.io/blog/p/day-040-multi-head-residual/",
+    "file": "2026-08-10-day-040-multi-head-residual.md",
+    "cover": null
+  },
+  {
     "slug": "day-039-attention-by-hand",
     "title": "Day 039 — Attention by Hand",
     "date": "2026-08-08",

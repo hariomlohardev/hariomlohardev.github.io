@@ -6,7 +6,18 @@
   <atom:link href="https://hariomlohardev.github.io/feed.xml" rel="self" type="application/rss+xml" />
   <description>Daily AGI research logs and articles by Hariom Lohar (hariomlohardev) — Python, Django, Flutter, Harvard CS50P 2026.</description>
   <language>en-IN</language>
-  <lastBuildDate>Sun, 09 Aug 2026 16:25:48 GMT</lastBuildDate>
+  <lastBuildDate>Sun, 09 Aug 2026 17:22:41 GMT</lastBuildDate>
+  <item>
+    <title>Day 040 — Multi-Head, Residual &amp; Layernorm by Hand</title>
+    <link>https://hariomlohardev.github.io/blog/p/day-040-multi-head-residual/</link>
+    <guid isPermaLink="true">https://hariomlohardev.github.io/blog/p/day-040-multi-head-residual/</guid>
+    <description>Stacked 4-head attention + residual + layernorm forward/backward in NumPy — same mask, new choreography, grads checked at 1e-4.</description>
+    <pubDate>Sun, 09 Aug 2026 18:30:00 GMT</pubDate>
+    <category>daily-log</category>
+    <category>Transformers</category>
+    <category>attention</category>
+    <category>NumPy</category>
+  </item>
   <item>
     <title>Day 039 — Attention by Hand</title>
     <link>https://hariomlohardev.github.io/blog/p/day-039-attention-by-hand/</link>

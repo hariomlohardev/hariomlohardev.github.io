@@ -400,6 +400,16 @@ ${post.html}
     <a href="/blog.html" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--ink);padding:11px 14px;background:white;text-decoration:none">← Back to blog</a>
     <a href="https://github.com/hariomlohardev" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:var(--ink);color:white;padding:11px 14px;border:1px solid var(--ink);text-decoration:none">Follow on GitHub ↗</a>
   </div>
+  <!-- Share — Lab Notebook tape, $0, no tracking -->
+  <section aria-label="Share this post" style="margin-top:14px;background:var(--sheet);border:1px solid var(--ink);padding:14px 14px 12px;position:relative;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+    <span style="position:absolute;top:-9px;left:14px;width:64px;height:12px;background:rgba(255,255,255,.78);border:1px solid rgba(11,18,32,.06);transform:rotate(-1deg)" aria-hidden="true"></span>
+    <span style="font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">Share — Lab Notebook No.01</span>
+    <span style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <button type="button" onclick="(function(b){ var u='${post.url}'; if(navigator.clipboard){ navigator.clipboard.writeText(u).then(function(){ b.textContent='Copied ✓'; setTimeout(function(){ b.textContent='Copy link'; },1600); }); } else { prompt('Copy link:', u); } })(this)" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--ink);background:var(--paper);padding:8px 10px;cursor:pointer">Copy link</button>
+      <a href="https://twitter.com/intent/tweet?url=${encodeURIComponent(post.url)}&text=${encodeURIComponent(post.title + ' — by Hariom Lohar')}" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper-2);padding:8px 10px;text-decoration:none">X ↗</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(post.url)}" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper-2);padding:8px 10px;text-decoration:none">LinkedIn ↗</a>
+    </span>
+  </section>
 </main>
 <footer>
   <div class="wrap foot-in">

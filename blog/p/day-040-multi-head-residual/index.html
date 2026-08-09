@@ -5,30 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#FFD400" />
 <meta name="color-scheme" content="light" />
-<title>Day 032 — CNN from Scratch, No Autograd — Hariom Lohar · Lab Notebook No.01</title>
-<meta name="description" content="Built 2D convolution forward + backward in pure NumPy — im2col, stride, padding, and the gradient that makes it learn." />
+<title>Day 040 — Multi-Head, Residual &amp; Layernorm by Hand — Hariom Lohar · Lab Notebook No.01</title>
+<meta name="description" content="Stacked 4-head attention + residual + layernorm forward/backward in NumPy — same mask, new choreography, grads checked at 1e-4." />
 <meta name="author" content="Hariom Lohar" />
 <meta name="robots" content="index, follow, max-image-preview:large" />
-<link rel="canonical" href="https://hariomlohardev.github.io/blog/p/day-032-cnn-from-scratch/" />
+<link rel="canonical" href="https://hariomlohardev.github.io/blog/p/day-040-multi-head-residual/" />
 <link rel="author" href="https://github.com/hariomlohardev" />
 <meta property="og:site_name" content="Hariom Lohar — Lab Notebook No.01" />
 <meta property="og:locale" content="en_IN" />
-<meta property="og:url" content="https://hariomlohardev.github.io/blog/p/day-032-cnn-from-scratch/" />
-<meta property="og:title" content="Day 032 — CNN from Scratch, No Autograd — Hariom Lohar" />
-<meta property="og:description" content="Built 2D convolution forward + backward in pure NumPy — im2col, stride, padding, and the gradient that makes it learn." />
+<meta property="og:url" content="https://hariomlohardev.github.io/blog/p/day-040-multi-head-residual/" />
+<meta property="og:title" content="Day 040 — Multi-Head, Residual &amp; Layernorm by Hand — Hariom Lohar" />
+<meta property="og:description" content="Stacked 4-head attention + residual + layernorm forward/backward in NumPy — same mask, new choreography, grads checked at 1e-4." />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2026-08-01" />
-<meta property="og:image" content="https://hariomlohardev.github.io/og/day-032-cnn-from-scratch.svg" />
+<meta property="article:published_time" content="2026-08-10" />
+<meta property="og:image" content="https://hariomlohardev.github.io/og/day-040-multi-head-residual.svg" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="Day 032 — CNN from Scratch, No Autograd — Hariom Lohar · Lab Notebook No.01" />
+<meta property="og:image:alt" content="Day 040 — Multi-Head, Residual &amp; Layernorm by Hand — Hariom Lohar · Lab Notebook No.01" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Day 032 — CNN from Scratch, No Autograd — Hariom Lohar" />
-<meta name="twitter:description" content="Built 2D convolution forward + backward in pure NumPy — im2col, stride, padding, and the gradient that makes it learn." />
-<meta name="twitter:image" content="https://hariomlohardev.github.io/og/day-032-cnn-from-scratch.svg" />
+<meta name="twitter:title" content="Day 040 — Multi-Head, Residual &amp; Layernorm by Hand — Hariom Lohar" />
+<meta name="twitter:description" content="Stacked 4-head attention + residual + layernorm forward/backward in NumPy — same mask, new choreography, grads checked at 1e-4." />
+<meta name="twitter:image" content="https://hariomlohardev.github.io/og/day-040-multi-head-residual.svg" />
 <meta name="twitter:creator" content="@HariomloharAGI" />
 <link rel="alternate" type="application/rss+xml" title="Hariom Lohar — Blog" href="https://hariomlohardev.github.io/feed.xml" />
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Day 032 — CNN from Scratch, No Autograd","description":"Built 2D convolution forward + backward in pure NumPy — im2col, stride, padding, and the gradient that makes it learn.","datePublished":"2026-08-01","dateModified":"2026-08-01","author":{"@type":"Person","name":"Hariom Lohar","url":"https://hariomlohardev.github.io/"},"mainEntityOfPage":"https://hariomlohardev.github.io/blog/p/day-032-cnn-from-scratch/","url":"https://hariomlohardev.github.io/blog/p/day-032-cnn-from-scratch/","image":"https://hariomlohardev.github.io/og/day-032-cnn-from-scratch.svg","keywords":"daily-log, CNN, NumPy, backprop","wordCount":166,"isPartOf":{"@type":"Blog","name":"Hariom Lohar — Lab Notebook"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Day 040 — Multi-Head, Residual & Layernorm by Hand","description":"Stacked 4-head attention + residual + layernorm forward/backward in NumPy — same mask, new choreography, grads checked at 1e-4.","datePublished":"2026-08-10","dateModified":"2026-08-10","author":{"@type":"Person","name":"Hariom Lohar","url":"https://hariomlohardev.github.io/"},"mainEntityOfPage":"https://hariomlohardev.github.io/blog/p/day-040-multi-head-residual/","url":"https://hariomlohardev.github.io/blog/p/day-040-multi-head-residual/","image":"https://hariomlohardev.github.io/og/day-040-multi-head-residual.svg","keywords":"daily-log, Transformers, attention, NumPy","wordCount":259,"isPartOf":{"@type":"Blog","name":"Hariom Lohar — Lab Notebook"}}</script>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>◎</text></svg>" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -93,7 +93,7 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
 <div id="prog" aria-hidden="true"></div>
 <header id="top">
   <div class="wrap">
-    <div class="head-top"><span>LAB NOTEBOOK <b>No.01</b> · BLOG · INDIA — UTC+5:30</span><span style="display:flex;gap:12px"><span>01 AUG 2026</span><span style="color:var(--muted)">1 min</span></span></div>
+    <div class="head-top"><span>LAB NOTEBOOK <b>No.01</b> · BLOG · INDIA — UTC+5:30</span><span style="display:flex;gap:12px"><span>10 AUG 2026</span><span style="color:var(--muted)">2 min</span></span></div>
     <div class="head-main">
       <a class="logo" href="/"><span class="logo-mark">HL</span> hariomlohardev</a>
       <nav aria-label="Primary"><a href="/">Home</a><a href="/projects.html">Projects</a><a href="/blog.html">Blog</a><a href="/blog.html#daily-log">Daily Logs</a><a href="/#contact">Contact</a></nav>
@@ -103,45 +103,57 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
 </header>
 <div class="marginalia" aria-hidden="true" style="background:var(--paper);color:var(--muted);border-color:var(--line);text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase">Hariom Lohar — Lab Notebook No.01 · Daily Logs &amp; Articles</div>
 <main class="wrap" id="main">
-  <div class="breadcrumb"><a href="/">Hariom Lohar</a><span>›</span><a href="/blog.html">Blog</a><span>›</span><span>Day 032 — CNN from Scratch, No Autograd</span></div>
+  <div class="breadcrumb"><a href="/">Hariom Lohar</a><span>›</span><a href="/blog.html">Blog</a><span>›</span><span>Day 040 — Multi-Head, Residual &amp; Layernorm by Hand</span></div>
   <div class="hero">
-    <div class="eyebrow"><i></i> Daily Log · 01 AUG 2026 · 1 min · Hariom Lohar</div>
-    <h1>Day 032 — CNN from Scratch, No Autograd</h1>
-    <div class="meta"><span><b>By Hariom Lohar</b> (hariomlohardev)</span><span>·</span><span>166 words</span><span>·</span><span><a href="/blog.html#tag=daily-log" style="font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper-2);padding:4px 8px;color:var(--muted)">daily-log</a> <a href="/blog.html#tag=CNN" style="font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper-2);padding:4px 8px;color:var(--muted)">CNN</a> <a href="/blog.html#tag=NumPy" style="font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper-2);padding:4px 8px;color:var(--muted)">NumPy</a> <a href="/blog.html#tag=backprop" style="font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper-2);padding:4px 8px;color:var(--muted)">backprop</a></span></div>
-    <p style="margin-top:10px;color:#475569;font-size:15px;line-height:1.6;max-width:65ch">Built 2D convolution forward + backward in pure NumPy — im2col, stride, padding, and the gradient that makes it learn.</p>
+    <div class="eyebrow"><i></i> Daily Log · 10 AUG 2026 · 2 min · Hariom Lohar</div>
+    <h1>Day 040 — Multi-Head, Residual &amp; Layernorm by Hand</h1>
+    <div class="meta"><span><b>By Hariom Lohar</b> (hariomlohardev)</span><span>·</span><span>259 words</span><span>·</span><span><a href="/blog.html#tag=daily-log" style="font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper-2);padding:4px 8px;color:var(--muted)">daily-log</a> <a href="/blog.html#tag=Transformers" style="font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper-2);padding:4px 8px;color:var(--muted)">Transformers</a> <a href="/blog.html#tag=attention" style="font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper-2);padding:4px 8px;color:var(--muted)">attention</a> <a href="/blog.html#tag=NumPy" style="font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper-2);padding:4px 8px;color:var(--muted)">NumPy</a></span></div>
+    <p style="margin-top:10px;color:#475569;font-size:15px;line-height:1.6;max-width:65ch">Stacked 4-head attention + residual + layernorm forward/backward in NumPy — same mask, new choreography, grads checked at 1e-4.</p>
   </div>
   <article class="paper">
     <div class="prose">
-<h2>What I built</h2>
+<h2>The shape — yesterday's edge</h2>
 
-<p>2D <code>conv2d</code> forward + backward in NumPy. No <code>torch.nn</code>, no autograd — paper, then code.</p>
+<p>Day 039 left me with single-head <code>softmax(QKᵀ/√dₖ)V</code> and its Jacobian. Today the choreography is stacking it.</p>
 
-<ul>
-<li><code>im2col</code> + <code>col2im</code> for the forward pass</li>
-<li>Stride & padding handled as index math, not magic</li>
-<li>Backward: <code>dW</code>, <code>db</code>, <code>dX</code> derived by hand</li>
-</ul>
-<pre><code class="lang-python"># forward — stride 1, padding 1
-cols = im2col(x_padded, KH, KW, stride=1)   # (KH*KW*C, H*W)
-w_col = W.reshape(-1, 1)                    # (KH*KW*C, 1)
-out = (w_col.T @ cols).reshape(N, H, W)</code></pre>
+<pre><code class="lang-">MultiHead(Q,K,V) = Concat(head₁,…,headₕ) W_O
+headᵢ = Attention(QW_Qᵢ, KW_Kᵢ, VW_Vᵢ)</code></pre>
 
-<h2>Why it hurt (and why it mattered)</h2>
+<p>Then: <code>x + MultiHead(LN(x))</code> — residual + layernorm, no framework.</p>
 
-<p>Getting <code>dX</code> right means flipping the kernel and handling the padded border — the same bug that hides for 30 lines then explodes on a <code>4×4</code> toy. Fixed by brute-forcing a numeric gradient check on a <code>2×2</code> input:</p>
+<h2>Forward — 4 heads, one mask</h2>
 
-<pre><code class="lang-python">assert np.allclose(grad_analytic, grad_numeric, atol=1e-5)</code></pre>
+<pre><code class="lang-python">def layernorm(x, eps=1e-5):
+    m = x.mean(axis=-1, keepdims=True)
+    v = x.var(axis=-1, keepdims=True)
+    return (x - m) / np.sqrt(v + eps)  # gamma=1, beta=0 for now
 
-<p>It passed at <code>1:47 AM</code>. The log did too.</p>
+h = 4
+xn = layernorm(x)  # (T, d)
+heads = []
+for i in range(h):
+    Q = xn @ Wq[i]  # (T, d_h)
+    K = xn @ Wk[i]
+    V = xn @ Wv[i]
+    scores = (Q @ K.T) / np.sqrt(d_h) + mask
+    w = softmax(scores, axis=-1)
+    heads.append(w @ V)
+out = np.concatenate(heads, axis=-1) @ Wo  # (T, d)
+y = x + out  # residual</code></pre>
 
-<h2>Next</h2>
+<p><code>mask</code> is the same causal <code>0 / -inf</code> from Day 039 — trust the mask.</p>
 
-<ul>
-<li>Depthwise + pointwise conv</li>
-<li><code>max_pool</code> backward (the mask trick)</li>
-<li>Then attention — same discipline, new shape.</li>
-</ul>
-Commit: <code>AGI_Research</code> — Day 032. Open notebook.
+<h2>Backward — where it bit</h2>
+
+<p>Layernorm backward is the new trap: <code>dx = (1/√v) <em> (dy - mean(dy) - x_hat</em>mean(dy*x_hat))</code>. I derived it twice. Second time I stopped copying and wrote the <code>mean</code> terms out — <code>T=3, d=4</code> numeric grad at <code>1e-4</code> passed after fixing a missing <code>1/h</code> scale on the <code>Wo</code> grad.</p>
+
+<p>Residual helps: <code>dx_total = dy + dx_ln_path</code>. Without it the 4-head grad vanishes.</p>
+
+<h2>Reflection</h2>
+
+<p>Four heads don't learn four things — they learn four ways to look. Layernorm doesn't normalize — it lets the residual speak. Tomorrow: feed-forward + full block, still by hand.</p>
+
+<p>Day 040. Committed.</p>
     </div>
   </article>
   <!-- Giscus — free comments via GitHub Discussions (no DB, no cost) -->
@@ -194,9 +206,9 @@ Commit: <code>AGI_Research</code> — Day 032. Open notebook.
     <span style="position:absolute;top:-9px;left:14px;width:64px;height:12px;background:rgba(255,255,255,.78);border:1px solid rgba(11,18,32,.06);transform:rotate(-1deg)" aria-hidden="true"></span>
     <span style="font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">Share — Lab Notebook No.01</span>
     <span style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-      <button type="button" onclick="(function(b){ var u='https://hariomlohardev.github.io/blog/p/day-032-cnn-from-scratch/'; if(navigator.clipboard){ navigator.clipboard.writeText(u).then(function(){ b.textContent='Copied ✓'; setTimeout(function(){ b.textContent='Copy link'; },1600); }); } else { prompt('Copy link:', u); } })(this)" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--ink);background:var(--paper);padding:8px 10px;cursor:pointer">Copy link</button>
-      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fhariomlohardev.github.io%2Fblog%2Fp%2Fday-032-cnn-from-scratch%2F&text=Day%20032%20%E2%80%94%20CNN%20from%20Scratch%2C%20No%20Autograd%20%E2%80%94%20by%20Hariom%20Lohar" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper-2);padding:8px 10px;text-decoration:none">X ↗</a>
-      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fhariomlohardev.github.io%2Fblog%2Fp%2Fday-032-cnn-from-scratch%2F" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper-2);padding:8px 10px;text-decoration:none">LinkedIn ↗</a>
+      <button type="button" onclick="(function(b){ var u='https://hariomlohardev.github.io/blog/p/day-040-multi-head-residual/'; if(navigator.clipboard){ navigator.clipboard.writeText(u).then(function(){ b.textContent='Copied ✓'; setTimeout(function(){ b.textContent='Copy link'; },1600); }); } else { prompt('Copy link:', u); } })(this)" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--ink);background:var(--paper);padding:8px 10px;cursor:pointer">Copy link</button>
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fhariomlohardev.github.io%2Fblog%2Fp%2Fday-040-multi-head-residual%2F&text=Day%20040%20%E2%80%94%20Multi-Head%2C%20Residual%20%26%20Layernorm%20by%20Hand%20%E2%80%94%20by%20Hariom%20Lohar" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper-2);padding:8px 10px;text-decoration:none">X ↗</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fhariomlohardev.github.io%2Fblog%2Fp%2Fday-040-multi-head-residual%2F" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper-2);padding:8px 10px;text-decoration:none">LinkedIn ↗</a>
     </span>
   </section>
 </main>
