@@ -812,7 +812,7 @@
             <figcaption><span>fig. 01 — a neural net, from scratch</span><span>NumPy · no autograd</span></figcaption>
           </figure>
           <div class="contrib">
-            <div class="contrib-head"><b>GitHub — last 30 weeks</b><span id="contribYear">— / year</span><span style="font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:none;color:var(--muted);margin-left:auto">illustrative · <a href="https://github.com/hariomlohardev" target="_blank" rel="noopener" style="text-decoration:underline;color:var(--blue)">see live on GitHub ↗</a></span></div>
+            <div class="contrib-head"><b>GitHub — last 30 weeks</b><span id="contribYear">— / year</span><span id="contribLive" style="font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:none;color:var(--muted);margin-left:auto">loading live… · <a href="https://github.com/hariomlohardev" target="_blank" rel="noopener" style="text-decoration:underline;color:var(--blue)">see live on GitHub ↗</a></span></div>
             <div id="cgrid" aria-hidden="true"></div>
             <div class="legend">Less <i style="background:rgba(11,18,32,.08)"></i><i style="background:rgba(11,18,32,.30)"></i><i style="background:rgba(11,18,32,.55)"></i><i style="background:rgba(11,18,32,.82)"></i> More</div>
           </div>
@@ -1286,24 +1286,73 @@
   function tickClock(){ var s=tf.format(new Date()); clockEls.forEach(function(e){ e.textContent=s; }); }
   tickClock(); setInterval(tickClock,1000);
 
-  function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; var t=Math.imul(a ^ a>>>15, 1|a); t=t+Math.imul(t ^ t>>>7,61|t)^t; return ((t ^ t>>>14)>>>0)/4294967296; }; }
-  var rnd=mulberry32(20260727);
-  var weeks=30, grid=document.getElementById('cgrid');
-  if(grid){
+  // ── GitHub contributions — live, cached, fallback to illustrative ──
+  (function(){
+    var grid=document.getElementById('cgrid');
+    var yearEl=document.getElementById('contribYear');
+    var liveEl=document.getElementById('contribLive');
+    if(!grid) return;
     var levels=['rgba(11,18,32,.08)','rgba(11,18,32,.30)','rgba(11,18,32,.55)','rgba(11,18,32,.82)','rgba(11,18,32,1)'];
-    var frag=document.createDocumentFragment();
-    for(var w=0;w<weeks;w++){
-      var boost=w>22?1:(w>16?0.4:0);
-      for(var d=0;d<7;d++){
-        var r=rnd()-boost*0.35;
-        var lv=r<0.40?0:r<0.62?1:r<0.80?2:r<0.93?3:4;
-        var cell=document.createElement('div'); cell.className='cell'; cell.style.background=levels[lv];
-        cell.title=(lv*2+(lv?1:0))+' contributions';
-        frag.appendChild(cell);
-      }
+    var WEEKS=30, CELLS=WEEKS*7;
+    function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; var t=Math.imul(a ^ a>>>15, 1|a); t=t+Math.imul(t ^ t>>>7,61|t)^t; return ((t ^ t>>>14)>>>0)/4294967296; }; }
+    function render(cells, total, label){
+      grid.innerHTML='';
+      var frag=document.createDocumentFragment();
+      cells.forEach(function(c){
+        var lv=Math.max(0,Math.min(4, c.level!=null? c.level : 0));
+        if(c.level==null){
+          var n=c.count||0;
+          lv=n===0?0:n<3?1:n<6?2:n<10?3:4;
+        }
+        var div=document.createElement('div'); div.className='cell'; div.style.background=levels[lv];
+        div.title=(c.date||'')+' — '+(c.count||0)+' contribution'+((c.count||0)!==1?'s':'');
+        frag.appendChild(div);
+      });
+      grid.appendChild(frag);
+      if(yearEl && total!=null) yearEl.textContent=total+' contributions / year';
+      if(liveEl) liveEl.innerHTML=label+' · <a href="https://github.com/hariomlohardev" target="_blank" rel="noopener" style="text-decoration:underline;color:var(--blue)">see live on GitHub ↗</a>';
     }
-    grid.appendChild(frag);
-  }
+    function fallback(label){
+      var rnd=mulberry32(20260727);
+      var cells=[];
+      for(var w=0;w<WEEKS;w++){
+        var boost=w>22?1:(w>16?0.4:0);
+        for(var d=0;d<7;d++){
+          var r=rnd()-boost*0.35;
+          var lv=r<0.40?0:r<0.62?1:r<0.80?2:r<0.93?3:4;
+          cells.push({date:'',count: lv*2+(lv?1:0), level:lv});
+        }
+      }
+      render(cells, null, label||'illustrative');
+    }
+    try{
+      var cached=JSON.parse(localStorage.getItem('hl_contrib_v1')||'null');
+      if(cached && cached.ts && (Date.now()-cached.ts) < 6*3600*1000 && cached.cells && cached.cells.length===CELLS){
+        render(cached.cells, cached.total, 'live · cached');
+      }
+    }catch(e){}
+    var url='https://github-contributions-api.jogruber.de/v4/hariomlohardev?y=last';
+    var ctrl=null, timed=false;
+    try{ ctrl=new AbortController(); setTimeout(function(){ timed=true; try{ctrl.abort();}catch(e){} if(!grid.children.length) fallback('illustrative'); }, 3800); }catch(e){}
+    fetch(url, ctrl?{signal:ctrl.signal}:{}).then(function(r){ if(!r.ok) throw new Error('bad '+r.status); return r.json(); }).then(function(j){
+      var arr=j.contributions || j.data || [];
+      if(!arr.length) throw new Error('empty');
+      var last=arr.slice(-CELLS);
+      while(last.length < CELLS) last.unshift({date:'',count:0,level:0});
+      var total=null;
+      if(j.total && typeof j.total==='object'){
+        var vals=Object.values(j.total); total=vals.reduce(function(a,b){return a+b;},0);
+        var thisYear=new Date().getFullYear(); if(j.total[thisYear]!=null) total=j.total[thisYear];
+      } else if(j.total!=null) total=j.total;
+      else total=arr.reduce(function(s,c){return s+(c.count||0);},0);
+      try{ localStorage.setItem('hl_contrib_v1', JSON.stringify({ts:Date.now(), cells:last, total:total})); }catch(e){}
+      render(last, total, 'live');
+    }).catch(function(){
+      if(timed) return;
+      if(!grid.children.length) fallback('illustrative');
+      else if(liveEl && !/live/.test(liveEl.textContent)) liveEl.innerHTML='illustrative · <a href="https://github.com/hariomlohardev" target="_blank" rel="noopener" style="text-decoration:underline;color:var(--blue)">see live on GitHub ↗</a>';
+    });
+  })();
 
   var header=document.querySelector('header'), prog=document.getElementById('prog'), queued=false;
   function onScroll(){
