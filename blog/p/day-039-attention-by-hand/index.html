@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#FFD400" />
+<meta name="color-scheme" content="light" />
 <title>Day 039 — Attention by Hand — Hariom Lohar · Lab Notebook No.01</title>
 <meta name="description" content="Derived scaled dot-product attention forward/backward in NumPy — QKᵀ, causal mask, softmax, and the gradient through it." />
 <meta name="author" content="Hariom Lohar" />
@@ -17,14 +18,17 @@
 <meta property="og:description" content="Derived scaled dot-product attention forward/backward in NumPy — QKᵀ, causal mask, softmax, and the gradient through it." />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2026-08-08" />
-<meta property="og:image" content="https://hariomlohardev.github.io/certificates/1.png" />
+<meta property="og:image" content="https://hariomlohardev.github.io/og/day-039-attention-by-hand.svg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Day 039 — Attention by Hand — Hariom Lohar · Lab Notebook No.01" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Day 039 — Attention by Hand — Hariom Lohar" />
 <meta name="twitter:description" content="Derived scaled dot-product attention forward/backward in NumPy — QKᵀ, causal mask, softmax, and the gradient through it." />
-<meta name="twitter:image" content="https://hariomlohardev.github.io/certificates/1.png" />
+<meta name="twitter:image" content="https://hariomlohardev.github.io/og/day-039-attention-by-hand.svg" />
 <meta name="twitter:creator" content="@HariomloharAGI" />
 <link rel="alternate" type="application/rss+xml" title="Hariom Lohar — Blog" href="https://hariomlohardev.github.io/feed.xml" />
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Day 039 — Attention by Hand","description":"Derived scaled dot-product attention forward/backward in NumPy — QKᵀ, causal mask, softmax, and the gradient through it.","datePublished":"2026-08-08","dateModified":"2026-08-08","author":{"@type":"Person","name":"Hariom Lohar","url":"https://hariomlohardev.github.io/"},"mainEntityOfPage":"https://hariomlohardev.github.io/blog/p/day-039-attention-by-hand/","url":"https://hariomlohardev.github.io/blog/p/day-039-attention-by-hand/","keywords":"daily-log, Transformers, attention, NumPy","wordCount":156,"isPartOf":{"@type":"Blog","name":"Hariom Lohar — Lab Notebook"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Day 039 — Attention by Hand","description":"Derived scaled dot-product attention forward/backward in NumPy — QKᵀ, causal mask, softmax, and the gradient through it.","datePublished":"2026-08-08","dateModified":"2026-08-08","author":{"@type":"Person","name":"Hariom Lohar","url":"https://hariomlohardev.github.io/"},"mainEntityOfPage":"https://hariomlohardev.github.io/blog/p/day-039-attention-by-hand/","url":"https://hariomlohardev.github.io/blog/p/day-039-attention-by-hand/","image":"https://hariomlohardev.github.io/og/day-039-attention-by-hand.svg","keywords":"daily-log, Transformers, attention, NumPy","wordCount":156,"isPartOf":{"@type":"Blog","name":"Hariom Lohar — Lab Notebook"}}</script>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>◎</text></svg>" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -84,6 +88,8 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
 </style>
 </head>
 <body>
+<a href="#main" class="skip" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden">Skip to content</a>
+<style>.skip:focus{left:16px;top:10px;width:auto;height:auto;padding:8px 12px;background:var(--ink);color:var(--paper);z-index:100;border:1px solid var(--signal);font-family:var(--mono);font-size:12px}</style>
 <div id="prog" aria-hidden="true"></div>
 <header id="top">
   <div class="wrap">
@@ -96,7 +102,7 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
   </div>
 </header>
 <div class="marginalia" aria-hidden="true" style="background:var(--paper);color:var(--muted);border-color:var(--line);text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase">Hariom Lohar — Lab Notebook No.01 · Daily Logs &amp; Articles</div>
-<main class="wrap">
+<main class="wrap" id="main">
   <div class="breadcrumb"><a href="/">Hariom Lohar</a><span>›</span><a href="/blog.html">Blog</a><span>›</span><span>Day 039 — Attention by Hand</span></div>
   <div class="hero">
     <div class="eyebrow"><i></i> Daily Log · 08 AUG 2026 · 1 min · Hariom Lohar</div>
@@ -200,5 +206,7 @@ dV = weights.T @ dScores_V</code></pre>
   window.addEventListener('scroll', onScroll,{passive:true}); onScroll();
 })();
 </script>
+<!-- Analytics — $0 placeholder (replaced when you set token in index.html; regen via node scripts/generate-blog.js) -->
+<!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "REPLACE_WITH_YOUR_CLOUDFLARE_TOKEN"}'></script> -->
 </body>
 </html>

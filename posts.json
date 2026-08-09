@@ -13,7 +13,8 @@
     "readingMinutes": 1,
     "wordCount": 156,
     "url": "https://hariomlohardev.github.io/blog/p/day-039-attention-by-hand/",
-    "file": "2026-08-08-day-039-attention-by-hand.md"
+    "file": "2026-08-08-day-039-attention-by-hand.md",
+    "cover": null
   },
   {
     "slug": "spam-classifier-shipped",
@@ -30,7 +31,8 @@
     "readingMinutes": 1,
     "wordCount": 147,
     "url": "https://hariomlohardev.github.io/blog/p/spam-classifier-shipped/",
-    "file": "2026-08-05-spam-classifier-shipped.md"
+    "file": "2026-08-05-spam-classifier-shipped.md",
+    "cover": null
   },
   {
     "slug": "day-032-cnn-from-scratch",
@@ -46,7 +48,8 @@
     "readingMinutes": 1,
     "wordCount": 166,
     "url": "https://hariomlohardev.github.io/blog/p/day-032-cnn-from-scratch/",
-    "file": "2026-08-01-day-032-cnn-from-scratch.md"
+    "file": "2026-08-01-day-032-cnn-from-scratch.md",
+    "cover": null
   },
   {
     "slug": "hello-daily-logs-day-001",
@@ -61,6 +64,7 @@
     "readingMinutes": 1,
     "wordCount": 159,
     "url": "https://hariomlohardev.github.io/blog/p/hello-daily-logs-day-001/",
-    "file": "2026-07-01-hello-daily-logs.md"
+    "file": "2026-07-01-hello-daily-logs.md",
+    "cover": null
   }
 ] 

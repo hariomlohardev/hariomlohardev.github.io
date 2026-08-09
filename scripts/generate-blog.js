@@ -130,6 +130,7 @@ for(const file of files){
   const slug = data.slug ? toSlug(data.slug) : toSlug(file.replace(/^\d{4}-\d{2}-\d{2}-/,"").replace(/\.md$/,"")) || toSlug(title);
   const description = data.description || body.split("\n").find(l=>l.trim() && !l.trim().startsWith("#"))?.slice(0,155) || "";
   const tags = Array.isArray(data.tags) ? data.tags : (data.tags? [String(data.tags)] : []);
+  const cover = data.cover || data.image || data.og || null;
   const html = mdToHtml(body.trim());
   const wc = wordCount(body);
   const reading = Math.max(1, Math.ceil(wc/200));
@@ -137,7 +138,7 @@ for(const file of files){
   posts.push({
     slug, title: String(title), date: dateStr, description: String(description),
     tags, html, raw: body, wordCount: wc, readingMinutes: reading, url,
-    file
+    file, cover: cover ? String(cover) : null
   });
 }
 posts.sort((a,b)=> b.date.localeCompare(a.date));
@@ -145,7 +146,7 @@ posts.sort((a,b)=> b.date.localeCompare(a.date));
 // ── write posts.json ────────────────────────────────────────────────
 const jsonOut = posts.map(p=>({
   slug:p.slug, title:p.title, date:p.date, description:p.description, tags:p.tags,
-  readingMinutes:p.readingMinutes, wordCount:p.wordCount, url:p.url, file:p.file
+  readingMinutes:p.readingMinutes, wordCount:p.wordCount, url:p.url, file:p.file, cover:p.cover
 }));
 fs.writeFileSync(POSTS_JSON, JSON.stringify(jsonOut,null,2)+" \n");
 console.log(`→ ${POSTS_JSON} (${posts.length} posts)`);
@@ -176,10 +177,52 @@ ${feedItems}
 fs.writeFileSync(FEED_XML, feed);
 console.log(`→ ${FEED_XML}`);
 
+// ── generate og/*.svg — per-post OG, Lab Notebook No.01, no deps, $0 ──
+function escSvg(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function ogSvg(post){
+  const dFmt = fmtDate(post.date);
+  const title = post.title.length > 64 ? post.title.slice(0,61)+'…' : post.title;
+  const desc = (post.description||'').slice(0,110);
+  const tag = (post.tags||[]).includes('daily-log') ? '◎ DAILY LOG' : '✎ ARTICLE';
+  // 1200×630, paper grid nod, signal bar
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="${escSvg(title)}">
+<rect width="1200" height="630" fill="#FFFEFB"/>
+<!-- grid 24px subtle -->
+<defs><pattern id="g" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0 H0 V24" fill="none" stroke="#E3ECFB" stroke-width="1"/></pattern><pattern id="g2" width="120" height="120" patternUnits="userSpaceOnUse"><path d="M120 0 H0 V120" fill="none" stroke="#C9D8F0" stroke-width="1"/></pattern></defs>
+<rect width="1200" height="630" fill="url(#g)"/><rect width="1200" height="630" fill="url(#g2)"/>
+<!-- top bar -->
+<rect x="0" y="0" width="1200" height="8" fill="#FFD400"/>
+<rect x="0" y="8" width="1200" height="1" fill="#0B1220" opacity="0.12"/>
+<!-- marginalia -->
+<rect x="0" y="0" width="1200" height="40" fill="#0B1220"/>
+<text x="32" y="26" fill="#C8D2E6" font-family="monospace" font-size="12" letter-spacing="1.2">LAB NOTEBOOK No.01 · HARIOM LOHAR — hariomlohardev · INDIA — UTC+5:30</text>
+<text x="1088" y="26" fill="#8A9AB6" font-family="monospace" font-size="11" text-anchor="end">${escSvg(dFmt)} · ${post.readingMinutes||3} MIN</text>
+<!-- tape -->
+<rect x="514" y="46" width="172" height="18" rx="2" fill="#FFFFFF" stroke="rgba(11,18,32,0.08)" transform="rotate(-1 600 55)"/>
+<!-- sheet -->
+<rect x="48" y="64" width="1104" height="518" rx="2" fill="#FFFFFF" stroke="#0B1220" stroke-width="2"/>
+<text x="72" y="112" fill="#6E7D9A" font-family="monospace" font-size="11" letter-spacing="1.6">${escSvg(tag)} · ${escSvg(dFmt)}</text>
+<text x="72" y="172" fill="#0B1220" font-family="sans-serif" font-size="54" font-weight="800" letter-spacing="-1.2">${escSvg(title)}</text>
+<text x="72" y="226" fill="#475569" font-family="sans-serif" font-size="20" letter-spacing="0">${escSvg(desc)}</text>
+<line x1="72" y1="260" x2="1128" y2="260" stroke="#D9E2EF" stroke-width="1" stroke-dasharray="6 6"/>
+<text x="72" y="300" fill="#0B1220" font-family="monospace" font-size="12" letter-spacing="0.8">By Hariom Lohar (hariomlohardev) · Harvard CS50P 2026 · 1 July 2026 → 31 Dec 2027</text>
+<text x="72" y="330" fill="#6E7D9A" font-family="monospace" font-size="11">hariomlohardev.github.io/blog/p/${escSvg(post.slug)}/ · Open notebook, open source.</text>
+<rect x="72" y="500" width="180" height="36" fill="#0B1220"/><text x="162" y="523" fill="#FFFEFB" font-family="monospace" font-size="12" text-anchor="middle" letter-spacing="1">OPEN POST →</text>
+<text x="1128" y="523" fill="#6E7D9A" font-family="monospace" font-size="11" text-anchor="end">◎ Lab Notebook No.01</text>
+</svg>`;
+}
+const OG_DIR = path.join(ROOT, "og");
+try{ fs.mkdirSync(OG_DIR, {recursive:true}); }catch{}
+
 // ── generate blog/p/<slug>/index.html ─────────────────────────────
 function postPage(post){
   const dFmt = fmtDate(post.date);
   const tagsHtml = (post.tags||[]).map(t=>`<a href="/blog.html#tag=${encodeURIComponent(t)}" style="font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper-2);padding:4px 8px;color:var(--muted)">${escHtml(t)}</a>`).join(" ");
+  const coverUrl = post.cover ? (post.cover.startsWith('http') ? post.cover : (post.cover.startsWith('/') ? SITE + post.cover : SITE + '/' + post.cover)) : null;
+  const ogSvgUrl = `${SITE}/og/${post.slug}.svg`;
+  const ogImage = coverUrl || ogSvgUrl;
+  const ogImageAlt = post.title + ' — Hariom Lohar · Lab Notebook No.01';
   const jsonLd = {
     "@context":"https://schema.org",
     "@type":"BlogPosting",
@@ -190,6 +233,7 @@ function postPage(post){
     author: {"@type":"Person","name":"Hariom Lohar","url":SITE+"/"},
     mainEntityOfPage: post.url,
     url: post.url,
+    image: ogImage,
     keywords: (post.tags||[]).join(", "),
     wordCount: post.wordCount,
     isPartOf: {"@type":"Blog","name":"Hariom Lohar — Lab Notebook"}
@@ -200,6 +244,7 @@ function postPage(post){
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#FFD400" />
+<meta name="color-scheme" content="light" />
 <title>${escHtml(post.title)} — Hariom Lohar · Lab Notebook No.01</title>
 <meta name="description" content="${escHtml(post.description)}" />
 <meta name="author" content="Hariom Lohar" />
@@ -213,11 +258,14 @@ function postPage(post){
 <meta property="og:description" content="${escHtml(post.description)}" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="${post.date}" />
-<meta property="og:image" content="${SITE}/certificates/1.png" />
+<meta property="og:image" content="${ogImage}" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="${escHtml(ogImageAlt)}" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="${escHtml(post.title)} — Hariom Lohar" />
 <meta name="twitter:description" content="${escHtml(post.description)}" />
-<meta name="twitter:image" content="${SITE}/certificates/1.png" />
+<meta name="twitter:image" content="${ogImage}" />
 <meta name="twitter:creator" content="@HariomloharAGI" />
 <link rel="alternate" type="application/rss+xml" title="Hariom Lohar — Blog" href="${SITE}/feed.xml" />
 <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
@@ -280,6 +328,8 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
 </style>
 </head>
 <body>
+<a href="#main" class="skip" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden">Skip to content</a>
+<style>.skip:focus{left:16px;top:10px;width:auto;height:auto;padding:8px 12px;background:var(--ink);color:var(--paper);z-index:100;border:1px solid var(--signal);font-family:var(--mono);font-size:12px}</style>
 <div id="prog" aria-hidden="true"></div>
 <header id="top">
   <div class="wrap">
@@ -292,7 +342,7 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
   </div>
 </header>
 <div class="marginalia" aria-hidden="true" style="background:var(--paper);color:var(--muted);border-color:var(--line);text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase">Hariom Lohar — Lab Notebook No.01 · Daily Logs &amp; Articles</div>
-<main class="wrap">
+<main class="wrap" id="main">
   <div class="breadcrumb"><a href="/">Hariom Lohar</a><span>›</span><a href="/blog.html">Blog</a><span>›</span><span>${escHtml(post.title)}</span></div>
   <div class="hero">
     <div class="eyebrow"><i></i> ${post.tags.includes("daily-log") ? "Daily Log" : "Article"} · ${dFmt} · ${post.readingMinutes} min · Hariom Lohar</div>
@@ -364,6 +414,8 @@ ${post.html}
   window.addEventListener('scroll', onScroll,{passive:true}); onScroll();
 })();
 </script>
+<!-- Analytics — $0 placeholder (replaced when you set token in index.html; regen via node scripts/generate-blog.js) -->
+<!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "REPLACE_WITH_YOUR_CLOUDFLARE_TOKEN"}'></script> -->
 </body>
 </html>`;
 }
@@ -373,6 +425,14 @@ for(const post of posts){
   fs.mkdirSync(dir, {recursive:true});
   fs.writeFileSync(path.join(dir,"index.html"), postPage(post));
   console.log(`→ blog/p/${post.slug}/index.html`);
+  // og svg — $0, Lab Notebook chrome
+  if(!post.cover){
+    try{
+      const svg = ogSvg(post);
+      fs.writeFileSync(path.join(OG_DIR, post.slug + ".svg"), svg);
+      console.log(`→ og/${post.slug}.svg`);
+    }catch(e){ console.warn('og fail', post.slug, e.message); }
+  }
 }
 
 // ── patch sitemap.xml ───────────────────────────────────────────────

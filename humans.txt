@@ -5,4 +5,7 @@ X: @HariomloharAGI — https://x.com/HariomloharAGI
 LinkedIn: https://www.linkedin.com/in/hariomlohar
 Site: https://hariomlohardev.github.io/
 Location: India (IST — Asia/Kolkata)
+Stack: Python Django FastAPI Flutter LangChain RAG NumPy PyTorch
+Mission: 1 July 2026 → 31 Dec 2027 (548 days, 8h/day, derive before import)
 Thanks: CS50 / David J. Malan, open-source community.
+Contact: https://hariomlohardev.github.io/#contact
