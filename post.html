@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#FFD400" />
+<title>Hariom Lohar — Post | Lab Notebook No.01</title>
+<meta name="description" content="Post by Hariom Lohar (hariomlohardev) — Lab Notebook No.01 · GitHub Pages. One log at a time since 1 July 2026." />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<link rel="canonical" href="https://hariomlohardev.github.io/post.html" />
+<link rel="alternate" type="application/rss+xml" title="Hariom Lohar — Blog" href="https://hariomlohardev.github.io/feed.xml" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>◎</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Fragment+Mono:ital@0;1&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+:root{--paper:#FFFEFB;--paper-2:#F3F0E8;--sheet:#fff;--ink:#0B1220;--muted:#6E7D9A;--line:#D9E2EF;--line-2:#B9C8E2;--grid:#E3ECFB;--signal:#FFD400;--red:#E10600;--blue:#0050FF;--green:#0E9F6E;--max:860px;--pad:clamp(18px,4vw,52px);--mono:'Fragment Mono',monospace;--display:'Bricolage Grotesque',sans-serif;--serif:'Instrument Serif',serif;--sans:'Instrument Sans',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px}
+a{color:inherit}
+a:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.wrap{max-width:var(--max);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
+header{position:sticky;top:0;z-index:40;background:rgba(255,254,251,.92);backdrop-filter:saturate(150%) blur(10px);border-bottom:1px solid var(--line)}
+.head-top{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px dashed var(--line);font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.head-main{display:flex;align-items:center;justify-content:space-between;gap:18px;height:56px}
+.logo{font-family:var(--mono);font-size:13px;font-weight:500;display:flex;gap:10px;align-items:center;text-decoration:none}
+.logo-mark{width:28px;height:28px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:11px}
+nav{display:flex;gap:18px;overflow-x:auto;scrollbar-width:none}
+nav a{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:6px 0;border-bottom:2px solid transparent;white-space:nowrap;text-decoration:none}
+nav a:hover{color:var(--ink);border-bottom-color:var(--signal)}
+.breadcrumb{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:14px 0;display:flex;gap:8px;flex-wrap:wrap}
+.breadcrumb a{color:var(--muted);text-decoration:none}
+.breadcrumb a:hover{color:var(--ink)}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);display:flex;gap:10px;align-items:center}
+.eyebrow i{width:8px;height:8px;background:var(--red);border-radius:50%}
+h1{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-height:1;font-size:clamp(1.9rem,4.5vw,2.8rem);text-transform:uppercase;margin-top:10px}
+.meta{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.paper{background:var(--sheet);border:1px solid var(--ink);padding:22px 22px 18px;box-shadow:0 1px 0 rgba(11,18,32,.06);position:relative;margin-top:18px}
+.paper::before{content:"";position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(-1deg);width:120px;height:14px;background:rgba(255,255,255,.78);border:1px solid rgba(11,18,32,.06)}
+.prose{font-size:16px;line-height:1.75;color:#1e293b}
+.prose h2{font-family:var(--display);font-weight:800;letter-spacing:-.02em;text-transform:uppercase;font-size:1.35rem;margin:22px 0 10px}
+.prose h3{font-weight:700;margin:18px 0 8px}
+.prose p{margin:12px 0}
+.prose a{color:var(--blue);text-decoration:underline}
+.prose blockquote{border-left:3px solid var(--signal);background:var(--paper-2);padding:10px 14px;margin:14px 0;color:#334155}
+.prose ul{margin:12px 0 12px 18px}
+.prose hr{border:none;border-top:1px solid var(--line);margin:18px 0}
+.prose pre{background:#0B1220;color:#E8EEFB;padding:14px;overflow:auto;border:1px solid var(--ink);font-family:var(--mono);font-size:12px;line-height:1.6;margin:14px 0}
+.prose code{font-family:var(--mono);font-size:.9em;background:var(--paper-2);border:1px solid var(--line);padding:1px 4px}
+.prose pre code{background:none;border:none;padding:0;color:inherit}
+footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)}
+.foot-in{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:18px 0;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+</style>
+</head>
+<body>
+<header id="top">
+  <div class="wrap">
+    <div class="head-top"><span>LAB NOTEBOOK <b>No.01</b> · POST · INDIA — UTC+5:30</span><span id="hdrDate" style="color:var(--muted)">—</span></div>
+    <div class="head-main">
+      <a class="logo" href="/"><span class="logo-mark">HL</span> hariomlohardev</a>
+      <nav aria-label="Primary"><a href="/">Home</a><a href="/projects.html">Projects</a><a href="/blog.html">Blog</a><a href="/#contact">Contact</a></nav>
+      <a href="https://github.com/hariomlohardev" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--green);color:var(--green);padding:6px 10px;text-decoration:none">GitHub ↗</a>
+    </div>
+  </div>
+</header>
+<div class="wrap">
+  <div class="breadcrumb"><a href="/">Hariom Lohar</a><span>›</span><a href="/blog.html">Blog</a><span>›</span><span id="crumb">Post</span></div>
+  <div id="hero">
+    <div class="eyebrow"><i></i> <span id="kicker">Loading…</span></div>
+    <h1 id="title">Loading…</h1>
+    <div class="meta" id="meta"></div>
+    <p id="desc" style="margin-top:10px;color:#475569;font-size:15px;line-height:1.6;max-width:65ch"></p>
+  </div>
+  <article class="paper" id="article" style="display:none"><div class="prose" id="prose"></div></article>
+  <div id="status" style="margin-top:18px;font-family:var(--mono);font-size:13px;color:var(--muted)">Loading post… If this hangs, run <code>node scripts/generate-blog.js</code> and use the static page at <code>/blog/p/&lt;slug&gt;/</code>.</div>
+  <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
+    <a href="/blog.html" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--ink);padding:11px 14px;background:white;text-decoration:none">← Back to blog</a>
+    <a id="canonicalLink" href="/blog.html" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:var(--ink);color:white;padding:11px 14px;border:1px solid var(--ink);text-decoration:none;display:none">Open canonical →</a>
+  </div>
+  <noscript>
+    <div style="margin-top:18px;background:var(--sheet);border:1px solid var(--ink);padding:16px">
+      <p style="font-weight:700">JavaScript is required for this fallback reader.</p>
+      <p style="margin-top:8px;color:#475569">Every post has a crawlable static page at <code>/blog/p/&lt;slug&gt;/</code>. Try: <a href="/blog/p/day-039-attention-by-hand/" style="color:var(--blue);text-decoration:underline">/blog/p/day-039-attention-by-hand/</a> · <a href="/blog/p/hello-daily-logs-day-001/" style="color:var(--blue);text-decoration:underline">/blog/p/hello-daily-logs-day-001/</a></p>
+    </div>
+  </noscript>
+</div>
+<footer>
+  <div class="wrap foot-in">
+    <span>© <span id="yr"></span> <b>Hariom Lohar</b> — Lab Notebook No.01 · <a href="https://github.com/hariomlohardev" style="text-decoration:underline">hariomlohardev on GitHub</a></span>
+    <span><a href="/blog.html">Blog</a> · <a href="/feed.xml">RSS</a> · <a href="#top">Top ↑</a></span>
+  </div>
+</footer>
+<script>
+(function(){
+  "use strict";
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  try{
+    document.getElementById('hdrDate').textContent = new Date().toLocaleDateString('en-GB',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric'}).toUpperCase();
+  }catch(e){}
+  var params = new URLSearchParams(location.search);
+  var slug = (params.get('slug')||params.get('p')||location.hash.replace(/^#/,'')).trim().toLowerCase();
+  if(!slug){
+    document.getElementById('status').innerHTML='No slug — open <a href="/blog.html" style="color:var(--blue);text-decoration:underline">/blog.html</a> and click a post, or use its static URL <code>/blog/p/&lt;slug&gt;/</code>.';
+    document.getElementById('title').textContent='Post — choose one';
+    return;
+  }
+  // normalize: strip leading slash stuff
+  slug = slug.replace(/^\/+|\/+$/g,'').split('/').pop();
+
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function fmt(d){ try{ return new Date(d+'T00:00:00+05:30').toLocaleDateString('en-GB',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric'}).toUpperCase(); }catch(e){ return d; } }
+
+  fetch('posts.json',{cache:'no-store'}).then(function(r){ if(!r.ok) throw new Error('posts.json '+r.status); return r.json(); }).then(function(arr){
+    var post = (arr||[]).find(function(p){ return String(p.slug).toLowerCase()===slug; });
+    if(!post){
+      document.getElementById('status').innerHTML='Post <code>'+esc(slug)+'</code> not found. See <a href="/blog.html" style="color:var(--blue);text-decoration:underline">/blog.html</a> or <a href="/blog/p/'+esc(slug)+'/" style="color:var(--blue);text-decoration:underline">/blog/p/'+esc(slug)+'/</a>.';
+      document.getElementById('title').textContent='Not found';
+      return;
+    }
+    var canon = post.url || ('https://hariomlohardev.github.io/blog/p/'+post.slug+'/');
+    document.title = post.title + ' — Hariom Lohar · Lab Notebook No.01';
+    var dEl=document.querySelector('meta[name="description"]'); if(dEl) dEl.setAttribute('content', post.description||'');
+    var link=document.querySelector('link[rel="canonical"]'); if(link) link.setAttribute('href', canon);
+    document.getElementById('crumb').textContent = post.title;
+    document.getElementById('kicker').textContent = ((post.tags||[]).indexOf('daily-log')!==-1 ? 'Daily Log' : 'Article')+' · '+fmt(post.date)+' · '+(post.readingMinutes||3)+' min · Hariom Lohar';
+    document.getElementById('title').textContent = post.title;
+    document.getElementById('desc').textContent = post.description||'';
+    var tagsHtml=(post.tags||[]).map(function(t){ return '<a href="/blog.html#tag='+encodeURIComponent(t)+'" style="border:1px solid var(--line);background:var(--paper-2);padding:4px 8px;color:var(--muted)">'+esc(t)+'</a>'; }).join(' ');
+    document.getElementById('meta').innerHTML = '<span><b>By Hariom Lohar</b></span><span>·</span><span>'+fmt(post.date)+'</span><span>·</span><span>'+(post.wordCount||'—')+' words</span><span>·</span><span>'+tagsHtml+'</span>';
+    var cl=document.getElementById('canonicalLink'); cl.href=canon; cl.style.display='inline-flex'; cl.textContent='Open canonical →';
+    // try to load static HTML for body
+    fetch('blog/p/'+post.slug+'/',{cache:'no-store'}).then(function(r){ if(!r.ok) throw new Error('static '+r.status); return r.text(); }).then(function(html){
+      var m=html.match(/<div class="prose">([\s\S]*?)<\/div>\s*<\/article>/i) || html.match(/<div class="prose">([\s\S]*?)<\/div>/i);
+      if(m){
+        document.getElementById('prose').innerHTML = m[1];
+        document.getElementById('article').style.display='block';
+        document.getElementById('status').style.display='none';
+      } else throw new Error('no prose');
+    }).catch(function(){
+      // fallback: try to fetch markdown source if file field present
+      var mdPath = post.file ? 'posts/'+post.file : null;
+      if(mdPath){
+        fetch(mdPath,{cache:'no-store'}).then(function(r){ if(!r.ok) throw new Error('md '+r.status); return r.text(); }).then(function(raw){
+          // strip frontmatter
+          var body = raw.replace(/^---[\s\S]*?---\s*/,'');
+          // tiny md → html (same as generator, simplified)
+          var s=body.replace(/\r\n/g,'\n');
+          var codes=[];
+          s=s.replace(/```[a-zA-Z0-9_-]*\n([\s\S]*?)```/g,function(_,c){ var i=codes.length; codes.push('<pre><code>'+esc(c.trimEnd())+'</code></pre>'); return '__CODE_'+i+'__'; });
+          s=s.replace(/`([^`]+?)`/g,function(_,c){ return '<code>'+esc(c)+'</code>'; });
+          s=s.replace(/^###\s+(.+)$/gm,'<h3>$1</h3>').replace(/^##\s+(.+)$/gm,'<h2>$1</h2>').replace(/^#\s+(.+)$/gm,'<h1>$1</h1>');
+          s=s.replace(/\[([^\]]+?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g,'<a href="$2">$1</a>');
+          s=s.replace(/\*\*([^*]+?)\*\*/g,'<strong>$1</strong>');
+          s=s.replace(/^\s*[-*]\s+(.+)$/gm,'<li>$1</li>');
+          s=s.replace(/(?:<li>.*<\/li>\n?)+/g,function(m){ return '<ul>\n'+m.trim().split('\n').join('\n')+'\n</ul>'; });
+          var blocks=s.split(/\n{2,}/).map(function(b){ b=b.trim(); if(!b) return ''; if(b.startsWith('<h')||b.startsWith('<pre')||b.startsWith('<ul')||b.startsWith('__CODE_')) return b; return '<p>'+b.replace(/\n/g,'<br />\n')+'</p>'; }).join('\n\n');
+          codes.forEach(function(html,i){ blocks=blocks.replace('__CODE_'+i+'__', html); });
+          document.getElementById('prose').innerHTML = blocks;
+          document.getElementById('article').style.display='block';
+          document.getElementById('status').style.display='none';
+        }).catch(function(){
+          document.getElementById('status').innerHTML='Post found but body not loaded. Open canonical: <a href="'+esc(canon)+'" style="color:var(--blue);text-decoration:underline">'+esc(canon)+'</a>';
+        });
+      } else {
+        document.getElementById('status').innerHTML='Post found. Open canonical: <a href="'+esc(canon)+'" style="color:var(--blue);text-decoration:underline">'+esc(canon)+'</a>';
+      }
+    });
+  }).catch(function(err){
+    document.getElementById('status').textContent='Failed to load posts.json: '+err.message+'. Run node scripts/generate-blog.js.';
+  });
+})();
+</script>
+</body>
+</html>

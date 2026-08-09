@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>Hariom Lohar — Lab Notebook No.01 · Blog &amp; Daily Logs</title>
+  <link>https://hariomlohardev.github.io/blog.html</link>
+  <atom:link href="https://hariomlohardev.github.io/feed.xml" rel="self" type="application/rss+xml" />
+  <description>Daily AGI research logs and articles by Hariom Lohar (hariomlohardev) — Python, Django, Flutter, Harvard CS50P 2026.</description>
+  <language>en-IN</language>
+  <lastBuildDate>Sun, 09 Aug 2026 15:19:44 GMT</lastBuildDate>
+  <item>
+    <title>Day 039 — Attention by Hand</title>
+    <link>https://hariomlohardev.github.io/blog/p/day-039-attention-by-hand/</link>
+    <guid isPermaLink="true">https://hariomlohardev.github.io/blog/p/day-039-attention-by-hand/</guid>
+    <description>Derived scaled dot-product attention forward/backward in NumPy — QKᵀ, causal mask, softmax, and the gradient through it.</description>
+    <pubDate>Fri, 07 Aug 2026 18:30:00 GMT</pubDate>
+    <category>daily-log</category>
+    <category>Transformers</category>
+    <category>attention</category>
+    <category>NumPy</category>
+  </item>
+  <item>
+    <title>Spam Classifier Shipped — 5,572 Messages, Zero Mock</title>
+    <link>https://hariomlohardev.github.io/blog/p/spam-classifier-shipped/</link>
+    <guid isPermaLink="true">https://hariomlohardev.github.io/blog/p/spam-classifier-shipped/</guid>
+    <description>Shipped a live Naive Bayes bench that tokenises, scores, and stamps P(spam|message) in your browser via Pyodide — nothing mocked.</description>
+    <pubDate>Tue, 04 Aug 2026 18:30:00 GMT</pubDate>
+    <category>article</category>
+    <category>Naive Bayes</category>
+    <category>NLP</category>
+    <category>Pyodide</category>
+    <category>ship</category>
+  </item>
+  <item>
+    <title>Day 032 — CNN from Scratch, No Autograd</title>
+    <link>https://hariomlohardev.github.io/blog/p/day-032-cnn-from-scratch/</link>
+    <guid isPermaLink="true">https://hariomlohardev.github.io/blog/p/day-032-cnn-from-scratch/</guid>
+    <description>Built 2D convolution forward + backward in pure NumPy — im2col, stride, padding, and the gradient that makes it learn.</description>
+    <pubDate>Fri, 31 Jul 2026 18:30:00 GMT</pubDate>
+    <category>daily-log</category>
+    <category>CNN</category>
+    <category>NumPy</category>
+    <category>backprop</category>
+  </item>
+  <item>
+    <title>Hello, Daily Logs — Day 001</title>
+    <link>https://hariomlohardev.github.io/blog/p/hello-daily-logs-day-001/</link>
+    <guid isPermaLink="true">https://hariomlohardev.github.io/blog/p/hello-daily-logs-day-001/</guid>
+    <description>Day 001 — why I chose the long road after 12th and how this public lab notebook works.</description>
+    <pubDate>Tue, 30 Jun 2026 18:30:00 GMT</pubDate>
+    <category>daily-log</category>
+    <category>AGI</category>
+    <category>first-principles</category>
+  </item>
+</channel>
+</rss>
