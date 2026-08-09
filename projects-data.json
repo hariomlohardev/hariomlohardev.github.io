@@ -1,0 +1,105 @@
+{
+  "projects": [
+    {
+      "id": "agi-research",
+      "name": "AGI_Research",
+      "page": "project-agi-research.html",
+      "url": "https://github.com/hariomlohardev/AGI_Research",
+      "featured": true,
+      "status": "in-progress",
+      "statusLabel": "Daily log · in progress",
+      "description": "Public lab notebook — committed daily since July 2026. Linear algebra, calculus and probability from axioms → neural nets and backprop in pure NumPy (SGD through Adam) → now CNNs, Transformers and PyTorch. No shortcuts.",
+      "chips": ["backprop ✓", "NumPy", "CNNs", "Transformers", "PyTorch", "daily commits"],
+      "languages": [
+        { "name": "Jupyter Notebook", "pct": 86.4, "color": "#DA5B0B" },
+        { "name": "Python", "pct": 13.6, "color": "#3572A5" }
+      ],
+      "highlights": [
+        "Linear algebra, calculus and probability from axioms",
+        "Forward and backward pass in pure NumPy",
+        "Backpropagation derived by hand — no autograd",
+        "Optimisers from SGD to Adam, built step by step",
+        "Now: CNNs, attention, Transformers"
+      ],
+      "stats": [
+        { "label": "Days", "value": "40+" },
+        { "label": "Notebooks", "value": "40+" },
+        { "label": "Commits", "value": "150+" }
+      ]
+    },
+    {
+      "id": "spam-classifier",
+      "name": "spam_classifier",
+      "page": "spam_classifier.html",
+      "url": "projects/spam_classifier.html",
+      "featured": true,
+      "status": "shipped",
+      "statusLabel": "Shipped · live demo",
+      "description": "Type a message, watch it split into tokens, score red (spam) or green (ham), filter the weak signals, then stamp a verdict with P(spam|message). 5,572 messages, Naive Bayes trained in your browser — nothing mocked.",
+      "chips": ["Naive Bayes", "NLP", "Pyodide", "Pandas", "live"],
+      "languages": [
+        { "name": "Python", "pct": 72, "color": "#3572A5" },
+        { "name": "HTML", "pct": 28, "color": "#E34C26" }
+      ],
+      "highlights": [
+        "Tokenisation and scoring you can see",
+        "Weak signals filtered, strong signals kept",
+        "Shows P(spam|message) with real math",
+        "Runs entirely in the browser (Pyodide)"
+      ],
+      "stats": [
+        { "label": "Dataset", "value": "data.csv" },
+        { "label": "Model", "value": "Naive Bayes" },
+        { "label": "Runtime", "value": "browser" }
+      ]
+    },
+    {
+      "id": "practice-code",
+      "name": "practice_code",
+      "page": "project-practice-code.html",
+      "url": "https://github.com/hariomlohardev/practice_code",
+      "featured": false,
+      "status": "open-source",
+      "statusLabel": "Open source",
+      "description": "60+ Python solutions for algorithms and data structures, grouped by topic. Each notes time and space. Fork it, add your approach, open a PR.",
+      "chips": ["algorithms", "data structures", "Python", "DSA"],
+      "languages": [
+        { "name": "Python", "pct": 100, "color": "#3572A5" }
+      ],
+      "highlights": [
+        "60+ problems with complexity notes",
+        "Grouped by topic: arrays, trees, graphs, DP",
+        "Fork-friendly — add your solution"
+      ],
+      "stats": [
+        { "label": "Solutions", "value": "60+" },
+        { "label": "Topics", "value": "12" },
+        { "label": "Language", "value": "Python" }
+      ]
+    },
+    {
+      "id": "pkg-jupy",
+      "name": "pkg_jupy",
+      "page": "project-pkg-jupy.html",
+      "url": "https://github.com/hariomlohardev/pkg_jupy",
+      "featured": false,
+      "status": "open-source",
+      "statusLabel": "Open source",
+      "description": "Jupyter experiments that grew up — small Python packages, utility notebooks and visualisation scratches. Open for issues and PRs.",
+      "chips": ["Jupyter", "packages", "utilities", "experiments"],
+      "languages": [
+        { "name": "Jupyter Notebook", "pct": 100, "color": "#DA5B0B" }
+      ],
+      "highlights": [
+        "Small, reusable Python packages",
+        "Utility notebooks for exploration",
+        "Visualisation scratches and helpers"
+      ],
+      "stats": [
+        { "label": "Notebooks", "value": "15+" },
+        { "label": "Packages", "value": "3" },
+        { "label": "Status", "value": "Active" }
+      ]
+    }
+  ]
+}

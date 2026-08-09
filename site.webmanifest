@@ -1,0 +1,20 @@
+{
+  "name": "Hariom Lohar — Lab Notebook No.01",
+  "short_name": "Hariom Lohar",
+  "description": "Hariom Lohar (hariomlohardev on GitHub) — Harvard CS50P 2026, Python/Django/Flutter, AGI from first principles since 1 July 2026.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#FFFEFB",
+  "theme_color": "#FFD400",
+  "lang": "en-IN",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>◎</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

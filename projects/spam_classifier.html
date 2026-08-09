@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#FFD400" />
+<title>Spam Classifier by Hariom Lohar — Live Naive Bayes Bench | hariomlohardev</title>
+<meta name="description" content="Spam Classifier by Hariom Lohar (hariomlohardev) — live Naive Bayes bench. Type a message, see tokens scored red/green, weak signals filtered, P(spam|message) stamped. Trained on 5,572 messages, runs in your browser via Pyodide. Nothing mocked." />
+<meta name="author" content="Hariom Lohar" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<link rel="canonical" href="https://hariomlohardev.github.io/projects/spam_classifier.html" />
+<link rel="author" href="https://github.com/hariomlohardev" />
+<link rel="manifest" href="/site.webmanifest" />
+<meta property="og:site_name" content="Hariom Lohar — Lab Notebook No.01" />
+<meta property="og:locale" content="en_IN" />
+<meta property="og:url" content="https://hariomlohardev.github.io/projects/spam_classifier.html" />
+<meta property="og:title" content="Spam Classifier by Hariom Lohar — Live Naive Bayes Bench | hariomlohardev" />
+<meta property="og:description" content="Live Naive Bayes bench by Hariom Lohar — tokenise, score, filter weak signals, stamp P(spam|message). 5,572 rows, runs in your browser. Open notebook by hariomlohardev." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://hariomlohardev.github.io/certificates/1.png" />
+<meta property="og:image:width" content="2246" />
+<meta property="og:image:height" content="1588" />
+<meta property="og:image:alt" content="Spam Classifier by Hariom Lohar — live bench" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Spam Classifier by Hariom Lohar — Live Bench | hariomlohardev" />
+<meta name="twitter:description" content="Type a message → see Naive Bayes score it live. By Hariom Lohar (hariomlohardev on GitHub)." />
+<meta name="twitter:image" content="https://hariomlohardev.github.io/certificates/1.png" />
+<meta name="twitter:creator" content="@HariomloharAGI" />
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://hariomlohardev.github.io/projects/spam_classifier.html#article","headline":"Spam Classifier — Live Naive Bayes Bench by Hariom Lohar","author":{"@id":"https://hariomlohardev.github.io/#person"},"url":"https://hariomlohardev.github.io/projects/spam_classifier.html","isPartOf":{"@id":"https://hariomlohardev.github.io/#website"},"about":["Naive Bayes","NLP","Spam detection","Pyodide"],"description":"Interactive Naive Bayes spam classifier by Hariom Lohar (hariomlohardev) — 5,572 messages, live in-browser training, transparent token scoring."},{"@type":"BreadcrumbList","@id":"https://hariomlohardev.github.io/projects/spam_classifier.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home — Hariom Lohar","item":"https://hariomlohardev.github.io/"},{"@type":"ListItem","position":2,"name":"Projects — Hariom Lohar","item":"https://hariomlohardev.github.io/projects.html"},{"@type":"ListItem","position":3,"name":"Spam Classifier — Hariom Lohar","item":"https://hariomlohardev.github.io/projects/spam_classifier.html"}]}]}</script>
+<script>document.documentElement.classList.add('js')</script>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>◎</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Fragment+Mono:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
+<style>
+  :root{
+    --paper:#FFFEFB;--paper-2:#F3F0E8;--paper-3:#EAE6DA;--sheet:#FFFFFF;
+    --ink:#0B1220;--ink-2:#1A2744;
+    --muted:#6E7D9A;--muted-2:#8A9AB6;
+    --line:#D9E2EF;--line-2:#B9C8E2;
+    --grid:#E3ECFB;--grid-2:#C9D8F0;
+    --signal:#FFD400;--signal-2:#FFC700;--signal-soft:rgba(255,212,0,.18);
+    --red:#E10600;--red-soft:rgba(225,6,0,.08);
+    --blue:#0050FF;--green:#0E9F6E;--green-soft:rgba(14,159,110,.10);
+    --max:1240px;--pad:clamp(18px,4vw,52px);
+    --mono:'Fragment Mono','JetBrains Mono',ui-monospace,monospace;
+    --display:'Bricolage Grotesque',system-ui,sans-serif;
+    --serif:'Instrument Serif',Georgia,serif;
+    --sans:'Instrument Sans',system-ui,sans-serif;
+    --ease:cubic-bezier(.22,1,.36,1);--ease2:cubic-bezier(.16,1,.3,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased;
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px),linear-gradient(var(--grid-2) 1px,transparent 1px),linear-gradient(90deg,var(--grid-2) 1px,transparent 1px);
+    background-size:24px 24px,24px 24px,120px 120px,120px 120px;background-position:-1px -1px}
+  body.loading{overflow:hidden} body.modal-open{overflow:hidden}
+  ::selection{background:var(--signal);color:var(--ink)}
+  a{color:inherit;text-decoration:none} button,textarea,input{font-family:inherit}
+  a:focus-visible,button:focus-visible,textarea:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+  #prog{position:fixed;top:0;left:0;height:3px;width:0;background:var(--signal);z-index:90;box-shadow:0 1px 0 rgba(0,0,0,.08)}
+
+  /* loader */
+  #load{position:fixed;inset:0;z-index:700;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:center;transition:transform .6s var(--ease)}
+  #load.done{transform:translateY(-101%)}
+  #load .big{font-family:var(--display);font-weight:800;font-size:clamp(3.2rem,13vw,9rem);letter-spacing:-.05em;line-height:.85;opacity:0;animation:loadin .7s var(--ease) forwards}
+  #load .big span{color:transparent;-webkit-text-stroke:2px var(--paper)}
+  @keyframes loadin{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+  #load .pct{position:absolute;top:26px;right:30px;font-family:var(--mono);font-size:13px;letter-spacing:.1em;color:var(--muted-2)}
+  #load .lab{position:absolute;bottom:26px;left:30px;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2)}
+  #load .bar{position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--signal)}
+
+  .wrap{max-width:var(--max);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad);position:relative;z-index:1}
+  header{position:sticky;top:0;z-index:40;background:rgba(255,254,251,.88);backdrop-filter:saturate(150%) blur(10px);border-bottom:1px solid var(--line)}
+  .head-top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0 12px;border-bottom:1px dashed var(--line);font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .head-top b{color:var(--ink);font-weight:500}
+  .head-main{display:flex;align-items:center;justify-content:space-between;height:56px;gap:24px}
+  .logo{font-family:var(--mono);font-size:13px;letter-spacing:.02em;display:inline-flex;align-items:center;gap:8px;font-weight:500}
+  .logo-mark{width:28px;height:28px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-family:var(--mono);font-size:11px;font-weight:600}
+  .logo i{font-style:normal;color:var(--muted);font-weight:400}
+  nav{display:flex;gap:22px}
+  nav a{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:6px 0;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+  nav a:hover,nav a.active{color:var(--ink);border-bottom-color:var(--signal)}
+  .eng-badge{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;white-space:nowrap;color:var(--muted);border:1px solid var(--line-2);padding:5px 10px;background:var(--paper)}
+  .eng-badge i{width:7px;height:7px;border-radius:50%;background:var(--muted);flex:none;transition:background .3s}
+  .eng-badge.busy i{background:var(--muted);animation:pulse2 1.2s infinite}
+  .eng-badge.ready{color:var(--green);border-color:var(--green);background:var(--green-soft)}
+  .eng-badge.ready i{background:var(--green)}
+  .eng-badge.fallback{color:var(--red);border-color:var(--red);background:var(--red-soft)}
+  .eng-badge.fallback i{background:var(--red)}
+  @keyframes pulse2{0%{box-shadow:0 0 0 0 rgba(225,6,0,.45)}70%{box-shadow:0 0 0 7px rgba(225,6,0,0)}100%{box-shadow:0 0 0 0 rgba(225,6,0,0)}}
+  header.scrolled{box-shadow:0 2px 12px rgba(11,18,32,.06)}
+  .marginalia{border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);background:var(--ink);color:#C8D2E6;overflow:hidden;padding:10px 0}
+  .marginalia .track{display:flex;width:max-content;animation:marq 28s linear infinite}
+  .marginalia:hover .track{animation-play-state:paused}
+  .marginalia .track span{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:0 18px;white-space:nowrap}
+  .marginalia .track span.dot{color:var(--signal)}
+  @keyframes marq{to{transform:translateX(-50%)}}
+
+  .open{padding:22px 0 40px;position:relative;overflow:hidden}
+  .watermark{position:absolute;right:-2%;top:2%;z-index:0;pointer-events:none;user-select:none;font-family:var(--display);font-weight:800;font-size:clamp(10rem,30vw,26rem);line-height:.8;letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1.5px var(--grid-2);opacity:.55;will-change:transform;max-width:100vw}
+  .back{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:6px 0;border-bottom:1px solid transparent;transition:color .2s,border-color .2s,transform .2s var(--ease)}
+  .back:hover{color:var(--ink);border-bottom-color:var(--line-2);transform:translateX(-3px)}
+  .eyebrow{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:12px 0;margin:14px 0 22px;position:relative;z-index:1}
+  .eyebrow .rec{display:inline-flex;align-items:center;gap:8px}
+  .eyebrow .rec i{width:8px;height:8px;border-radius:50%;background:var(--red);animation:pulse2 1.6s infinite}
+  .title-row{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;flex-wrap:wrap;margin-bottom:26px;position:relative;z-index:1}
+  h1{font-family:var(--display);font-weight:800;letter-spacing:-.045em;line-height:.86;font-size:clamp(2.6rem,6.6vw,5.2rem);text-transform:uppercase}
+  h1 .l2{display:block;color:transparent;-webkit-text-stroke:1.7px var(--ink)}
+  @supports not (-webkit-text-stroke:2px #000){h1 .l2{color:var(--ink)}}
+  .ch{display:inline-block;overflow:hidden;vertical-align:top}
+  .chi{display:inline-block;transform:translateY(115%);transition:transform 1s var(--ease)}
+  body.ready .chi{transform:none}
+  .caret{color:var(--blue);-webkit-text-stroke:0;animation:blink 1.1s steps(1) infinite;font-weight:400}
+  @keyframes blink{50%{opacity:0}}
+  .title-meta{display:flex;flex-direction:column;gap:8px;align-items:flex-end;padding-bottom:8px}
+  .status-pill{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:5px 11px;border:1px solid var(--green);color:var(--green);background:var(--green-soft);white-space:nowrap}
+  .title-meta .sub{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.04em}
+
+  /* bench — paper sheets */
+  .machine{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(18px,3vw,28px);position:relative;z-index:1}
+  .panel{background:var(--sheet);border:1px solid var(--ink);position:relative;padding:22px 22px 20px;box-shadow:0 1px 0 rgba(11,18,32,.06)}
+  .panel::before{content:"";position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(-1deg);width:96px;height:14px;background:rgba(255,255,255,.78);border:1px solid rgba(11,18,32,.06);box-shadow:0 1px 6px rgba(0,0,0,.07);z-index:2}
+  .p-label{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px dashed var(--line)}
+  .p-label .eng{letter-spacing:.08em;color:var(--blue)}
+  #msgIn{width:100%;min-height:148px;resize:vertical;border:1px solid var(--line-2);background:var(--paper-2);padding:16px;font-family:var(--mono);font-size:13.5px;line-height:1.65;color:var(--ink);transition:border-color .2s,box-shadow .2s}
+  #msgIn:focus{border-color:var(--ink);box-shadow:0 0 0 3px var(--signal-soft);outline:none}
+  #msgIn::placeholder{color:var(--muted-2)}
+  #msgIn[aria-invalid="true"]{border-color:var(--red);background:var(--red-soft)}
+  .help{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5}
+  .help kbd{font-family:var(--mono);border:1px solid var(--line-2);padding:1px 5px;border-radius:3px;background:var(--paper);color:var(--ink);font-size:10px}
+  .compose-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap}
+  .charcount{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em}
+  .send-btn{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;background:var(--ink);color:var(--paper);border:1px solid var(--ink);padding:12px 22px;cursor:pointer;display:inline-flex;align-items:center;gap:10px;transition:background .22s,transform .15s var(--ease),box-shadow .22s,opacity .22s}
+  .send-btn:hover:not(:disabled){background:var(--blue);border-color:var(--blue);transform:translateY(-1px);box-shadow:0 6px 16px rgba(0,80,255,.18)}
+  .send-btn:active:not(:disabled){transform:translateY(0)}
+  .send-btn:disabled{opacity:.45;cursor:not-allowed}
+  .send-btn .k{font-size:9px;border:1px solid rgba(255,255,255,.4);padding:2px 5px;letter-spacing:.06em;color:rgba(255,255,255,.8)}
+  .samples{margin-top:16px;border-top:1px solid var(--line);padding-top:12px}
+  .samples .s-lab{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:10px}
+  .sample-chips{display:flex;flex-wrap:wrap;gap:8px}
+  .schip{font-family:var(--mono);font-size:10.5px;border:1px solid var(--line-2);background:var(--paper);color:var(--muted);padding:7px 11px;cursor:pointer;transition:all .22s var(--ease);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .schip:hover{border-color:var(--ink);color:var(--ink);transform:translateY(-1px)}
+  .schip.sp{border-left:3px solid var(--red)} .schip.ha{border-left:3px solid var(--green)}
+  .panel.shake{animation:shake .4s}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+
+  .verdict-panel{display:flex;flex-direction:column}
+  .v-stage{position:relative;flex:1;min-height:238px;border:1px dashed var(--line-2);display:grid;place-items:center;overflow:hidden;background:var(--paper-2);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:20px 20px}
+  .v-idle{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;padding:20px}
+  .v-idle .big-q{font-family:var(--display);font-size:52px;font-weight:800;color:var(--grid-2);line-height:1}
+  .v-idle p{font-size:11px;letter-spacing:.02em;text-transform:none;color:var(--muted);max-width:28ch;line-height:1.5}
+  .v-run{display:none;flex-direction:column;align-items:center;gap:14px;font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .v-run .spin{width:34px;height:34px;border:2px solid var(--line-2);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .v-done{display:none;width:100%;padding:6px 10px 10px}
+  .stamp-v{position:absolute;top:36%;left:50%;transform:translate(-50%,-50%) rotate(-14deg) scale(2.4);opacity:0;font-family:var(--display);font-weight:800;font-size:clamp(2.2rem,4.6vw,3.4rem);letter-spacing:.04em;text-transform:uppercase;border:3px solid currentColor;padding:2px 22px;pointer-events:none;z-index:4;background:var(--sheet);transition:transform .38s cubic-bezier(.34,1.56,.64,1),opacity .22s}
+  .stamp-v.on{opacity:1;transform:translate(-50%,-50%) rotate(-8deg) scale(1)}
+  .stamp-v.spam{color:var(--red)} .stamp-v.ham{color:var(--green)}
+  .v-num-row{display:flex;align-items:baseline;gap:14px;margin-top:64px}
+  .v-pct{font-family:var(--display);font-weight:800;font-size:clamp(2.4rem,5.4vw,3.6rem);letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;min-width:3.4ch}
+  .v-pct.spam{color:var(--red)} .v-pct.ham{color:var(--green)}
+  .v-cap{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);line-height:1.6}
+  .v-cap b{color:var(--ink)}
+  .gauge{position:relative;height:8px;background:var(--paper);border:1px solid var(--ink);margin-top:18px}
+  .g-fill{position:absolute;inset:0 auto 0 0;width:0;transition:width 1.1s var(--ease),background .4s}
+  .g-mark{position:absolute;top:-5px;bottom:-5px;left:0;width:2px;background:var(--ink);transition:left 1.1s var(--ease)}
+  .g-mid{position:absolute;top:0;bottom:0;left:50%;width:1px;background:var(--line-2)}
+  .g-labels{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+  .g-labels .gl-g{color:var(--green)} .g-labels .gl-a{color:var(--red)}
+  .v-words{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:14px;letter-spacing:.04em}
+  .v-words b.r{color:var(--red)} .v-words b.g{color:var(--green)}
+  .replay{margin-top:14px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:var(--sheet);border:1px solid var(--line-2);color:var(--muted);padding:7px 13px;cursor:pointer;transition:all .25s}
+  .replay:hover{border-color:var(--ink);color:var(--ink)}
+
+  .data-strip{margin-top:clamp(18px,3vw,28px);border:1px solid var(--ink);background:var(--sheet);padding:18px 20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;position:relative;z-index:1;box-shadow:0 1px 0 rgba(11,18,32,.06)}
+  .data-strip::before{content:"";position:absolute;top:-9px;left:22px;width:84px;height:14px;background:rgba(255,255,255,.78);border:1px solid rgba(11,18,32,.06);transform:rotate(-1deg)}
+  .ds-info{flex:1;min-width:200px}
+  .ds-info .ds-lab{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);display:flex;align-items:center;gap:8px}
+  .ds-info .ds-lab i{width:7px;height:7px;border-radius:50%;background:var(--blue);animation:pulse2 1.6s infinite}
+  .ds-info p{font-size:13.5px;color:var(--muted);margin-top:6px;line-height:1.5}
+  .ds-info p b{color:var(--ink)}
+  .ds-btns{display:flex;gap:10px;flex-wrap:wrap}
+  .ds-btn{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:11px 18px;cursor:pointer;transition:all .25s var(--ease);display:inline-flex;align-items:center;gap:8px;border:1px solid}
+  .ds-btn.primary{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .ds-btn.primary:hover{background:var(--blue);border-color:var(--blue);transform:translateY(-1px)}
+  .ds-btn.ghost{background:var(--paper);border-color:var(--line-2);color:var(--muted)}
+  .ds-btn.ghost:hover{border-color:var(--ink);color:var(--ink);transform:translateY(-1px)}
+
+  /* analysis modal */
+  .modal-backdrop{position:fixed;inset:0;z-index:600;background:rgba(11,18,32,.52);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .35s var(--ease)}
+  .modal-backdrop.open{opacity:1;pointer-events:auto}
+  .modal{width:100%;max-width:740px;background:var(--paper);border:1px solid var(--ink);position:relative;transform:scale(.94) translateY(16px);transition:transform .4s var(--ease);box-shadow:12px 12px 0 rgba(11,18,32,.15)}
+  .modal-backdrop.open .modal{transform:none}
+  .modal::before{content:"";position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(-1deg);width:110px;height:14px;background:rgba(255,255,255,.78);border:1px solid rgba(11,18,32,.06);box-shadow:0 1px 4px rgba(0,0,0,.06)}
+  .modal-head{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px 14px;background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+  .modal-head .m-title{display:flex;align-items:center;gap:10px;color:#cfcfc8}
+  .modal-head .m-title .dots{display:flex;gap:5px}
+  .modal-head .m-title .dots i{width:8px;height:8px;border-radius:50%;background:#334155;transition:background .3s}
+  .modal-head .m-title .dots i.on{background:var(--signal)}
+  .modal-head .m-title .dots i.done{background:var(--green)}
+  .m-phase{color:var(--signal);min-width:120px;text-align:right}
+  .m-skip{background:none;border:1px solid #334155;color:var(--muted-2);font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;cursor:pointer;transition:color .25s,border-color .25s}
+  .m-skip:hover{color:var(--paper);border-color:var(--paper)}
+  .modal-body{padding:clamp(20px,4vw,36px);min-height:260px;display:flex;flex-direction:column;justify-content:center}
+  .m-msg{font-family:var(--mono);font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:20px;padding:12px 14px;border:1px solid var(--line);background:var(--paper-2);opacity:0;transform:translateY(8px);transition:opacity .4s,transform .4s}
+  .m-msg.show{opacity:1;transform:none}
+  .m-msg .m-msg-lab{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);display:block;margin-bottom:6px}
+  .token-area{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;min-height:84px;align-items:center}
+  .tk{font-family:var(--mono);font-size:clamp(12px,1.9vw,14px);padding:7px 11px;border:1px solid var(--line-2);background:var(--sheet);color:var(--ink);position:relative;display:inline-flex;flex-direction:column;align-items:center;gap:3px;line-height:1.1;opacity:0;transform:scale(.7) translateY(10px);transition:all .35s var(--ease)}
+  .tk.in{opacity:1;transform:none}
+  .tk .tk-p{font-size:9px;letter-spacing:.04em;opacity:0;transition:opacity .3s;color:var(--muted)}
+  .tk.scored .tk-p{opacity:.8}
+  .tk.spam{border-color:var(--red);color:var(--red);background:var(--red-soft)}
+  .tk.ham{border-color:var(--green);color:var(--green);background:var(--green-soft)}
+  .tk.weak{opacity:0!important;transform:scale(.4)!important;pointer-events:none}
+  .tk.strong{transform:scale(1.08);box-shadow:0 0 0 1.5px currentColor;font-weight:600}
+  .tk.strong.pulse{animation:tkpulse .5s var(--ease)}
+  @keyframes tkpulse{0%{transform:scale(1.08)}50%{transform:scale(1.18)}100%{transform:scale(1.08)}}
+  .m-status{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:center;margin-top:18px;min-height:1.4em;transition:color .3s}
+  .m-status.accent{color:var(--blue)} .m-status.green{color:var(--green)}
+  .modal-progress{height:3px;background:var(--line);position:relative;overflow:hidden}
+  .modal-progress i{position:absolute;inset:0 auto 0 0;width:0;background:var(--signal);border-right:2px solid var(--ink);transition:width .5s var(--ease)}
+
+  /* data viewer */
+  .dv-backdrop{position:fixed;inset:0;z-index:650;background:rgba(11,18,32,.58);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:clamp(12px,3vw,32px);opacity:0;pointer-events:none;transition:opacity .35s var(--ease)}
+  .dv-backdrop.open{opacity:1;pointer-events:auto}
+  .dv-window{width:100%;max-width:960px;max-height:88vh;background:var(--paper);border:1px solid var(--ink);display:flex;flex-direction:column;position:relative;transform:scale(.94) translateY(16px);transition:transform .4s var(--ease);box-shadow:14px 14px 0 rgba(11,18,32,.18)}
+  .dv-backdrop.open .dv-window{transform:none}
+  .dv-window::before{content:"";position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(-1deg);width:120px;height:14px;background:rgba(255,255,255,.78);border:1px solid rgba(11,18,32,.06)}
+  .dv-titlebar{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px 14px;background:var(--ink);color:var(--paper);flex:none}
+  .dv-titlebar .dv-t{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11px;letter-spacing:.1em}
+  .dv-titlebar .dv-t .dots{display:flex;gap:5px}
+  .dv-titlebar .dv-t .dots i{width:9px;height:9px;border-radius:50%}
+  .dv-titlebar .dv-t .dots i:nth-child(1){background:var(--red)} .dv-titlebar .dv-t .dots i:nth-child(2){background:var(--signal)} .dv-titlebar .dv-t .dots i:nth-child(3){background:var(--green)}
+  .dv-titlebar .dv-name{color:#cfcfc8}
+  .dv-titlebar .dv-count{font-family:var(--mono);font-size:10px;color:var(--muted-2);letter-spacing:.08em}
+  .dv-close{background:none;border:1px solid #334155;color:var(--muted-2);font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;cursor:pointer;transition:color .25s,border-color .25s}
+  .dv-close:hover{color:var(--paper);border-color:var(--paper)}
+  .dv-toolbar{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--line);flex:none;flex-wrap:wrap}
+  .dv-tabs{display:flex;gap:6px}
+  .dv-tab{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:6px 14px;border:1px solid var(--line-2);background:var(--paper);color:var(--muted);cursor:pointer;transition:all .2s}
+  .dv-tab:hover{border-color:var(--ink);color:var(--ink)}
+  .dv-tab.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .dv-tab.active.tb-sp{background:var(--red);border-color:var(--red)} .dv-tab.active.tb-ha{background:var(--green);border-color:var(--green)}
+  .dv-search{margin-left:auto;position:relative}
+  .dv-search input{font-family:var(--mono);font-size:12px;padding:8px 12px 8px 30px;border:1px solid var(--line-2);background:var(--paper-2);color:var(--ink);width:200px;transition:border-color .25s,width .3s var(--ease)}
+  .dv-search input:focus{border-color:var(--ink);outline:none;width:260px;box-shadow:0 0 0 3px var(--signal-soft)}
+  .dv-search::before{content:"⌕";position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--muted)}
+  .dv-table-wrap{flex:1;overflow:auto;min-height:0}
+  .dv-table{width:100%;border-collapse:collapse;font-size:13px}
+  .dv-table thead{position:sticky;top:0;z-index:2}
+  .dv-table th{background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:11px 14px;text-align:left;font-weight:500;white-space:nowrap}
+  .dv-table th:first-child{width:52px;text-align:center}
+  .dv-table th:last-child{width:90px;text-align:center}
+  .dv-table td{padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  .dv-table tr:nth-child(even) td{background:var(--paper-2)}
+  .dv-table tr:hover td{background:var(--signal-soft)}
+  .dv-table .row-no{font-family:var(--mono);font-size:11px;color:var(--muted-2);text-align:center;font-variant-numeric:tabular-nums}
+  .dv-table .msg-cell{font-family:var(--mono);font-size:12px;line-height:1.55;color:#334155;word-break:break-word}
+  .dv-table .label-cell{text-align:center}
+  .label-pill{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border:1px solid;display:inline-block}
+  .label-pill.spam{color:var(--red);border-color:var(--red);background:var(--red-soft)} .label-pill.ham{color:var(--green);border-color:var(--green);background:var(--green-soft)}
+  .dv-table tr.row-spam td:first-child{border-left:3px solid var(--red)} .dv-table tr.row-ham td:first-child{border-left:3px solid var(--green)}
+  .dv-footer{padding:12px 14px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:var(--muted);display:flex;justify-content:space-between;align-items:center;flex:none;flex-wrap:wrap;gap:10px;background:var(--paper-2)}
+  .dv-footer a{color:var(--ink);border-bottom:1px solid var(--line-2);transition:color .2s,border-color .2s}
+  .dv-footer a:hover{color:var(--blue);border-color:var(--blue)}
+  .dv-empty{padding:40px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.06em}
+
+  footer{border-top:2px solid var(--ink);margin-top:18px;background:var(--paper-2);position:relative;z-index:1}
+  .foot-in{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;padding:18px 0;font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+  .foot-in a:hover{color:var(--ink)}
+  html.js [data-reveal]{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease2),transform .7s var(--ease2)}
+  html.js [data-reveal].in{opacity:1;transform:none}
+  @media(max-width:980px){.machine{grid-template-columns:1fr}.watermark{font-size:42vw}.title-meta{align-items:flex-start}}
+  @media(max-width:720px){nav{display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}nav a{padding:10px 6px;min-height:44px;display:grid;place-items:center;white-space:nowrap}nav::-webkit-scrollbar{display:none}.dv-search input{width:140px}.dv-search input:focus{width:180px}}
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}[data-reveal],.chi{opacity:1!important;transform:none!important}html{scroll-behavior:auto}#load{display:none}}
+</style>
+</head>
+<body class="loading">
+<a href="#main" class="skip" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden">Skip to content</a>
+<style>.skip:focus{left:16px;top:10px;width:auto;height:auto;padding:8px 12px;background:var(--ink);color:var(--paper);z-index:100;border:1px solid var(--signal);font-family:var(--mono);font-size:12px}</style>
+<div id="load" aria-hidden="true"><span class="pct" id="pct">000%</span><div class="big">SP<span>AM</span></div><span class="lab">naive bayes — booting engine</span><div class="bar" id="lbar"></div></div>
+<div id="prog" aria-hidden="true"></div>
+
+<header id="top">
+  <div class="wrap">
+    <div class="head-top">
+      <span>LAB NOTEBOOK <b>No. 01</b> · BENCH · INDIA — UTC+5:30</span>
+      <span style="display:flex;gap:14px;flex-wrap:wrap;align-items:center">
+        <span>NAIVE BAYES · LAPLACE k=1</span>
+        <span id="hdrStats" style="color:var(--muted)">—</span>
+      </span>
+    </div>
+    <div class="head-main">
+      <a class="logo" href="../index.html"><span class="logo-mark">HL</span> hariomlohardev <i>— build log</i></a>
+      <nav aria-label="Primary">
+        <a href="../index.html">Home</a>
+        <a href="../projects.html" class="active" aria-current="page">Projects</a>
+        <a href="../index.html#mission">Mission</a>
+        <a href="../index.html#contact">Contact</a>
+      </nav>
+      <div class="eng-badge busy" id="engBadge"><i aria-hidden="true"></i><span id="engText">Loading python…</span></div>
+    </div>
+  </div>
+</header>
+<div class="marginalia" aria-hidden="true"><div class="track" data-track></div></div>
+
+<main id="main">
+  <section class="open">
+    <div class="wrap">
+      <div class="watermark" id="wmark" aria-hidden="true">BAYES</div>
+      <a class="back" href="../projects.html">← All projects</a>
+      <div class="eyebrow" data-reveal>
+        <span class="rec"><i aria-hidden="true"></i>Live — runs in your browser</span>
+        <span>data.csv · trained locally · nothing mocked</span>
+      </div>
+
+      <div class="title-row" data-reveal>
+        <h1 aria-label="Spam classifier">
+          <span aria-hidden="true"><span data-split>SPAM</span></span>
+          <span class="l2" aria-hidden="true"><span data-split>CLASSIFIER</span><span class="caret">_</span></span>
+        </h1>
+        <div class="title-meta">
+          <span class="status-pill">✓ Shipped · 2026</span>
+          <span class="sub" id="trainSub">Training on data.csv…</span>
+        </div>
+      </div>
+
+      <div class="machine">
+        <div class="panel" id="composePanel" data-reveal>
+          <div class="p-label"><span>Message</span><span class="eng">type or paste</span></div>
+          <label for="msgIn" class="sr-only" style="position:absolute;left:-9999px">Message to classify</label>
+          <textarea id="msgIn" placeholder="Try: “Free money!!! Click now to claim” or “Hey, lunch tomorrow?”" spellcheck="false" aria-describedby="msgHelp msgError" aria-invalid="false"></textarea>
+          <p class="help" id="msgHelp">The bench tokenizes your message, scores each word red (spam) or green (ham), then stamps a verdict. Press <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to run.</p>
+          <p id="msgError" role="alert" aria-live="polite" style="font-family:var(--mono);font-size:11px;color:var(--red);min-height:1.2em;margin-top:6px"></p>
+          <div class="compose-foot">
+            <span class="charcount"><span id="charN">0</span> characters</span>
+            <button class="send-btn" id="sendBtn" disabled aria-describedby="msgHelp">Classify <span class="k">CTRL ↵</span></button>
+          </div>
+          <div class="samples">
+            <span class="s-lab">Load a sample — then edit it</span>
+            <div class="sample-chips" id="sampleChips"></div>
+          </div>
+        </div>
+
+        <div class="panel verdict-panel" data-reveal>
+          <div class="p-label"><span>Verdict</span><span class="eng">P(spam | message)</span></div>
+          <div class="v-stage" aria-live="polite" aria-atomic="true">
+            <div class="v-idle" id="vIdle"><span class="big-q">?</span><span>Awaiting input</span><p>Your result appears here. The analysis shows each token’s score before the final stamp.</p></div>
+            <div class="v-run" id="vRun"><span class="spin" aria-hidden="true"></span><span id="vRunTxt">Analyzing…</span></div>
+            <div class="stamp-v" id="vStamp" aria-hidden="true">SPAM</div>
+            <div class="v-done" id="vDone">
+              <div class="v-num-row">
+                <span class="v-pct" id="vPct">—</span>
+                <span class="v-cap" id="vCap">probability this<br>message is <b>spam</b></span>
+              </div>
+              <div class="gauge" aria-hidden="true"><span class="g-mid"></span><div class="g-fill" id="gFill"></div><div class="g-mark" id="gMark"></div></div>
+              <div class="g-labels"><span class="gl-g">← Ham</span><span>0.5</span><span class="gl-a">Spam →</span></div>
+              <p class="v-words" id="vWords"></p>
+              <button class="replay" id="replayBtn">↻ Replay analysis</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="data-strip" data-reveal>
+        <div class="ds-info">
+          <span class="ds-lab"><i aria-hidden="true"></i>Training data</span>
+          <p>The model learned from <b id="dsCount">—</b> in <b>data.csv</b>. Inspect every row — filter by label or search the text.</p>
+        </div>
+        <div class="ds-btns">
+          <button class="ds-btn primary" id="viewDataBtn">View training data</button>
+          <a class="ds-btn ghost" href="https://github.com/hariomlohardev/spam_classifier" target="_blank" rel="noopener">Source code ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-label="Analysis"><div class="modal"><div class="modal-head"><span class="m-title"><span class="dots"><i id="dot1"></i><i id="dot2"></i><i id="dot3"></i></span> bayes_analysis</span><span class="m-phase" id="mPhase">Initializing…</span><button class="m-skip" id="skipBtn">Skip →</button></div><div class="modal-body"><div class="m-msg" id="mMsg"><span class="m-msg-lab">Input message</span><span id="mMsgText"></span></div><div class="token-area" id="tokenArea"></div><div class="m-status" id="mStatus" role="status" aria-live="polite"></div></div><div class="modal-progress"><i id="mProg"></i></div></div></div>
+
+<div class="dv-backdrop" id="dvBackdrop" role="dialog" aria-modal="true" aria-label="Training data viewer"><div class="dv-window"><div class="dv-titlebar"><span class="dv-t"><span class="dots"><i></i><i></i><i></i></span><span class="dv-name">data.csv</span></span><span class="dv-count" id="dvCount">— rows</span><button class="dv-close" id="dvClose">✕ Close</button></div><div class="dv-toolbar"><div class="dv-tabs"><button class="dv-tab active" data-dvfilter="all">All</button><button class="dv-tab tb-sp" data-dvfilter="spam">Spam</button><button class="dv-tab tb-ha" data-dvfilter="ham">Ham</button></div><div class="dv-search"><label for="dvSearch" style="position:absolute;left:-9999px">Search messages</label><input type="text" id="dvSearch" placeholder="Search messages…" autocomplete="off" /></div></div><div class="dv-table-wrap"><table class="dv-table"><thead><tr><th>#</th><th>Message</th><th>Label</th></tr></thead><tbody id="dvBody"></tbody></table><div class="dv-empty" id="dvEmpty" style="display:none">No rows match your filter.</div></div><div class="dv-footer"><span id="dvShowing">Showing — of —</span><a href="https://github.com/hariomlohardev/spam_classifier/blob/main/data.csv" target="_blank" rel="noopener">View raw on GitHub ↗</a></div></div></div>
+
+<footer>
+  <div class="wrap foot-in">
+    <span>© <span id="yr"></span> <b>Hariom Lohar</b> — Lab Notebook No.01 · <a href="https://github.com/hariomlohardev" style="text-decoration:underline">hariomlohardev on GitHub</a> · India.</span>
+    <span>Engine: Naive Bayes · by <b>Hariom Lohar</b> · runs in your browser</span>
+    <span><a href="#top">Back to top ↑</a></span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var CSV_URL = 'https://raw.githubusercontent.com/hariomlohardev/spam_classifier/main/data.csv';
+  function $(id){ return document.getElementById(id); }
+  function wait(ms){ return new Promise(function(r){ setTimeout(r, reduced ? 0 : ms); }); }
+  function escapeHtml(s){ return s.replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+
+  var csvText = null, engine = null, pyodide = null;
+  var parsedRows = [];
+
+  function parseCSV(text){
+    var rows=[], row=[], cur='', inQ=false;
+    for(var i=0;i<text.length;i++){
+      var c=text[i];
+      if(inQ){ if(c==='"'){ if(text[i+1]==='"'){cur+='"';i++;} else inQ=false; } else cur+=c; }
+      else{
+        if(c==='"') inQ=true;
+        else if(c===','){ row.push(cur); cur=''; }
+        else if(c==='\n'){ row.push(cur); rows.push(row); row=[]; cur=''; }
+        else if(c!=='\r') cur+=c;
+      }
+    }
+    if(cur!==''||row.length){ row.push(cur); rows.push(row); }
+    return rows;
+  }
+  function buildJSEngine(text){
+    var rows = parseCSV(text);
+    var head = rows[0].map(function(h){ return h.trim(); });
+    var mi = head.indexOf('message'), li = head.indexOf('label');
+    var spamWords={}, hamWords={}, vocab={}, ts=0, tsw=0, thw=0, docs=0;
+    for(var r=1;r<rows.length;r++){
+      var msg = rows[r][mi], lab = (rows[r][li]||'').trim();
+      if(!msg || (lab!=='spam' && lab!=='ham')) continue;
+      docs++;
+      parsedRows.push({message:msg, label:lab});
+      if(lab==='spam') ts++;
+      var ws = msg.toLowerCase().match(/\w+/g) || [];
+      ws.forEach(function(w){
+        vocab[w]=1;
+        if(lab==='spam'){ spamWords[w]=(spamWords[w]||0)+1; tsw++; }
+        else{ hamWords[w]=(hamWords[w]||0)+1; thw++; }
+      });
+    }
+    var V = Object.keys(vocab).length, th = docs - ts;
+    function ps(w){ return ((spamWords[w]||0)+1)/(tsw+V); }
+    function ph(w){ return ((hamWords[w]||0)+1)/(thw+V); }
+    return {
+      name:'js-mirror',
+      stats:{ total_sms:docs, total_spam:ts, total_ham:th, vocab_size:V },
+      analyze:function(msg){
+        var toks = msg.toLowerCase().trim().split(/\s+/).filter(Boolean);
+        return toks.map(function(tok){
+          var m = tok.match(/\w+/); var key = m ? m[0] : tok;
+          var a = ps(key), b = ph(key);
+          return { word:tok, score:a/(a+b), is_spam:a>b, unseen:!vocab[key] };
+        });
+      },
+      verdict:function(msg){
+        var toks = msg.toLowerCase().trim().split(/\s+/).filter(Boolean);
+        var ls = Math.log(ts/docs), lh = Math.log(th/docs);
+        toks.forEach(function(t){ ls += Math.log(ps(t)); lh += Math.log(ph(t)); });
+        var m = Math.max(ls,lh);
+        var p = Math.exp(ls-m)/(Math.exp(ls-m)+Math.exp(lh-m));
+        return { p_spam:p, verdict: p>0.5?'spam':'ham' };
+      }
+    };
+  }
+
+  var PY_CLASS = [
+    "import re, math, csv, sys, json","import pandas as pd",
+    "class Classifier:",
+    "    def __init__(self, file_path='data.csv'):",
+    "        self.dataset = self.get_data(file_path)",
+    "        self.total_spam = 0","        self.total_spam_word = 0","        self.total_ham_word = 0",
+    "        self.spam_words = None","        self.ham_words = None","        self.vocab_size = None",
+    "        self.init()",
+    "        self.total_ham = len(self.dataset) - self.total_spam",
+    "        self.total_sms = self.total_spam + self.total_ham",
+    "        self.total_word = self.total_spam_word + self.total_ham_word",
+    "    def init(self):",
+    "        data = []",
+    "        for sms, label in self.dataset:",
+    "            if label == 'spam': self.total_spam += 1",
+    "            words = re.findall(r'\\w+', sms.lower())",
+    "            for word in words:","                data.append({'word': word, 'label': label})",
+    "        df = pd.DataFrame(data)",
+    "        df = df.groupby(['word','label']).size().reset_index(name='word_count')",
+    "        self.vocab_size = len(set(df['word']))",
+    "        df_spam = df[df['label']=='spam'].copy().drop(columns='label')",
+    "        df_ham = df[df['label']=='ham'].copy().drop(columns='label')",
+    "        self.total_ham_word = sum(df_ham['word_count'])",
+    "        self.ham_words = dict(zip(df_ham['word'], df_ham['word_count']))",
+    "        self.total_spam_word = sum(df_spam['word_count'])",
+    "        self.spam_words = dict(zip(df_spam['word'], df_spam['word_count']))",
+    "    def get_data(self, path):",
+    "        with open(path,'r',encoding='utf-8') as f:",
+    "            reader = csv.DictReader(f)",
+    "            return [(d['message'], d['label']) for d in reader]",
+    "    def _spam_prob(self, word):",
+    "        c = self.spam_words.get(word, 0)",
+    "        return float((c + 1) / (self.total_spam_word + self.vocab_size))",
+    "    def _ham_prob(self, word):",
+    "        c = self.ham_words.get(word, 0)",
+    "        return float((c + 1) / (self.total_ham_word + self.vocab_size))",
+    "    def is_spam(self, s):",
+    "        t = sum(math.log(self._spam_prob(w)) for w in s.lower().strip().split())",
+    "        return t + math.log(self.total_spam / self.total_sms)",
+    "    def is_ham(self, s):",
+    "        t = sum(math.log(self._ham_prob(w)) for w in s.lower().strip().split())",
+    "        return t + math.log(self.total_ham / self.total_sms)",
+    "    def __call__(self, s):",
+    "        return {'prob_spam': self.is_spam(s), 'prob_ham': self.is_ham(s)}",
+    "","clf = Classifier('/data.csv')",
+    "def analyze(msg):",
+    "    out = []",
+    "    for tok in msg.lower().strip().split():",
+    "        m = re.findall(r'\\w+', tok)",
+    "        key = m[0] if m else tok",
+    "        p_s, p_h = clf._spam_prob(key), clf._ham_prob(key)",
+    "        out.append({'word': tok, 'score': p_s/(p_s+p_h), 'is_spam': p_s > p_h, 'unseen': key not in clf.spam_words and key not in clf.ham_words})",
+    "    return json.dumps(out)",
+    "def verdict(msg):",
+    "    r = clf(msg)","    ls, lh = r['prob_spam'], r['prob_ham']","    m = max(ls, lh)",
+    "    p = math.exp(ls-m) / (math.exp(ls-m) + math.exp(lh-m))",
+    "    return json.dumps({'p_spam': p, 'verdict': 'spam' if p > 0.5 else 'ham'})",
+    "import json as _json",
+    "_stats_json = _json.dumps({'total_sms': clf.total_sms, 'total_spam': clf.total_spam, 'total_ham': clf.total_ham, 'vocab_size': clf.vocab_size})"
+  ].join("\n");
+
+  function setBadge(mode, text){ $('engBadge').className = 'eng-badge ' + mode; $('engText').textContent = text; }
+  function applyStats(stats, engName){
+    $('trainSub').textContent = 'Trained on ' + stats.total_sms + ' messages · V=' + stats.vocab_size;
+    $('hdrStats').textContent = stats.total_sms + ' rows · V=' + stats.vocab_size;
+    $('dsCount').textContent = stats.total_sms + ' messages (' + stats.total_spam + ' spam / ' + stats.total_ham + ' ham)';
+  }
+
+  async function boot(){
+    setBadge('busy','Fetching data.csv…');
+    try{
+      var r = await fetch(CSV_URL, {cache:'no-store'});
+      if(!r.ok) throw 0;
+      csvText = await r.text();
+    }catch(e){
+      setBadge('fallback','Dataset unreachable');
+      $('trainSub').textContent = 'Could not load data.csv — check your connection.';
+      $('msgHelp').textContent = 'The dataset failed to load, so scoring uses a fallback. Reload to try again.';
+      return;
+    }
+    engine = buildJSEngine(csvText);
+    applyStats(engine.stats, 'js-mirror');
+    setBadge('ready','Engine ready · Python warming…');
+    $('sendBtn').disabled = false;
+    $('dvCount').textContent = parsedRows.length + ' rows';
+    try{
+      setBadge('busy','Loading Python runtime…');
+      pyodide = await loadPyodide();
+      setBadge('busy','Loading Pandas…');
+      await pyodide.loadPackage('pandas');
+      setBadge('busy','Training on data.csv…');
+      pyodide.FS.writeFile('/data.csv', csvText);
+      pyodide.runPython(PY_CLASS);
+      var stats = JSON.parse(pyodide.runPython('_stats_json'));
+      engine = {
+        name:'python/pyodide',
+        analyze:function(msg){ pyodide.globals.set('MSG', msg); return JSON.parse(pyodide.runPython('analyze(MSG)')); },
+        verdict:function(msg){ pyodide.globals.set('MSG', msg); return JSON.parse(pyodide.runPython('verdict(MSG)')); }
+      };
+      applyStats(stats, 'python / pyodide');
+      setBadge('ready','Engine: Python ✓');
+    }catch(err){
+      setBadge('fallback','Engine: JS fallback');
+    }
+  }
+
+  var runId = 0, lastMsg = '', skipped = false;
+  var backdrop = $('modalBackdrop'), tokenArea = $('tokenArea');
+  var mPhase = $('mPhase'), mStatus = $('mStatus'), mProg = $('mProg');
+  var dots = [$('dot1'), $('dot2'), $('dot3')];
+
+  function setDot(n, mode){
+    dots.forEach(function(d, i){
+      if(i < n) d.className = 'done';
+      else if(i === n) d.className = mode === 'done' ? 'done' : 'on';
+      else d.className = '';
+    });
+  }
+  function setStatus(text, cls){ mStatus.textContent = text; mStatus.className = 'm-status' + (cls ? ' ' + cls : ''); }
+  function openModal(msg){
+    $('mMsgText').textContent = msg;
+    $('mMsg').classList.remove('show');
+    tokenArea.innerHTML = '';
+    setStatus(''); mProg.style.width = '0'; setDot(0, '');
+    mPhase.textContent = 'Initializing…';
+    backdrop.classList.add('open');
+    document.body.classList.add('modal-open');
+  }
+  function closeModal(){ backdrop.classList.remove('open'); document.body.classList.remove('modal-open'); }
+
+  async function runSequence(msg){
+    if(!engine) return;
+    var my = ++runId; skipped = false; lastMsg = msg;
+    verdictState('run'); $('vRunTxt').textContent = 'Analyzing…';
+    $('vStamp').classList.remove('on','spam','ham');
+    $('msgError').textContent = '';
+    $('msgIn').setAttribute('aria-invalid','false');
+    openModal(msg);
+    await wait(350); if(my !== runId) return;
+
+    var tokens = engine.analyze(msg);
+    var res = engine.verdict(msg);
+    if(my !== runId) return;
+
+    mPhase.textContent = '01 — Tokenizing'; setDot(0, ''); mProg.style.width = '10%';
+    $('mMsg').classList.add('show');
+    setStatus('Breaking message into tokens…');
+    await wait(500); if(my !== runId || skipped) return finishEarly(res, tokens);
+    tokens.forEach(function(t, i){
+      var el = document.createElement('span');
+      el.className = 'tk';
+      el.innerHTML = '<span>' + escapeHtml(t.word) + '</span><span class="tk-p"></span>';
+      el.style.transitionDelay = (i * 50) + 'ms';
+      tokenArea.appendChild(el);
+    });
+    requestAnimationFrame(function(){ tokenArea.querySelectorAll('.tk').forEach(function(el){ el.classList.add('in'); }); });
+    await wait(tokens.length * 50 + 600); if(my !== runId || skipped) return finishEarly(res, tokens);
+
+    mPhase.textContent = '02 — Scoring'; setDot(0, 'done'); setDot(1, ''); mProg.style.width = '40%';
+    setStatus('Computing P(spam | word) for each token…');
+    var chips = tokenArea.querySelectorAll('.tk');
+    chips.forEach(function(el, i){
+      var t = tokens[i];
+      el.style.transitionDelay = (i * 45) + 'ms';
+      setTimeout(function(){
+        if(my !== runId) return;
+        el.classList.add(t.is_spam ? 'spam' : 'ham', 'scored');
+        el.querySelector('.tk-p').textContent = Math.round(t.score * 100) + '% spam';
+      }, reduced ? 0 : i * 45);
+    });
+    await wait(tokens.length * 45 + 700); if(my !== runId || skipped) return finishEarly(res, tokens);
+
+    mPhase.textContent = '03 — Filtering'; setDot(1, 'done'); setDot(2, ''); mProg.style.width = '70%';
+    var strongCount = 0;
+    chips.forEach(function(el, i){
+      var t = tokens[i], strength = Math.abs(t.score - 0.5);
+      if(strength < 0.12 || t.unseen){
+        el.style.transitionDelay = (i * 30) + 'ms';
+        setTimeout(function(){ el.classList.add('weak'); }, reduced ? 0 : i * 30);
+      } else {
+        strongCount++;
+        el.style.transitionDelay = (i * 30) + 'ms';
+        setTimeout(function(){ el.classList.add('strong','pulse'); }, reduced ? 0 : tokens.length * 30 + 200);
+      }
+    });
+    setStatus('Filtering weak signals… ' + strongCount + ' of ' + tokens.length + ' tokens are decisive', 'accent');
+    await wait(tokens.length * 30 + 900); if(my !== runId || skipped) return finishEarly(res, tokens);
+
+    mPhase.textContent = '04 — Deciding'; setDot(2, 'done'); mProg.style.width = '92%';
+    setStatus('Summing log-likelihoods → softmax…', 'green');
+    await wait(700); if(my !== runId) return;
+    mProg.style.width = '100%';
+    await wait(200);
+    closeModal(); await wait(400); if(my !== runId) return;
+    revealVerdict(res, tokens);
+  }
+  function finishEarly(res, tokens){ closeModal(); revealVerdict(res, tokens); }
+
+  function revealVerdict(res, tokens){
+    var isSpam = res.verdict === 'spam', p = res.p_spam * 100;
+    var nSpam = tokens.filter(function(t){ return t.is_spam && !t.unseen; }).length;
+    verdictState('done');
+    var stamp = $('vStamp');
+    stamp.textContent = isSpam ? 'SPAM' : 'HAM';
+    stamp.className = 'stamp-v ' + (isSpam ? 'spam' : 'ham');
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ stamp.classList.add('on'); }); });
+    var pctEl = $('vPct');
+    pctEl.className = 'v-pct ' + (isSpam ? 'spam' : 'ham');
+    $('vCap').innerHTML = 'Probability this<br>message is <b>' + (isSpam ? 'spam' : 'ham') + '</b>';
+    $('gFill').style.width = p + '%';
+    $('gFill').style.background = isSpam ? 'var(--red)' : 'var(--green)';
+    $('gMark').style.left = 'calc(' + p + '% - 1px)';
+    $('vWords').innerHTML = '<b class="r">' + nSpam + '</b> spam tokens · <b class="g">' + (tokens.length - nSpam) + '</b> ham tokens';
+    var s0 = performance.now(), DUR = reduced ? 1 : 950;
+    (function cnt(now){
+      var t = Math.min(1, (now - s0) / DUR), e = 1 - Math.pow(1 - t, 3);
+      pctEl.textContent = (e * p).toFixed(1) + '%';
+      if(t < 1) requestAnimationFrame(cnt);
+    })(s0);
+  }
+  function verdictState(mode){
+    $('vIdle').style.display = mode==='idle' ? 'flex' : 'none';
+    $('vRun').style.display  = mode==='run'  ? 'flex' : 'none';
+    $('vDone').style.display = mode==='done' ? 'block' : 'none';
+  }
+
+  var dvFilter = 'all', dvQuery = '';
+  function renderDataViewer(){
+    var body = $('dvBody');
+    var filtered = parsedRows.filter(function(r){
+      if(dvFilter !== 'all' && r.label !== dvFilter) return false;
+      if(dvQuery && r.message.toLowerCase().indexOf(dvQuery) === -1) return false;
+      return true;
+    });
+    if(filtered.length === 0){
+      body.innerHTML = '';
+      $('dvEmpty').style.display = 'block';
+    } else {
+      $('dvEmpty').style.display = 'none';
+      body.innerHTML = filtered.map(function(r, i){
+        return '<tr class="row-' + r.label + '">' +
+          '<td class="row-no">' + (i + 1) + '</td>' +
+          '<td class="msg-cell">' + escapeHtml(r.message) + '</td>' +
+          '<td class="label-cell"><span class="label-pill ' + r.label + '">' + r.label + '</span></td>' +
+        '</tr>';
+      }).join('');
+    }
+    $('dvShowing').textContent = 'Showing ' + filtered.length + ' of ' + parsedRows.length + ' rows';
+  }
+  function openDataViewer(){
+    if(!parsedRows.length){ $('msgError').textContent = 'Dataset is still loading. Try again in a moment.'; return; }
+    renderDataViewer();
+    $('dvBackdrop').classList.add('open');
+    document.body.classList.add('modal-open');
+  }
+  function closeDataViewer(){
+    $('dvBackdrop').classList.remove('open');
+    if(!backdrop.classList.contains('open')) document.body.classList.remove('modal-open');
+  }
+  $('viewDataBtn').addEventListener('click', openDataViewer);
+  $('dvClose').addEventListener('click', closeDataViewer);
+  $('dvBackdrop').addEventListener('click', function(ev){ if(ev.target === $('dvBackdrop')) closeDataViewer(); });
+  document.querySelectorAll('[data-dvfilter]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('[data-dvfilter]').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      dvFilter = btn.getAttribute('data-dvfilter');
+      renderDataViewer();
+    });
+  });
+  $('dvSearch').addEventListener('input', function(){
+    dvQuery = this.value.toLowerCase().trim();
+    renderDataViewer();
+  });
+
+  var msgIn = $('msgIn');
+  function send(){
+    var text = msgIn.value.trim();
+    if(!engine){ $('msgError').textContent = 'Engine is still loading. Please wait a moment and try again.'; $('msgIn').setAttribute('aria-invalid','true'); return; }
+    if(!text){
+      $('msgError').textContent = 'Type a message first, or load a sample to edit.';
+      $('msgIn').setAttribute('aria-invalid','true');
+      var p = $('composePanel'); p.classList.remove('shake'); void p.offsetWidth; p.classList.add('shake');
+      msgIn.focus();
+      return;
+    }
+    $('msgError').textContent = ''; $('msgIn').setAttribute('aria-invalid','false');
+    runSequence(text);
+  }
+  $('sendBtn').addEventListener('click', send);
+  msgIn.addEventListener('keydown', function(ev){ if((ev.ctrlKey||ev.metaKey)&&ev.key==='Enter'){ ev.preventDefault(); send(); } });
+  msgIn.addEventListener('input', function(){
+    $('charN').textContent = msgIn.value.length;
+    if(msgIn.value.trim()){ $('msgError').textContent=''; $('msgIn').setAttribute('aria-invalid','false'); }
+  });
+  $('replayBtn').addEventListener('click', function(){ if(lastMsg) runSequence(lastMsg); });
+  $('skipBtn').addEventListener('click', function(){ skipped = true; });
+  backdrop.addEventListener('click', function(ev){ if(ev.target === backdrop) skipped = true; });
+  window.addEventListener('keydown', function(ev){
+    if(ev.key === 'Escape'){
+      if($('dvBackdrop').classList.contains('open')) closeDataViewer();
+      else if(backdrop.classList.contains('open')) skipped = true;
+    }
+  });
+
+  var SAMPLES = [
+    {t:"Congratulations! You've WON a free iPhone. Click here to claim your prize now!!!", c:"sp"},
+    {t:"Hey, are we still on for the meeting tomorrow at 10?", c:"ha"},
+    {t:"URGENT: Your account has been suspended. Verify now to avoid permanent loss!", c:"sp"},
+    {t:"Mom: don't forget dinner on Sunday, and bring the book I lent you", c:"ha"},
+    {t:"FREE $500 gift card! Limited time only. Reply WIN to claim now!", c:"sp"},
+    {t:"The paper deadline moved to Friday. Can you review my draft tonight?", c:"ha"}
+  ];
+  var chipBox = $('sampleChips');
+  SAMPLES.forEach(function(s){
+    var b = document.createElement('button');
+    b.className = 'schip ' + s.c;
+    b.setAttribute('aria-label','Load sample: ' + s.t);
+    b.textContent = (s.c==='sp' ? '⚠ ' : '✓ ') + (s.t.length > 44 ? s.t.slice(0,44) + '…' : s.t);
+    b.title = s.t;
+    b.addEventListener('click', function(){ msgIn.value = s.t; $('charN').textContent = s.t.length; $('msgError').textContent=''; $('msgIn').setAttribute('aria-invalid','false'); send(); });
+    chipBox.appendChild(b);
+  });
+
+  var load=$('load'), pctEl=$('pct'), lbar=$('lbar');
+  function finishLoad(){
+    document.body.classList.remove('loading'); document.body.classList.add('ready');
+    if(load){ load.classList.add('done'); setTimeout(function(){ if(load.parentNode) load.parentNode.removeChild(load); }, 700); }
+  }
+  if(reduced || !load){ finishLoad(); }
+  else{
+    var t0=performance.now(), DUR=900;
+    (function step(now){
+      var p=Math.min(1,(now-t0)/DUR), e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2, v=Math.round(e*100);
+      pctEl.textContent=String(v).padStart(3,'0')+'%'; lbar.style.width=v+'%';
+      if(p<1) requestAnimationFrame(step); else setTimeout(finishLoad,150);
+    })(t0);
+  }
+  document.querySelectorAll('[data-split]').forEach(function(el){
+    if(reduced) return;
+    var txt=el.textContent; el.textContent='';
+    txt.split('').forEach(function(c,i){
+      var o=document.createElement('span'); o.className='ch';
+      var inn=document.createElement('span'); inn.className='chi';
+      inn.textContent=c===' '?' ':c; inn.style.transitionDelay=(i*45)+'ms';
+      o.appendChild(inn); el.appendChild(o);
+    });
+  });
+  (function(){
+    var els=document.querySelectorAll('[data-reveal]');
+    if('IntersectionObserver' in window && !reduced){
+      var io=new IntersectionObserver(function(entries){
+        entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+      },{threshold:0.1,rootMargin:'0px 0px -6% 0px'});
+      els.forEach(function(el,i){ el.style.transitionDelay=(Math.min(i,5)*60)+'ms'; io.observe(el); });
+    } else { els.forEach(function(el){ el.classList.add('in'); }); }
+  })();
+  var header=$('top'), prog=$('prog'), queued=false;
+  function onScroll(){
+    if(queued) return; queued=true;
+    requestAnimationFrame(function(){
+      queued=false;
+      header.classList.toggle('scrolled', window.scrollY>24);
+      var h=document.documentElement.scrollHeight-window.innerHeight;
+      prog.style.width=(h>0?(window.scrollY/h)*100:0)+'%';
+    });
+  }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  var wmark=$('wmark');
+  var finePointer = window.matchMedia('(pointer: fine)').matches;
+  if(wmark && finePointer && !reduced){
+    var tx=0,ty=0,cx=0,cy=0;
+    window.addEventListener('mousemove',function(ev){ tx=(ev.clientX/innerWidth-0.5)*18; ty=(ev.clientY/innerHeight-0.5)*14; },{passive:true});
+    (function ploop(){
+      cx+=(tx-cx)*0.05; cy+=(ty-cy)*0.05;
+      var drift=Math.min(window.scrollY*0.12,120);
+      wmark.style.transform='translate3d('+cx.toFixed(1)+'px,'+(cy+drift).toFixed(1)+'px,0)';
+      requestAnimationFrame(ploop);
+    })();
+  }
+  /* marquee */
+  (function(){
+    var words=['Bayes','Laplace k=1','Naive','data.csv','Pandas','Pyodide','N=—','P(spam|message)','Tokenize','Score','Filter','Stamp'];
+    var track=document.querySelector('[data-track]');
+    if(!track) return;
+    var html='';
+    for(var p=0;p<2;p++) words.forEach(function(w){ html+='<span>'+w+'</span><span class="dot">✦</span>'; });
+    track.innerHTML=html;
+  })();
+  $('yr').textContent=new Date().getFullYear();
+  boot();
+})();
+</script>
+</body>
+</html>

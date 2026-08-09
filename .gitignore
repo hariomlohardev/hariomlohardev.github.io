@@ -1,0 +1,8 @@
+# claude local
+.claude/
+# OS
+.DS_Store
+Thumbs.db
+# editor
+.vscode/
+*.log

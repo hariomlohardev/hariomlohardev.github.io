@@ -1,0 +1,169 @@
+{
+  "meta": {
+    "name": "Hariom Lohar",
+    "handle": "hariomlohardev",
+    "location": "India",
+    "timezone": "Asia/Kolkata"
+  },
+  "mission": {
+    "label": "AGI Mission — First Principles",
+    "startDate": "2026-07-01",
+    "totalDays": 548,
+    "note": "CS50P certified (Harvard, 2026). Math from axioms → neural nets & backprop in pure NumPy — SGD → Adam — now CNNs, Transformers & PyTorch. Started 1 July 2026, committed daily.",
+    "repoUrl": "https://github.com/hariomlohardev/AGI_Research"
+  },
+  "status": {
+    "availableForFreelance": true,
+    "roles": [
+      "Python · Django · FastAPI — backends that stay up",
+      "Flutter · Dart — one codebase, both stores",
+      "AGI researcher — first principles, in public"
+    ],
+    "currentlyLearning": ["CNNs", "Transformers", "PyTorch", "Computer Vision"],
+    "learningNext": ["LLMs", "RAG at scale", "AGI"],
+    "now": [
+      { "verb": "Learning", "text": "CNNs, attention and PyTorch internals" },
+      { "verb": "Building", "text": "daily commits to AGI_Research" },
+      { "verb": "Shipping", "text": "Django, FastAPI and Flutter for clients" },
+      { "verb": "Sharing", "text": "every step on X @HariomloharAGI" }
+    ]
+  },
+  "stats": [
+    { "value": 172, "suffix": "", "label": "commits<br>last 12 months" },
+    { "value": 8, "suffix": "h", "label": "deep work<br>every day" },
+    { "value": 4, "suffix": "", "label": "public<br>projects" }
+  ],
+  "taglines": [
+    "Rebuilding AGI from first principles.",
+    "Harvard CS50P — certified 2026.",
+    "CNNs and Transformers — right now.",
+    "Backends that stay up. Apps that feel native.",
+    "8 hours a day, committed in public.",
+    "Open notebook, open source."
+  ],
+  "marquee": [
+    "Python", "Django", "FastAPI", "Flutter", "Dart", "LangChain", "RAG",
+    "NumPy", "PyTorch", "CNNs", "Transformers", "Computer Vision",
+    "Backprop from scratch", "Linear Algebra", "CS50P · Harvard", "Open Source"
+  ],
+  "certificates": [
+    {
+      "id": "cs50p",
+      "title": "CS50's Introduction to Programming with Python",
+      "shortTitle": "CS50P",
+      "issuer": "Harvard University · CS50",
+      "year": "2026",
+      "dateLabel": "2026",
+      "image": "certificates/1.png",
+      "url": "https://cs50.harvard.edu/certificates/544021b8-ab89-4eb2-a433-9c0b949e658f",
+      "detail": "Nine problem sets + one final project. Awarded Cambridge, Massachusetts.",
+      "instructor": "David J. Malan — Gordon McKay Professor, Harvard",
+      "verifyLabel": "Verify at cs50.harvard.edu ↗"
+    }
+  ],
+  "projects": [
+    {
+      "name": "AGI_Research",
+      "url": "https://github.com/hariomlohardev/AGI_Research",
+      "featured": true,
+      "status": "in-progress",
+      "statusLabel": "Daily log · in progress",
+      "description": "Public lab notebook — committed daily since July 2026. Linear algebra, calculus and probability from axioms → neural nets and backprop in pure NumPy (SGD through Adam) → now CNNs, Transformers and PyTorch. No shortcuts.",
+      "chips": ["backprop ✓", "NumPy", "CNNs", "Transformers", "PyTorch", "daily commits"],
+      "languages": [
+        { "name": "Jupyter Notebook", "pct": 86.4, "color": "#DA5B0B" },
+        { "name": "Python", "pct": 13.6, "color": "#3572A5" }
+      ]
+    },
+    {
+      "name": "spam_classifier",
+      "url": "projects/spam_classifier.html",
+      "featured": true,
+      "status": "shipped",
+      "statusLabel": "Shipped · live demo",
+      "description": "Type a message, watch it split into tokens, score red (spam) or green (ham), filter the weak signals, then stamp a verdict with P(spam|message). 5,572 messages, Naive Bayes trained in your browser — nothing mocked.",
+      "chips": ["Python", "Naive Bayes", "NLP", "Pyodide", "Pandas", "live"],
+      "languages": [
+        { "name": "Python", "pct": 72, "color": "#3572A5" },
+        { "name": "HTML", "pct": 28, "color": "#E34C26" }
+      ]
+    },
+    {
+      "name": "practice_code",
+      "url": "https://github.com/hariomlohardev/practice_code",
+      "featured": false,
+      "status": "open-source",
+      "statusLabel": "Open source",
+      "description": "60+ Python solutions for algorithms and data structures, grouped by topic. Each notes time and space. Fork it, add your approach, open a PR.",
+      "chips": ["algorithms", "data structures", "Python", "DSA"],
+      "languages": [
+        { "name": "Python", "pct": 100, "color": "#3572A5" }
+      ]
+    },
+    {
+      "name": "pkg_jupy",
+      "url": "https://github.com/hariomlohardev/pkg_jupy",
+      "featured": false,
+      "status": "open-source",
+      "statusLabel": "Open source",
+      "description": "Jupyter experiments that grew up — small Python packages, utility notebooks and visualisation scratches. Open for issues and PRs.",
+      "chips": ["Jupyter", "packages", "utilities", "experiments"],
+      "languages": [
+        { "name": "Jupyter Notebook", "pct": 100, "color": "#DA5B0B" }
+      ]
+    }
+  ],
+  "services": [
+    {
+      "title": "Backend Systems",
+      "description": "APIs, auth and databases that stay up. Django and FastAPI, clean migrations, tests and deploy pipelines you can hand over.",
+      "chips": ["Django", "FastAPI", "REST APIs", "Python"]
+    },
+    {
+      "title": "Mobile Apps",
+      "description": "One codebase, two stores. Flutter and Dart apps that feel native on iOS and Android — from first build to release.",
+      "chips": ["Flutter", "Dart", "iOS", "Android"]
+    },
+    {
+      "title": "AI Features",
+      "description": "Add chat and search over your own data. Retrieval pipelines with LangChain, embeddings and RAG — running in your infrastructure, not a black box.",
+      "chips": ["LangChain", "RAG", "embeddings", "Python"]
+    },
+    {
+      "title": "Automation & Scripts",
+      "description": "Remove the repetitive work. Scraping, data pipelines and Python scripts that run on schedule and report clearly.",
+      "chips": ["Python", "scraping", "data pipelines"]
+    }
+  ],
+  "skills": {
+    "ship": [
+      { "name": "Python", "note": "daily driver" },
+      { "name": "Django", "note": "server framework" },
+      { "name": "FastAPI", "note": "fast APIs" },
+      { "name": "Flutter", "note": "cross-platform" },
+      { "name": "Dart", "note": "app logic" },
+      { "name": "LangChain", "note": "LLM pipelines" },
+      { "name": "RAG", "note": "retrieval" }
+    ],
+    "mastered": [
+      { "name": "CS50P — Python", "note": "Harvard · 2026 ✓" },
+      { "name": "Linear Algebra", "note": "from axioms" },
+      { "name": "Multivariable Calculus", "note": "from axioms" },
+      { "name": "Probability & Statistics", "note": "from axioms" },
+      { "name": "Neural Networks", "note": "built in NumPy" },
+      { "name": "Backpropagation", "note": "derived by hand" },
+      { "name": "Optimizers", "note": "SGD → Adam" }
+    ]
+  },
+  "phases": [
+    { "no": "01", "title": "Math foundations", "detail": "linear algebra · calculus · probability", "state": "done" },
+    { "no": "02", "title": "Neural nets from scratch", "detail": "backprop · optimizers · NumPy", "state": "done" },
+    { "no": "03", "title": "Deep learning", "detail": "CNNs · Transformers · PyTorch", "state": "now" },
+    { "no": "04", "title": "Toward AGI", "detail": "LLMs · RAG at scale · research", "state": "next" }
+  ],
+  "links": [
+    { "name": "GitHub", "url": "https://github.com/hariomlohardev", "display": "github.com/hariomlohardev" },
+    { "name": "X / Twitter", "url": "https://x.com/HariomloharAGI", "display": "@HariomloharAGI" },
+    { "name": "LinkedIn", "url": "https://www.linkedin.com/in/hariomlohar", "display": "in/hariomlohar" }
+  ]
+}

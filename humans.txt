@@ -1,0 +1,8 @@
+/* TEAM — Lab Notebook No.01 */
+Developer: Hariom Lohar
+GitHub: hariomlohardev — https://github.com/hariomlohardev
+X: @HariomloharAGI — https://x.com/HariomloharAGI
+LinkedIn: https://www.linkedin.com/in/hariomlohar
+Site: https://hariomlohardev.github.io/
+Location: India (IST — Asia/Kolkata)
+Thanks: CS50 / David J. Malan, open-source community.
