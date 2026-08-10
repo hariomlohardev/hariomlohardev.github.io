@@ -152,6 +152,15 @@
   .sec-head .kicker i{width:28px;height:1px;background:var(--ink)}
   .sec-head h2{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-height:.9;font-size:clamp(1.6rem,3.5vw,2.4rem);text-transform:uppercase}
   .sec-head .tag{margin-left:auto;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:6px 10px;background:var(--paper)}
+  .filter-bar{display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin:18px 0 16px;padding:12px 14px;background:var(--sheet);border:1px solid var(--ink);box-shadow:0 1px 0 rgba(11,18,32,.05)}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap}
+  .tab{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:8px 12px;border:1px solid var(--line);background:var(--paper-2);color:var(--muted);cursor:pointer;transition:all .15s}
+  .tab.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .tab.active .count{background:var(--signal);color:var(--ink)}
+  .tab .count{margin-left:6px;padding:2px 6px;border:1px solid var(--line);background:var(--paper);font-size:10px}
+  .search-wrap{position:relative;display:flex;align-items:center}
+  .search-wrap input{font-family:var(--mono);font-size:12px;padding:9px 36px 9px 12px;border:1px solid var(--line);background:var(--paper);min-width:240px}
+  .search-wrap span{position:absolute;right:10px;color:var(--muted)}
   .repo-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
   .repo-card{background:var(--sheet);border:1px solid var(--ink);position:relative;padding:18px 18px 16px;display:flex;flex-direction:column;gap:10px;box-shadow:0 1px 0 rgba(11,18,32,.05);transition:transform .2s,box-shadow .2s}
   .repo-card:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(11,18,32,.08)}
@@ -251,6 +260,7 @@
           </div>
           <div class="f-actions">
             <a class="f-btn primary" href="projects/spam_classifier.html">Open live bench →</a>
+            <a class="f-btn ghost" href="projects/p/spam-classifier/" style="position:relative;z-index:2">Details · FAQ →</a>
             <a class="f-btn ghost" href="https://github.com/hariomlohardev/spam_classifier" target="_blank" rel="noopener" style="position:relative;z-index:2">Code ↗</a>
           </div>
           <p style="margin-top:10px;font-family:var(--mono);font-size:11px;color:var(--muted)">Runs entirely in your browser. No data leaves your device.</p>
@@ -287,7 +297,16 @@
         <h2>All builds</h2>
         <span class="tag" id="archiveTag">Loading archive…</span>
       </div>
+      <div class="filter-bar" data-reveal>
+        <div class="tabs" role="tablist" aria-label="Project filters">
+          <button class="tab active" data-filter="all" role="tab" aria-selected="true">All <span class="count" id="tabCountAll">4</span></button>
+          <button class="tab" data-filter="live" role="tab" aria-selected="false">Live · interactive <span class="count" id="tabCountLive">1</span></button>
+          <button class="tab" data-filter="repo" role="tab" aria-selected="false">Code · repos <span class="count" id="tabCountRepo">3</span></button>
+        </div>
+        <label class="search-wrap" aria-label="Search projects"><input id="projSearch" type="search" placeholder="Search — try Bayes, DSA, AGI…" autocomplete="off" /><span>⌕</span></label>
+      </div>
       <div id="archiveGrid" class="repo-grid" aria-live="polite"></div>
+      <p id="noResults" style="display:none;margin-top:12px;font-family:var(--mono);font-size:12px;color:var(--muted);border:1px dashed var(--line);padding:12px;background:var(--paper)">No projects match that filter — try All or clear search.</p>
       <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap" data-reveal>
         <a href="https://github.com/hariomlohardev?tab=repositories" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--ink);padding:11px 14px;background:var(--sheet)">View all on GitHub ↗</a>
         <a href="index.html#work" style="font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;background:var(--signal);border:1px solid var(--ink);padding:11px 14px">Back to selected work ↓</a>
@@ -368,36 +387,108 @@
     rotEl.style.transition='opacity .24s, transform .24s var(--ease2)';
   }
 
-  // archive grid from projects-data.json
+  // archive grid from projects-data.json — tabs: All / Live · interactive / Code · repos
+  var fullList = null;
+  var currentFilter = (location.hash.replace('#','') || 'all');
+  if(['all','live','repo'].indexOf(currentFilter)===-1) currentFilter='all';
+  var searchTerm = '';
+
+  function getFiltered(list){
+    var term = searchTerm.trim().toLowerCase();
+    return list.filter(function(p){
+      var kind = p.kind || (p.demoUrl ? 'live' : 'repo');
+      var okKind = currentFilter==='all' || kind===currentFilter;
+      if(!okKind) return false;
+      if(!term) return true;
+      var hay = [p.name, p.description, (p.chips||[]).join(' '), (p.highlights||[]).join(' '), p.statusLabel].join(' ').toLowerCase();
+      return hay.indexOf(term)!==-1;
+    });
+  }
+
   function renderArchive(list){
+    fullList = list;
     var grid=$('archiveGrid');
-    var filtered = list.filter(function(p){ return p.id !== 'spam-classifier'; });
-    // also support old data shape where spam may be missing
-    $('archiveTag').textContent = list.length + ' builds · ' + filtered.length + ' in list + 1 bench';
+    var noEl=$('noResults');
+    // header counts (always full list)
+    $('archiveTag').textContent = list.length + ' builds';
     $('hdrCount').textContent = list.length + ' builds';
     $('countBig').innerHTML = '<em>'+String(list.length).padStart(2,'0')+'</em> / '+String(list.length).padStart(2,'0');
+    var liveCount = list.filter(function(p){ return (p.kind|| (p.demoUrl?'live':'repo'))==='live'; }).length;
+    var repoCount = list.length - liveCount;
     var shipped = list.filter(function(p){return p.status==='shipped'}).length;
     var oss = list.filter(function(p){return p.status==='open-source'}).length;
     var log = list.length - shipped - oss;
+    if($('tabCountAll')) $('tabCountAll').textContent = String(list.length);
+    if($('tabCountLive')) $('tabCountLive').textContent = String(liveCount);
+    if($('tabCountRepo')) $('tabCountRepo').textContent = String(repoCount);
     $('countLab').textContent = shipped+' shipped · '+oss+' open source · '+log+' log';
+    // set active tab
+    document.querySelectorAll('.tab').forEach(function(b){
+      var isActive = b.getAttribute('data-filter')===currentFilter;
+      b.classList.toggle('active', isActive);
+      b.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+    var filtered = getFiltered(list);
+    grid.innerHTML='';
+    if(!filtered.length){
+      if(noEl) noEl.style.display='block';
+      armReveal();
+      return;
+    }
+    if(noEl) noEl.style.display='none';
     filtered.forEach(function(p,i){
+      var kind = p.kind || (p.demoUrl ? 'live' : 'repo');
+      var isLive = kind==='live';
       var isOss=p.status==='open-source', isShipped=p.status==='shipped';
+      var slug = p.slug || p.id;
+      var detailHref = p.detailUrl ? p.detailUrl.replace('https://hariomlohardev.github.io','') : ('projects/p/'+slug+'/');
+      // ensure leading slash for consistency handled as relative without leading slash for local preview
+      if(detailHref.indexOf('/')===0) detailHref = detailHref.slice(1);
       var a=document.createElement('a');
-      a.className='repo-card'; a.href=p.url; a.setAttribute('data-reveal','');
-      if(p.url.indexOf('projects/')===0){ a.target='_self'; } else { a.target='_blank'; a.rel='noopener'; }
-      a.setAttribute('aria-label', p.name + ' — ' + p.statusLabel);
-      var statusHtml = isOss? '<span class="status oss">⑂ '+p.statusLabel+'</span>' : isShipped? '<span class="status shipped">✓ '+p.statusLabel+'</span>' : '<span class="status live"><i></i>'+p.statusLabel+'</span>';
+      a.className='repo-card'; a.href=detailHref; a.setAttribute('data-reveal','');
+      a.target='_self';
+      a.setAttribute('aria-label', p.name + ' — ' + p.statusLabel + (isLive ? ' · live' : ''));
+      var statusHtml = isLive ? '<span class="status live"><i></i>'+p.statusLabel+'</span>' : isOss? '<span class="status oss">⑂ '+p.statusLabel+'</span>' : isShipped? '<span class="status shipped">✓ '+p.statusLabel+'</span>' : '<span class="status oss">'+p.statusLabel+'</span>';
       var langbar = (p.languages && p.languages.length>1) ? '<div class="langbar">'+p.languages.map(function(l){return '<i style="width:'+l.pct+'%;background:'+l.color+'"></i>';}).join('')+'</div>' : '';
       var meta = (p.languages||[]).map(function(l){return '<span style="display:inline-flex;align-items:center;gap:6px"><i class="dot" style="background:'+l.color+'"></i>'+l.name+'</span>';}).join(' · ');
-      a.innerHTML='<span class="repo-arrow">↗</span><div class="repo-top"><span class="repo-idx">0'+(i+2)+'</span>'+statusHtml+'</div><h3>'+p.name+'</h3><p>'+p.description+'</p><div class="chips">'+p.chips.map(function(c){return '<span>'+c+'</span>';}).join('')+'</div>'+langbar+'<div class="repo-meta" style="margin-top:6px">'+meta+'</div>';
+      var chipHtml = (p.chips||[]).map(function(c){return '<span>'+c+'</span>';}).join('');
+      var extra = isLive ? '<span style="margin-left:6px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--red);border:1px solid var(--red);padding:2px 6px;background:var(--red-soft)">LIVE</span>' : '<span style="margin-left:6px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--green);border:1px solid var(--green);padding:2px 6px;background:var(--green-soft)">CODE</span>';
+      a.innerHTML='<span class="repo-arrow">↗</span><div class="repo-top"><span class="repo-idx">0'+(i+1)+'</span>'+statusHtml+extra+'</div><h3>'+p.name+'</h3><p>'+p.description+'</p><div class="chips">'+chipHtml+'</div>'+langbar+'<div class="repo-meta" style="margin-top:6px">'+meta+'</div>';
       grid.appendChild(a);
     });
     armReveal();
   }
+  function rerender(){ if(fullList) renderArchive(fullList); }
+
+  // tab + search wiring
+  document.querySelectorAll('.tab').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      currentFilter = btn.getAttribute('data-filter');
+      history.replaceState(null,'','#'+currentFilter);
+      rerender();
+    });
+  });
+  var searchInput = $('projSearch');
+  if(searchInput){
+    // init from query param ?q=
+    try{ var u=new URL(location.href); var q=u.searchParams.get('q'); if(q){ searchTerm=q; searchInput.value=q; }}catch(e){}
+    searchInput.addEventListener('input', function(){
+      searchTerm = searchInput.value;
+      rerender();
+      // reflect in URL without reload
+      try{ var uu=new URL(location.href); if(searchTerm) uu.searchParams.set('q', searchTerm); else uu.searchParams.delete('q'); history.replaceState(null,'',uu.pathname+uu.search+(location.hash||'')); }catch(e){}
+    });
+  }
+  window.addEventListener('hashchange', function(){
+    var h=(location.hash.replace('#','')||'all');
+    if(['all','live','repo'].indexOf(h)!==-1){ currentFilter=h; rerender(); }
+  });
+
   var fallback = [
-    {"id":"agi-research","name":"AGI_Research","url":"https://github.com/hariomlohardev/AGI_Research","status":"in-progress","statusLabel":"Daily log · in progress","description":"Public lab notebook — committed daily since July 2026. Math from axioms → neural nets in NumPy → now CNNs, Transformers and PyTorch.","chips":["backprop ✓","NumPy","CNNs","Transformers","PyTorch","daily commits"],"languages":[{"name":"Jupyter Notebook","pct":86.4,"color":"#DA5B0B"},{"name":"Python","pct":13.6,"color":"#3572A5"}]},
-    {"id":"practice-code","name":"practice_code","url":"https://github.com/hariomlohardev/practice_code","status":"open-source","statusLabel":"Open source","description":"60+ Python solutions for algorithms and data structures, grouped by topic. Each notes time and space.","chips":["algorithms","data structures","Python","DSA"],"languages":[{"name":"Python","pct":100,"color":"#3572A5"}]},
-    {"id":"pkg-jupy","name":"pkg_jupy","url":"https://github.com/hariomlohardev/pkg_jupy","status":"open-source","statusLabel":"Open source","description":"Jupyter experiments that grew up — small packages, notebooks and visualisation scratches.","chips":["Jupyter","packages","utilities","experiments"],"languages":[{"name":"Jupyter Notebook","pct":100,"color":"#DA5B0B"}]}
+    {"id":"agi-research","slug":"agi-research","name":"AGI_Research","kind":"repo","url":"https://github.com/hariomlohardev/AGI_Research","detailUrl":"https://hariomlohardev.github.io/projects/p/agi-research/","status":"in-progress","statusLabel":"Daily log · in progress","description":"Public lab notebook — committed daily since July 2026. Math from axioms → neural nets in NumPy → now CNNs, Transformers and PyTorch.","chips":["backprop ✓","NumPy","CNNs","Transformers","PyTorch","daily commits"],"languages":[{"name":"Jupyter Notebook","pct":86.4,"color":"#DA5B0B"},{"name":"Python","pct":13.6,"color":"#3572A5"}]},
+    {"id":"spam-classifier","slug":"spam-classifier","name":"spam_classifier","kind":"live","url":"projects/spam_classifier.html","detailUrl":"https://hariomlohardev.github.io/projects/p/spam-classifier/","demoUrl":"projects/spam_classifier.html","repoUrl":"https://github.com/hariomlohardev/spam_classifier","status":"shipped","statusLabel":"Shipped · live demo","description":"Type a message, watch it split into tokens, score red (spam) or green (ham), filter the weak signals, then stamp a verdict with P(spam|message). 5,572 messages, Naive Bayes trained in your browser — nothing mocked.","chips":["Naive Bayes","NLP","Pyodide","Pandas","live"],"languages":[{"name":"Python","pct":72,"color":"#3572A5"},{"name":"HTML","pct":28,"color":"#E34C26"}]},
+    {"id":"practice-code","slug":"practice-code","name":"practice_code","kind":"repo","url":"https://github.com/hariomlohardev/practice_code","detailUrl":"https://hariomlohardev.github.io/projects/p/practice-code/","status":"open-source","statusLabel":"Open source","description":"60+ Python solutions for algorithms and data structures, grouped by topic. Each notes time and space.","chips":["algorithms","data structures","Python","DSA"],"languages":[{"name":"Python","pct":100,"color":"#3572A5"}]},
+    {"id":"pkg-jupy","slug":"pkg-jupy","name":"pkg_jupy","kind":"repo","url":"https://github.com/hariomlohardev/pkg_jupy","detailUrl":"https://hariomlohardev.github.io/projects/p/pkg-jupy/","status":"open-source","statusLabel":"Open source","description":"Jupyter experiments that grew up — small packages, notebooks and visualisation scratches.","chips":["Jupyter","packages","utilities","experiments"],"languages":[{"name":"Jupyter Notebook","pct":100,"color":"#DA5B0B"}]}
   ];
   var fallbackTo = setTimeout(function(){ if(!document.getElementById('archiveGrid').children.length) renderArchive(fallback); }, 3000);
   try{

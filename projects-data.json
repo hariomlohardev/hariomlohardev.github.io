@@ -2,13 +2,19 @@
   "projects": [
     {
       "id": "agi-research",
+      "slug": "agi-research",
       "name": "AGI_Research",
+      "kind": "repo",
       "page": "project-agi-research.html",
       "url": "https://github.com/hariomlohardev/AGI_Research",
+      "detailUrl": "https://hariomlohardev.github.io/projects/p/agi-research/",
+      "demoUrl": null,
+      "repoUrl": "https://github.com/hariomlohardev/AGI_Research",
       "featured": true,
       "status": "in-progress",
       "statusLabel": "Daily log · in progress",
       "description": "Public lab notebook — committed daily since July 2026. Linear algebra, calculus and probability from axioms → neural nets and backprop in pure NumPy (SGD through Adam) → now CNNs, Transformers and PyTorch. No shortcuts.",
+      "longDescription": "A public lab notebook committed daily since 1 July 2026 — 548 days to 31 Dec 2027. I derive everything by hand: linear algebra, calculus and probability from axioms, then neural nets, backprop, optimisers from SGD to Adam in pure NumPy, now CNNs and Transformers.\n\nEach day is a notebook with math, code and reflection — no autograd, no shortcuts. The repo is the research log; the portfolio shows the distilled logs. Follow along as the bench grows.",
       "chips": ["backprop ✓", "NumPy", "CNNs", "Transformers", "PyTorch", "daily commits"],
       "languages": [
         { "name": "Jupyter Notebook", "pct": 86.4, "color": "#DA5B0B" },
@@ -25,17 +31,30 @@
         { "label": "Days", "value": "40+" },
         { "label": "Notebooks", "value": "40+" },
         { "label": "Commits", "value": "150+" }
-      ]
+      ],
+      "faq": [
+        { "q": "How often do you commit?", "a": "Daily since 1 July 2026 — the mission is 548 days to 31 Dec 2027. Each day is a notebook." },
+        { "q": "Do you use PyTorch or pure NumPy?", "a": "Both — I first build everything in pure NumPy by hand (backprop, Adam, CNN), then show the PyTorch version for comparison." },
+        { "q": "Can I follow along locally?", "a": "Yes — clone hariomlohardev/AGI_Research, open any notebook in Jupyter, and run top to bottom. No API keys needed." }
+      ],
+      "relatedSlugs": ["day-040-multi-head-residual", "day-039-attention-by-hand", "day-032-cnn-from-scratch"],
+      "cover": null
     },
     {
       "id": "spam-classifier",
+      "slug": "spam-classifier",
       "name": "spam_classifier",
+      "kind": "live",
       "page": "spam_classifier.html",
       "url": "projects/spam_classifier.html",
+      "detailUrl": "https://hariomlohardev.github.io/projects/p/spam-classifier/",
+      "demoUrl": "projects/spam_classifier.html",
+      "repoUrl": "https://github.com/hariomlohardev/spam_classifier",
       "featured": true,
       "status": "shipped",
       "statusLabel": "Shipped · live demo",
       "description": "Type a message, watch it split into tokens, score red (spam) or green (ham), filter the weak signals, then stamp a verdict with P(spam|message). 5,572 messages, Naive Bayes trained in your browser — nothing mocked.",
+      "longDescription": "A Naive Bayes spam filter you can see working. Type any message and it tokenises, scores each token P(spam|token) with Laplace smoothing, filters weak signals, then stamps SPAM or HAM with P(spam|message).\n\nTrained live in your browser on 5,572 SMS messages (data.csv) via Pyodide + pandas — no mock, no server. The same Python that trained it scores you, token by token, in real time. Open the live bench and try WINNER!! free money now.",
       "chips": ["Naive Bayes", "NLP", "Pyodide", "Pandas", "live"],
       "languages": [
         { "name": "Python", "pct": 72, "color": "#3572A5" },
@@ -51,17 +70,30 @@
         { "label": "Dataset", "value": "data.csv" },
         { "label": "Model", "value": "Naive Bayes" },
         { "label": "Runtime", "value": "browser" }
-      ]
+      ],
+      "faq": [
+        { "q": "Does my message leave my device?", "a": "No — the bench runs entirely in your browser via Pyodide. Nothing is sent to a server." },
+        { "q": "How is the model trained?", "a": "Naive Bayes with Laplace smoothing (k=1) over the 5,572-row SMS dataset — the same data.csv from the repo, loaded live." },
+        { "q": "What does Weak filtered mean?", "a": "Tokens with P(spam|token) near 0.5 (weak signal, within 0.12 of 0.5) are filtered before the verdict — only strong red/green tokens count." }
+      ],
+      "relatedSlugs": ["spam-classifier-shipped"],
+      "cover": null
     },
     {
       "id": "practice-code",
+      "slug": "practice-code",
       "name": "practice_code",
+      "kind": "repo",
       "page": "project-practice-code.html",
       "url": "https://github.com/hariomlohardev/practice_code",
+      "detailUrl": "https://hariomlohardev.github.io/projects/p/practice-code/",
+      "demoUrl": null,
+      "repoUrl": "https://github.com/hariomlohardev/practice_code",
       "featured": false,
       "status": "open-source",
       "statusLabel": "Open source",
       "description": "60+ Python solutions for algorithms and data structures, grouped by topic. Each notes time and space. Fork it, add your approach, open a PR.",
+      "longDescription": "60+ Python solutions for algorithms and data structures, grouped by topic — arrays, strings, trees, graphs, DP, and more. Each solution notes time and space complexity.\n\nFork-friendly: add your approach in any language, keep the same folder structure, and open a PR. Built to stay readable and interview-ready.",
       "chips": ["algorithms", "data structures", "Python", "DSA"],
       "languages": [
         { "name": "Python", "pct": 100, "color": "#3572A5" }
@@ -75,17 +107,30 @@
         { "label": "Solutions", "value": "60+" },
         { "label": "Topics", "value": "12" },
         { "label": "Language", "value": "Python" }
-      ]
+      ],
+      "faq": [
+        { "q": "What language are the solutions in?", "a": "Python — clean, commented, with complexity noted at the top of each file." },
+        { "q": "Can I add solutions in other languages?", "a": "Yes — fork, add a parallel folder for your language, keep the problem naming, and open a PR." },
+        { "q": "Are these interview questions?", "a": "Yes — classic DSA patterns grouped by topic so you can drill arrays, trees, graphs or DP in order." }
+      ],
+      "relatedSlugs": [],
+      "cover": null
     },
     {
       "id": "pkg-jupy",
+      "slug": "pkg-jupy",
       "name": "pkg_jupy",
+      "kind": "repo",
       "page": "project-pkg-jupy.html",
       "url": "https://github.com/hariomlohardev/pkg_jupy",
+      "detailUrl": "https://hariomlohardev.github.io/projects/p/pkg-jupy/",
+      "demoUrl": null,
+      "repoUrl": "https://github.com/hariomlohardev/pkg_jupy",
       "featured": false,
       "status": "open-source",
       "statusLabel": "Open source",
       "description": "Jupyter experiments that grew up — small Python packages, utility notebooks and visualisation scratches. Open for issues and PRs.",
+      "longDescription": "Jupyter experiments that grew into small Python packages — utilities, visualisation scratches and notebook helpers that I actually reuse.\n\nNot a framework — just focused tools. Open for issues and PRs if you find a rough edge.",
       "chips": ["Jupyter", "packages", "utilities", "experiments"],
       "languages": [
         { "name": "Jupyter Notebook", "pct": 100, "color": "#DA5B0B" }
@@ -99,7 +144,14 @@
         { "label": "Notebooks", "value": "15+" },
         { "label": "Packages", "value": "3" },
         { "label": "Status", "value": "Active" }
-      ]
+      ],
+      "faq": [
+        { "q": "What kind of packages are these?", "a": "Small, single-purpose Python helpers extracted from notebooks — no heavy dependencies." },
+        { "q": "Can I use them in my own notebooks?", "a": "Yes — clone pkg_jupy, pip install -e ., and import. Issues and PRs welcome." },
+        { "q": "Are they published to PyPI?", "a": "Not yet — they live as importable packages in the repo while they stabilise." }
+      ],
+      "relatedSlugs": [],
+      "cover": null
     }
   ]
 }
