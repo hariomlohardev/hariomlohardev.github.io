@@ -1,0 +1,26 @@
+name: ping-search
+on:
+  push:
+    branches: [main]
+    paths:
+      - "sitemap.xml"
+      - "blog/p/**"
+      - "index.html"
+      - "blog.html"
+      - "**.html"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - name: Ping Google + Bing + IndexNow
+        env:
+          INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
+        run: node scripts/ping-search.js --verbose
