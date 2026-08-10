@@ -1,0 +1,549 @@
+{
+  "generated_at": "2026-08-10T09:01:31+05:30",
+  "generated_at_iso": "2026-08-10T09:01:31.339Z",
+  "user": "hariomlohardev",
+  "site": "https://hariomlohardev.github.io",
+  "stats": {
+    "repos": 11,
+    "prs": 9,
+    "events": 30,
+    "stars_total": 2
+  },
+  "repos": [
+    {
+      "id": 1327898300,
+      "name": "InsightAgent",
+      "full_name": "hariomlohardev/InsightAgent",
+      "html_url": "https://github.com/hariomlohardev/InsightAgent",
+      "description": "",
+      "language": "Python",
+      "stars": 1,
+      "forks": 0,
+      "updated_at": "2026-08-09",
+      "pushed_at": "2026-08-10",
+      "fork": false,
+      "topics": [],
+      "is_fork": false
+    },
+    {
+      "id": 1313500831,
+      "name": "themes_jupy",
+      "full_name": "hariomlohardev/themes_jupy",
+      "html_url": "https://github.com/hariomlohardev/themes_jupy",
+      "description": "",
+      "language": "JavaScript",
+      "stars": 1,
+      "forks": 1,
+      "updated_at": "2026-07-27",
+      "pushed_at": "2026-07-27",
+      "fork": false,
+      "topics": [],
+      "is_fork": false
+    },
+    {
+      "id": 1282187550,
+      "name": "AGI_Research",
+      "full_name": "hariomlohardev/AGI_Research",
+      "html_url": "https://github.com/hariomlohardev/AGI_Research",
+      "description": "An Journy towards learning AGI",
+      "language": "Jupyter Notebook",
+      "stars": 0,
+      "forks": 0,
+      "updated_at": "2026-08-10",
+      "pushed_at": "2026-08-10",
+      "fork": false,
+      "topics": [],
+      "is_fork": false
+    },
+    {
+      "id": 1313454013,
+      "name": "hariomlohardev.github.io",
+      "full_name": "hariomlohardev/hariomlohardev.github.io",
+      "html_url": "https://github.com/hariomlohardev/hariomlohardev.github.io",
+      "description": "",
+      "language": "HTML",
+      "stars": 0,
+      "forks": 0,
+      "updated_at": "2026-08-10",
+      "pushed_at": "2026-08-10",
+      "fork": false,
+      "topics": [],
+      "is_fork": false
+    },
+    {
+      "id": 1283642364,
+      "name": "hariomlohardev",
+      "full_name": "hariomlohardev/hariomlohardev",
+      "html_url": "https://github.com/hariomlohardev/hariomlohardev",
+      "description": "",
+      "language": "—",
+      "stars": 0,
+      "forks": 0,
+      "updated_at": "2026-08-09",
+      "pushed_at": "2026-08-09",
+      "fork": false,
+      "topics": [],
+      "is_fork": false
+    },
+    {
+      "id": 1324988681,
+      "name": "inkdown",
+      "full_name": "hariomlohardev/inkdown",
+      "html_url": "https://github.com/hariomlohardev/inkdown",
+      "description": "",
+      "language": "JavaScript",
+      "stars": 0,
+      "forks": 0,
+      "updated_at": "2026-08-08",
+      "pushed_at": "2026-08-08",
+      "fork": false,
+      "topics": [],
+      "is_fork": false
+    },
+    {
+      "id": 1316708996,
+      "name": "spam_classifier",
+      "full_name": "hariomlohardev/spam_classifier",
+      "html_url": "https://github.com/hariomlohardev/spam_classifier",
+      "description": "",
+      "language": "Python",
+      "stars": 0,
+      "forks": 0,
+      "updated_at": "2026-07-30",
+      "pushed_at": "2026-07-30",
+      "fork": false,
+      "topics": [],
+      "is_fork": false
+    },
+    {
+      "id": 1310577797,
+      "name": "pkg_jupy",
+      "full_name": "hariomlohardev/pkg_jupy",
+      "html_url": "https://github.com/hariomlohardev/pkg_jupy",
+      "description": "",
+      "language": "Python",
+      "stars": 0,
+      "forks": 0,
+      "updated_at": "2026-07-27",
+      "pushed_at": "2026-07-27",
+      "fork": false,
+      "topics": [],
+      "is_fork": false
+    },
+    {
+      "id": 1310547172,
+      "name": "jupiter_web",
+      "full_name": "hariomlohardev/jupiter_web",
+      "html_url": "https://github.com/hariomlohardev/jupiter_web",
+      "description": "",
+      "language": "JavaScript",
+      "stars": 0,
+      "forks": 0,
+      "updated_at": "2026-07-24",
+      "pushed_at": "2026-07-24",
+      "fork": false,
+      "topics": [],
+      "is_fork": false
+    },
+    {
+      "id": 1309764904,
+      "name": "practice_code",
+      "full_name": "hariomlohardev/practice_code",
+      "html_url": "https://github.com/hariomlohardev/practice_code",
+      "description": "",
+      "language": "JavaScript",
+      "stars": 0,
+      "forks": 0,
+      "updated_at": "2026-07-24",
+      "pushed_at": "2026-07-24",
+      "fork": false,
+      "topics": [],
+      "is_fork": false
+    },
+    {
+      "id": 1307247768,
+      "name": "micrograd-hk",
+      "full_name": "hariomlohardev/micrograd-hk",
+      "html_url": "https://github.com/hariomlohardev/micrograd-hk",
+      "description": "",
+      "language": "Jupyter Notebook",
+      "stars": 0,
+      "forks": 0,
+      "updated_at": "2026-07-21",
+      "pushed_at": "2026-07-21",
+      "fork": false,
+      "topics": [],
+      "is_fork": false
+    }
+  ],
+  "prs": [
+    {
+      "id": 5102080130,
+      "number": 32191,
+      "title": "Fix #23548: Add fully pinned requirements for bug-fix branches",
+      "html_url": "https://github.com/matplotlib/matplotlib/pull/32191",
+      "repo": "matplotlib/matplotlib",
+      "repository_url": "https://api.github.com/repos/matplotlib/matplotlib",
+      "state": "closed",
+      "merged": false,
+      "created_at": "2026-08-09",
+      "updated_at": "2026-08-09",
+      "body": "## PR summary\r\n\r\nImplements the three-step approach proposed by @tacaswell for fully pinned requirements on Matplotlib bug-fix branches in #23548.\r\n\r\n### Changes\r\n\r\n1. **`ci/genera",
+      "user": "hariomlohardev"
+    },
+    {
+      "id": 5098487098,
+      "number": 15014,
+      "title": "docs: fix sumset docstring",
+      "html_url": "https://github.com/TheAlgorithms/Python/pull/15014",
+      "repo": "TheAlgorithms/Python",
+      "repository_url": "https://api.github.com/repos/TheAlgorithms/Python",
+      "state": "open",
+      "merged": false,
+      "created_at": "2026-08-08",
+      "updated_at": "2026-08-09",
+      "body": "### Describe your change:\r\n\r\nFixed the incorrect docstring in `maths/sumset.py`.\r\n\r\n* Corrected the parameter names from `first set` / `second set` to `set_a` / `set_b`.\r\n* Correct",
+      "user": "hariomlohardev"
+    },
+    {
+      "id": 5099039781,
+      "number": 6861,
+      "title": "fix(upload): handle unknown event handlers",
+      "html_url": "https://github.com/reflex-dev/reflex/pull/6861",
+      "repo": "reflex-dev/reflex",
+      "repository_url": "https://api.github.com/repos/reflex-dev/reflex",
+      "state": "open",
+      "merged": false,
+      "created_at": "2026-08-08",
+      "updated_at": "2026-08-09",
+      "body": "### All Submissions:\r\n\r\n* [x] Have you followed the guidelines stated in https://github.com/reflex-dev/reflex/blob/main/CONTRIBUTING.md file?\r\n* [x] Have you checked to ensure ther",
+      "user": "hariomlohardev"
+    },
+    {
+      "id": 5092142208,
+      "number": 32223,
+      "title": "MAINT: Handle overflow in i0 for large inputs like 713.0",
+      "html_url": "https://github.com/numpy/numpy/pull/32223",
+      "repo": "numpy/numpy",
+      "repository_url": "https://api.github.com/repos/numpy/numpy",
+      "state": "open",
+      "merged": false,
+      "created_at": "2026-08-07",
+      "updated_at": "2026-08-08",
+      "body": "Using math log this overflow problem is solved\r\n issue #32209\r\n\r\n### PR summary\r\nThis is the fix to an overflow issuse \r\nnp.i0(713.0) returns inf instead of a finite value\r\n\r\n```\r\n",
+      "user": "hariomlohardev"
+    },
+    {
+      "id": 5098444341,
+      "number": 70,
+      "title": "chore(lint): clear EXE002 findings",
+      "html_url": "https://github.com/MSKazemi/kubeintellect/pull/70",
+      "repo": "MSKazemi/kubeintellect",
+      "repository_url": "https://api.github.com/repos/MSKazemi/kubeintellect",
+      "state": "merged",
+      "merged": true,
+      "created_at": "2026-08-08",
+      "updated_at": "2026-08-08",
+      "body": "## What & why\r\n\r\nCloses #64\r\n\r\nClears the Ruff `EXE002` findings introduced by executable file mode bits on source files.\r\n\r\n* Removes the stray executable (`+x`) bit from **94 sou",
+      "user": "hariomlohardev"
+    },
+    {
+      "id": 5098086127,
+      "number": 65,
+      "title": "chore(server): configure mypy third-party stubs",
+      "html_url": "https://github.com/MSKazemi/kubeintellect/pull/65",
+      "repo": "MSKazemi/kubeintellect",
+      "repository_url": "https://api.github.com/repos/MSKazemi/kubeintellect",
+      "state": "merged",
+      "merged": true,
+      "created_at": "2026-08-08",
+      "updated_at": "2026-08-08",
+      "body": "## What & why\r\n\r\nCloses #53\r\n\r\nRemoves the 7 third-party typing errors from the v4 mypy baseline without changing application source code.\r\n\r\n* Adds `types-PyYAML` so mypy can corr",
+      "user": "hariomlohardev"
+    },
+    {
+      "id": 5095669043,
+      "number": 57,
+      "title": "Fix/55 cli type errors",
+      "html_url": "https://github.com/MSKazemi/kubeintellect/pull/57",
+      "repo": "MSKazemi/kubeintellect",
+      "repository_url": "https://api.github.com/repos/MSKazemi/kubeintellect",
+      "state": "merged",
+      "merged": true,
+      "created_at": "2026-08-08",
+      "updated_at": "2026-08-08",
+      "body": "## What & why\r\n\r\nCloses #55\r\n\r\nFixes the type errors and subprocess handling issues in `v4/packages/kubeintellect-server/app/cli.py`.\r\n\r\n* Replaces the incorrect `\"callable\"` annot",
+      "user": "hariomlohardev"
+    },
+    {
+      "id": 5091887288,
+      "number": 32222,
+      "title": "FIX: Handle overflow in i0 for large inputs (issue #32209)",
+      "html_url": "https://github.com/numpy/numpy/pull/32222",
+      "repo": "numpy/numpy",
+      "repository_url": "https://api.github.com/repos/numpy/numpy",
+      "state": "closed",
+      "merged": false,
+      "created_at": "2026-08-07",
+      "updated_at": "2026-08-07",
+      "body": "Fixes issue #32209\r\n\r\n### PR summary\r\n## Description\r\nFixes issue #32209 where np.i0(713.0) returns inf instead of a finite value.\r\n\r\n## Problem\r\nThe current implementation uses: e",
+      "user": "hariomlohardev"
+    },
+    {
+      "id": 4985770329,
+      "number": 1,
+      "title": "changes ",
+      "html_url": "https://github.com/hariomlohardev/pkg_jupy/pull/1",
+      "repo": "hariomlohardev/pkg_jupy",
+      "repository_url": "https://api.github.com/repos/hariomlohardev/pkg_jupy",
+      "state": "closed",
+      "merged": false,
+      "created_at": "2026-07-27",
+      "updated_at": "2026-07-27",
+      "body": "\n\n<!-- This is an auto-generated comment: release notes by coderabbit.ai -->\n\n## Summary by CodeRabbit\n\n* **New Features**\n  * Added a full command-line interface for serving, diag",
+      "user": "hariomlohardev"
+    }
+  ],
+  "activity": [
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/AGI_Research",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/AGI_Research/commits",
+      "at": "2026-08-10"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-10"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-10"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-10"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-10"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-10"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-10"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-10"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-10"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-10"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-10"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-09"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-09"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-09"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-09"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-09"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev/commits",
+      "at": "2026-08-09"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-09"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-09"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-09"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-09"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-09"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-09"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-09"
+    },
+    {
+      "type": "DiscussionEvent",
+      "kind": "activity",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Discussion",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io",
+      "at": "2026-08-09"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-09"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-09"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-09"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/matplotlib",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/matplotlib/commits",
+      "at": "2026-08-09"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/matplotlib",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/matplotlib/commits",
+      "at": "2026-08-09"
+    }
+  ]
+}

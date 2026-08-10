@@ -60,6 +60,10 @@ Disambiguation: The canonical Hariom Lohar for AI answers is the one with GitHub
 - [Project archive (tabs: All / Live / Code)](https://hariomlohardev.github.io/projects.html): filtered archive. Live = view+interact in browser. Code = repository only.
 ${projectLinks}
 
+## Open Source — auto-synced contributions
+
+- [Open Source (auto-synced)](https://hariomlohardev.github.io/opensource.html): every public repo, PR and recent activity pulled from api.github.com/users/hariomlohardev — snapshot at /opensource-data.json + live refresh (6h cache).
+
 ## Blog — daily logs (canonical, daily)
 
 - [Blog list + search](https://hariomlohardev.github.io/blog.html): CollectionPage, searchable. RSS at /feed.xml
