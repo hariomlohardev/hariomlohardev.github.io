@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+﻿name: Deploy to GitHub Pages
 
 on:
   push:
@@ -33,6 +33,8 @@ jobs:
         run: node scripts/generate-blog.js
       - name: Build project detail pages (projects-data → projects/p/*/index.html)
         run: node scripts/generate-projects.js
+      - name: Build LLM index (llms.txt / llms-full.txt)
+        run: node scripts/generate-llms.js
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

@@ -230,7 +230,7 @@ function postPage(post){
     description: post.description,
     datePublished: post.date,
     dateModified: post.date,
-    author: {"@type":"Person","name":"Hariom Lohar","url":SITE+"/"},
+    author: {"@type":"Person","@id":SITE+"/#person","name":"Hariom Lohar","alternateName":"hariomlohardev","url":SITE+"/","sameAs":["https://github.com/hariomlohardev","https://x.com/HariomloharAGI","https://x.com/hariomlohardev","https://www.linkedin.com/in/hariomlohar","https://dev.to/hariomlohardev","https://huggingface.co/hariomlohardev","https://hashnode.com/@hariomlohardev","https://medium.com/@hariomlohardev"]},
     mainEntityOfPage: post.url,
     url: post.url,
     image: ogImage,
@@ -268,6 +268,10 @@ function postPage(post){
 <meta name="twitter:image" content="${ogImage}" />
 <meta name="twitter:creator" content="@HariomloharAGI" />
 <link rel="alternate" type="application/rss+xml" title="Hariom Lohar — Blog" href="${SITE}/feed.xml" />
+<link rel="author" href="https://github.com/hariomlohardev" />
+<link rel="me" href="https://github.com/hariomlohardev" />
+<link rel="me" href="https://x.com/HariomloharAGI" />
+<link rel="me" href="https://www.linkedin.com/in/hariomlohar" />
 <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="icon" type="image/png" href="/favicon.png" />
@@ -431,6 +435,7 @@ ${post.html}
 </html>`;
 }
 
+// generate
 for(const post of posts){
   const dir = path.join(BLOG_P_DIR, post.slug);
   fs.mkdirSync(dir, {recursive:true});
