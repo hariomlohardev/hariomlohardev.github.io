@@ -426,8 +426,7 @@ ${post.html}
   window.addEventListener('scroll', onScroll,{passive:true}); onScroll();
 })();
 </script>
-<!-- Analytics — $0 placeholder (replaced when you set token in index.html; regen via node scripts/generate-blog.js) -->
-<!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "REPLACE_WITH_YOUR_CLOUDFLARE_TOKEN"}'></script> -->
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7c8c6879055d45ba894f6ac0ce1cc51a"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>`;
 }
