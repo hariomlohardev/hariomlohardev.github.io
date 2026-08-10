@@ -1,5 +1,7 @@
 # claude local
 .claude/
+# private ops vault — never push
+PRIVATE/
 # OS
 .DS_Store
 Thumbs.db
