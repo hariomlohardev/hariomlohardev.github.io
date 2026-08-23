@@ -578,7 +578,7 @@ ${post.html}
 (function(){
 "use strict";
 var reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-document.getElementById('yr')?.textContent=new Date().getFullYear();
+var _yr=document.getElementById('yr'); if(_yr) _yr.textContent=new Date().getFullYear();
 function copyText(text,btn,label){
   function done(){
     if(!btn)return;
