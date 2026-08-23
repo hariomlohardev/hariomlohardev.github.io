@@ -218,8 +218,8 @@ try{ fs.mkdirSync(OG_DIR, {recursive:true}); }catch{}
 // ── generate blog/p/<slug>/index.html ─────────────────────────────
 function postPage(post){
   const dFmt = fmtDate(post.date);
-  const tagsHtml = (post.tags||[]).map(t=>`<a href="/blog.html#tag=${encodeURIComponent(t)}">#${escHtml(t)}</a>`).join(" ");
-  const tagLinks = (post.tags||[]).map(t=>`<a href="/blog.html#tag=${encodeURIComponent(t)}">${escHtml(t)}</a>`).join("");
+  const tagsHtml = (post.tags||[]).map(t=>`<a href="/blog#tag=${encodeURIComponent(t)}">#${escHtml(t)}</a>`).join(" ");
+  const tagLinks = (post.tags||[]).map(t=>`<a href="/blog#tag=${encodeURIComponent(t)}">${escHtml(t)}</a>`).join("");
   const isLog = (post.tags||[]).map(x=>String(x).toLowerCase()).includes('daily-log');
   const typeLabel = isLog ? 'Daily Log' : 'Article';
   const coverUrl = post.cover ? (post.cover.startsWith('http') ? post.cover : (post.cover.startsWith('/') ? SITE + post.cover : SITE + '/' + post.cover)) : null;
@@ -485,12 +485,12 @@ html:not(.js) .rv{opacity:1;transform:none}
       </a>
       <nav class="desk" aria-label="Primary">
         <a href="/">Home</a>
-        <a href="/projects.html">Projects</a>
-        <a href="/opensource.html">Open Source</a>
-        <a href="/blog.html" class="active" aria-current="page">Blog</a>
-        <a href="/about.html">About</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/community.html">Community</a>
+        <a href="/projects">Projects</a>
+        <a href="/opensource">Open Source</a>
+        <a href="/blog" class="active" aria-current="page">Blog</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a href="/community">Community</a>
       </nav>
       <div class="head-right">
         <a class="gh-pill" href="https://github.com/hariomlohardev" target="_blank" rel="noopener"><i aria-hidden="true"></i><span>Github&nbsp;↗</span></a>
@@ -503,12 +503,12 @@ html:not(.js) .rv{opacity:1;transform:none}
   <div class="mobile-panel" id="mobilePanel" aria-hidden="true">
     <nav aria-label="Mobile primary">
       <a href="/"><span>Home</span><span class="no">01</span></a>
-      <a href="/projects.html"><span>Projects</span><span class="no">02</span></a>
-      <a href="/opensource.html"><span>Open Source</span><span class="no">03</span></a>
-      <a href="/blog.html" class="active"><span>Blog &amp; Logs</span><span class="no">04</span></a>
-      <a href="/about.html"><span>About</span><span class="no">05</span></a>
-      <a href="/contact.html"><span>Contact</span><span class="no">06</span></a>
-      <a href="/community.html"><span>Community</span><span class="no">07</span></a>
+      <a href="/projects"><span>Projects</span><span class="no">02</span></a>
+      <a href="/opensource"><span>Open Source</span><span class="no">03</span></a>
+      <a href="/blog" class="active"><span>Blog &amp; Logs</span><span class="no">04</span></a>
+      <a href="/about"><span>About</span><span class="no">05</span></a>
+      <a href="/contact"><span>Contact</span><span class="no">06</span></a>
+      <a href="/community"><span>Community</span><span class="no">07</span></a>
     </nav>
     <div class="mp-actions">
       <a href="/feed.xml">RSS Feed</a>
@@ -520,7 +520,7 @@ html:not(.js) .rv{opacity:1;transform:none}
   <div class="read">
     <div class="breadcrumb">
       <a href="/">Hariom Lohar</a><span class="sep">/</span>
-      <a href="/blog.html">Blog</a><span class="sep">/</span>
+      <a href="/blog">Blog</a><span class="sep">/</span>
       <span class="cur">${escHtml(shortCur)}</span>
     </div>
     <div class="hero">
@@ -537,7 +537,7 @@ html:not(.js) .rv{opacity:1;transform:none}
           <span class="sep">·</span><span>${wordCount} words</span>
           <span class="sep">·</span><span>committed in public</span>
         </div>
-        <div class="tags">${(post.tags||[]).map(t=>`<a href="/blog.html#tag=${encodeURIComponent(t)}">${escHtml(t)}</a>`).join("")}</div>
+        <div class="tags">${(post.tags||[]).map(t=>`<a href="/blog#tag=${encodeURIComponent(t)}">${escHtml(t)}</a>`).join("")}</div>
       </div>
     </div>
     <div class="rule" aria-hidden="true"></div>
@@ -562,7 +562,7 @@ ${post.html}
       </div>
     </section>
     <div class="post-nav rv">
-      <a href="/blog.html" class="btn">← Back to blog</a>
+      <a href="/blog" class="btn">← Back to blog</a>
       <a href="https://github.com/hariomlohardev" target="_blank" rel="noopener" class="btn solid">Follow on GitHub ↗</a>
     </div>
   </div>
@@ -570,7 +570,7 @@ ${post.html}
 <footer>
   <div class="wrap foot-in">
     <span>© ${new Date().getFullYear()} Hariom Lohar — Lab Notebook №01</span>
-    <span><a href="/blog.html">Blog</a> · <a href="/feed.xml">RSS</a> · press <span class="kbd">G</span> → github</span>
+    <span><a href="/blog">Blog</a> · <a href="/feed.xml">RSS</a> · press <span class="kbd">G</span> → github</span>
     <button class="top-btn" id="topBtn" type="button">Back to top ↑</button>
   </div>
 </footer>
@@ -690,7 +690,7 @@ document.getElementById('copyBtn').addEventListener('click',function(){
 for(const post of posts){
   const dir = path.join(BLOG_P_DIR, post.slug);
   fs.mkdirSync(dir, {recursive:true});
-  fs.writeFileSync(path.join(dir,"index.html"), postPage(post));
+  fs.writeFileSync(path.join(dir,"/"), postPage(post));
   console.log(`→ blog/p/${post.slug}/index.html`);
   // og svg — $0, Lab Notebook chrome
   if(!post.cover){
@@ -705,7 +705,7 @@ for(const post of posts){
 // ── patch sitemap.xml ───────────────────────────────────────────────
 if(fs.existsSync(SITEMAP_XML)){
   let sitemap = fs.readFileSync(SITEMAP_XML,"utf8");
-  const hasBlog = sitemap.includes("/blog.html");
+  const hasBlog = sitemap.includes("/blog");
   if(!hasBlog){
     const entries = [`  <url><loc>${SITE}/blog.html</loc><lastmod>${posts[0]?.date || new Date().toISOString().slice(0,10)}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>`]
       .concat(posts.map(p=>`  <url><loc>${escXml(p.url)}</loc><lastmod>${p.date}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>`))

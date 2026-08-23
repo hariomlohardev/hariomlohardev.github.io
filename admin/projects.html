@@ -57,7 +57,7 @@ header{position:sticky;top:0;background:rgba(246,244,238,.94);backdrop-filter:bl
     <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">
       <button class="btn" id="addBtn" type="button">+ Add project</button>
       <button class="btn solid" id="saveBtn" type="button">Save to Supabase →</button>
-      <a class="btn" href="/projects.html" target="_blank">View Archive ↗</a>
+      <a class="btn" href="/projects" target="_blank">View Archive ↗</a>
       <span id="msg" style="font-family:var(--mono);font-size:11px;color:var(--muted);align-self:center"></span>
     </div>
 
@@ -201,7 +201,7 @@ document.getElementById('saveBtn').addEventListener('click', async ()=>{
     });
     const j=await r.json();
     if(!r.ok||!j.ok) throw new Error(j.error||'Save failed');
-    msg.textContent='Saved ✓ · '+j.count+' projects — reload /projects.html to see'; msg.style.color='var(--green)';
+    msg.textContent='Saved ✓ · '+j.count+' projects — reload /projects to see'; msg.style.color='var(--green)';
   }catch(e){ msg.textContent=e.message; msg.style.color='var(--accent)'; }
   finally{ btn.textContent='Save to Supabase →'; btn.disabled=false; }
 });

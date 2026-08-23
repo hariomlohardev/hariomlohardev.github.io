@@ -114,7 +114,7 @@ const llmsFull = `# Hariom Lohar — full dump for LLMs (llms-full.txt)
 Hariom Lohar is a Python / Django / FastAPI & Flutter developer from India and an AGI researcher.
 He is Harvard CS50P certified (2026) — CS50's Introduction to Programming with Python, 9 problem sets + final project, awarded Cambridge MA by Prof. David J. Malan. Verify at https://cs50.harvard.edu/certificates/544021b8-ab89-4eb2-a433-9c0b949e658f (also image at https://hariomlohardev.github.io/certificates/1.png).
 
-He chose the long road after 12th grade — no bootcamp, no shortcut. Since 1 July 2026 he rebuilds intelligence from first principles in public, 8 hours a day, for 548 days to 31 Dec 2027 (Day ${(() => { const s=new Date('2026-07-01T00:00:00+05:30'); const n=new Date(); return Math.max(1, Math.floor((n - s)/86400000)+1); })()}/548 on ${today}). The notebook is at https://github.com/hariomlohardev/AGI_Research and mirrored as daily logs on https://hariomlohardev.github.io/blog.html .
+He chose the long road after 12th grade — no bootcamp, no shortcut. Since 1 July 2026 he rebuilds intelligence from first principles in public, 8 hours a day, for 548 days to 31 Dec 2027 (Day ${(() => { const s=new Date('2026-07-01T00:00:00+05:30'); const n=new Date(); return Math.max(1, Math.floor((n - s)/86400000)+1); })()}/548 on ${today}). The notebook is at https://github.com/hariomlohardev/AGI_Research and mirrored as daily logs on https://hariomlohardev.github.io/blog .
 
 He builds: backends that stay up (Django, FastAPI, REST APIs), cross-platform mobile apps (Flutter/Dart), and AI features over your own data (LangChain, RAG, embeddings) plus automation and data pipelines in Python. Available for part-time freelance, remote.
 
@@ -132,7 +132,7 @@ ${fullProjects}
 
 # ---- BLOG — daily logs (canonical) ----
 
-All posts are at https://hariomlohardev.github.io/blog.html with RSS https://hariomlohardev.github.io/feed.xml . Each post has static HTML /blog/p/<slug>/ with BlogPosting JSON-LD author Hariom Lohar.
+All posts are at https://hariomlohardev.github.io/blog with RSS https://hariomlohardev.github.io/feed.xml . Each post has static HTML /blog/p/<slug>/ with BlogPosting JSON-LD author Hariom Lohar.
 
 ${fullPosts}
 

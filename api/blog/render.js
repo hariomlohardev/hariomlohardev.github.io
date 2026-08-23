@@ -17,7 +17,7 @@ module.exports = async (req, res) => {
     // Reuse the same HTML as static generator would — minimal shell that then hydrates via post.html JS
     // Instead of duplicating, just redirect to post.html?slug=
     res.setHeader('Content-Type','text/html');
-    return res.status(200).send(`<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=/post.html?slug=${encodeURIComponent(slug)}" /></head><body>Redirecting to <a href="/post.html?slug=${encodeURIComponent(slug)}">/post.html?slug=${slug}</a></body></html>`);
+    return res.status(200).send(`<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=/post.html?slug=${encodeURIComponent(slug)}" /></head><body>Redirecting to <a href="/post?slug=${encodeURIComponent(slug)}">/post.html?slug=${slug}</a></body></html>`);
   }catch(e){
     return res.status(500).send(e.message);
   }

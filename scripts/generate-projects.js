@@ -130,7 +130,7 @@ function projectPage(p){
   const ctaRepo = p.repoUrl ? `<a href="${p.repoUrl}" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;padding:12px 18px;display:inline-flex;align-items:center;gap:8px;background:var(--sheet);color:var(--ink);border:1px solid var(--ink);text-decoration:none">View code on GitHub ↗</a>` : "";
   const graph = [
     {"@type":"CreativeWork","@id":url+"#work","name":p.name+" — by Hariom Lohar","description":p.description,"url":url,"author":{"@id":SITE+"/#person"},"isPartOf":{"@id":SITE+"/#website"}},
-    {"@type":"BreadcrumbList","@id":url+"#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home — Hariom Lohar","item":SITE+"/"},{"@type":"ListItem","position":2,"name":"Projects — Hariom Lohar","item":SITE+"/projects.html"},{"@type":"ListItem","position":3,"name":p.name,"item":url}]}
+    {"@type":"BreadcrumbList","@id":url+"#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home — Hariom Lohar","item":SITE+"/"},{"@type":"ListItem","position":2,"name":"Projects — Hariom Lohar","item":SITE+"/projects"},{"@type":"ListItem","position":3,"name":p.name,"item":url}]}
   ];
   if(faqJson.length) graph.push({"@type":"FAQPage","@id":url+"#faq","mainEntity":faqJson});
   const jsonLd = {"@context":"https://schema.org","@graph":graph};
@@ -237,19 +237,19 @@ footer{border-top:2px solid var(--ink);margin-top:24px;background:var(--paper-2)
     <div class="head-top"><span>LAB NOTEBOOK <b>No. 01</b> · PROJECT · INDIA — UTC+5:30</span><span style="display:flex;gap:12px;flex-wrap:wrap"><span>${escHtml(kindLabel)}</span><span style="color:var(--muted)">${escHtml(p.statusLabel)}</span></span></div>
     <div class="head-main">
       <a class="logo" href="/"><span class="logo-mark">HL</span> hariomlohardev <i>— build log</i></a>
-      <nav aria-label="Primary"><a href="/">Home</a><a href="/projects.html" class="active" aria-current="page">Projects</a><a href="/opensource.html">Open Source</a><a href="/blog.html">Blog</a><a href="/contact.html">Contact</a>
-        <a href="/community.html">Community</a></nav>
-      <a class="avail" href="/contact.html"><i></i> Available for freelance</a>
+      <nav aria-label="Primary"><a href="/">Home</a><a href="/projects" class="active" aria-current="page">Projects</a><a href="/opensource">Open Source</a><a href="/blog">Blog</a><a href="/contact">Contact</a>
+        <a href="/community">Community</a></nav>
+      <a class="avail" href="/contact"><i></i> Available for freelance</a>
     </div>
   </div>
 </header>
 <main class="wrap" id="main">
-  <div class="breadcrumb"><a href="/">Hariom Lohar</a><span>›</span><a href="/projects.html">Projects</a><span>›</span><span>${escHtml(p.name)}</span></div>
+  <div class="breadcrumb"><a href="/">Hariom Lohar</a><span>›</span><a href="/projects">Projects</a><span>›</span><span>${escHtml(p.name)}</span></div>
   <div class="hero">
     <div class="eyebrow"><i></i> ${escHtml(kindLabel)} · ${escHtml(p.statusLabel)}</div>
     <h1>${escHtml(p.name)}</h1>
     <div class="meta"><span>${kindBadge}</span><span>·</span><span>${escHtml(p.description).slice(0,120)}</span></div>
-    <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">${ctaLive} ${ctaRepo} <a href="/projects.html" style="font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper-2);padding:12px 18px;text-decoration:none">← Back to archive</a></div>
+    <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">${ctaLive} ${ctaRepo} <a href="/projects" style="font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper-2);padding:12px 18px;text-decoration:none">← Back to archive</a></div>
   </div>
   <article class="paper">
     <div class="prose">
@@ -266,14 +266,14 @@ footer{border-top:2px solid var(--ink);margin-top:24px;background:var(--paper-2)
   <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
     ${ctaLive}
     ${ctaRepo}
-    <a href="/projects.html" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--ink);padding:11px 14px;background:var(--sheet);text-decoration:none">← All projects</a>
+    <a href="/projects" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--ink);padding:11px 14px;background:var(--sheet);text-decoration:none">← All projects</a>
     <a href="https://github.com/hariomlohardev" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:var(--ink);color:white;padding:11px 14px;border:1px solid var(--ink);text-decoration:none">GitHub ↗</a>
   </div>
 </main>
 <footer>
   <div class="wrap foot-in">
     <span>© ${new Date().getFullYear()} <b>Hariom Lohar</b> — Lab Notebook No.01 · <a href="https://github.com/hariomlohardev" style="text-decoration:underline">hariomlohardev on GitHub</a></span>
-    <span><a href="/projects.html">Projects</a> · <a href="/blog.html">Blog</a> · <a href="#top">Top ↑</a></span>
+    <span><a href="/projects">Projects</a> · <a href="/blog">Blog</a> · <a href="#top">Top ↑</a></span>
   </div>
 </footer>
 <script>
@@ -299,7 +299,7 @@ for(const p of projects){
   const dir = path.join(PROJECTS_P_DIR, slug);
   fs.mkdirSync(dir, {recursive:true});
   const html = projectPage({...p, slug});
-  fs.writeFileSync(path.join(dir,"index.html"), html);
+  fs.writeFileSync(path.join(dir,"/"), html);
   console.log(`→ projects/p/${slug}/index.html`);
   // og svg if no cover
   if(!p.cover){

@@ -36,7 +36,7 @@ const FALLBACK = {
     { no:"03 · FILE", name:"LinkedIn", url:"https://www.linkedin.com/in/hariomlohar", display:"in/hariomlohar" },
     { no:"04 · FILE", name:"Instagram", url:"https://www.instagram.com/hariom_lohar_mp/", display:"@hariom_lohar_mp" },
     { no:"05 · FILE", name:"Hugging Face", url:"https://huggingface.co/hariomlohardev", display:"huggingface.co/hariomlohardev" },
-    { no:"06 · COMMUNITY", name:"SIGMOID", url:"community.html", display:"lab community · members & batches →" }
+    { no:"06 · COMMUNITY", name:"SIGMOID", url:"/community", display:"lab community · members & batches →" }
   ]
 };
 
