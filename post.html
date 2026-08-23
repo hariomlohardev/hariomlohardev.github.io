@@ -170,7 +170,18 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
     root.appendChild(s);
   }
 
-  fetch('posts.json',{cache:'no-store'}).then(function(r){ if(!r.ok) throw new Error('posts.json '+r.status); return r.json(); }).then(function(arr){
+  // Supabase-only: try API first, then direct REST
+  fetch('/api/blog/post?slug='+encodeURIComponent(slug),{cache:'no-store'}).then(function(r){ if(!r.ok) throw new Error('api '+r.status); return r.json(); }).then(function(j){
+    if(!j.ok||!j.post) throw new Error('no post');
+    return [j.post];
+  }).catch(function(){
+    var anon=document.querySelector('meta[name="supabase-anon"]')?.content || '';
+    var url='https://rgmvhptebkslkjleoilc.supabase.co/rest/v1/posts?slug=eq.'+encodeURIComponent(slug)+'&select=*';
+    return fetch(url, {headers: anon?{apikey:anon, Authorization:'Bearer '+anon}:{}}).then(function(r){ if(!r.ok) throw new Error('rest '+r.status); return r.json(); }).then(function(arr2){
+      if(!arr2||!arr2.length) throw new Error('no rest');
+      return arr2.map(function(p){ return {slug:p.slug,title:p.title,description:p.description,date:p.date,tags:p.tags||[],cover:p.cover,html:p.html,raw:p.raw,wordCount:p.word_count,readingMinutes:p.reading_minutes,url:'https://hariomlohardev.github.io/blog/p/'+p.slug+'/', file:p.slug+'.md'}; });
+    });
+  }).then(function(arr){
     var post = (arr||[]).find(function(p){ return String(p.slug).toLowerCase()===slug; });
     if(!post){
       document.getElementById('status').innerHTML='Post <code>'+esc(slug)+'</code> not found. See <a href="/blog.html" style="color:var(--blue);text-decoration:underline">/blog.html</a> or <a href="/blog/p/'+esc(slug)+'/" style="color:var(--blue);text-decoration:underline">/blog/p/'+esc(slug)+'/</a>.';
