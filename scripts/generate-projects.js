@@ -89,23 +89,23 @@ function ogSvg(project){
   const sub = project.statusLabel || (project.kind==="live" ? "Live demo in browser" : "Open source");
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="${escSvg(project.name)}">
-<rect width="1200" height="630" fill="#FFFEFB"/>
-<defs><pattern id="g" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0 H0 V24" fill="none" stroke="#E3ECFB" stroke-width="1"/></pattern><pattern id="g2" width="120" height="120" patternUnits="userSpaceOnUse"><path d="M120 0 H0 V120" fill="none" stroke="#C9D8F0" stroke-width="1"/></pattern></defs>
+<rect width="1200" height="630" fill="#F6F4EE"/>
+<defs><pattern id="g" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0 H0 V24" fill="none" stroke="#DAD5C6" stroke-width="1"/></pattern><pattern id="g2" width="120" height="120" patternUnits="userSpaceOnUse"><path d="M120 0 H0 V120" fill="none" stroke="#C4BEAC" stroke-width="1"/></pattern></defs>
 <rect width="1200" height="630" fill="url(#g)"/><rect width="1200" height="630" fill="url(#g2)"/>
-<rect x="0" y="0" width="1200" height="8" fill="#FFD400"/><rect x="0" y="8" width="1200" height="1" fill="#0B1220" opacity="0.12"/>
-<rect x="0" y="0" width="1200" height="40" fill="#0B1220"/>
-<text x="32" y="26" fill="#C8D2E6" font-family="monospace" font-size="12" letter-spacing="1.2">LAB NOTEBOOK No.01 · HARIOM LOHAR — hariomlohardev · INDIA — UTC+5:30</text>
-<text x="1088" y="26" fill="#8A9AB6" font-family="monospace" font-size="11" text-anchor="end">${escSvg(sub)}</text>
-<rect x="514" y="46" width="172" height="18" rx="2" fill="#FFFFFF" stroke="rgba(11,18,32,0.08)" transform="rotate(-1 600 55)"/>
-<rect x="48" y="64" width="1104" height="518" rx="2" fill="#FFFFFF" stroke="#0B1220" stroke-width="2"/>
-<text x="72" y="112" fill="#6E7D9A" font-family="monospace" font-size="11" letter-spacing="1.6">${escSvg(tag)} · ${escSvg(project.name)}</text>
-<text x="72" y="172" fill="#0B1220" font-family="sans-serif" font-size="54" font-weight="800" letter-spacing="-1.2">${escSvg(title)}</text>
+<rect x="0" y="0" width="1200" height="8" fill="#B93A13"/><rect x="0" y="8" width="1200" height="1" fill="#181611" opacity="0.12"/>
+<rect x="0" y="0" width="1200" height="40" fill="#181611"/>
+<text x="32" y="26" fill="#EFECE2" font-family="monospace" font-size="12" letter-spacing="1.2">LAB NOTEBOOK No.01 · HARIOM LOHAR — hariomlohardev · INDIA — UTC+5:30</text>
+<text x="1088" y="26" fill="#C4BEAC" font-family="monospace" font-size="11" text-anchor="end">${escSvg(sub)}</text>
+<rect x="514" y="46" width="172" height="18" rx="2" fill="#FFFFFF" stroke="rgba(24,22,17,0.08)" transform="rotate(-1 600 55)"/>
+<rect x="48" y="64" width="1104" height="518" rx="2" fill="#FBFAF6" stroke="#181611" stroke-width="2"/>
+<text x="72" y="112" fill="#5F594A" font-family="monospace" font-size="11" letter-spacing="1.6">${escSvg(tag)} · ${escSvg(project.name)}</text>
+<text x="72" y="172" fill="#181611" font-family="serif" font-size="54" font-weight="800" letter-spacing="-1.2">${escSvg(title)}</text>
 <text x="72" y="216" fill="#475569" font-family="sans-serif" font-size="19" letter-spacing="0">${escSvg(desc)}</text>
-<line x1="72" y1="250" x2="1128" y2="250" stroke="#D9E2EF" stroke-width="1" stroke-dasharray="6 6"/>
+<line x1="72" y1="250" x2="1128" y2="250" stroke="#DAD5C6" stroke-width="1" stroke-dasharray="6 6"/>
 <text x="72" y="290" fill="#0B1220" font-family="monospace" font-size="12" letter-spacing="0.8">By Hariom Lohar (hariomlohardev) · ${escSvg(project.statusLabel)}</text>
-<text x="72" y="320" fill="#6E7D9A" font-family="monospace" font-size="11">hariomlohardev.github.io/projects/p/${escSvg(project.slug)}/ · Lab Notebook No.01</text>
-<rect x="72" y="500" width="200" height="36" fill="#0B1220"/><text x="172" y="523" fill="#FFFEFB" font-family="monospace" font-size="12" text-anchor="middle" letter-spacing="1">${project.kind==="live" ? "OPEN LIVE BENCH →" : "VIEW CODE ↗"}</text>
-<text x="1128" y="523" fill="#6E7D9A" font-family="monospace" font-size="11" text-anchor="end">◎ Lab Notebook No.01</text>
+<text x="72" y="320" fill="#5F594A" font-family="monospace" font-size="11">hariomlohardev.github.io/projects/p/${escSvg(project.slug)}/ · Lab Notebook No.01</text>
+<rect x="72" y="500" width="200" height="36" fill="#0B1220"/><text x="172" y="523" fill="#F6F4EE" font-family="monospace" font-size="12" text-anchor="middle" letter-spacing="1">${project.kind==="live" ? "OPEN LIVE BENCH →" : "VIEW CODE ↗"}</text>
+<text x="1128" y="523" fill="#5F594A" font-family="monospace" font-size="11" text-anchor="end">◎ Lab Notebook No.01</text>
 </svg>`;
 }
 
@@ -140,7 +140,7 @@ function projectPage(p){
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="theme-color" content="#FFD400" />
+<meta name="theme-color" content="#F6F4EE" />
 <meta name="color-scheme" content="light" />
 <title>Hariom Lohar — ${escHtml(p.name)} · ${escHtml(p.statusLabel)} | hariomlohardev</title>
 <meta name="description" content="${escHtml(p.description)}" />
@@ -167,16 +167,24 @@ function projectPage(p){
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="icon" type="image/png" href="/favicon.png" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Fragment+Mono:ital@0;1&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-400-italic.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-600-italic.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-mono/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-mono/latin-400-italic.css">
 <script>document.documentElement.classList.add('js')</script>
 <style>
-:root{--paper:#FFFEFB;--paper-2:#F3F0E8;--paper-3:#EAE6DA;--sheet:#FFFFFF;--ink:#0B1220;--muted:#6E7D9A;--muted-2:#8A9AB6;--line:#D9E2EF;--line-2:#B9C8E2;--grid:#E3ECFB;--grid-2:#C9D8F0;--signal:#FFD400;--signal-soft:rgba(255,212,0,.18);--red:#E10600;--red-soft:rgba(225,6,0,.08);--blue:#0050FF;--green:#0E9F6E;--green-soft:rgba(14,159,110,.10);--max:960px;--pad:clamp(18px,4vw,52px);--mono:'Fragment Mono',ui-monospace,monospace;--display:'Bricolage Grotesque',system-ui,sans-serif;--serif:'Instrument Serif',Georgia,serif;--sans:'Instrument Sans',system-ui,sans-serif;--ease:cubic-bezier(.22,1,.36,1);--ease2:cubic-bezier(.16,1,.3,1)}
+:root{--paper:#F6F4EE;--paper-2:#EFECE2;--sheet:#FBFAF6;--ink:#181611;--ink-2:#37342B;--body:#3B382E;--muted:#5F594A;--muted-2:#6E6858;--line:#DAD5C6;--line-2:#C4BEAC;--grid:#E3ECFB;--grid-2:#C9D8F0;--signal:#B93A13;--signal-soft:rgba(185,58,19,.12);--accent:#B93A13;--accent-soft:rgba(185,58,19,.12);--red:#E10600;--red-soft:rgba(225,6,0,.08);--blue:#0050FF;--green:#1E7A4E;--green-soft:rgba(30,122,78,.10);--max:960px;--pad:clamp(18px,4vw,52px);--mono:'Space Mono',ui-monospace,monospace;--display:'Fraunces',Georgia,serif;--serif:'Fraunces',Georgia,serif;--sans:'Archivo',system-ui,sans-serif;--ease:cubic-bezier(.22,1,.36,1);--ease2:cubic-bezier(.16,1,.3,1)}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px),linear-gradient(var(--grid-2) 1px,transparent 1px),linear-gradient(90deg,var(--grid-2) 1px,transparent 1px);background-size:24px 24px,24px 24px,120px 120px,120px 120px;background-position:-1px -1px}
 ::selection{background:var(--signal);color:var(--ink)}
+body::after{content:"";position:fixed;inset:0;z-index:120;pointer-events:none;opacity:.05;mix-blend-mode:multiply;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E")}
 a{color:inherit;text-decoration:none}
 a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
 #prog{position:fixed;top:0;left:0;height:3px;width:0;background:var(--signal);z-index:90}

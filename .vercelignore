@@ -1,0 +1,18 @@
+# .vercelignore — what Vercel should NOT upload (keeps deploys fast)
+.git
+.claude
+PRIVATE
+temp
+# local vcs / OS
+.DS_Store
+Thumbs.db
+.vscode
+*.log
+# node artifacts (we have zero deps, but keep ignore)
+node_modules
+npm-debug.log*
+# vercel local
+.vercel
+# python
+__pycache__
+*.pyc

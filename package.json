@@ -1,0 +1,27 @@
+{
+  "name": "hariomlohardev.github.io",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Hariom Lohar — Lab Notebook No.01 · hariomlohardev.github.io — static site, builds via Node scripts, ships to GitHub Pages and Vercel",
+  "type": "commonjs",
+  "engines": {
+    "node": "20.x"
+  },
+  "scripts": {
+    "build": "node scripts/generate-blog.js && node scripts/generate-projects.js && node scripts/generate-llms.js && node scripts/generate-opensource.js",
+    "vercel-build": "npm run build",
+    "dev": "python -m http.server 8000",
+    "generate:blog": "node scripts/generate-blog.js",
+    "generate:projects": "node scripts/generate-projects.js",
+    "generate:llms": "node scripts/generate-llms.js",
+    "generate:opensource": "node scripts/generate-opensource.js",
+    "check": "node --check scripts/generate-blog.js && node --check scripts/generate-projects.js && echo 'ok'"
+  },
+  "keywords": ["hariomlohardev", "Hariom Lohar", "CS50P", "AGI", "portfolio"],
+  "author": "Hariom Lohar <hariomlohar.new@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hariomlohardev/hariomlohardev.github.io"
+  }
+}

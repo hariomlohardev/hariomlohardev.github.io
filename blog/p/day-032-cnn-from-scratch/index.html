@@ -3,15 +3,21 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="theme-color" content="#FFD400" />
+<meta name="theme-color" content="#F6F4EE" />
 <meta name="color-scheme" content="light" />
-<title>Day 032 — CNN from Scratch, No Autograd — Hariom Lohar · Lab Notebook No.01</title>
+<title>Day 032 — CNN from Scratch, No Autograd — Hariom Lohar · Lab Notebook №01</title>
 <meta name="description" content="Built 2D convolution forward + backward in pure NumPy — im2col, stride, padding, and the gradient that makes it learn." />
 <meta name="author" content="Hariom Lohar" />
 <meta name="robots" content="index, follow, max-image-preview:large" />
 <link rel="canonical" href="https://hariomlohardev.github.io/blog/p/day-032-cnn-from-scratch/" />
 <link rel="author" href="https://github.com/hariomlohardev" />
-<meta property="og:site_name" content="Hariom Lohar — Lab Notebook No.01" />
+<link rel="me" href="https://github.com/hariomlohardev" />
+<link rel="me" href="https://x.com/HariomloharAGI" />
+<link rel="me" href="https://www.linkedin.com/in/hariomlohar" />
+<link rel="alternate" type="application/rss+xml" title="Hariom Lohar — Blog" href="https://hariomlohardev.github.io/feed.xml" />
+<link rel="manifest" href="/site.webmanifest" />
+<link rel="alternate" type="text/plain" href="/llms.txt" title="LLM index — Hariom Lohar" />
+<meta property="og:site_name" content="Hariom Lohar — Lab Notebook №01" />
 <meta property="og:locale" content="en_IN" />
 <meta property="og:url" content="https://hariomlohardev.github.io/blog/p/day-032-cnn-from-scratch/" />
 <meta property="og:title" content="Day 032 — CNN from Scratch, No Autograd — Hariom Lohar" />
@@ -27,97 +33,263 @@
 <meta name="twitter:description" content="Built 2D convolution forward + backward in pure NumPy — im2col, stride, padding, and the gradient that makes it learn." />
 <meta name="twitter:image" content="https://hariomlohardev.github.io/og/day-032-cnn-from-scratch.svg" />
 <meta name="twitter:creator" content="@HariomloharAGI" />
-<link rel="alternate" type="application/rss+xml" title="Hariom Lohar — Blog" href="https://hariomlohardev.github.io/feed.xml" />
-<link rel="author" href="https://github.com/hariomlohardev" />
-<link rel="me" href="https://github.com/hariomlohardev" />
-<link rel="me" href="https://x.com/HariomloharAGI" />
-<link rel="me" href="https://www.linkedin.com/in/hariomlohar" />
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Day 032 — CNN from Scratch, No Autograd","description":"Built 2D convolution forward + backward in pure NumPy — im2col, stride, padding, and the gradient that makes it learn.","datePublished":"2026-08-01","dateModified":"2026-08-01","author":{"@type":"Person","@id":"https://hariomlohardev.github.io/#person","name":"Hariom Lohar","alternateName":"hariomlohardev","url":"https://hariomlohardev.github.io/","sameAs":["https://github.com/hariomlohardev","https://x.com/HariomloharAGI","https://x.com/hariomlohardev","https://www.linkedin.com/in/hariomlohar","https://dev.to/hariomlohardev","https://huggingface.co/hariomlohardev","https://hashnode.com/@hariomlohardev","https://medium.com/@hariomlohardev"]},"mainEntityOfPage":"https://hariomlohardev.github.io/blog/p/day-032-cnn-from-scratch/","url":"https://hariomlohardev.github.io/blog/p/day-032-cnn-from-scratch/","image":"https://hariomlohardev.github.io/og/day-032-cnn-from-scratch.svg","keywords":"daily-log, CNN, NumPy, backprop","wordCount":166,"isPartOf":{"@type":"Blog","name":"Hariom Lohar — Lab Notebook"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Day 032 — CNN from Scratch, No Autograd","description":"Built 2D convolution forward + backward in pure NumPy — im2col, stride, padding, and the gradient that makes it learn.","datePublished":"2026-08-01","dateModified":"2026-08-01","author":{"@type":"Person","@id":"https://hariomlohardev.github.io/#person","name":"Hariom Lohar","alternateName":"hariomlohardev","url":"https://hariomlohardev.github.io/","sameAs":["https://github.com/hariomlohardev","https://x.com/HariomloharAGI","https://www.linkedin.com/in/hariomlohar"]},"mainEntityOfPage":"https://hariomlohardev.github.io/blog/p/day-032-cnn-from-scratch/","url":"https://hariomlohardev.github.io/blog/p/day-032-cnn-from-scratch/","image":"https://hariomlohardev.github.io/og/day-032-cnn-from-scratch.svg","keywords":"daily-log, CNN, NumPy, backprop","wordCount":166,"isPartOf":{"@type":"Blog","name":"Hariom Lohar — Lab Notebook"}}</script>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="icon" type="image/png" href="/favicon.png" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Fragment+Mono:ital@0;1&display=swap" rel="stylesheet">
 <script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-400-italic.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-600-italic.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-mono/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-mono/latin-400-italic.css">
 <style>
-:root{--paper:#FFFEFB;--paper-2:#F3F0E8;--sheet:#fff;--ink:#0B1220;--muted:#6E7D9A;--line:#D9E2EF;--line-2:#B9C8E2;--grid:#E3ECFB;--signal:#FFD400;--red:#E10600;--blue:#0050FF;--green:#0E9F6E;--max:860px;--pad:clamp(18px,4vw,52px);--mono:'Fragment Mono',monospace;--display:'Bricolage Grotesque',sans-serif;--serif:'Instrument Serif',serif;--sans:'Instrument Sans',sans-serif}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px}
-a{color:inherit}
-a:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
-#prog{position:fixed;top:0;left:0;height:3px;width:0;background:var(--signal);z-index:90}
-.wrap{max-width:var(--max);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
-header{position:sticky;top:0;z-index:40;background:rgba(255,254,251,.88);backdrop-filter:saturate(150%) blur(10px);border-bottom:1px solid var(--line)}
-header.scrolled{box-shadow:0 6px 24px rgba(11,18,32,.08)}
-.head-top{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px dashed var(--line);font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.head-main{display:flex;align-items:center;justify-content:space-between;gap:18px;height:56px}
-.logo{font-family:var(--mono);font-size:13px;font-weight:500;display:flex;gap:10px;align-items:center;text-decoration:none}
-.logo-mark{width:28px;height:28px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:11px}
-nav{display:flex;gap:18px;overflow-x:auto;scrollbar-width:none}
-nav a{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:6px 0;border-bottom:2px solid transparent;white-space:nowrap;text-decoration:none}
-nav a:hover{color:var(--ink);border-bottom-color:var(--signal)}
-@media(max-width:760px){
-  nav{display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:2px;-webkit-mask-image:linear-gradient(to right, transparent, black 14px, black calc(100% - 14px), transparent);mask-image:linear-gradient(to right, transparent, black 14px, black calc(100% - 14px), transparent)}
-  nav::-webkit-scrollbar{display:none}
-  nav a{padding:10px 6px;min-height:44px;display:grid;place-items:center}
+:root{
+  --paper:#F6F4EE;--paper-2:#EFECE2;--sheet:#FBFAF6;
+  --ink:#181611;--ink-2:#37342B;--body:#3B382E;
+  --muted:#5F594A;--muted-2:#6E6858;
+  --line:#DAD5C6;--line-2:#C4BEAC;
+  --accent:#B93A13;--accent-soft:rgba(185,58,19,.12);
+  --green:#1E7A4E;--green-soft:rgba(30,122,78,.10);
+  --max:1200px;--read:700px;--pad:clamp(20px,4.6vw,60px);
+  --serif:'Fraunces',Georgia,serif;--sans:'Archivo',system-ui,sans-serif;--mono:'Space Mono',ui-monospace,'SFMono-Regular',monospace;
+  --ease:cubic-bezier(.22,1,.36,1);
 }
-.marginalia{border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);background:var(--ink);color:#C8D2E6;overflow:hidden;padding:10px 0}
-.breadcrumb{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:14px 0;display:flex;gap:8px;flex-wrap:wrap}
-.breadcrumb a{color:var(--muted);text-decoration:none}
-.breadcrumb a:hover{color:var(--ink)}
-.hero{padding:18px 0 8px}
-.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);display:flex;gap:10px;align-items:center}
-.eyebrow i{width:8px;height:8px;background:var(--red);border-radius:50%}
-h1{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-height:1;font-size:clamp(1.9rem,4.5vw,2.8rem);text-transform:uppercase;margin-top:10px}
-h1 em{font-family:var(--serif);font-style:italic;font-weight:400;text-transform:none}
-.meta{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-family:var(--mono);font-size:11px;color:var(--muted)}
-.meta b{color:var(--ink)}
-.paper{background:var(--sheet);border:1px solid var(--ink);padding:22px 22px 18px;box-shadow:0 1px 0 rgba(11,18,32,.06);position:relative;margin-top:18px}
-.paper::before{content:"";position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(-1deg);width:120px;height:14px;background:rgba(255,255,255,.78);border:1px solid rgba(11,18,32,.06)}
-.prose{font-size:16px;line-height:1.75;color:#1e293b}
-.prose h2{font-family:var(--display);font-weight:800;letter-spacing:-.02em;text-transform:uppercase;font-size:1.35rem;margin:22px 0 10px}
-.prose h3{font-weight:700;margin:18px 0 8px}
-.prose p{margin:12px 0}
-.prose a{color:var(--blue);text-decoration:underline;text-underline-offset:2px}
-.prose a:hover{color:#0037b3}
-.prose blockquote{border-left:3px solid var(--signal);background:var(--paper-2);padding:10px 14px;margin:14px 0;color:#334155}
-.prose ul{margin:12px 0 12px 18px}
-.prose hr{border:none;border-top:1px solid var(--line);margin:18px 0}
-.prose pre{background:#0B1220;color:#E8EEFB;padding:14px;overflow:auto;border:1px solid var(--ink);font-family:var(--mono);font-size:12px;line-height:1.6;margin:14px 0}
-.prose code{font-family:var(--mono);font-size:.9em;background:var(--paper-2);border:1px solid var(--line);padding:1px 4px}
-.prose pre code{background:none;border:none;padding:0;color:inherit}
-footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)}
-.foot-in{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:18px 0;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important} #prog{display:none}}
-@media print{ header,.marginalia,#prog,#giscus-root,footer{display:none!important} body{background:#fff;background-image:none} .paper{box-shadow:none}}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--sans);background:var(--paper);color:var(--body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::after{content:"";position:fixed;inset:0;z-index:120;pointer-events:none;opacity:.05;mix-blend-mode:multiply;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E")}
+::selection{background:var(--accent);color:var(--paper)}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+button{font:inherit;background:none;border:none;cursor:pointer;color:inherit}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+#prog{position:fixed;top:0;left:0;height:2px;width:0;background:var(--accent);z-index:140}
+.wrap{max-width:var(--max);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad);position:relative}
+.read{max-width:var(--read);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
+.skip{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+.skip:focus{left:16px;top:12px;width:auto;height:auto;padding:9px 14px;background:var(--ink);color:var(--paper);z-index:200;font-family:var(--mono);font-size:12px}
+header{position:sticky;top:0;z-index:100;background:rgba(246,244,238,.94);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--line);transition:box-shadow .3s var(--ease)}
+header.scrolled{box-shadow:0 10px 30px rgba(24,22,17,.07)}
+.head-main{display:flex;align-items:center;justify-content:space-between;gap:20px;height:68px}
+.logo{display:flex;align-items:center;gap:12px;flex:none}
+.logo-mark{width:36px;height:36px;flex:none;transition:transform .3s var(--ease)}
+.logo:hover .logo-mark{transform:rotate(-6deg)}
+.logo-mark svg{width:100%;height:100%;display:block}
+.logo-word{font-family:var(--mono);font-size:13px;letter-spacing:.05em;line-height:1.25;color:var(--ink)}
+.logo-word i{display:block;font-style:normal;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+nav.desk{display:flex;gap:26px}
+nav.desk a{font-family:var(--mono);font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:6px 0;position:relative;white-space:nowrap;transition:color .2s}
+nav.desk a::after{content:"";position:absolute;left:0;bottom:0;height:1.5px;width:100%;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
+nav.desk a:hover{color:var(--ink)}
+nav.desk a:hover::after{transform:scaleX(1)}
+nav.desk a.active{color:var(--ink)}
+nav.desk a.active::after{transform:scaleX(1)}
+.head-right{display:flex;align-items:center;gap:12px;flex:none}
+.gh-pill{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;border:1px solid var(--ink);padding:10px 14px;display:inline-flex;align-items:center;gap:9px;transition:background .2s,color .2s;color:var(--ink)}
+.gh-pill i{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2.2s infinite}
+.gh-pill:hover{background:var(--ink);color:var(--paper)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(30,122,78,.45)}70%{box-shadow:0 0 0 7px rgba(30,122,78,0)}100%{box-shadow:0 0 0 0 rgba(30,122,78,0)}}
+.menu-btn{display:none;align-items:center;gap:10px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--ink);color:var(--ink);padding:11px 14px;min-height:44px}
+.menu-btn .bars{width:16px;height:10px;position:relative;flex:none}
+.menu-btn .bars span{position:absolute;left:0;width:100%;height:1.6px;background:currentColor;transition:transform .25s var(--ease),top .25s var(--ease)}
+.menu-btn .bars span:nth-child(1){top:0}
+.menu-btn .bars span:nth-child(2){top:8px}
+.menu-btn.open .bars span:nth-child(1){top:4px;transform:rotate(45deg)}
+.menu-btn.open .bars span:nth-child(2){top:4px;transform:rotate(-45deg)}
+.mobile-panel{display:none;position:absolute;left:0;right:0;top:100%;background:var(--paper);border-bottom:1px solid var(--ink);padding:6px var(--pad) 18px;opacity:0;transform:translateY(-8px);visibility:hidden;transition:opacity .28s var(--ease),transform .28s var(--ease),visibility .28s;box-shadow:0 18px 34px rgba(24,22,17,.10);z-index:99}
+.mobile-panel.open{opacity:1;transform:none;visibility:visible}
+.mobile-panel nav{display:grid;gap:0}
+.mobile-panel nav a{font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);padding:15px 4px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;min-height:48px}
+.mobile-panel nav a .no{font-size:10px;color:var(--accent)}
+.mobile-panel nav a.active{color:var(--accent)}
+.mp-actions{display:flex;gap:10px;margin-top:16px}
+.mp-actions a{flex:1;text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;border:1px solid var(--ink);padding:13px 10px;color:var(--ink);min-height:46px;display:flex;align-items:center;justify-content:center}
+.mp-actions a.alt{border-color:var(--accent);color:var(--accent)}
+.breadcrumb{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding-top:clamp(28px,4vw,40px);display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.breadcrumb a{color:var(--muted);transition:color .15s}
+.breadcrumb a:hover{color:var(--accent)}
+.breadcrumb .sep{color:var(--line-2)}
+.breadcrumb .cur{color:var(--ink-2)}
+.hero{padding:clamp(48px,8vw,90px) 0 clamp(40px,6vw,64px)}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-2);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.eyebrow i{width:9px;height:9px;background:var(--accent);flex:none;transform:rotate(45deg)}
+.eyebrow .dot{color:var(--line-2)}
+.hero h1{font-family:var(--serif);font-weight:600;letter-spacing:-.032em;line-height:1.08;font-size:clamp(2.1rem,5.8vw,3.6rem);margin-top:26px;color:var(--ink)}
+.hero h1 em{font-style:italic;font-weight:400}
+.lede{margin-top:26px;color:var(--ink-2);font-family:var(--serif);font-style:italic;font-size:clamp(1.15rem,2.4vw,1.35rem);line-height:1.55;max-width:34ch}
+.hero-foot{margin-top:34px;display:flex;flex-direction:column;gap:16px}
+.meta{display:flex;gap:12px;flex-wrap:wrap;align-items:center;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.meta b{color:var(--ink);font-weight:400}
+.meta .sep{color:var(--line-2)}
+.tags{display:flex;gap:18px;flex-wrap:wrap}
+.tags a{font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;color:var(--muted);transition:color .15s;padding:2px 0}
+.tags a::before{content:"#";color:var(--accent)}
+.tags a:hover{color:var(--ink)}
+.rule{width:56px;height:2px;background:var(--accent);margin:0 0 clamp(40px,6vw,64px)}
+.prose{font-size:17.5px;line-height:1.9;color:var(--body);counter-reset:sec}
+.prose h2{font-family:var(--serif);font-weight:600;letter-spacing:-.02em;font-size:1.7rem;line-height:1.25;color:var(--ink);margin:72px 0 18px;counter-increment:sec}
+.prose h2:first-child{margin-top:0}
+.prose h2::before{content:"§ " counter(sec,decimal-leading-zero);display:block;font-family:var(--mono);font-size:11px;letter-spacing:.22em;color:var(--accent);margin-bottom:14px;font-weight:400}
+.prose h3{font-family:var(--serif);font-weight:600;letter-spacing:-.01em;font-size:1.25rem;color:var(--ink);margin:40px 0 14px}
+.prose p{margin:24px 0}
+.prose a{color:var(--accent);font-weight:500;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.prose a:hover{background:var(--accent-soft)}
+.prose strong{color:var(--ink);font-weight:600}
+.prose blockquote{border-left:3px solid var(--accent);padding:6px 0 6px 26px;margin:36px 0;color:var(--ink-2);font-family:var(--serif);font-style:italic;font-size:1.2rem;line-height:1.6}
+.prose ul,.prose ol{margin:22px 0 22px 24px}
+.prose li{margin:9px 0}
+.prose li::marker{color:var(--accent)}
+.prose hr{border:none;border-top:1px solid var(--line);margin:44px 0}
+.prose code{font-family:var(--mono);font-size:.85em;background:var(--paper-2);padding:2px 6px;color:var(--ink)}
+.prose pre{background:var(--ink);color:var(--paper);padding:20px 22px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.8;margin:36px 0;border:none}
+.prose pre code{background:none;border:none;padding:0;color:inherit;font-size:inherit;white-space:pre}
+.codeblock{margin:38px 0;background:var(--ink);overflow:hidden;box-shadow:0 8px 24px rgba(24,22,17,.10)}
+.code-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 18px;background:rgba(246,244,238,.05);border-bottom:1px solid rgba(246,244,238,.12)}
+.code-lang{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(246,244,238,.5);display:flex;align-items:center;gap:8px}
+.code-lang::before{content:"";width:7px;height:7px;background:var(--accent);transform:rotate(45deg)}
+.code-copy{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(246,244,238,.75);border:1px solid rgba(246,244,238,.22);padding:6px 12px;transition:all .18s var(--ease);background:transparent;min-height:32px}
+.code-copy:hover{color:var(--paper);border-color:var(--paper);background:rgba(246,244,238,.08)}
+.code-copy.done{color:#8FD7AC;border-color:#8FD7AC}
+.codeblock pre{margin:0;background:transparent;padding:20px 22px;box-shadow:none}
+.tk-k{color:#E8A15C}
+.tk-n{color:#A8CBA0}
+.tk-c{color:#8A93A6;font-style:italic}
+.endmark{text-align:center;margin-top:64px;color:var(--accent);font-size:14px;letter-spacing:.6em;padding-left:.6em}
+.flat-sec{margin-top:clamp(64px,9vw,100px)}
+.kicker{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:10px;margin-bottom:22px}
+.kicker i{width:24px;height:1px;background:var(--ink)}
+.kicker .sub{text-transform:none;letter-spacing:.02em;color:var(--muted-2);margin-left:auto}
+#giscus-root{min-height:80px}
+#giscus-setup{margin-top:14px;font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--muted)}
+#giscus-setup a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+#giscus-setup code{font-family:var(--mono);font-size:.9em;background:var(--paper-2);padding:1px 5px}
+.share-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.share-btn{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line-2);background:transparent;padding:12px 16px;transition:all .18s var(--ease);display:inline-flex;align-items:center;gap:8px;min-height:46px;color:var(--ink-2)}
+.share-btn:hover{border-color:var(--ink);color:var(--ink);background:var(--sheet)}
+.post-nav{margin-top:clamp(56px,8vw,84px);padding-top:36px;border-top:1px solid var(--line);display:flex;gap:14px;flex-wrap:wrap}
+.btn{font-family:var(--mono);font-size:11.5px;letter-spacing:.15em;text-transform:uppercase;padding:15px 22px;border:1px solid var(--ink);display:inline-flex;align-items:center;gap:10px;min-height:48px;color:var(--ink);transition:background .2s,color .2s,transform .2s var(--ease)}
+.btn:hover{background:var(--ink);color:var(--paper)}
+.btn.solid{background:var(--ink);color:var(--paper)}
+.btn.solid:hover{background:var(--accent);border-color:var(--accent)}
+.btn:active{transform:translateY(1px)}
+footer{border-top:1px solid var(--ink);margin-top:clamp(56px,8vw,84px);background:var(--paper)}
+.foot-in{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center;padding:26px 0;font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);line-height:2}
+.foot-in a:hover{color:var(--accent)}
+.foot-in .top-btn{border:1px solid var(--line-2);padding:10px 14px;min-height:42px;transition:all .15s;color:var(--ink-2)}
+.foot-in .top-btn:hover{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.kbd{border:1px solid var(--line-2);padding:2px 6px;border-radius:3px;color:var(--ink);font-weight:600;background:var(--paper)}
+html.js .rv{opacity:0;transform:translateY(16px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+html.js .rv.in{opacity:1;transform:none}
+html:not(.js) .rv{opacity:1;transform:none}
+@media(max-width:760px){
+  nav.desk{display:none}
+  .menu-btn{display:inline-flex}
+  .mobile-panel{display:block}
+  .gh-pill{display:none}
+}
+@media(max-width:640px){
+  :root{--pad:20px}
+  .head-main{height:62px}
+  .logo-mark{width:31px;height:31px}
+  .prose{font-size:16px}
+  .prose h2{font-size:1.4rem;margin:56px 0 16px}
+  .prose pre,.codeblock pre{font-size:11.5px;padding:16px}
+  .post-nav .btn{flex:1;justify-content:center}
+  .foot-in{flex-direction:column;align-items:flex-start}
+  .foot-in .top-btn{width:100%;text-align:center}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+@media print{
+  header,#prog,.flat-sec,.post-nav,footer,body::after{display:none!important}
+  body{background:#fff}
+  .codeblock{box-shadow:none}
+}
 </style>
 </head>
 <body>
-<a href="#main" class="skip" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden">Skip to content</a>
-<style>.skip:focus{left:16px;top:10px;width:auto;height:auto;padding:8px 12px;background:var(--ink);color:var(--paper);z-index:100;border:1px solid var(--signal);font-family:var(--mono);font-size:12px}</style>
+<a href="#main" class="skip">Skip to content</a>
 <div id="prog" aria-hidden="true"></div>
 <header id="top">
   <div class="wrap">
-    <div class="head-top"><span>LAB NOTEBOOK <b>No.01</b> · BLOG · INDIA — UTC+5:30</span><span style="display:flex;gap:12px"><span>01 AUG 2026</span><span style="color:var(--muted)">1 min</span></span></div>
     <div class="head-main">
-      <a class="logo" href="/"><span class="logo-mark">HL</span> hariomlohardev</a>
-      <nav aria-label="Primary"><a href="/">Home</a><a href="/projects.html">Projects</a><a href="/opensource.html">Open Source</a><a href="/blog.html">Blog</a><a href="/blog.html#daily-log">Daily Logs</a><a href="/#contact">Contact</a></nav>
-      <a href="https://github.com/hariomlohardev" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--green);color:var(--green);padding:6px 10px;text-decoration:none">GitHub ↗</a>
+      <a class="logo" href="/" aria-label="Hariom Lohar — home">
+        <span class="logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 44 44" fill="none">
+            <path d="M7 6 V38" stroke="#181611" stroke-width="5"/>
+            <path d="M23 6 V38" stroke="#181611" stroke-width="5"/>
+            <path d="M7 22 H23" stroke="#B93A13" stroke-width="5"/>
+            <path d="M23 38 H38" stroke="#181611" stroke-width="5"/>
+            <circle cx="37" cy="7" r="3.4" fill="#B93A13"/>
+          </svg>
+        </span>
+        <span class="logo-word">hariomlohardev<i>lab notebook №01</i></span>
+      </a>
+      <nav class="desk" aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="/projects.html">Projects</a>
+        <a href="/opensource.html">Open Source</a>
+        <a href="/blog.html" class="active" aria-current="page">Blog</a>
+        <a href="/#about">About</a>
+        <a href="/#contact">Contact</a>
+      </nav>
+      <div class="head-right">
+        <a class="gh-pill" href="https://github.com/hariomlohardev" target="_blank" rel="noopener"><i aria-hidden="true"></i><span>Github&nbsp;↗</span></a>
+        <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobilePanel" aria-label="Open menu">
+          <span class="bars" aria-hidden="true"><span></span><span></span></span> Menu
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="mobile-panel" id="mobilePanel" aria-hidden="true">
+    <nav aria-label="Mobile primary">
+      <a href="/"><span>Home</span><span class="no">01</span></a>
+      <a href="/projects.html"><span>Projects</span><span class="no">02</span></a>
+      <a href="/opensource.html"><span>Open Source</span><span class="no">03</span></a>
+      <a href="/blog.html" class="active"><span>Blog &amp; Logs</span><span class="no">04</span></a>
+      <a href="/#about"><span>About</span><span class="no">05</span></a>
+      <a href="/#contact"><span>Contact</span><span class="no">06</span></a>
+    </nav>
+    <div class="mp-actions">
+      <a href="/feed.xml">RSS Feed</a>
+      <a class="alt" href="https://github.com/hariomlohardev" target="_blank" rel="noopener">GitHub ↗</a>
     </div>
   </div>
 </header>
-<div class="marginalia" aria-hidden="true" style="background:var(--paper);color:var(--muted);border-color:var(--line);text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase">Hariom Lohar — Lab Notebook No.01 · Daily Logs &amp; Articles</div>
-<main class="wrap" id="main">
-  <div class="breadcrumb"><a href="/">Hariom Lohar</a><span>›</span><a href="/blog.html">Blog</a><span>›</span><span>Day 032 — CNN from Scratch, No Autograd</span></div>
-  <div class="hero">
-    <div class="eyebrow"><i></i> Daily Log · 01 AUG 2026 · 1 min · Hariom Lohar</div>
-    <h1>Day 032 — CNN from Scratch, No Autograd</h1>
-    <div class="meta"><span><b>By Hariom Lohar</b> (hariomlohardev)</span><span>·</span><span>166 words</span><span>·</span><span><a href="/blog.html#tag=daily-log" style="font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper-2);padding:4px 8px;color:var(--muted)">daily-log</a> <a href="/blog.html#tag=CNN" style="font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper-2);padding:4px 8px;color:var(--muted)">CNN</a> <a href="/blog.html#tag=NumPy" style="font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper-2);padding:4px 8px;color:var(--muted)">NumPy</a> <a href="/blog.html#tag=backprop" style="font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper-2);padding:4px 8px;color:var(--muted)">backprop</a></span></div>
-    <p style="margin-top:10px;color:#475569;font-size:15px;line-height:1.6;max-width:65ch">Built 2D convolution forward + backward in pure NumPy — im2col, stride, padding, and the gradient that makes it learn.</p>
-  </div>
-  <article class="paper">
-    <div class="prose">
+<main id="main">
+  <div class="read">
+    <div class="breadcrumb">
+      <a href="/">Hariom Lohar</a><span class="sep">/</span>
+      <a href="/blog.html">Blog</a><span class="sep">/</span>
+      <span class="cur">Day 032 — CNN from Scratch…</span>
+    </div>
+    <div class="hero">
+      <p class="eyebrow rv"><i aria-hidden="true"></i>
+        <span>Daily Log</span><span class="dot">·</span>
+        <span>01 AUG 2026</span><span class="dot">·</span>
+        <span>1 min read</span>
+      </p>
+      <h1 class="rv">Day 032 — CNN from Scratch, No Autograd</h1>
+      <p class="lede rv">Built 2D convolution forward + backward in pure NumPy — im2col, stride, padding, and the gradient that makes it learn.</p>
+      <div class="hero-foot rv">
+        <div class="meta">
+          <span><b>By Hariom Lohar</b> (hariomlohardev)</span>
+          <span class="sep">·</span><span>166 words</span>
+          <span class="sep">·</span><span>committed in public</span>
+        </div>
+        <div class="tags"><a href="/blog.html#tag=daily-log">daily-log</a><a href="/blog.html#tag=CNN">CNN</a><a href="/blog.html#tag=NumPy">NumPy</a><a href="/blog.html#tag=backprop">backprop</a></div>
+      </div>
+    </div>
+    <div class="rule" aria-hidden="true"></div>
+    <article class="rv">
+      <div class="prose">
 <h2>What I built</h2>
 
 <p>2D <code>conv2d</code> forward + backward in NumPy. No <code>torch.nn</code>, no autograd — paper, then code.</p>
@@ -148,77 +320,144 @@ out = (w_col.T @ cols).reshape(N, H, W)</code></pre>
 <li>Then attention — same discipline, new shape.</li>
 </ul>
 Commit: <code>AGI_Research</code> — Day 032. Open notebook.
+      </div>
+      <div class="endmark" aria-hidden="true">◆</div>
+    </article>
+    <section class="flat-sec rv" aria-label="Comments">
+      <div class="kicker"><i></i> Discuss — powered by GitHub <span class="sub">free · no tracking · GitHub login to comment</span></div>
+      <div id="giscus-root"></div>
+      <noscript><p style="font-family:var(--mono);font-size:12px;color:var(--muted)">Enable JavaScript to load comments. Or <a href="https://github.com/hariomlohardev/hariomlohardev.github.io/discussions" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline">open Discussions →</a></p></noscript>
+      <p id="giscus-setup" style="display:none">Giscus not yet configured — <a href="https://giscus.app" target="_blank" rel="noopener">giscus.app</a> → pick <b>hariomlohardev/hariomlohardev.github.io</b> → enable Discussions → copy <code>data-repo-id</code> &amp; <code>data-category-id</code> into this page's script.</p>
+    </section>
+    <section class="flat-sec rv" aria-label="Share this post">
+      <div class="kicker"><i></i> Share — Lab Notebook №01</div>
+      <div class="share-row">
+        <button type="button" class="share-btn" id="copyBtn">Copy link</button>
+        <a class="share-btn" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fhariomlohardev.github.io%2Fblog%2Fp%2Fday-032-cnn-from-scratch%2F&text=Day%20032%20%E2%80%94%20CNN%20from%20Scratch%2C%20No%20Autograd%20%E2%80%94%20by%20Hariom%20Lohar" target="_blank" rel="noopener">X ↗</a>
+        <a class="share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fhariomlohardev.github.io%2Fblog%2Fp%2Fday-032-cnn-from-scratch%2F" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+    </section>
+    <div class="post-nav rv">
+      <a href="/blog.html" class="btn">← Back to blog</a>
+      <a href="https://github.com/hariomlohardev" target="_blank" rel="noopener" class="btn solid">Follow on GitHub ↗</a>
     </div>
-  </article>
-  <!-- Giscus — free comments via GitHub Discussions (no DB, no cost) -->
-  <section style="margin-top:22px;background:var(--sheet);border:1px solid var(--ink);padding:16px;position:relative" aria-label="Comments">
-    <div style="font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap"><span>Discuss — powered by GitHub</span><span style="text-transform:none;letter-spacing:0;color:var(--muted);font-size:11px">free · no tracking · GitHub login to comment</span></div>
-    <div id="giscus-root" style="margin-top:14px;min-height:80px"></div>
-    <noscript><p style="font-family:var(--mono);font-size:12px;color:var(--muted)">Enable JavaScript to load comments. Or <a href="https://github.com/hariomlohardev/hariomlohardev.github.io/discussions" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:underline">open Discussions →</a></p></noscript>
-    <p id="giscus-setup" style="display:none;margin-top:10px;font-family:var(--mono);font-size:11px;line-height:1.6;color:var(--muted);background:var(--paper-2);border:1px dashed var(--line);padding:10px">Giscus not yet configured — <a href="https://giscus.app" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:underline">giscus.app</a> → pick <b>hariomlohardev/hariomlohardev.github.io</b> → enable Discussions → copy <code>data-repo-id</code> &amp; <code>data-category-id</code> into this page's script. See <code>posts/README.md</code>.</p>
-  </section>
-  <script>
-  (function(){
-    var s=document.createElement('script');
-    s.src='https://giscus.app/client.js';
-    s.async=true; s.crossOrigin='anonymous';
-    // ——— FILL THESE TWO IDs AFTER ONE-TIME SETUP (see instructions below) ———
-    // Get them free at https://giscus.app — pick repo hariomlohardev/hariomlohardev.github.io
-    // If you leave them empty, comments show a setup note (no break).
-    s.setAttribute('data-repo','hariomlohardev/hariomlohardev.github.io');
-    s.setAttribute('data-repo-id','R_kgDOTkm3vQ');
-    s.setAttribute('data-category','General');
-    s.setAttribute('data-category-id','DIC_kwDOTkm3vc4DDAjC');
-    s.setAttribute('data-mapping','pathname');
-    s.setAttribute('data-strict','0');
-    s.setAttribute('data-reactions-enabled','1');
-    s.setAttribute('data-emit-metadata','0');
-    s.setAttribute('data-input-position','bottom');
-    s.setAttribute('data-theme','preferred_color_scheme');
-    s.setAttribute('data-lang','en');
-    var hasIds = s.getAttribute('data-repo-id') && s.getAttribute('data-category-id');
-    if(!hasIds){
-      var note=document.getElementById('giscus-setup');
-      if(note) note.style.display='block';
-      // still load Utterances as fallback — works with just repo name, no IDs
-      s.src='https://utteranc.es/client.js';
-      s.setAttribute('repo','hariomlohardev/hariomlohardev.github.io');
-      s.setAttribute('issue-term','pathname');
-      s.setAttribute('theme','github-light');
-      s.removeAttribute('data-repo'); s.removeAttribute('data-repo-id'); s.removeAttribute('data-category'); s.removeAttribute('data-category-id');
-      s.removeAttribute('data-mapping'); s.removeAttribute('data-strict'); s.removeAttribute('data-reactions-enabled'); s.removeAttribute('data-emit-metadata'); s.removeAttribute('data-input-position'); s.removeAttribute('data-lang');
-    }
-    document.getElementById('giscus-root').appendChild(s);
-  })();
-  </script>
-  <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
-    <a href="/blog.html" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--ink);padding:11px 14px;background:white;text-decoration:none">← Back to blog</a>
-    <a href="https://github.com/hariomlohardev" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:var(--ink);color:white;padding:11px 14px;border:1px solid var(--ink);text-decoration:none">Follow on GitHub ↗</a>
   </div>
-  <!-- Share — Lab Notebook tape, $0, no tracking -->
-  <section aria-label="Share this post" style="margin-top:14px;background:var(--sheet);border:1px solid var(--ink);padding:14px 14px 12px;position:relative;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between">
-    <span style="position:absolute;top:-9px;left:14px;width:64px;height:12px;background:rgba(255,255,255,.78);border:1px solid rgba(11,18,32,.06);transform:rotate(-1deg)" aria-hidden="true"></span>
-    <span style="font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">Share — Lab Notebook No.01</span>
-    <span style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-      <button type="button" onclick="(function(b){ var u='https://hariomlohardev.github.io/blog/p/day-032-cnn-from-scratch/'; if(navigator.clipboard){ navigator.clipboard.writeText(u).then(function(){ b.textContent='Copied ✓'; setTimeout(function(){ b.textContent='Copy link'; },1600); }); } else { prompt('Copy link:', u); } })(this)" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--ink);background:var(--paper);padding:8px 10px;cursor:pointer">Copy link</button>
-      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fhariomlohardev.github.io%2Fblog%2Fp%2Fday-032-cnn-from-scratch%2F&text=Day%20032%20%E2%80%94%20CNN%20from%20Scratch%2C%20No%20Autograd%20%E2%80%94%20by%20Hariom%20Lohar" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper-2);padding:8px 10px;text-decoration:none">X ↗</a>
-      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fhariomlohardev.github.io%2Fblog%2Fp%2Fday-032-cnn-from-scratch%2F" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper-2);padding:8px 10px;text-decoration:none">LinkedIn ↗</a>
-    </span>
-  </section>
 </main>
 <footer>
   <div class="wrap foot-in">
-    <span>© 2026 <b>Hariom Lohar</b> — Lab Notebook No.01 · <a href="https://github.com/hariomlohardev" style="text-decoration:underline">hariomlohardev on GitHub</a></span>
-    <span><a href="/blog.html">Blog</a> · <a href="/feed.xml">RSS</a> · <a href="#top">Top ↑</a></span>
+    <span>© 2026 Hariom Lohar — Lab Notebook №01</span>
+    <span><a href="/blog.html">Blog</a> · <a href="/feed.xml">RSS</a> · press <span class="kbd">G</span> → github</span>
+    <button class="top-btn" id="topBtn" type="button">Back to top ↑</button>
   </div>
 </footer>
 <script>
 (function(){
-  var hdr=document.querySelector('header'), prog=document.getElementById('prog'), qd=false;
-  function onScroll(){ if(qd) return; qd=true; requestAnimationFrame(function(){ qd=false; var h=document.documentElement.scrollHeight-window.innerHeight; if(prog) prog.style.width=(h>0?(window.scrollY/h)*100:0)+'%'; if(hdr) hdr.classList.toggle('scrolled', window.scrollY>8); }); }
-  window.addEventListener('scroll', onScroll,{passive:true}); onScroll();
+"use strict";
+var reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.getElementById('yr')?.textContent=new Date().getFullYear();
+function copyText(text,btn,label){
+  function done(){
+    if(!btn)return;
+    var old=btn.textContent;
+    btn.textContent='Copied ✓';btn.classList.add('done');
+    setTimeout(function(){btn.textContent=label||old;btn.classList.remove('done');},1600);
+  }
+  function fallback(){
+    var ta=document.createElement('textarea');
+    ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);ta.focus();ta.select();
+    try{document.execCommand('copy');done();}catch(e){}
+    document.body.removeChild(ta);
+  }
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(fallback);
+  }else fallback();
+}
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function highlightPython(src){
+  return src.split('\n').map(function(line){
+    var ci=line.indexOf('#');
+    var code=ci>-1?line.slice(0,ci):line;
+    var comment=ci>-1?line.slice(ci):'';
+    var out=escHtml(code)
+      .replace(/\b(def|return|for|in|range|import|from|as|if|elif|else|lambda|class|None|True|False)\b/g,'<span class="tk-k">$1</span>')
+      .replace(/\b(\d+\.?\d*(?:e-?\d+)?)\b/g,'<span class="tk-n">$1</span>');
+    if(comment)out+='<span class="tk-c">'+escHtml(comment)+'</span>';
+    return out;
+  }).join('\n');
+}
+function enhanceCode(){
+  document.querySelectorAll('.prose pre').forEach(function(pre){
+    var codeEl=pre.querySelector('code')||pre;
+    var m=(codeEl.className||'').match(/lang(?:uage)?-([a-z0-9]+)/i);
+    var lang=m?m[1].toLowerCase():'';
+    var fig=document.createElement('div');fig.className='codeblock';
+    pre.parentNode.insertBefore(fig,pre);
+    var head=document.createElement('div');head.className='code-head';
+    var lab=document.createElement('span');lab.className='code-lang';
+    lab.textContent=lang==='math'?'equation':(lang||'code');
+    var btn=document.createElement('button');btn.type='button';btn.className='code-copy';
+    btn.textContent='Copy';btn.setAttribute('aria-label','Copy code to clipboard');
+    btn.addEventListener('click',function(){copyText(codeEl.innerText,btn,'Copy');});
+    head.appendChild(lab);head.appendChild(btn);
+    fig.appendChild(head);
+    fig.appendChild(pre);
+    if(lang==='python'){codeEl.innerHTML=highlightPython(codeEl.textContent);}
+  });
+}
+enhanceCode();
+var hdr=document.querySelector('header'),prog=document.getElementById('prog'),qd=false;
+function onScroll(){if(qd)return;qd=true;requestAnimationFrame(function(){qd=false;var h=document.documentElement.scrollHeight-window.innerHeight;if(prog)prog.style.width=(h>0?(window.scrollY/h)*100:0)+'%';if(hdr)hdr.classList.toggle('scrolled',window.scrollY>8);});}
+window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+var menuBtn=document.getElementById('menuBtn'),panel=document.getElementById('mobilePanel');
+function setMenu(o){menuBtn.setAttribute('aria-expanded',String(o));menuBtn.setAttribute('aria-label',o?'Close menu':'Open menu');menuBtn.classList.toggle('open',o);panel.classList.toggle('open',o);panel.setAttribute('aria-hidden',String(!o));}
+menuBtn.addEventListener('click',function(){setMenu(menuBtn.getAttribute('aria-expanded')!=='true');});
+panel.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){setMenu(false);});});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&panel.classList.contains('open'))setMenu(false);});
+document.addEventListener('click',function(e){if(panel.classList.contains('open')&&!panel.contains(e.target)&&!menuBtn.contains(e.target))setMenu(false);});
+window.addEventListener('resize',function(){if(window.innerWidth>760&&panel.classList.contains('open'))setMenu(false);});
+function observeReveals(){
+  var els=document.querySelectorAll('.rv:not(.in)');
+  if('IntersectionObserver' in window&&!reduced){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.08});
+    els.forEach(function(el,i){el.style.transitionDelay=(Math.min(i,5)*45)+'ms';io.observe(el);});
+  }else els.forEach(function(el){el.classList.add('in');});
+}
+observeReveals();
+window.addEventListener('keydown',function(e){if(e.metaKey||e.ctrlKey||e.altKey)return;var t=(document.activeElement&&document.activeElement.tagName)||'';if(t==='INPUT'||t==='TEXTAREA')return;if(e.key==='g'||e.key==='G')window.open('https://github.com/hariomlohardev','_blank','noopener');});
+document.getElementById('topBtn').addEventListener('click',function(){window.scrollTo({top:0,behavior:reduced?'auto':'smooth'});});
+document.getElementById('copyBtn').addEventListener('click',function(){
+  copyText('https://hariomlohardev.github.io/blog/p/day-032-cnn-from-scratch/',this,'Copy link');
+});
+(function(){
+  var s=document.createElement('script');
+  s.src='https://giscus.app/client.js';
+  s.async=true;s.crossOrigin='anonymous';
+  s.setAttribute('data-repo','hariomlohardev/hariomlohardev.github.io');
+  s.setAttribute('data-repo-id','R_kgDOTkm3vQ');
+  s.setAttribute('data-category','General');
+  s.setAttribute('data-category-id','DIC_kwDOTkm3vc4DDAjC');
+  s.setAttribute('data-mapping','pathname');
+  s.setAttribute('data-strict','0');
+  s.setAttribute('data-reactions-enabled','1');
+  s.setAttribute('data-emit-metadata','0');
+  s.setAttribute('data-input-position','bottom');
+  s.setAttribute('data-theme','preferred_color_scheme');
+  s.setAttribute('data-lang','en');
+  var hasIds=s.getAttribute('data-repo-id')&&s.getAttribute('data-category-id');
+  if(!hasIds){
+    var note=document.getElementById('giscus-setup');
+    if(note)note.style.display='block';
+    s.src='https://utteranc.es/client.js';
+    s.setAttribute('repo','hariomlohardev/hariomlohardev.github.io');
+    s.setAttribute('issue-term','pathname');
+    s.setAttribute('theme','github-light');
+    ['data-repo','data-repo-id','data-category','data-category-id','data-mapping','data-strict','data-reactions-enabled','data-emit-metadata','data-input-position','data-lang'].forEach(function(a){s.removeAttribute(a);});
+  }
+  document.getElementById('giscus-root').appendChild(s);
+})();
 })();
 </script>
-<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7c8c6879055d45ba894f6ac0ce1cc51a"}'></script><!-- End Cloudflare Web Analytics -->
+<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7c8c6879055d45ba894f6ac0ce1cc51a"}'></script>
 </body>
 </html>

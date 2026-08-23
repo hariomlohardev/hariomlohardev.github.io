@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="theme-color" content="#FFD400" />
-<title>Hariom Lohar — Open Source Contributions (auto-synced) | hariomlohardev</title>
-<meta name="description" content="Open-source contributions by Hariom Lohar (hariomlohardev on GitHub) — repos, pull requests & activity auto-synced from GitHub. Harvard CS50P 2026, Python/Django/Flutter, AGI from first principles." />
+<meta name="theme-color" content="#F6F4EE" />
+<meta name="color-scheme" content="light" />
+<title>Hariom Lohar — Open Source Contributions | Lab Notebook №01</title>
+<meta name="description" content="Open-source contributions by Hariom Lohar (hariomlohardev on GitHub) — pull requests, issues and activity in external projects. Harvard CS50P 2026, Python/Django/Flutter, AGI from first principles." />
 <meta name="author" content="Hariom Lohar" />
 <meta name="robots" content="index, follow, max-image-preview:large" />
 <link rel="canonical" href="https://hariomlohardev.github.io/opensource.html" />
@@ -13,532 +14,772 @@
 <link rel="me" href="https://github.com/hariomlohardev" />
 <link rel="me" href="https://x.com/HariomloharAGI" />
 <link rel="me" href="https://www.linkedin.com/in/hariomlohar" />
-<link rel="manifest" href="/site.webmanifest" />
-<meta property="og:site_name" content="Hariom Lohar — Lab Notebook No.01" />
+<link rel="alternate" type="application/rss+xml" title="Hariom Lohar — Blog & Daily Logs" href="https://hariomlohardev.github.io/feed.xml" />
+<meta property="og:site_name" content="Hariom Lohar — Lab Notebook №01" />
 <meta property="og:locale" content="en_IN" />
 <meta property="og:url" content="https://hariomlohardev.github.io/opensource.html" />
-<meta property="og:title" content="Hariom Lohar — Open Source Contributions (auto-synced) | hariomlohardev" />
-<meta property="og:description" content="Every repo, every PR — pulled live from GitHub. Open-source work by Hariom Lohar (hariomlohardev): the daily AGI notebook, live benches & utilities. Auto-synced, no hand edits." />
+<meta property="og:title" content="Hariom Lohar — Open Source Contributions | Lab Notebook №01" />
+<meta property="og:description" content="Open-source contributions by Hariom Lohar (hariomlohardev) — PRs and activity in external projects, auto-synced from GitHub." />
 <meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Hariom Lohar — Open Source Contributions" />
+<meta name="twitter:description" content="Open-source contributions by Hariom Lohar (hariomlohardev) — PRs and activity in external projects, auto-synced from GitHub." />
+<meta name="twitter:creator" content="@HariomloharAGI" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-400-italic.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-600-italic.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-mono/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-mono/latin-400-italic.css">
+<style>
+:root{
+  --paper:#F6F4EE;--paper-2:#EFECE2;--sheet:#FBFAF6;
+  --ink:#181611;--ink-2:#37342B;--body:#3B382E;
+  --muted:#5F594A;--muted-2:#6E6858;
+  --line:#DAD5C6;--line-2:#C4BEAC;
+  --accent:#B93A13;--accent-soft:rgba(185,58,19,.12);
+  --green:#1E7A4E;--green-soft:rgba(30,122,78,.10);
+  --max:1200px;--pad:clamp(18px,4.2vw,56px);
+  --serif:'Fraunces',Georgia,serif;--sans:'Archivo',system-ui,sans-serif;--mono:'Space Mono',ui-monospace,'SFMono-Regular',monospace;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--sans);background:var(--paper);color:var(--body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::after{content:"";position:fixed;inset:0;z-index:120;pointer-events:none;opacity:.05;mix-blend-mode:multiply;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E")}
+::selection{background:var(--accent);color:var(--paper)}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+button{font:inherit;background:none;border:none;cursor:pointer;color:inherit}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+#prog{position:fixed;top:0;left:0;height:2px;width:0;background:var(--accent);z-index:140}
+.wrap{max-width:var(--max);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad);position:relative}
+.skip{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+.skip:focus{left:16px;top:12px;width:auto;height:auto;padding:9px 14px;background:var(--ink);color:var(--paper);z-index:200;font-family:var(--mono);font-size:12px}
+section[id]{scroll-margin-top:96px}
+
+/* ── header ── */
+header{position:sticky;top:0;z-index:100;background:rgba(246,244,238,.94);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--line);transition:box-shadow .3s var(--ease)}
+header.scrolled{box-shadow:0 10px 30px rgba(24,22,17,.07)}
+.head-main{display:flex;align-items:center;justify-content:space-between;gap:20px;height:68px}
+.logo{display:flex;align-items:center;gap:12px;flex:none}
+.logo-mark{width:36px;height:36px;flex:none;transition:transform .3s var(--ease)}
+.logo:hover .logo-mark{transform:rotate(-6deg)}
+.logo-mark svg{width:100%;height:100%;display:block}
+.logo-word{font-family:var(--mono);font-size:13px;letter-spacing:.05em;line-height:1.25;color:var(--ink)}
+.logo-word i{display:block;font-style:normal;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+nav.desk{display:flex;gap:26px}
+nav.desk a{font-family:var(--mono);font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:6px 0;position:relative;white-space:nowrap;transition:color .2s}
+nav.desk a::after{content:"";position:absolute;left:0;bottom:0;height:1.5px;width:100%;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
+nav.desk a:hover{color:var(--ink)}
+nav.desk a:hover::after{transform:scaleX(1)}
+nav.desk a.active{color:var(--ink)}
+nav.desk a.active::after{transform:scaleX(1)}
+.head-right{display:flex;align-items:center;gap:12px;flex:none}
+.gh-pill{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;border:1px solid var(--ink);padding:10px 14px;display:inline-flex;align-items:center;gap:9px;transition:background .2s,color .2s;color:var(--ink)}
+.gh-pill i{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2.2s infinite}
+.gh-pill:hover{background:var(--ink);color:var(--paper)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(30,122,78,.45)}70%{box-shadow:0 0 0 7px rgba(30,122,78,0)}100%{box-shadow:0 0 0 0 rgba(30,122,78,0)}}
+.menu-btn{display:none;align-items:center;gap:10px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--ink);color:var(--ink);padding:11px 14px;min-height:44px}
+.menu-btn .bars{width:16px;height:10px;position:relative;flex:none}
+.menu-btn .bars span{position:absolute;left:0;width:100%;height:1.6px;background:currentColor;transition:transform .25s var(--ease),top .25s var(--ease)}
+.menu-btn .bars span:nth-child(1){top:0}
+.menu-btn .bars span:nth-child(2){top:8px}
+.menu-btn.open .bars span:nth-child(1){top:4px;transform:rotate(45deg)}
+.menu-btn.open .bars span:nth-child(2){top:4px;transform:rotate(-45deg)}
+.mobile-panel{display:none;position:absolute;left:0;right:0;top:100%;background:var(--paper);border-bottom:1px solid var(--ink);padding:6px var(--pad) 18px;opacity:0;transform:translateY(-8px);visibility:hidden;transition:opacity .28s var(--ease),transform .28s var(--ease),visibility .28s;box-shadow:0 18px 34px rgba(24,22,17,.10);z-index:99}
+.mobile-panel.open{opacity:1;transform:none;visibility:visible}
+.mobile-panel nav{display:grid;gap:0}
+.mobile-panel nav a{font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);padding:15px 4px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;min-height:48px}
+.mobile-panel nav a .no{font-size:10px;color:var(--accent)}
+.mobile-panel nav a.active{color:var(--accent)}
+.mp-actions{display:flex;gap:10px;margin-top:16px}
+.mp-actions a{flex:1;text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;border:1px solid var(--ink);padding:13px 10px;color:var(--ink);min-height:46px;display:flex;align-items:center;justify-content:center}
+.mp-actions a.alt{border-color:var(--accent);color:var(--accent)}
+
+/* ── hero ── */
+.hero{padding:clamp(44px,8vw,100px) 0 clamp(34px,5vw,56px);border-bottom:1px solid var(--ink)}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-2);display:flex;align-items:center;gap:12px;min-height:18px}
+.eyebrow i{width:9px;height:9px;background:var(--accent);flex:none;transform:rotate(45deg)}
+.hero h1{font-family:var(--serif);font-weight:600;letter-spacing:-.035em;line-height:.92;font-size:clamp(3rem,9.5vw,7.6rem);margin-top:22px;color:var(--ink);overflow-wrap:break-word}
+.mask{display:block;overflow:hidden;padding-bottom:.08em}
+.line{display:block;transform:translateY(112%);animation:rise 1s var(--ease) forwards}
+.line.d2{animation-delay:.14s}
+@keyframes rise{to{transform:translateY(0)}}
+.hero h1 em{font-style:italic;font-weight:400}
+.lede{margin-top:24px;color:var(--body);font-size:clamp(16px,1.9vw,17.5px);line-height:1.75;max-width:62ch}
+.lede a{color:var(--accent);font-weight:500;text-decoration:underline;text-underline-offset:3px}
+.lede code{font-family:var(--mono);font-size:.9em;background:var(--paper-2);padding:2px 6px;border:1px solid var(--line)}
+.hero-actions{margin-top:28px;display:flex;gap:12px;flex-wrap:wrap}
+.btn{font-family:var(--mono);font-size:11.5px;letter-spacing:.15em;text-transform:uppercase;padding:14px 20px;border:1px solid var(--ink);display:inline-flex;align-items:center;gap:10px;min-height:46px;color:var(--ink);transition:background .2s,color .2s,transform .2s var(--ease)}
+.btn:hover{background:var(--ink);color:var(--paper)}
+.btn.solid{background:var(--ink);color:var(--paper)}
+.btn.solid:hover{background:var(--accent);border-color:var(--accent)}
+.btn:active{transform:translateY(1px)}
+
+/* stats ledger strip */
+.stats{border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);display:grid;grid-template-columns:repeat(4,1fr);margin-top:clamp(34px,5vw,60px)}
+.stat{padding:24px 22px 26px;border-right:1px solid var(--line);position:relative;display:flex;flex-direction:column;gap:10px;transition:background .25s var(--ease)}
+.stat:last-child{border-right:none}
+.stat::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);transform:scaleY(0);transform-origin:top;transition:transform .35s var(--ease)}
+.stat:hover{background:var(--sheet)}
+.stat:hover::before{transform:scaleY(1)}
+.stat b{font-family:var(--serif);font-weight:600;font-size:clamp(2rem,3.6vw,3rem);letter-spacing:-.035em;line-height:1;color:var(--ink);display:flex;align-items:baseline;gap:7px;transition:color .25s var(--ease)}
+.stat:hover b{color:var(--accent)}
+.stat b sup{font-family:var(--serif);font-style:italic;font-weight:400;font-size:.5em;color:var(--accent)}
+.stat span{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);line-height:1.6;display:flex;align-items:flex-start;gap:9px}
+.stat span::before{content:"";width:6px;height:6px;background:var(--accent);transform:rotate(45deg);flex:none;margin-top:5px}
+
+/* sections */
+section{padding:clamp(44px,6vw,76px) 0;position:relative}
+section+section{border-top:1px solid var(--line)}
+.sec-head{display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap;margin-bottom:clamp(22px,3vw,34px);padding-bottom:14px;border-bottom:1px solid var(--ink)}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:10px;white-space:nowrap}
+.kicker i{width:28px;height:1px;background:var(--ink)}
+.sec-head h2{font-family:var(--serif);font-weight:600;letter-spacing:-.03em;line-height:.95;font-size:clamp(2rem,4.6vw,3.4rem);color:var(--ink)}
+.sec-head h2 em{font-style:italic;font-weight:400;color:var(--muted)}
+.sec-tag{margin-left:auto;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:8px 12px;background:var(--sheet)}
+
+/* filter bar */
+.toolbar{border-top:1px solid var(--ink);border-bottom:1px solid var(--line);padding:18px 0;display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end;margin-bottom:6px}
+.search{flex:1;min-width:240px;display:flex;align-items:baseline;gap:12px;border-bottom:1px solid var(--ink);padding:6px 2px 9px;position:relative;transition:border-color .2s}
+.search:focus-within{border-color:var(--accent)}
+.search .lens{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);flex:none}
+.search input{flex:1;border:none;background:transparent;font-family:var(--mono);font-size:14px;color:var(--ink);outline:none;min-width:60px;padding:4px 0}
+.search input::placeholder{color:var(--muted-2)}
+.q-tools{display:flex;align-items:center;gap:10px;flex:none}
+.clear-btn{font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);padding:5px 8px;color:var(--muted);display:none;transition:border-color .15s,color .15s}
+.clear-btn.show{display:inline-block}
+.clear-btn:hover{border-color:var(--ink);color:var(--ink)}
+#qCount{font-family:var(--mono);font-size:11.5px;color:var(--muted);min-width:60px;text-align:right}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.pill{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line-2);padding:11px 15px;color:var(--ink-2);transition:all .18s var(--ease);min-height:42px}
+.pill:hover{border-color:var(--ink)}
+.pill[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.pill .n{opacity:.6;margin-left:7px;font-size:10px}
+
+.sync-note{margin-top:14px;font-family:var(--mono);font-size:11.5px;color:var(--muted);letter-spacing:.03em;display:flex;gap:10px;flex-wrap:wrap;align-items:center;min-height:18px;line-height:1.9}
+.sync-note b{color:var(--ink);font-weight:400}
+.sync-note i{width:7px;height:7px;border-radius:50%;background:var(--green);flex:none;animation:pulse 2s infinite}
+.sync-note button{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line-2);padding:6px 10px;color:var(--ink-2);transition:all .15s}
+.sync-note button:hover{border-color:var(--ink);background:var(--sheet);color:var(--ink)}
+.sync-note button:disabled{opacity:.4;cursor:wait}
+
+/* ── contribution rows ── */
+.list{margin-top:8px}
+.row{display:grid;grid-template-columns:120px 1fr 120px;gap:clamp(14px,2.4vw,28px);padding:26px 8px;border-bottom:1px solid var(--line);position:relative;cursor:pointer;transition:background .22s var(--ease);text-decoration:none;color:inherit}
+.row:first-child{border-top:1px solid var(--line)}
+.row::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--accent);transform:scaleY(0);transform-origin:top;transition:transform .3s var(--ease)}
+.row:hover{background:var(--sheet)}
+.row:hover::before{transform:scaleY(1)}
+.row-left{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--muted-2);padding-top:5px;display:flex;align-items:flex-start;gap:10px;transition:color .2s}
+.row:hover .row-left{color:var(--accent)}
+.row-left .type-icon{width:10px;height:10px;flex:none;margin-top:3px}
+.row-left .type-icon.pr{background:transparent;border:1.5px solid var(--green)}
+.row-left .type-icon.pr.merged{background:var(--green);border-color:var(--green)}
+.row-left .type-icon.pr.open{background:var(--paper);border-color:var(--accent)}
+.row-left .type-icon.activity{background:var(--paper);border:1.5px solid var(--muted);border-radius:50%}
+.row-body{display:flex;flex-direction:column;gap:7px;min-width:0}
+.row-meta{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;align-items:center;line-height:1.8}
+.row-meta .tag{padding:2px 7px;border:1px solid var(--line);background:var(--sheet);color:var(--ink-2)}
+.row-meta .tag.merged{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.row-meta .tag.open{border-color:var(--accent);color:var(--accent)}
+.row-meta .tag.type-issue{border-color:var(--accent);color:var(--accent)}
+.row h3{font-family:var(--serif);font-weight:600;font-size:clamp(1.2rem,2vw,1.5rem);letter-spacing:-.015em;line-height:1.2;color:var(--ink);transition:transform .3s var(--ease);overflow-wrap:anywhere}
+.row:hover h3{transform:translateX(6px)}
+.row h3 .repo-path{color:var(--muted);font-family:var(--mono);font-size:12px;font-weight:400;letter-spacing:.04em;margin-left:6px}
+.row p{color:var(--body);font-size:14.5px;line-height:1.65;max-width:64ch}
+.row-tags{margin-top:3px;display:flex;gap:14px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;color:var(--muted)}
+.row-tags span::before{content:"#";color:var(--accent)}
+.row-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px;font-family:var(--mono);font-size:11px;color:var(--muted);padding-top:5px;transition:color .2s}
+.row:hover .row-right{color:var(--accent)}
+.row-right .date{font-size:10.5px;letter-spacing:.06em}
+.row-right .arrow{font-family:var(--serif);font-size:20px;color:var(--muted-2);transition:transform .3s var(--ease),color .2s;margin-top:auto}
+.row:hover .row-right .arrow{transform:translateX(6px);color:var(--accent)}
+mark.hl{background:var(--accent-soft);color:var(--accent);padding:0 2px;box-shadow:inset 0 -2px 0 var(--accent)}
+.empty{border:1px dashed var(--line-2);padding:44px 24px;text-align:center;font-family:var(--mono);font-size:13px;color:var(--muted);letter-spacing:.03em;line-height:2.1;margin-top:14px}
+.empty a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+.skeleton{height:92px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,var(--paper-2) 25%,var(--sheet) 40%,var(--paper-2) 60%);background-size:400% 100%;animation:shimmer 1.3s infinite}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
+
+/* source band */
+.source-band{margin-top:32px;background:var(--sheet);border:1px solid var(--ink);padding:clamp(22px,3vw,30px);display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center}
+.source-band p{color:var(--body);font-size:14.5px;line-height:1.7;max-width:60ch}
+.source-band code{font-family:var(--mono);font-size:12px;background:var(--paper-2);padding:2px 6px;border:1px solid var(--line);color:var(--ink)}
+.source-band .src-actions{display:flex;gap:10px;flex-wrap:wrap}
+
+/* footer */
+footer{border-top:1px solid var(--ink);background:var(--paper)}
+.foot-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:clamp(26px,4vw,48px);padding:clamp(36px,5vw,60px) 0 34px}
+.foot-brand p{font-family:var(--serif);font-style:italic;font-size:20px;color:var(--ink-2);max-width:26ch;line-height:1.5}
+.foot-brand .fsub{margin-top:16px;font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.fcol h4{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+.fcol ul{list-style:none;display:grid;gap:10px}
+.fcol a{font-size:14.5px;color:var(--body);transition:color .15s}
+.fcol a:hover{color:var(--accent)}
+.fcol a .arr{font-family:var(--mono);font-size:10px;color:var(--accent);margin-left:5px}
+.foot-base{border-top:1px solid var(--line);padding:20px 0 28px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);line-height:2}
+.foot-base .top-btn{border:1px solid var(--line-2);padding:10px 14px;min-height:42px;transition:all .15s;color:var(--ink-2);font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase}
+.foot-base .top-btn:hover{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.kbd{border:1px solid var(--line-2);padding:2px 6px;border-radius:3px;color:var(--ink);font-weight:600;background:var(--paper)}
+
+/* reveal */
+html.js .rv{opacity:0;transform:translateY(16px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+html.js .rv.in{opacity:1;transform:none}
+html.js .row.rv{transform:translateY(8px)}
+html.js .row.rv.in{transform:none}
+html:not(.js) .rv{opacity:1;transform:none}
+
+@media(max-width:1020px){
+  .source-band{grid-template-columns:1fr}
+}
+@media(max-width:860px){
+  .stats{grid-template-columns:1fr 1fr}
+  .stat:nth-child(2){border-right:none}
+  .stat:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .foot-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:760px){
+  nav.desk{display:none}
+  .menu-btn{display:inline-flex}
+  .mobile-panel{display:block}
+  .gh-pill{display:none}
+  .sec-tag{margin-left:0}
+}
+@media(max-width:640px){
+  :root{--pad:18px}
+  .head-main{height:62px}
+  .logo-mark{width:31px;height:31px}
+  .hero-actions .btn{flex:1;justify-content:center}
+  .stats{margin:clamp(34px,5vw,60px) -18px 0}
+  .stat{padding:18px 20px 20px}
+  .stat b{font-size:1.6rem}
+  .row{grid-template-columns:60px 1fr 50px;gap:12px;padding:20px 4px}
+  .row-left{font-size:10px;gap:7px}
+  .row-left .type-icon{width:8px;height:8px;margin-top:2px}
+  .row h3{font-size:1.1rem}
+  .row h3 .repo-path{display:block;margin-left:0;margin-top:3px}
+  .row p{font-size:13.5px}
+  .row-right{font-size:10px}
+  .row-right .arrow{font-size:16px}
+  .toolbar{flex-direction:column;align-items:stretch;gap:14px}
+  .filters{overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none;padding-bottom:4px;margin:0 -18px;padding-left:18px;padding-right:18px}
+  .filters::-webkit-scrollbar{display:none}
+  .pill{white-space:nowrap;flex:none}
+  .search input{font-size:16px}
+  .foot-grid{grid-template-columns:1fr;gap:30px}
+  .foot-base{flex-direction:column;align-items:flex-start}
+  .foot-base .top-btn{width:100%;text-align:center}
+  .sec-head{flex-direction:column;align-items:flex-start}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .line{transform:none}
+}
+</style>
+
+<link rel="manifest" href="/site.webmanifest" />
+<link rel="alternate" type="text/plain" href="/llms.txt" title="LLM index — Hariom Lohar" />
+<link rel="alternate" type="text/plain" href="/llms-full.txt" title="LLM full dump — Hariom Lohar" />
+<link rel="alternate" type="text/plain" href="/ai.txt" title="AI entity card — Hariom Lohar" />
 <meta property="og:image" content="https://hariomlohardev.github.io/og/opensource.svg" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content="Open Source by Hariom Lohar — auto-synced from GitHub hariomlohardev" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Hariom Lohar — Open Source (auto-synced) | hariomlohardev" />
-<meta name="twitter:description" content="Repos, PRs & activity auto-synced from GitHub — Hariom Lohar (hariomlohardev) open-source contributions." />
 <meta name="twitter:image" content="https://hariomlohardev.github.io/og/opensource.svg" />
-<meta name="twitter:creator" content="@HariomloharAGI" />
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"CollectionPage","@id":"https://hariomlohardev.github.io/opensource.html#webpage","url":"https://hariomlohardev.github.io/opensource.html","name":"Hariom Lohar — Open Source Contributions (auto-synced)","isPartOf":{"@id":"https://hariomlohardev.github.io/#website"},"about":{"@id":"https://hariomlohardev.github.io/#person"},"description":"Open-source contributions by Hariom Lohar (hariomlohardev) — repos, pull requests and activity auto-synced from api.github.com/users/hariomlohardev.","breadcrumb":{"@id":"https://hariomlohardev.github.io/opensource.html#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://hariomlohardev.github.io/opensource.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home — Hariom Lohar","item":"https://hariomlohardev.github.io/"},{"@type":"ListItem","position":2,"name":"Open Source — Hariom Lohar","item":"https://hariomlohardev.github.io/opensource.html"}]}]}</script>
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="icon" type="image/png" href="/favicon.png" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Fragment+Mono:ital@0;1&display=swap" rel="stylesheet">
-<script>document.documentElement.classList.add('js')</script>
-<style>
-  :root{
-    --paper:#FFFEFB;--paper-2:#F3F0E8;--paper-3:#EAE6DA;--sheet:#FFFFFF;
-    --ink:#0B1220;--muted:#6E7D9A;--muted-2:#8A9AB6;
-    --line:#D9E2EF;--line-2:#B9C8E2;--grid:#E3ECFB;--grid-2:#C9D8F0;
-    --signal:#FFD400;--signal-soft:rgba(255,212,0,.18);
-    --red:#E10600;--red-soft:rgba(225,6,0,.08);
-    --blue:#0050FF;--green:#0E9F6E;--green-soft:rgba(14,159,110,.10);
-    --max:1280px;--pad:clamp(18px,4vw,52px);
-    --mono:'Fragment Mono',ui-monospace,monospace;
-    --display:'Bricolage Grotesque',system-ui,sans-serif;
-    --serif:'Instrument Serif',Georgia,serif;
-    --sans:'Instrument Sans',system-ui,sans-serif;
-    --ease:cubic-bezier(.22,1,.36,1);--ease2:cubic-bezier(.16,1,.3,1);
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;
-    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px),linear-gradient(var(--grid-2) 1px,transparent 1px),linear-gradient(90deg,var(--grid-2) 1px,transparent 1px);
-    background-size:24px 24px,24px 24px,120px 120px,120px 120px;background-position:-1px -1px}
-  ::selection{background:var(--signal);color:var(--ink)}
-  a{color:inherit;text-decoration:none}
-  a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
-  #prog{position:fixed;top:0;left:0;height:3px;width:0;background:var(--signal);z-index:90}
-  .wrap{max-width:var(--max);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad);position:relative}
-  header{position:sticky;top:0;z-index:40;background:rgba(255,254,251,.88);backdrop-filter:saturate(150%) blur(10px);border-bottom:1px solid var(--line)}
-  .head-top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0 12px;border-bottom:1px dashed var(--line);font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-  .head-top b{color:var(--ink);font-weight:500}
-  .head-main{display:flex;align-items:center;justify-content:space-between;gap:24px;height:56px}
-  .logo{font-family:var(--mono);font-size:13px;letter-spacing:.02em;font-weight:500;display:flex;align-items:center;gap:10px}
-  .logo-mark{width:28px;height:28px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-family:var(--mono);font-size:11px;font-weight:600}
-  .logo i{font-style:normal;color:var(--muted);font-weight:400}
-  nav{display:flex;gap:22px;overflow-x:auto;scrollbar-width:none}
-  nav::-webkit-scrollbar{display:none}
-  nav a{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:6px 0;border-bottom:2px solid transparent;transition:color .2s,border-color .2s;white-space:nowrap}
-  nav a:hover,nav a.active{color:var(--ink);border-bottom-color:var(--signal)}
-  .avail{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--green);color:var(--green);padding:6px 10px;background:var(--green-soft);white-space:nowrap}
-  .avail i{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
-  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(14,159,110,.4)}70%{box-shadow:0 0 0 6px rgba(14,159,110,0)}100%{box-shadow:0 0 0 0 rgba(14,159,110,0)}}
-  .marginalia{border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);background:var(--ink);color:#C8D2E6;overflow:hidden;padding:10px 0}
-  .marginalia .track{display:flex;width:max-content;animation:marq 28s linear infinite}
-  .marginalia:hover .track{animation-play-state:paused}
-  .marginalia .track span{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:0 18px;white-space:nowrap;display:flex;align-items:center;gap:10px}
-  .marginalia .track span.dot{color:var(--signal)}
-  @keyframes marq{to{transform:translateX(-50%)}}
-  .hero{padding:36px 0 18px;position:relative;overflow:hidden}
-  .watermark{position:absolute;right:-1%;top:4%;z-index:0;pointer-events:none;user-select:none;font-family:var(--display);font-weight:800;font-size:clamp(8rem,28vw,24rem);line-height:.8;letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1.5px var(--grid-2);opacity:.55;max-width:100vw;overflow:hidden}
-  .eyebrow{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:12px 0;margin-bottom:22px;position:relative;z-index:1}
-  .eyebrow .rec{display:inline-flex;align-items:center;gap:8px}
-  .eyebrow .rec i{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.6s infinite}
-  .hero-head{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;flex-wrap:wrap;margin-bottom:8px;position:relative;z-index:1}
-  h1{font-family:var(--display);font-weight:800;letter-spacing:-.045em;line-height:.86;font-size:clamp(2.8rem,7.5vw,6rem);text-transform:uppercase}
-  h1 .line2{display:block;position:relative}
-  h1 .line2 span{position:relative;z-index:1}
-  h1 .line2::after{content:"";position:absolute;left:-4px;right:8%;bottom:.18em;height:.32em;background:var(--signal);z-index:0;transform:rotate(-.6deg)}
-  h1 .caret{color:var(--blue);font-weight:400;animation:blink 1s steps(1) infinite}
-  @keyframes blink{50%{opacity:0}}
-  .hero-count{display:flex;flex-direction:column;gap:6px;align-items:flex-end;padding-bottom:8px}
-  .hero-count .big-n{font-family:var(--display);font-weight:800;font-size:clamp(2.2rem,5vw,3.6rem);line-height:1;letter-spacing:-.03em}
-  .hero-count .big-n em{font-style:normal;background:var(--signal);padding:0 6px;border:1px solid var(--ink);transform:rotate(-.4deg);display:inline-block}
-  .hero-count .n-lab{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
-  .hero-note{position:relative;z-index:1;font-family:var(--mono);font-size:11px;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:6px 0 18px}
-  .hero-note b{color:var(--ink);font-weight:600}
-  .hero-note .sync-pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line-2);background:var(--sheet);padding:6px 10px;font-size:11px}
-  .hero-note .sync-pill i{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.8s infinite}
-  .hero-note .sync-pill.limited i{background:var(--red)}
-  .hero-note button{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--ink);background:var(--sheet);padding:7px 12px;cursor:pointer}
-  .hero-note button:hover{background:var(--signal)}
-  .hero-cta{position:relative;z-index:1;display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
-  .btn{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;padding:12px 18px;display:inline-flex;align-items:center;gap:8px;border:1px solid;transition:transform .2s,box-shadow .2s,background .2s}
-  .btn.primary{background:var(--ink);color:var(--paper);border-color:var(--ink)}
-  .btn.primary:hover{background:var(--blue);border-color:var(--blue);transform:translateY(-1px)}
-  .btn.ghost{background:var(--paper);color:var(--ink);border-color:var(--ink)}
-  .btn.ghost:hover{background:var(--signal)}
-  .filter-bar{display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin:18px 0 16px;padding:12px 14px;background:var(--sheet);border:1px solid var(--ink);box-shadow:0 1px 0 rgba(11,18,32,.05);position:relative;z-index:1}
-  .tabs{display:flex;gap:8px;flex-wrap:wrap}
-  .tab{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:8px 12px;border:1px solid var(--line);background:var(--paper-2);color:var(--muted);cursor:pointer;transition:all .15s}
-  .tab.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
-  .tab.active .count{background:var(--signal);color:var(--ink)}
-  .tab .count{margin-left:6px;padding:2px 6px;border:1px solid var(--line);background:var(--paper);font-size:10px}
-  .search-wrap{position:relative;display:flex;align-items:center}
-  .search-wrap input{font-family:var(--mono);font-size:12px;padding:9px 36px 9px 12px;border:1px solid var(--line);background:var(--paper);min-width:260px}
-  .search-wrap span{position:absolute;right:10px;color:var(--muted)}
-  .repo-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  .repo-card{background:var(--sheet);border:1px solid var(--ink);position:relative;padding:18px 18px 16px;display:flex;flex-direction:column;gap:10px;box-shadow:0 1px 0 rgba(11,18,32,.05);transition:transform .2s,box-shadow .2s}
-  .repo-card:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(11,18,32,.08)}
-  .repo-card::before{content:"";position:absolute;top:-8px;left:16px;width:74px;height:12px;background:rgba(255,255,255,.78);border:1px solid rgba(11,18,32,.06);transform:rotate(-1deg)}
-  .repo-top{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-  .repo-idx{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--blue);font-weight:600}
-  .status{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:4px 8px;border:1px solid;display:inline-flex;align-items:center;gap:6px}
-  .status.repo{color:var(--blue);border-color:var(--blue);background:rgba(0,80,255,.08)}
-  .status.pr{background:var(--green-soft);color:var(--green);border-color:var(--green)}
-  .status.pr.open{background:rgba(0,80,255,.08);color:var(--blue);border-color:var(--blue)}
-  .status.pr.merged{background:rgba(128,0,255,.08);color:#6B21A8;border-color:#6B21A8}
-  .status.act{color:var(--muted);border-color:var(--line-2);background:var(--paper-2)}
-  .status i{width:6px;height:6px;border-radius:50%;background:currentColor}
-  .repo-card h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;text-transform:uppercase;font-size:1.22rem;line-height:.95;overflow-wrap:anywhere}
-  .repo-card p{color:#475569;font-size:13px;line-height:1.62;overflow-wrap:anywhere}
-  .chips{display:flex;flex-wrap:wrap;gap:6px}
-  .chips span{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;background:var(--paper-2);border:1px solid var(--line);padding:4px 8px;color:var(--muted)}
-  .repo-meta{font-family:var(--mono);font-size:11px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-  .repo-meta .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
-  .repo-arrow{position:absolute;top:14px;right:14px;width:30px;height:30px;display:grid;place-items:center;border:1px solid var(--line);background:var(--paper);transition:background .2s,color .2s}
-  .repo-card:hover .repo-arrow{background:var(--ink);color:var(--paper)}
-  .skeleton{border:1px dashed var(--line-2);background:var(--sheet);padding:18px;display:flex;flex-direction:column;gap:10px;animation:flick 1.2s infinite alternate}
-  @keyframes flick{from{opacity:.7}to{opacity:1}}
-  .sk-line{height:10px;background:var(--paper-2);border:1px solid var(--line)}
-  .sourceline{margin-top:14px;font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--line);background:var(--paper);padding:12px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-  .sourceline code{background:var(--paper-2);padding:2px 6px;border:1px solid var(--line)}
-  footer{border-top:2px solid var(--ink);margin-top:22px;background:var(--paper-2)}
-  .foot-in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center;padding:18px 0;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-  .foot-in a:hover{color:var(--ink)}
-  html.js [data-reveal]{opacity:0;transform:translateY(12px);transition:opacity .6s var(--ease2),transform .6s var(--ease2)}
-  html.js [data-reveal].in{opacity:1;transform:none}
-  @media(max-width:980px){.watermark{font-size:44vw}}
-  @media(max-width:760px){nav{gap:14px}.repo-grid{grid-template-columns:1fr}.head-top{flex-wrap:wrap}nav a{padding:10px 6px;min-height:44px;display:grid;place-items:center}.search-wrap input{min-width:0;width:100%}.search-wrap{width:100%}.filter-bar{flex-direction:column;align-items:stretch}}
-  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}[data-reveal]{opacity:1!important;transform:none!important}}
-</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"CollectionPage","@id":"https://hariomlohardev.github.io/opensource.html#webpage","url":"https://hariomlohardev.github.io/opensource.html","name":"Hariom Lohar — Open Source Contributions (auto-synced)","isPartOf":{"@id":"https://hariomlohardev.github.io/#website"},"about":{"@id":"https://hariomlohardev.github.io/#person"},"description":"Open-source contributions by Hariom Lohar (hariomlohardev) — repos, pull requests and activity auto-synced from api.github.com/users/hariomlohardev.","breadcrumb":{"@id":"https://hariomlohardev.github.io/opensource.html#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://hariomlohardev.github.io/opensource.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home — Hariom Lohar","item":"https://hariomlohardev.github.io/"},{"@type":"ListItem","position":2,"name":"Open Source — Hariom Lohar","item":"https://hariomlohardev.github.io/opensource.html"}]}]}</script>
+
 </head>
 <body>
-<a href="#main" class="skip" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden">Skip to content</a>
-<style>.skip:focus{left:16px;top:10px;width:auto;height:auto;padding:8px 12px;background:var(--ink);color:var(--paper);z-index:100;border:1px solid var(--signal);font-family:var(--mono);font-size:12px}</style>
+<a href="#main" class="skip">Skip to content</a>
 <div id="prog" aria-hidden="true"></div>
+
 <header id="top">
   <div class="wrap">
-    <div class="head-top">
-      <span>LAB NOTEBOOK <b>No. 01</b> · OPEN SOURCE · INDIA — UTC+5:30</span>
-      <span style="display:flex;gap:14px;flex-wrap:wrap">
-        <span id="hdrCount">— repos</span>
-        <span style="color:var(--muted)">EST. 2026</span>
-      </span>
-    </div>
     <div class="head-main">
-      <a class="logo" href="index.html"><span class="logo-mark">HL</span> hariomlohardev <i>— build log</i></a>
-      <nav aria-label="Primary">
-        <a href="index.html">Home</a>
-        <a href="projects.html">Projects</a>
-        <a href="opensource.html" class="active" aria-current="page">Open Source</a>
-        <a href="blog.html">Blog</a>
-        <a href="index.html#contact">Contact</a>
+      <a class="logo" href="/" aria-label="Hariom Lohar — home">
+        <span class="logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 44 44" fill="none">
+            <path d="M7 6 V38" stroke="#181611" stroke-width="5"/>
+            <path d="M23 6 V38" stroke="#181611" stroke-width="5"/>
+            <path d="M7 22 H23" stroke="#B93A13" stroke-width="5"/>
+            <path d="M23 38 H38" stroke="#181611" stroke-width="5"/>
+            <circle cx="37" cy="7" r="3.4" fill="#B93A13"/>
+          </svg>
+        </span>
+        <span class="logo-word">hariomlohardev<i>lab notebook №01</i></span>
+      </a>
+      <nav class="desk" aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="/projects.html">Projects</a>
+        <a href="/opensource.html" class="active" aria-current="page">Open Source</a>
+        <a href="/blog.html">Blog</a>
+        <a href="/#about">About</a>
+        <a href="/#contact">Contact</a>
       </nav>
-      <a class="avail" href="https://github.com/hariomlohardev" target="_blank" rel="noopener"><i></i> GitHub hariomlohardev ↗</a>
+      <div class="head-right">
+        <a class="gh-pill" href="https://github.com/hariomlohardev" target="_blank" rel="noopener"><i aria-hidden="true"></i><span>Github&nbsp;↗</span></a>
+        <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobilePanel" aria-label="Open menu">
+          <span class="bars" aria-hidden="true"><span></span><span></span></span> Menu
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="mobile-panel" id="mobilePanel" aria-hidden="true">
+    <nav aria-label="Mobile primary">
+      <a href="/"><span>Home</span><span class="no">01</span></a>
+      <a href="/projects.html"><span>Projects</span><span class="no">02</span></a>
+      <a href="/opensource.html" class="active"><span>Open Source</span><span class="no">03</span></a>
+      <a href="/blog.html"><span>Blog &amp; Logs</span><span class="no">04</span></a>
+      <a href="/#about"><span>About</span><span class="no">05</span></a>
+      <a href="/#contact"><span>Contact</span><span class="no">06</span></a>
+    </nav>
+    <div class="mp-actions">
+      <a href="/feed.xml">RSS Feed</a>
+      <a class="alt" href="https://github.com/hariomlohardev" target="_blank" rel="noopener">GitHub ↗</a>
     </div>
   </div>
 </header>
-<div class="marginalia" aria-hidden="true"><div class="track" data-track></div></div>
 
 <main id="main">
+
+  <!-- ══ HERO ══ -->
   <section class="hero">
     <div class="wrap">
-      <div class="watermark" aria-hidden="true">OSS</div>
-      <div class="eyebrow" data-reveal>
-        <span class="rec"><i></i> Auto-synced from GitHub · hariomlohardev</span>
-        <span>Every commit has a note</span>
+      <p class="eyebrow rv"><i aria-hidden="true"></i><span id="eyebrow" data-text="CONTRIBUTIONS TO OTHERS' REPOS · AUTO-SYNCED">CONTRIBUTIONS TO OTHERS' REPOS · AUTO-SYNCED</span></p>
+      <h1>
+        <span class="mask"><span class="line">Open</span></span>
+        <span class="mask"><span class="line d2"><em>Source</em></span></span>
+      </h1>
+      <p class="lede rv">Every pull request I've opened, every issue I've filed, every contribution to the projects I rely on — pulled live from <code>github.com/hariomlohardev</code>. Not my own repos; the work I've given back.</p>
+      <div class="hero-actions rv">
+        <a class="btn solid" href="https://github.com/hariomlohardev" target="_blank" rel="noopener">Open GitHub ↗</a>
+        <a class="btn" href="https://github.com/search?q=author%3Ahariomlohardev+type%3Apr" target="_blank" rel="noopener">All my PRs ↗</a>
+        <a class="btn" href="/blog.html">Daily logs →</a>
       </div>
-      <div class="hero-head" data-reveal>
-        <h1>Open<span style="background:var(--signal);padding:0 6px;border:1px solid var(--ink);transform:rotate(-.4deg);display:inline-block">Source</span><span class="line2"><span>Contributions<span class="caret">_</span></span></span></h1>
-        <div class="hero-count">
-          <span class="big-n" id="countBig"><em>—</em> / —</span>
-          <span class="n-lab" id="countLab">auto-synced · GitHub API</span>
-        </div>
+      <div class="stats rv" id="statStrip">
+        <div class="stat"><b id="stPRs">—</b><span>Pull requests</span></div>
+        <div class="stat"><b id="stRepos">—</b><span>External repos</span></div>
+        <div class="stat"><b id="stIssues">—</b><span>Issues opened</span></div>
+        <div class="stat"><b>01 Jul <em>'26</em></b><span>First contribution</span></div>
       </div>
-      <div class="hero-note" data-reveal>
-        <span class="sync-pill" id="syncPill"><i></i> <span id="syncText">Syncing from GitHub…</span></span>
-        <span id="syncMeta">api.github.com/users/hariomlohardev · <code>opensource-data.json</code> snapshot + live refresh (6h cache)</span>
-        <button id="refreshBtn" type="button">↻ Refresh now</button>
-      </div>
-      <div class="hero-cta" data-reveal>
-        <a class="btn primary" href="https://github.com/hariomlohardev" target="_blank" rel="noopener">View GitHub →</a>
-        <a class="btn ghost" href="projects.html">Project archive ↗</a>
-        <a class="btn ghost" href="blog.html">Daily logs →</a>
+    </div>
+  </section>
+
+  <!-- ══ CONTRIBUTIONS ══ -->
+  <section id="ledger">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="kicker"><i></i> 01 — Contributions</span>
+        <h2>The <em>ledger</em></h2>
+        <span class="sec-tag" id="secTag">Loading…</span>
       </div>
 
-      <div class="filter-bar" data-reveal>
-        <div class="tabs" role="tablist" aria-label="Open source filters">
-          <button class="tab active" data-filter="all" role="tab" aria-selected="true">All <span class="count" id="tabAll">—</span></button>
-          <button class="tab" data-filter="repo" role="tab" aria-selected="false">Repos <span class="count" id="tabRepo">—</span></button>
-          <button class="tab" data-filter="pr" role="tab" aria-selected="false">Pull Requests <span class="count" id="tabPr">—</span></button>
-          <button class="tab" data-filter="activity" role="tab" aria-selected="false">Activity <span class="count" id="tabAct">—</span></button>
+      <div class="toolbar">
+        <label class="search">
+          <span class="lens">Search</span>
+          <span class="q-tools">
+            <button id="qClear" class="clear-btn" type="button" aria-label="Clear search">✕</button>
+            <span id="qCount">—</span>
+          </span>
+          <input id="q" type="search" placeholder="try numpy, transformers, merged, langchain…" autocomplete="off" spellcheck="false" aria-label="Search contributions" />
+        </label>
+        <div class="filters" role="group" aria-label="Filter by type">
+          <button class="pill" data-filter="all" aria-pressed="true">All <span class="n" id="nAll"></span></button>
+          <button class="pill" data-filter="pr" aria-pressed="false">Pull requests <span class="n" id="nPR"></span></button>
+          <button class="pill" data-filter="issue" aria-pressed="false">Issues <span class="n" id="nIssue"></span></button>
         </div>
-        <label class="search-wrap" aria-label="Search open source"><input id="ossSearch" type="search" placeholder="Search — try Python, spam, PR, fork…" autocomplete="off" /><span>⌕</span></label>
       </div>
 
-      <div id="ossGrid" class="repo-grid" aria-live="polite"></div>
-      <p id="noResults" style="display:none;margin-top:12px;font-family:var(--mono);font-size:12px;color:var(--muted);border:1px dashed var(--line);padding:12px;background:var(--paper)">No matches — try All or clear search. Check spelling or try GitHub directly: <a href="https://github.com/hariomlohardev?tab=repositories" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:underline">hariomlohardev repos ↗</a></p>
-      <div class="sourceline" data-reveal>
-        <span id="sourceLine">Source: <code>api.github.com/users/hariomlohardev</code> → <code>opensource-data.json</code> + live refresh (6h cache). Rate-aware, no token needed.</span>
-        <span><a href="https://github.com/hariomlohardev?tab=repositories" target="_blank" rel="noopener" style="text-decoration:underline">View all on GitHub ↗</a></span>
+      <div class="sync-note" id="syncNote" aria-live="polite">
+        <i aria-hidden="true"></i>
+        <span id="syncText">Synced just now · <b id="syncCount">—</b> contributions</span>
+        <span>·</span>
+        <span id="syncDate">—</span>
+        <button id="refreshBtn" type="button">↻ Refresh</button>
       </div>
-      <p style="margin-top:10px;font-family:var(--mono);font-size:11px;color:var(--muted)">Fork it, star it, open a PR — your contribution will appear here within a day (snapshot builds on every push). Want it instantly? Hit Refresh.</p>
+
+      <div id="list" class="list" aria-live="polite" aria-busy="true">
+        <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SOURCE NOTE ══ -->
+  <section>
+    <div class="wrap">
+      <div class="source-band rv">
+        <div>
+          <p>This page lists <b>curated</b> contributions — PRs I choose to showcase via <code>opensource-curated.json</code>. External only; own projects live on My own projects live on <a href="/projects.html" style="color:var(--accent);text-decoration:underline;text-underline-offset:3px">Projects</a>. Data is read from <code>opensource-curated.json</code> at the repo root; edit that file (or run <code>node scripts/curate-opensource.js &lt;url&gt;</code>) and the list updates on push.</p>
+        </div>
+        <div class="src-actions">
+          <a class="btn" href="https://github.com/search?q=author%3Ahariomlohardev+type%3Apr" target="_blank" rel="noopener">All PRs ↗</a>
+          <a class="btn" href="https://github.com/search?q=author%3Ahariomlohardev+type%3Aissue" target="_blank" rel="noopener">All issues ↗</a>
+        </div>
+      </div>
     </div>
   </section>
 </main>
 
 <footer>
-  <div class="wrap foot-in">
-    <span>© <span id="yr"></span> <b>Hariom Lohar</b> — Lab Notebook No.01 · <a href="https://github.com/hariomlohardev" style="text-decoration:underline">hariomlohardev on GitHub</a> · India.</span>
-    <span><a href="index.html">Hariom Lohar — Home</a> · press <span class="kbd" style="border:1px solid var(--line-2);padding:2px 6px;border-radius:3px;color:var(--ink);font-weight:600;background:var(--paper)">G</span> → GitHub · <a href="#top">Back to top ↑</a></span>
-    <span>IST <span class="clock">--:--:--</span></span>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <p>"One log at a time — rebuilding AGI from first principles, in public."</p>
+        <div class="fsub">Hariom Lohar · Lab Notebook №01</div>
+      </div>
+      <div class="fcol"><h4>Sitemap</h4><ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/projects.html">Projects</a></li>
+        <li><a href="/opensource.html">Open Source</a></li>
+        <li><a href="/blog.html">Blog &amp; Logs</a></li>
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#contact">Contact</a></li>
+      </ul></div>
+      <div class="fcol"><h4>Elsewhere</h4><ul>
+        <li><a href="https://github.com/hariomlohardev" target="_blank" rel="noopener">GitHub<span class="arr">↗</span></a></li>
+        <li><a href="https://x.com/HariomloharAGI" target="_blank" rel="noopener">X / Twitter<span class="arr">↗</span></a></li>
+        <li><a href="https://www.linkedin.com/in/hariomlohar" target="_blank" rel="noopener">LinkedIn<span class="arr">↗</span></a></li>
+        <li><a href="https://huggingface.co/hariomlohardev" target="_blank" rel="noopener">Hugging Face<span class="arr">↗</span></a></li>
+      </ul></div>
+      <div class="fcol"><h4>The lab</h4><ul>
+        <li><a href="/feed.xml">RSS — /feed.xml</a></li>
+        <li><a href="https://buttondown.com/hariomlohar" target="_blank" rel="noopener">Newsletter<span class="arr">↗</span></a></li>
+        <li><a href="https://github.com/hariomlohardev/AGI_Research" target="_blank" rel="noopener">AGI_Research<span class="arr">↗</span></a></li>
+      </ul></div>
+    </div>
+    <div class="foot-base">
+      <span>© <span id="yr"></span> Hariom Lohar — Lab Notebook №01</span>
+      <span>press <span class="kbd">G</span> → github · IST <span class="clock">--:--:--</span></span>
+      <button class="top-btn" id="topBtn" type="button">Back to top ↑</button>
+    </div>
   </div>
 </footer>
 
 <script>
 (function(){
-  "use strict";
-  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var ghUrl = 'https://github.com/hariomlohardev';
-  var SNAP = 'opensource-data.json';
-  var USER = 'hariomlohardev';
-  function $(id){ return document.getElementById(id); }
-  function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+"use strict";
+var reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.getElementById('yr').textContent=new Date().getFullYear();
 
-  // progress + clock
-  var prog=$('prog');
-  var q=false;
-  function onScroll(){ if(q) return; q=true; requestAnimationFrame(function(){ q=false; var h=document.documentElement.scrollHeight-window.innerHeight; prog.style.width=(h>0?(window.scrollY/h)*100:0)+'%'; }); }
-  window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
-  $('yr') && ($('yr').textContent=new Date().getFullYear());
-  var clockEls=document.querySelectorAll('.clock');
+/* ── DEMO JSON — replace later with /opensource-data.json
+   Format: only external contributions (PRs + issues to others' repos).
+   NO repos field — those are the user's own projects, listed on /projects.html.
+┌──────────────────────────────────────────────────────────────────────────┐
+│  {                                                                       │
+│    "generated_at": "2026-08-20T10:24:00+05:30",                          │
+│    "prs": [{ "title", "repo" (owner/name), "html_url", "state",          │
+│              "body", "updated_at" }],                                    │
+│    "issues": [{ "title", "repo", "html_url", "state",                    │
+│                "body", "updated_at" }]                                   │
+│  }                                                                       │
+└──────────────────────────────────────────────────────────────────────────┘ */
+var DEMO_DATA = {
+  "generated_at": "2026-08-20T10:24:00+05:30",
+  "prs": [
+    {
+      "title": "Fix retrieval edge case in Chain.from_messages",
+      "repo": "langchain-ai/langchain",
+      "html_url": "https://github.com/langchain-ai/langchain/pull/12345",
+      "state": "merged",
+      "body": "When the input message list is empty, Chain.from_messages silently dropped it. Added a guard and a regression test.",
+      "updated_at": "2026-08-18T14:00:00+05:30"
+    },
+    {
+      "title": "Docs: clarify usage of StratifiedKFold with sparse y",
+      "repo": "scikit-learn/scikit-learn",
+      "html_url": "https://github.com/scikit-learn/scikit-learn/pull/23456",
+      "state": "merged",
+      "body": "The docs were silent on sparse y arrays. Added a note and a doctest that exercises it.",
+      "updated_at": "2026-08-12T10:00:00+05:30"
+    },
+    {
+      "title": "Add reproducible example for Conv2d from scratch",
+      "repo": "pytorch/pytorch",
+      "html_url": "https://github.com/pytorch/pytorch/pull/98765",
+      "state": "open",
+      "body": "Pure-Python reference implementation of Conv2d with hand-written forward pass for the tutorial.",
+      "updated_at": "2026-08-10T17:00:00+05:30"
+    },
+    {
+      "title": "Typo fix in tutorial for tf-idf vectorizer",
+      "repo": "scikit-learn/scikit-learn",
+      "html_url": "https://github.com/scikit-learn/scikit-learn/pull/23400",
+      "state": "merged",
+      "body": "Corrected a typo in the sublinear_tf parameter description.",
+      "updated_at": "2026-08-02T11:00:00+05:30"
+    },
+    {
+      "title": "Add NumPy softmax reference implementation",
+      "repo": "numpy/numpy",
+      "html_url": "https://github.com/numpy/numpy/pull/45678",
+      "state": "merged",
+      "body": "A minimal, numerically stable softmax in pure NumPy for the docs — used as a baseline for scipy.",
+      "updated_at": "2026-07-25T16:00:00+05:30"
+    },
+    {
+      "title": "Clarify backprop chain-rule diagram",
+      "repo": "huggingface/transformers",
+      "html_url": "https://github.com/huggingface/transformers/pull/34567",
+      "state": "open",
+      "body": "The chain-rule diagram in the internals doc had a missing arrow. Re-drew with clearer notation.",
+      "updated_at": "2026-07-20T12:00:00+05:30"
+    },
+    {
+      "title": "Add test for edge case in np.dot broadcasting",
+      "repo": "numpy/numpy",
+      "html_url": "https://github.com/numpy/numpy/pull/45600",
+      "state": "merged",
+      "body": "Regression test for a broadcasting corner case in np.dot with 0-d arrays.",
+      "updated_at": "2026-07-11T09:00:00+05:30"
+    }
+  ],
+  "issues": [
+    {
+      "title": "Positional encodings tutorial: request for NumPy example",
+      "repo": "huggingface/transformers",
+      "html_url": "https://github.com/huggingface/transformers/issues/4567",
+      "state": "open",
+      "body": "The docs show PyTorch only. Would love a NumPy reference to mirror the attention-from-scratch tutorial.",
+      "updated_at": "2026-08-14T15:00:00+05:30"
+    },
+    {
+      "title": "Confusing error message when y is empty in StratifiedKFold",
+      "repo": "scikit-learn/scikit-learn",
+      "html_url": "https://github.com/scikit-learn/scikit-learn/issues/23399",
+      "state": "open",
+      "body": "Empty y array produces a cryptic IndexError — proposed a clearer ValueError.",
+      "updated_at": "2026-08-08T13:00:00+05:30"
+    },
+    {
+      "title": "Docs: mention PyTorch backend for conv2d tutorial",
+      "repo": "pytorch/pytorch",
+      "html_url": "https://github.com/pytorch/pytorch/issues/98760",
+      "state": "open",
+      "body": "Suggested a small note linking to a hand-written reference implementation.",
+      "updated_at": "2026-07-30T11:00:00+05:30"
+    }
+  ]
+};
+
+/* ── clock ── */
+function tickClock(){
   var tf=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
-  function tick(){ var s=tf.format(new Date()); clockEls.forEach(function(e){ e.textContent=s; }); }
-  tick(); setInterval(tick,1000);
-  window.addEventListener('keydown',function(ev){
-    if(ev.metaKey||ev.ctrlKey||ev.altKey) return;
-    var tag=(document.activeElement&&document.activeElement.tagName)||''; if(tag==='INPUT'||tag==='TEXTAREA') return;
-    if(ev.key==='g'||ev.key==='G') window.open(ghUrl,'_blank','noopener');
+  var s=tf.format(new Date());
+  document.querySelectorAll('.clock').forEach(function(e){ e.textContent=s; });
+}
+tickClock();setInterval(tickClock,1000);
+
+/* ── scroll progress ── */
+var prog=document.getElementById('prog'),hdr=document.querySelector('header'),qd=false;
+function onScroll(){if(qd)return;qd=true;requestAnimationFrame(function(){qd=false;var h=document.documentElement.scrollHeight-window.innerHeight;prog.style.width=(h>0?(window.scrollY/h)*100:0)+'%';if(hdr)hdr.classList.toggle('scrolled',window.scrollY>8);});}
+window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+/* ── mobile menu ── */
+var menuBtn=document.getElementById('menuBtn'),panel=document.getElementById('mobilePanel');
+function setMenu(o){menuBtn.setAttribute('aria-expanded',String(o));menuBtn.setAttribute('aria-label',o?'Close menu':'Open menu');menuBtn.classList.toggle('open',o);panel.classList.toggle('open',o);panel.setAttribute('aria-hidden',String(!o));}
+menuBtn.addEventListener('click',function(){setMenu(menuBtn.getAttribute('aria-expanded')!=='true');});
+panel.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){setMenu(false);});});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&panel.classList.contains('open'))setMenu(false);});
+document.addEventListener('click',function(e){if(panel.classList.contains('open')&&!panel.contains(e.target)&&!menuBtn.contains(e.target))setMenu(false);});
+window.addEventListener('resize',function(){if(window.innerWidth>760&&panel.classList.contains('open'))setMenu(false);});
+
+/* ── eyebrow scramble ── */
+(function(){
+  var el=document.getElementById('eyebrow');if(!el)return;
+  var t=el.getAttribute('data-text');
+  if(reduced){el.textContent=t;return;}
+  var g='AEHLNORSTU№#%&·/',f=0;el.textContent='';
+  var iv=setInterval(function(){f++;var o='';for(var i=0;i<t.length;i++){var c=t[i];o+=(c===' ')?' ':(i<f*.9?c:g[Math.floor(Math.random()*g.length)]);}el.textContent=o;if(f*.9>=t.length){clearInterval(iv);el.textContent=t;}},26);
+})();
+
+/* ── G shortcut ── */
+var ghUrl='https://github.com/hariomlohardev';
+window.addEventListener('keydown',function(e){if(e.metaKey||e.ctrlKey||e.altKey)return;var t=(document.activeElement&&document.activeElement.tagName)||'';if(t==='INPUT'||t==='TEXTAREA')return;if(e.key==='g'||e.key==='G')window.open(ghUrl,'_blank','noopener');});
+document.getElementById('topBtn').addEventListener('click',function(){window.scrollTo({top:0,behavior:reduced?'auto':'smooth'});});
+
+/* ── data + render ── */
+var POSTS=[],VIEW=[],Q='',FILTER='all';
+var qEl=document.getElementById('q'),qClear=document.getElementById('qClear'),qCount=document.getElementById('qCount');
+var listEl=document.getElementById('list'),secTag=document.getElementById('secTag');
+var searchTimer=null;
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function hl(s,q){if(!q)return esc(s);try{var re=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig');return esc(s).replace(re,'<mark class="hl">$1</mark>');}catch(e){return esc(s);}}
+function fmtDate(iso){try{var d=new Date(iso);return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase();}catch(e){return iso;}}
+function fmtRel(iso){try{var d=new Date(iso);if(isNaN(d))return iso||'';var diff=Math.floor((Date.now()-d)/1000);if(diff<60)return'just now';if(diff<3600)return Math.floor(diff/60)+'m ago';if(diff<86400)return Math.floor(diff/3600)+'h ago';if(diff<2592000)return Math.floor(diff/86400)+'d ago';return fmtDate(iso);}catch(e){return iso||'';}}
+
+function flatten(j){
+  var items=[];
+  (j.prs||[]).forEach(function(p){items.push({type:'pr',title:p.title,repo:p.repo||'',desc:p.body||'',url:p.html_url,state:p.merged?'merged':(p.state||'open'),updated:p.updated_at||p.created_at||'',language:'',merged:!!p.merged});});
+  (j.issues||[]).forEach(function(i){items.push({type:'issue',title:i.title,repo:i.repo||'',desc:i.body||'',url:i.html_url,state:i.state||'open',updated:i.updated_at||''});});
+  // also support activity as fallback for external issues if present (mapped as issue)
+  if((!j.issues || j.issues.length===0) && j.activity){
+    j.activity.forEach(function(a){
+      if(a.type==='IssuesEvent' || a.type==='PullRequestEvent'){
+        items.push({type:'issue',title:a.title||a.type,repo:a.repo||'',desc:a.title||'',url:a.url||'',state:'open',updated:a.at||''});
+      }
+    });
+  }
+  items.sort(function(a,b){return String(b.updated||'').localeCompare(String(a.updated||''));});
+  items.forEach(function(it,i){it.__no=i+1;});
+  return items;
+}
+
+function filtered(){
+  var q=(Q||'').toLowerCase().trim();
+  return POSTS.filter(function(it){
+    if(FILTER!=='all'&&it.type!==FILTER)return false;
+    if(q){var hay=[it.title,it.repo,it.desc,it.state||''].join(' ').toLowerCase();if(hay.indexOf(q)===-1)return false;}
+    return true;
+  });
+}
+
+function render(){
+  VIEW=filtered();
+  qCount.textContent=VIEW.length+'/'+POSTS.length;
+  qClear.classList.toggle('show',!!Q);
+  listEl.setAttribute('aria-busy','false');
+
+  var prs=POSTS.filter(function(x){return x.type==='pr';}).length;
+  var issues=POSTS.filter(function(x){return x.type==='issue';}).length;
+  var uniqueRepos={};POSTS.forEach(function(p){if(p.repo)uniqueRepos[p.repo]=1;});
+  var repoCount=Object.keys(uniqueRepos).length;
+
+  document.getElementById('nAll').textContent=POSTS.length;
+  document.getElementById('nPR').textContent=prs;
+  document.getElementById('nIssue').textContent=issues;
+  document.getElementById('stPRs').textContent=prs;
+  document.getElementById('stIssues').textContent=issues;
+  document.getElementById('stRepos').textContent=repoCount;
+  secTag.textContent=POSTS.length+' contributions · '+prs+' PRs · '+issues+' issues · '+repoCount+' repos';
+
+  if(VIEW.length===0){
+    listEl.innerHTML='<div class="empty">No matches — try another search,<br>or <a href="#" id="clearAll">clear all filters</a>.<br>Browse directly on <a href="https://github.com/search?q=author%3Ahariomlohardev" target="_blank" rel="noopener">GitHub ↗</a>.</div>';
+    var ca=document.getElementById('clearAll');
+    if(ca)ca.addEventListener('click',function(e){e.preventDefault();Q='';FILTER='all';qEl.value='';location.hash='';
+      document.querySelectorAll('.pill').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-filter')==='all'));});
+      render();});
+    return;
+  }
+
+  var qLower=(Q||'').toLowerCase().trim();
+  listEl.innerHTML=VIEW.map(function(it,i){
+    var idx='No.'+String(it.__no).padStart(3,'0');
+    var iconCls=it.type+' '+(it.state||'');
+    var typeIcon='<span class="type-icon '+iconCls+'" aria-hidden="true"></span>';
+
+    var metaParts=[];
+    if(it.type==='pr'){
+      var cls=it.state==='merged'?'merged':it.state==='open'?'open':'';
+      metaParts.push('<span class="tag '+cls+'">PR · '+esc(it.state||'open')+'</span>');
+    }else{
+      var cls=it.state==='open'?'type-issue':'';
+      metaParts.push('<span class="tag '+cls+'">Issue · '+esc(it.state||'open')+'</span>');
+    }
+    if(it.repo)metaParts.push('<span>'+esc(it.repo)+'</span>');
+
+    var title='<h3>'+hl(it.title,qLower)+'<span class="repo-path">'+esc(it.repo||'')+'</span></h3>';
+    var desc=it.desc?'<p>'+hl(it.desc,qLower)+'</p>':'';
+    var rightParts=[];
+    if(it.updated)rightParts.push('<span class="date">'+fmtRel(it.updated)+'</span>');
+
+    return '<a class="row rv" href="'+esc(it.url)+'" target="_blank" rel="noopener" style="transition-delay:'+(Math.min(i,8)*35)+'ms">'+
+      '<div class="row-left">'+typeIcon+'<span>'+idx+'</span></div>'+
+      '<div class="row-body">'+
+        '<div class="row-meta">'+metaParts.join('')+'</div>'+
+        title+desc+
+      '</div>'+
+      '<div class="row-right">'+rightParts.join('')+'<span class="arrow" aria-hidden="true">→</span></div>'+
+    '</a>';
+  }).join('');
+
+  requestAnimationFrame(function(){requestAnimationFrame(function(){observeReveals(listEl);});});
+}
+
+function observeReveals(scope){
+  var els=(scope||document).querySelectorAll('.rv:not(.in)');
+  if('IntersectionObserver' in window&&!reduced){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.08});
+    els.forEach(function(el){io.observe(el);});
+  }else els.forEach(function(el){el.classList.add('in');});
+}
+
+function applyHash(){
+  var h=location.hash||'';
+  var f=h.match(/filter=([^&]+)/);if(f&&['all','pr','issue'].indexOf(f[1])!==-1)FILTER=f[1];
+  var qm=h.match(/q=([^&]+)/);if(qm){Q=decodeURIComponent(qm[1]);qEl.value=Q;}
+  document.querySelectorAll('.pill').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-filter')===FILTER));});
+}
+function writeHash(){
+  var parts=[];
+  if(FILTER!=='all')parts.push('filter='+FILTER);
+  if(Q)parts.push('q='+encodeURIComponent(Q));
+  var h='#'+parts.join('&');
+  if(location.hash!==h){if(parts.length)location.hash=h;else if(location.hash)history.replaceState(null,'',location.pathname+location.search);}
+}
+function scheduleRender(){clearTimeout(searchTimer);searchTimer=setTimeout(function(){writeHash();render();},140);}
+
+qEl.addEventListener('input',function(){Q=qEl.value.trim();scheduleRender();});
+qEl.addEventListener('keydown',function(e){if(e.key==='Escape'){Q='';qEl.value='';writeHash();render();}});
+qClear.addEventListener('click',function(){Q='';qEl.value='';qEl.focus();writeHash();render();});
+document.querySelectorAll('.pill').forEach(function(b){
+  b.addEventListener('click',function(){
+    FILTER=b.getAttribute('data-filter');
+    document.querySelectorAll('.pill').forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+    writeHash();render();
+  });
+});
+window.addEventListener('hashchange',function(){applyHash();render();});
+
+document.addEventListener('keydown',function(e){if(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){e.preventDefault();qEl.focus();}});
+
+function init(j){
+  POSTS=flatten(j||DEMO_DATA);
+  try{
+    var gen=j.generated_at||DEMO_DATA.generated_at;
+    document.getElementById('syncDate').textContent='Synced '+fmtRel(gen);
+    document.getElementById('syncCount').textContent=POSTS.length;
+  }catch(e){}
+  applyHash();render();observeReveals();
+}
+
+// Curated first — edit opensource-curated.json to control what shows. Falls back to auto snapshot.
+fetch('opensource-curated.json',{cache:'no-store'})
+  .then(function(r){if(!r.ok)throw 0;return r.json();})
+  .then(function(j){ if(j && ((j.prs&&j.prs.length)||(j.issues&&j.issues.length))) return j; throw 0; })
+  .then(init)
+  .catch(function(){
+    fetch('opensource-data.json',{cache:'no-store'})
+      .then(function(r){if(!r.ok)throw new Error('no snapshot');return r.json();})
+      .then(init)
+      .catch(function(){init(DEMO_DATA);});
   });
 
-  // marquee
-  var marquee=['Open Source','GitHub','hariomlohardev','Python','Jupyter','Daily commits','AGI Research','Live Bench','Auto-synced'];
-  function fillTracks(){
-    var t=document.querySelector('[data-track]'); if(!t) return;
-    var html='';
-    for(var pass=0;pass<2;pass++) marquee.forEach(function(s){ html+='<span>'+esc(s)+'</span><span class="dot">✦</span>'; });
-    t.innerHTML=html;
-  }
-  fillTracks();
-
-  function armReveal(){
-    var els=document.querySelectorAll('[data-reveal]');
-    if('IntersectionObserver' in window && !reduced){
-      var io=new IntersectionObserver(function(entries){ entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }}); },{threshold:0.12});
-      els.forEach(function(el,i){ el.style.transitionDelay=(Math.min(i,5)*45)+'ms'; io.observe(el); });
-    } else { els.forEach(function(e){ e.classList.add('in'); });}
-  }
-  armReveal();
-
-  var allItems = [];
-  var currentFilter = (location.hash.replace('#','') || 'all');
-  if(['all','repo','pr','activity'].indexOf(currentFilter)===-1) currentFilter='all';
-  var searchTerm = '';
-
-  function formatRel(iso){
-    try{
-      var d = new Date(iso);
-      if(isNaN(d)) return iso||"";
-      var now = new Date();
-      var diff = Math.floor((now - d)/1000);
-      if(diff < 60) return "just now";
-      if(diff < 3600) return Math.floor(diff/60)+"m ago";
-      if(diff < 86400) return Math.floor(diff/3600)+"h ago";
-      if(diff < 2592000) return Math.floor(diff/86400)+"d ago";
-      return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
-    }catch{ return iso||"";}
-  }
-
-  function getFiltered(){
-    var term = searchTerm.trim().toLowerCase();
-    return allItems.filter(function(it){
-      var okKind = currentFilter==='all' || it._kind===currentFilter;
-      if(!okKind) return false;
-      if(!term) return true;
-      var hay = [it.title||it.name, it.description||"", it.repo||"", (it.topics||[]).join(' '), it.language||""].join(' ').toLowerCase();
-      return hay.indexOf(term)!==-1;
+document.getElementById('refreshBtn').addEventListener('click',function(){
+  var btn=this;btn.disabled=true;btn.textContent='Refreshing…';
+  fetch('opensource-curated.json',{cache:'no-store'})
+    .then(function(r){if(!r.ok)throw 0;return r.json();})
+    .then(function(j){ if(j && ((j.prs&&j.prs.length)||(j.issues&&j.issues.length))) return j; throw 0; })
+    .then(function(j){init(j);btn.disabled=false;btn.textContent='↻ Refresh';})
+    .catch(function(){
+      fetch('opensource-data.json',{cache:'no-store'})
+        .then(function(r){if(!r.ok)throw new Error();return r.json();})
+        .then(function(j){init(j);btn.disabled=false;btn.textContent='↻ Refresh';})
+        .catch(function(){init(DEMO_DATA);btn.disabled=false;btn.textContent='↻ Refresh';});
     });
-  }
-
-  function langColor(lang){
-    var m={"Python":"#3572A5","Jupyter Notebook":"#DA5B0B","JavaScript":"#f1e05a","TypeScript":"#3178c6","HTML":"#E34C26","CSS":"#563d7c","Shell":"#89e051","Dart":"#00B4AB"};
-    return m[lang] || "#6E7D9A";
-  }
-
-  function render(){
-    var grid=$('ossGrid'), noEl=$('noResults');
-    // counts (full)
-    var cAll=allItems.length;
-    var cRepo=allItems.filter(function(x){return x._kind==='repo';}).length;
-    var cPr=allItems.filter(function(x){return x._kind==='pr';}).length;
-    var cAct=allItems.filter(function(x){return x._kind==='activity';}).length;
-    $('tabAll').textContent = cAll; $('tabRepo').textContent = cRepo; $('tabPr').textContent = cPr; $('tabAct').textContent = cAct;
-    $('hdrCount').textContent = cAll + " items";
-    $('countBig').innerHTML = '<em>'+String(cAll).padStart(2,'0')+'</em> / '+String(cAll).padStart(2,'0');
-    $('countLab').textContent = cRepo+" repos · "+cPr+" PRs · "+cAct+" events";
-    document.querySelectorAll('.tab').forEach(function(b){
-      var is=b.getAttribute('data-filter')===currentFilter;
-      b.classList.toggle('active', is);
-      b.setAttribute('aria-selected', is?'true':'false');
-    });
-    var filtered = getFiltered();
-    grid.innerHTML='';
-    if(!filtered.length){
-      if(noEl) noEl.style.display='block';
-      armReveal();
-      return;
-    }
-    if(noEl) noEl.style.display='none';
-    filtered.forEach(function(it,i){
-      var a=document.createElement('a');
-      a.className='repo-card'; a.setAttribute('data-reveal',''); a.target='_blank'; a.rel='noopener';
-      a.href = it.url || it.html_url || ghUrl;
-      var idx = String(i+1).padStart(2,'0');
-      var statusHtml="", badgeExtra="";
-      if(it._kind==='repo'){
-        var isFork = it.fork || it.is_fork;
-        statusHtml = '<span class="status repo"><i></i> Repo'+(isFork?' · fork':'')+'</span>';
-        badgeExtra = it.stars!=null ? '<span style="font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:3px 7px;background:var(--paper)">★ '+it.stars+'</span>' : '';
-      } else if(it._kind==='pr'){
-        var lab = it.state||"pr";
-        var cls = lab==='merged' ? 'merged' : (lab==='open' ? 'open' : '');
-        statusHtml = '<span class="status pr '+cls+'">⑂ PR · '+esc(lab)+'</span>';
-        badgeExtra = it.repo ? '<span style="font-family:var(--mono);font-size:10px;color:var(--muted);border:1px solid var(--line);padding:3px 7px;background:var(--paper)">'+esc(it.repo)+'</span>' : '';
-      } else {
-        statusHtml = '<span class="status act">◷ '+esc(it.kind||'activity')+'</span>';
-        badgeExtra = it.repo ? '<span style="font-family:var(--mono);font-size:10px;color:var(--muted);border:1px solid var(--line);padding:3px 7px;background:var(--paper)">'+esc(it.repo)+'</span>' : '';
-      }
-      var title = esc(it.title || it.name || it.repo || "Untitled");
-      var desc = esc((it.description||it.body||"").slice(0,170));
-      var chips = (it.topics||[]).slice(0,4).map(function(c){return '<span>'+esc(c)+'</span>';}).join('');
-      if(it.language && chips.indexOf(it.language)===-1 && it._kind==='repo'){
-        chips = '<span>'+esc(it.language)+'</span>' + chips;
-      }
-      var metaParts=[];
-      if(it.language) metaParts.push('<span style="display:inline-flex;align-items:center;gap:6px"><i class="dot" style="background:'+langColor(it.language)+'"></i>'+esc(it.language)+'</span>');
-      if(it.updated_at||it.pushed_at||it.at) metaParts.push(esc(formatRel(it.updated_at||it.pushed_at||it.at)));
-      if(it.stars!=null) metaParts.push('★ '+it.stars);
-      var meta = metaParts.join(' · ');
-      a.innerHTML='<span class="repo-arrow">↗</span><div class="repo-top"><span class="repo-idx">'+idx+'</span>'+statusHtml+badgeExtra+'</div><h3>'+title+'</h3><p>'+(desc||'<span style="color:var(--muted)">No description — see GitHub</span>')+'</p><div class="chips">'+chips+'</div><div class="repo-meta" style="margin-top:6px">'+meta+'</div>';
-      grid.appendChild(a);
-    });
-    armReveal();
-  }
-
-  function showSkeleton(){
-    var grid=$('ossGrid');
-    grid.innerHTML='';
-    for(var i=0;i<6;i++){
-      var d=document.createElement('div'); d.className='skeleton';
-      d.innerHTML='<div class="sk-line" style="width:28%"></div><div class="sk-line" style="width:70%;height:18px"></div><div class="sk-line" style="width:92%"></div><div class="sk-line" style="width:60%"></div>';
-      grid.appendChild(d);
-    }
-  }
-
-  function setSync(state, text, limited){
-    var pill=$('syncPill'), txt=$('syncText');
-    if(txt) txt.textContent = text;
-    if(pill){
-      pill.classList.toggle('limited', !!limited);
-      var dot = pill.querySelector('i');
-      if(dot) dot.style.background = limited ? 'var(--red)' : (state==='ok'?'var(--green)':'var(--muted)');
-    }
-    var meta=$('sourceLine');
-    if(meta && state==='ok'){
-      // keep
-    }
-  }
-
-  // build unified list from snapshot
-  function fromSnapshot(j){
-    var items=[];
-    (j.repos||[]).forEach(function(r){
-      items.push(Object.assign({}, r, {_kind:'repo', title: r.name, url: r.html_url, description: r.description||"", language: r.language}));
-    });
-    (j.prs||[]).forEach(function(p){
-      items.push(Object.assign({}, p, {_kind:'pr', title: p.title, url: p.html_url, description: p.body||"", language:""}));
-    });
-    (j.activity||[]).forEach(function(a){
-      items.push(Object.assign({}, a, {_kind:'activity', title: a.title, url: a.url, description: a.repo, language:""}));
-    });
-    // dedupe by url+title? keep as is, sort repos first then prs then activity by recency
-    items.sort(function(a,b){
-      var order={repo:0, pr:1, activity:2};
-      var o = (order[a._kind]||9) - (order[b._kind]||9);
-      if(o!==0) return o;
-      var da = a.updated_at||a.pushed_at||a.at||a.created_at||"";
-      var db = b.updated_at||b.pushed_at||b.at||b.created_at||"";
-      return String(db).localeCompare(String(da));
-    });
-    return items;
-  }
-
-  var snapshot = null;
-  showSkeleton();
-
-  // tabs + search wiring
-  document.querySelectorAll('.tab').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      currentFilter = btn.getAttribute('data-filter');
-      history.replaceState(null,'','#'+currentFilter);
-      render();
-    });
-  });
-  var searchInput=$('ossSearch');
-  if(searchInput){
-    try{ var u=new URL(location.href); var q=u.searchParams.get('q'); if(q){ searchTerm=q; searchInput.value=q; }}catch(e){}
-    searchInput.addEventListener('input', function(){
-      searchTerm = searchInput.value;
-      render();
-      try{ var uu=new URL(location.href); if(searchTerm) uu.searchParams.set('q', searchTerm); else uu.searchParams.delete('q'); history.replaceState(null,'',uu.pathname+uu.search+(location.hash||'')); }catch(e){}
-    });
-  }
-  window.addEventListener('hashchange', function(){
-    var h=(location.hash.replace('#','')||'all');
-    if(['all','repo','pr','activity'].indexOf(h)!==-1){ currentFilter=h; render(); }
-  });
-
-  function loadSnapshot(){
-    return fetch(SNAP,{cache:'no-store'}).then(function(r){
-      if(!r.ok) throw new Error("snapshot "+r.status);
-      return r.json();
-    }).then(function(j){
-      snapshot=j;
-      allItems = fromSnapshot(j);
-      var gen = j.generated_at || j.generated_at_iso || "";
-      var rel = gen ? formatRel(gen) : "";
-      setSync('ok', "Snapshot synced "+(rel?rel+" — ":"")+String(gen).slice(0,10)+" · "+(j.stats? (j.stats.repos+" repos · "+j.stats.prs+" PRs") : ""), false);
-      render();
-      // schedule live refresh if cache expired
-      tryLiveRefresh(j);
-    }).catch(function(e){
-      setSync('error', "Snapshot unavailable — trying live GitHub…", true);
-      // fallback: try live directly
-      liveRefresh(true);
-    });
-  }
-
-  // live refresh (client-side GitHub API, 6h localStorage cache, rate-aware)
-  var LS_KEY = "oss_cache_v1";
-  var LS_AT = "oss_cache_at";
-  var TTL = 6*3600*1000;
-  function tryLiveRefresh(snap){
-    try{
-      var at = parseInt(localStorage.getItem(LS_AT)||"0",10);
-      var cached = localStorage.getItem(LS_KEY);
-      if(cached && (Date.now() - at) < TTL){
-        // use cached live merge if fresher than snapshot? we already rendered snapshot, no need
-        return;
-      }
-    }catch(e){}
-    // don't spam API on every load — only auto if > TTL, otherwise wait for Refresh button
-    try{
-      var at2 = parseInt(localStorage.getItem(LS_AT)||"0",10);
-      if(Date.now() - at2 < TTL) return;
-    }catch(e){}
-    liveRefresh(false);
-  }
-
-  function liveRefresh(force){
-    var btn=$('refreshBtn');
-    if(btn) btn.disabled=true;
-    setSync('sync', "Live syncing from GitHub…", false);
-    var headers = { "Accept":"application/vnd.github+json" };
-    // anonymous fetch — no token in client
-    var pRepos = fetch("https://api.github.com/users/"+USER+"/repos?per_page=100&sort=updated", {headers: headers}).then(function(r){ if(!r.ok) throw new Error("repos "+r.status); return r.json(); }).catch(function(){ return null; });
-    var pPrs = fetch("https://api.github.com/search/issues?q=author:"+USER+"+type:pr&per_page=20&sort=updated", {headers: headers}).then(function(r){ if(!r.ok) throw new Error("prs "+r.status); return r.json(); }).catch(function(){ return null; });
-    Promise.all([pRepos, pPrs]).then(function(vals){
-      var reposLive = vals[0], prsLive = vals[1];
-      if(!reposLive && !prsLive){
-        throw new Error(" GitHub rate limited or offline");
-      }
-      // merge into current allItems: replace repos/prs sections
-      var liveRepos = Array.isArray(reposLive) ? reposLive.map(function(r){ return { _kind:'repo', name:r.name, title:r.name, html_url:r.html_url, url:r.html_url, description:r.description||"", language:r.language||"", stars:r.stargazers_count, forks:r.forks_count, updated_at:(r.updated_at||"").slice(0,10), pushed_at:(r.pushed_at||"").slice(0,10), fork:!!r.fork, topics:Array.isArray(r.topics)?r.topics.slice(0,4):[] }; }).filter(function(r){ return !r.fork || r.stars>0; }) : null;
-      var livePrs = (prsLive && Array.isArray(prsLive.items)) ? prsLive.items.map(function(it){ var slug=""; try{ slug=new URL(it.repository_url).pathname.split("/").filter(Boolean).slice(1).join("/");}catch(e){} var merged=it.pull_request && it.pull_request.merged_at; return { _kind:'pr', title:it.title, html_url:it.html_url, url:it.html_url, body:(it.body||"").slice(0,160), repo:slug, state: merged ? "merged" : it.state, updated_at:(it.updated_at||"").slice(0,10) }; }) : null;
-      // rebuild: keep activity from snapshot, replace repos/prs if live available
-      var newItems=[];
-      if(liveRepos) newItems = newItems.concat(liveRepos);
-      else if(snapshot) newItems = newItems.concat((snapshot.repos||[]).map(function(r){ return Object.assign({},r,{_kind:'repo', title:r.name, url:r.html_url}); }));
-      if(livePrs) newItems = newItems.concat(livePrs);
-      else if(snapshot) newItems = newItems.concat((snapshot.prs||[]).map(function(p){ return Object.assign({},p,{_kind:'pr', title:p.title, url:p.html_url}); }));
-      if(snapshot && snapshot.activity) newItems = newItems.concat(snapshot.activity.map(function(a){ return Object.assign({},a,{_kind:'activity', title:a.title, url:a.url}); }));
-      allItems = newItems;
-      allItems.sort(function(a,b){
-        var order={repo:0, pr:1, activity:2};
-        var o=(order[a._kind]||9)-(order[b._kind]||9);
-        if(o!==0) return o;
-        return String(b.updated_at||b.pushed_at||b.at||"").localeCompare(String(a.updated_at||a.pushed_at||a.at||""));
-      });
-      try{ localStorage.setItem(LS_KEY, JSON.stringify({repos:liveRepos, prs:livePrs})); localStorage.setItem(LS_AT, String(Date.now())); }catch(e){}
-      setSync('ok', "Live synced just now · "+ new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'})+" "+ new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}), false);
-      render();
-    }).catch(function(e){
-      var msg = String(e.message||e);
-      var limited = msg.indexOf("403")!==-1 || msg.indexOf("429")!==-1 || msg.indexOf("rate")!==-1;
-      setSync('error', limited ? "GitHub rate limited — showing snapshot (retry in ~1h)" : "Live sync failed — showing snapshot", limited);
-      // keep snapshot render
-    }).finally(function(){ if(btn) btn.disabled=false; });
-  }
-
-  $('refreshBtn') && $('refreshBtn').addEventListener('click', function(){ liveRefresh(true); });
-
-  loadSnapshot();
+});
 })();
 </script>
-<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7c8c6879055d45ba894f6ac0ce1cc51a"}'></script><!-- End Cloudflare Web Analytics -->
+<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7c8c6879055d45ba894f6ac0ce1cc51a"}'></script>
 </body>
 </html>

@@ -9,3 +9,9 @@ Thumbs.db
 .vscode/
 *.log
 temp/
+
+# vercel
+.vercel
+node_modules
+.env
+.env.local

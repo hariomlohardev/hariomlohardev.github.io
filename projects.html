@@ -3,327 +3,499 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="theme-color" content="#FFD400" />
-<title>Projects by Hariom Lohar — Archive · Spam Classifier Live Bench & AGI Research | hariomlohardev</title>
+<meta name="theme-color" content="#F6F4EE" />
+<meta name="color-scheme" content="light" />
+<title>Projects by Hariom Lohar — Archive · Spam Classifier Live Bench &amp; AGI Research | hariomlohardev</title>
 <meta name="description" content="Archive of builds by Hariom Lohar (hariomlohardev on GitHub) — Spam Classifier live Naive Bayes bench (5,572 messages in your browser), AGI_Research daily log since 1 July 2026, and open-source Python notebooks. CS50P Harvard 2026." />
 <meta name="author" content="Hariom Lohar" />
 <meta name="robots" content="index, follow, max-image-preview:large" />
 <link rel="canonical" href="https://hariomlohardev.github.io/projects.html" />
 <link rel="author" href="https://github.com/hariomlohardev" />
 <link rel="me" href="https://github.com/hariomlohardev" />
+<link rel="me" href="https://x.com/HariomloharAGI" />
+<link rel="me" href="https://www.linkedin.com/in/hariomlohar" />
 <link rel="manifest" href="/site.webmanifest" />
-<meta property="og:site_name" content="Hariom Lohar — Lab Notebook No.01" />
+<link rel="alternate" type="application/rss+xml" title="Hariom Lohar — Blog & Daily Logs" href="https://hariomlohardev.github.io/feed.xml" />
+<meta property="og:site_name" content="Hariom Lohar — Lab Notebook №01" />
 <meta property="og:locale" content="en_IN" />
 <meta property="og:url" content="https://hariomlohardev.github.io/projects.html" />
 <meta property="og:title" content="Projects by Hariom Lohar — Archive · Spam Classifier & AGI Research | hariomlohardev" />
 <meta property="og:description" content="Every project has a lab note — live Naive Bayes bench, AGI research daily commits, open-source notebooks. By Hariom Lohar (hariomlohardev on GitHub) — CS50P Harvard 2026." />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="https://hariomlohardev.github.io/certificates/1.png" />
-<meta property="og:image:width" content="2246" />
-<meta property="og:image:height" content="1588" />
-<meta property="og:image:alt" content="Projects by Hariom Lohar — Hariom Lohar GitHub archive" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Projects by Hariom Lohar | hariomlohardev GitHub Archive" />
 <meta name="twitter:description" content="Spam Classifier live bench + AGI Research daily log + open-source notebooks — by Hariom Lohar (hariomlohardev)." />
-<meta name="twitter:image" content="https://hariomlohardev.github.io/certificates/1.png" />
 <meta name="twitter:creator" content="@HariomloharAGI" />
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"CollectionPage","@id":"https://hariomlohardev.github.io/projects.html#webpage","url":"https://hariomlohardev.github.io/projects.html","name":"Projects by Hariom Lohar — Archive","isPartOf":{"@id":"https://hariomlohardev.github.io/#website"},"about":{"@id":"https://hariomlohardev.github.io/#person"},"description":"Archive of builds by Hariom Lohar (hariomlohardev): Spam Classifier live bench, AGI Research, open-source notebooks.","breadcrumb":{"@id":"https://hariomlohardev.github.io/projects.html#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://hariomlohardev.github.io/projects.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home — Hariom Lohar","item":"https://hariomlohardev.github.io/"},{"@type":"ListItem","position":2,"name":"Projects — Hariom Lohar","item":"https://hariomlohardev.github.io/projects.html"}]}]}</script>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-400-italic.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-600-italic.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-mono/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-mono/latin-400-italic.css">
+<style>
+:root{
+  --paper:#F6F4EE;--paper-2:#EFECE2;--sheet:#FBFAF6;
+  --ink:#181611;--ink-2:#37342B;--body:#3B382E;
+  --muted:#5F594A;--muted-2:#6E6858;
+  --line:#DAD5C6;--line-2:#C4BEAC;
+  --accent:#B93A13;--accent-soft:rgba(185,58,19,.12);
+  --green:#1E7A4E;--green-soft:rgba(30,122,78,.10);
+  --max:1200px;--pad:clamp(18px,4.2vw,56px);
+  --serif:'Fraunces',Georgia,serif;--sans:'Archivo',system-ui,sans-serif;--mono:'Space Mono',ui-monospace,'SFMono-Regular',monospace;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--sans);background:var(--paper);color:var(--body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::after{content:"";position:fixed;inset:0;z-index:120;pointer-events:none;opacity:.05;mix-blend-mode:multiply;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E")}
+::selection{background:var(--accent);color:var(--paper)}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+button{font:inherit;background:none;border:none;cursor:pointer;color:inherit}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+#prog{position:fixed;top:0;left:0;height:2px;width:0;background:var(--accent);z-index:140}
+.wrap{max-width:var(--max);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad);position:relative}
+.skip{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+.skip:focus{left:16px;top:12px;width:auto;height:auto;padding:9px 14px;background:var(--ink);color:var(--paper);z-index:200;font-family:var(--mono);font-size:12px}
+section[id]{scroll-margin-top:96px}
+
+/* ── header ── */
+header{position:sticky;top:0;z-index:100;background:rgba(246,244,238,.94);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--line);transition:box-shadow .3s var(--ease)}
+header.scrolled{box-shadow:0 10px 30px rgba(24,22,17,.07)}
+.head-main{display:flex;align-items:center;justify-content:space-between;gap:20px;height:68px}
+.logo{display:flex;align-items:center;gap:12px;flex:none}
+.logo-mark{width:36px;height:36px;flex:none;transition:transform .3s var(--ease)}
+.logo:hover .logo-mark{transform:rotate(-6deg)}
+.logo-mark svg{width:100%;height:100%;display:block}
+.logo-word{font-family:var(--mono);font-size:13px;letter-spacing:.05em;line-height:1.25;color:var(--ink)}
+.logo-word i{display:block;font-style:normal;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+nav.desk{display:flex;gap:26px}
+nav.desk a{font-family:var(--mono);font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:6px 0;position:relative;white-space:nowrap;transition:color .2s}
+nav.desk a::after{content:"";position:absolute;left:0;bottom:0;height:1.5px;width:100%;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
+nav.desk a:hover{color:var(--ink)}
+nav.desk a:hover::after{transform:scaleX(1)}
+nav.desk a.active{color:var(--ink)}
+nav.desk a.active::after{transform:scaleX(1)}
+.head-right{display:flex;align-items:center;gap:12px;flex:none}
+.gh-pill{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;border:1px solid var(--ink);padding:10px 14px;display:inline-flex;align-items:center;gap:9px;transition:background .2s,color .2s;color:var(--ink)}
+.gh-pill i{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2.2s infinite}
+.gh-pill:hover{background:var(--ink);color:var(--paper)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(30,122,78,.45)}70%{box-shadow:0 0 0 7px rgba(30,122,78,0)}100%{box-shadow:0 0 0 0 rgba(30,122,78,0)}}
+.menu-btn{display:none;align-items:center;gap:10px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--ink);color:var(--ink);padding:11px 14px;min-height:44px}
+.menu-btn .bars{width:16px;height:10px;position:relative;flex:none}
+.menu-btn .bars span{position:absolute;left:0;width:100%;height:1.6px;background:currentColor;transition:transform .25s var(--ease),top .25s var(--ease)}
+.menu-btn .bars span:nth-child(1){top:0}
+.menu-btn .bars span:nth-child(2){top:8px}
+.menu-btn.open .bars span:nth-child(1){top:4px;transform:rotate(45deg)}
+.menu-btn.open .bars span:nth-child(2){top:4px;transform:rotate(-45deg)}
+.mobile-panel{display:none;position:absolute;left:0;right:0;top:100%;background:var(--paper);border-bottom:1px solid var(--ink);padding:6px var(--pad) 18px;opacity:0;transform:translateY(-8px);visibility:hidden;transition:opacity .28s var(--ease),transform .28s var(--ease),visibility .28s;box-shadow:0 18px 34px rgba(24,22,17,.10);z-index:99}
+.mobile-panel.open{opacity:1;transform:none;visibility:visible}
+.mobile-panel nav{display:grid;gap:0}
+.mobile-panel nav a{font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);padding:15px 4px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;min-height:48px}
+.mobile-panel nav a .no{font-size:10px;color:var(--accent)}
+.mobile-panel nav a.active{color:var(--accent)}
+.mp-actions{display:flex;gap:10px;margin-top:16px}
+.mp-actions a{flex:1;text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;border:1px solid var(--ink);padding:13px 10px;color:var(--ink);min-height:46px;display:flex;align-items:center;justify-content:center}
+.mp-actions a.alt{border-color:var(--accent);color:var(--accent)}
+
+/* ── hero ── */
+.hero{padding:clamp(44px,8vw,96px) 0 clamp(30px,5vw,50px);border-bottom:1px solid var(--ink)}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-2);display:flex;align-items:center;gap:12px;min-height:18px}
+.eyebrow i{width:9px;height:9px;background:var(--accent);flex:none;transform:rotate(45deg)}
+.hero h1{font-family:var(--serif);font-weight:600;letter-spacing:-.035em;line-height:.92;font-size:clamp(2.9rem,9vw,7rem);margin-top:22px;color:var(--ink);overflow-wrap:break-word}
+.mask{display:block;overflow:hidden;padding-bottom:.08em}
+.line{display:block;transform:translateY(112%);animation:rise 1s var(--ease) forwards}
+.line.d2{animation-delay:.14s}
+@keyframes rise{to{transform:translateY(0)}}
+.hero h1 em{font-style:italic;font-weight:400}
+.lede{margin-top:24px;color:var(--body);font-size:clamp(16px,1.9vw,17.5px);line-height:1.75;max-width:62ch}
+.lede a{color:var(--accent);font-weight:500;text-decoration:underline;text-underline-offset:3px}
+
+/* stats ledger strip */
+.stats{border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);display:grid;grid-template-columns:repeat(4,1fr);margin-top:clamp(30px,5vw,52px)}
+.stat{padding:24px 22px 26px;border-right:1px solid var(--line);position:relative;display:flex;flex-direction:column;gap:10px;transition:background .25s var(--ease)}
+.stat:last-child{border-right:none}
+.stat::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);transform:scaleY(0);transform-origin:top;transition:transform .35s var(--ease)}
+.stat:hover{background:var(--sheet)}
+.stat:hover::before{transform:scaleY(1)}
+.stat b{font-family:var(--serif);font-weight:600;font-size:clamp(2rem,3.6vw,3rem);letter-spacing:-.035em;line-height:1;color:var(--ink);display:flex;align-items:baseline;gap:7px;transition:color .25s var(--ease)}
+.stat:hover b{color:var(--accent)}
+.stat span{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);line-height:1.6;display:flex;align-items:flex-start;gap:9px}
+.stat span::before{content:"";width:6px;height:6px;background:var(--accent);transform:rotate(45deg);flex:none;margin-top:5px}
+
+/* sections */
+section{padding:clamp(44px,6vw,76px) 0;position:relative}
+section+section{border-top:1px solid var(--line)}
+.sec-head{display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap;margin-bottom:clamp(22px,3vw,32px);padding-bottom:14px;border-bottom:1px solid var(--ink)}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:10px;white-space:nowrap}
+.kicker i{width:28px;height:1px;background:var(--ink)}
+.sec-head h2{font-family:var(--serif);font-weight:600;letter-spacing:-.03em;line-height:.95;font-size:clamp(2rem,4.6vw,3.4rem);color:var(--ink)}
+.sec-head h2 em{font-style:italic;font-weight:400;color:var(--muted)}
+.sec-tag{margin-left:auto;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:8px 12px;background:var(--sheet)}
+
+/* ── featured bench ── */
+.bench{border:1px solid var(--ink);background:var(--sheet);display:grid;grid-template-columns:1.05fr .95fr;overflow:hidden;position:relative;box-shadow:0 1px 0 rgba(24,22,17,.05)}
+.bench-info{padding:clamp(24px,4vw,40px);display:flex;flex-direction:column;position:relative;z-index:1}
+.bench-top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.bench-idx{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--accent);font-weight:600}
+.bench-badges{display:flex;gap:8px;flex-wrap:wrap}
+.bbadge{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:4px 9px;border:1px solid}
+.bbadge.ship{color:var(--green);border-color:var(--green);background:var(--green-soft)}
+.bbadge.cat{color:var(--muted);border-color:var(--line-2);background:var(--paper-2)}
+.bench-name{font-family:var(--serif);font-weight:600;letter-spacing:-.03em;line-height:.98;font-size:clamp(2rem,4.2vw,3.4rem);color:var(--ink);margin-bottom:14px}
+.bench-name em{font-style:italic;font-weight:400}
+.bench-name .arw{display:inline-block;color:var(--accent);transition:transform .25s var(--ease)}
+.bench:hover .arw{transform:translate(4px,-4px)}
+.bench-desc{font-size:14.5px;color:var(--body);line-height:1.7;max-width:50ch;margin-bottom:18px}
+.bench-desc b{color:var(--ink);font-weight:600;background:linear-gradient(transparent 62%,var(--accent-soft) 62%);padding:0 1px}
+.bench-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:auto}
+.bench-chips span{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;background:var(--paper-2);border:1px solid var(--line);padding:4px 8px;color:var(--muted)}
+.bench-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.bench-note{margin-top:14px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.btn{font-family:var(--mono);font-size:11.5px;letter-spacing:.15em;text-transform:uppercase;padding:14px 20px;border:1px solid var(--ink);display:inline-flex;align-items:center;gap:10px;min-height:46px;color:var(--ink);transition:background .2s,color .2s,transform .2s var(--ease);position:relative;z-index:2}
+.btn:hover{background:var(--ink);color:var(--paper)}
+.btn.solid{background:var(--ink);color:var(--paper)}
+.btn.solid:hover{background:var(--accent);border-color:var(--accent)}
+.btn:active{transform:translateY(1px)}
+.f-stretched-link::after{content:"";position:absolute;inset:0;z-index:1}
+
+/* bench preview */
+.bench-preview{background:var(--paper-2);border-left:1px solid var(--ink);display:flex;flex-direction:column;position:relative;overflow:hidden}
+.bp-head{display:flex;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid var(--ink);background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase}
+.bp-head .live{display:inline-flex;align-items:center;gap:7px;color:var(--paper)}
+.bp-head .live i{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.4s infinite}
+.bp-body{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:24px 18px;gap:20px;background:var(--paper)}
+.bp-msg{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);background:var(--sheet);border:1px solid var(--line);padding:6px 10px}
+.bp-tokens{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;min-height:96px;align-items:center;max-width:380px}
+.tk{font-family:var(--mono);font-size:12px;padding:6px 9px;border:1px solid var(--line);background:var(--sheet);color:var(--ink);opacity:0;transform:scale(.85) translateY(6px);transition:all .32s var(--ease)}
+.tk.in{opacity:1;transform:none}
+.tk.r{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.tk.g{border-color:var(--green);color:var(--green);background:var(--green-soft)}
+.tk.n{border-style:dashed;color:var(--muted)}
+.bp-verdict{display:flex;align-items:center;gap:18px;min-height:58px}
+.stamp{font-family:var(--mono);font-size:1.35rem;letter-spacing:.06em;text-transform:uppercase;border:2px solid currentColor;padding:2px 13px;transform:rotate(-5deg) scale(1.6);opacity:0;transition:transform .34s cubic-bezier(.34,1.56,.64,1),opacity .2s;background:var(--sheet)}
+.stamp.on{opacity:1;transform:rotate(-5deg) scale(1)}
+.stamp.spam{color:var(--accent)}
+.stamp.ham{color:var(--green)}
+.pct{font-family:var(--mono);font-size:1.3rem;font-variant-numeric:tabular-nums}
+.pct.spam{color:var(--accent)}.pct.ham{color:var(--green)}
+.pct-lab{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.bp-progress{height:8px;background:var(--paper-2);border-top:1px solid var(--ink);position:relative;overflow:hidden}
+.bp-progress i{position:absolute;inset:0 auto 0 0;width:0;background:var(--accent);border-right:2px solid var(--ink);transition:width .2s linear}
+
+/* ── toolbar ── */
+.toolbar{border-top:1px solid var(--ink);border-bottom:1px solid var(--line);padding:18px 0;display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end;margin-bottom:6px}
+.search{flex:1;min-width:240px;display:flex;align-items:baseline;gap:12px;border-bottom:1px solid var(--ink);padding:6px 2px 9px;transition:border-color .2s}
+.search:focus-within{border-color:var(--accent)}
+.search .lens{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);flex:none}
+.search input{flex:1;border:none;background:transparent;font-family:var(--mono);font-size:14px;color:var(--ink);outline:none;min-width:60px;padding:4px 0}
+.search input::placeholder{color:var(--muted-2)}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.pill{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line-2);padding:11px 15px;color:var(--ink-2);transition:all .18s var(--ease);min-height:42px}
+.pill:hover{border-color:var(--ink)}
+.pill[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.pill .n{opacity:.6;margin-left:7px;font-size:10px}
+.result-note{margin-top:14px;font-family:var(--mono);font-size:11.5px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;align-items:center;min-height:18px}
+
+/* ── project cards ── */
+.proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:8px}
+.proj-card{background:var(--sheet);border:1px solid var(--ink);position:relative;padding:22px 22px 20px;display:flex;flex-direction:column;gap:10px;transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+.proj-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);transform:scaleY(0);transform-origin:top;transition:transform .3s var(--ease)}
+.proj-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(24,22,17,.10)}
+.proj-card:hover::before{transform:scaleY(1)}
+.proj-top{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.proj-idx{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--accent);font-weight:600}
+.status{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border:1px solid;display:inline-flex;align-items:center;gap:6px}
+.status.live{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
+.status.live i{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 1.4s infinite}
+.status.shipped{color:var(--green);border-color:var(--green);background:var(--green-soft)}
+.status.oss{color:var(--muted);border-color:var(--line-2);background:var(--sheet)}
+.status.log{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
+.kind{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;padding:2px 7px;border:1px solid;margin-left:auto}
+.kind.live{color:var(--accent);border-color:var(--accent)}
+.kind.code{color:var(--green);border-color:var(--green)}
+.proj-card h3{font-family:var(--serif);font-weight:600;letter-spacing:-.02em;line-height:1.1;font-size:1.45rem;color:var(--ink);margin-top:2px}
+.proj-card p{color:var(--body);font-size:14px;line-height:1.65}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips span{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;background:var(--paper-2);border:1px solid var(--line);padding:4px 8px;color:var(--muted)}
+.langbar{display:flex;height:6px;border:1px solid var(--ink);overflow:hidden;background:var(--paper-2);max-width:260px}
+.langbar i{display:block;height:100%}
+.proj-meta{font-family:var(--mono);font-size:11px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+.proj-meta .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.proj-arrow{position:absolute;top:16px;right:16px;width:32px;height:32px;display:grid;place-items:center;border:1px solid var(--line);background:var(--paper);font-size:14px;color:var(--muted);transition:background .2s,color .2s,transform .2s}
+.proj-card:hover .proj-arrow{background:var(--ink);color:var(--paper);transform:translate(2px,-2px)}
+.empty{border:1px dashed var(--line-2);padding:44px 24px;text-align:center;font-family:var(--mono);font-size:13px;color:var(--muted);line-height:2.1;grid-column:1/-1}
+.work-actions{margin-top:22px;display:flex;gap:12px;flex-wrap:wrap}
+
+/* ── next / on the bench ── */
+.next-card{display:flex;flex-direction:column;gap:14px;max-width:720px}
+.next-title{font-family:var(--serif);font-weight:600;letter-spacing:-.02em;font-size:clamp(1.6rem,3.4vw,2.4rem);color:var(--ink);line-height:1.15}
+.next-title .rot{font-style:italic;font-weight:400;color:var(--accent);display:inline-block;min-width:8ch;transition:opacity .24s,transform .24s var(--ease)}
+.next-sub{font-family:var(--mono);font-size:12.5px;color:var(--muted);max-width:56ch;line-height:1.7}
+
+/* ── footer ── */
+footer{border-top:1px solid var(--ink);background:var(--paper)}
+.foot-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:clamp(26px,4vw,48px);padding:clamp(36px,5vw,60px) 0 34px}
+.foot-brand p{font-family:var(--serif);font-style:italic;font-size:20px;color:var(--ink-2);max-width:26ch;line-height:1.5}
+.foot-brand .fsub{margin-top:16px;font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.fcol h4{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+.fcol ul{list-style:none;display:grid;gap:10px}
+.fcol a{font-size:14.5px;color:var(--body);transition:color .15s}
+.fcol a:hover{color:var(--accent)}
+.fcol a .arr{font-family:var(--mono);font-size:10px;color:var(--accent);margin-left:5px}
+.foot-base{border-top:1px solid var(--line);padding:20px 0 28px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);line-height:2}
+.foot-base .top-btn{border:1px solid var(--line-2);padding:10px 14px;min-height:42px;transition:all .15s;color:var(--ink-2);font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase}
+.foot-base .top-btn:hover{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.kbd{border:1px solid var(--line-2);padding:2px 6px;border-radius:3px;color:var(--ink);font-weight:600;background:var(--paper)}
+
+/* reveal */
+html.js .rv{opacity:0;transform:translateY(16px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+html.js .rv.in{opacity:1;transform:none}
+html.js .proj-card.rv{transform:translateY(10px)}
+html.js .proj-card.rv.in{transform:none}
+html:not(.js) .rv{opacity:1;transform:none}
+.skeleton{height:140px;border:1px solid var(--line);background:linear-gradient(90deg,var(--paper-2) 25%,var(--sheet) 40%,var(--paper-2) 60%);background-size:400% 100%;animation:shimmer 1.3s infinite}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
+
+@media(max-width:1020px){
+  .bench{grid-template-columns:1fr}
+  .bench-preview{border-left:none;border-top:1px solid var(--ink);min-height:340px}
+}
+@media(max-width:860px){
+  .stats{grid-template-columns:1fr 1fr}
+  .stat:nth-child(2){border-right:none}
+  .stat:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .foot-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:760px){
+  nav.desk{display:none}
+  .menu-btn{display:inline-flex}
+  .mobile-panel{display:block}
+  .gh-pill{display:none}
+  .proj-grid{grid-template-columns:1fr}
+  .sec-tag{margin-left:0}
+}
+@media(max-width:640px){
+  :root{--pad:18px}
+  .head-main{height:62px}
+  .logo-mark{width:31px;height:31px}
+  .stats{margin:clamp(30px,5vw,52px) -18px 0}
+  .stat{padding:18px 20px 20px}
+  .stat b{font-size:1.6rem}
+  .toolbar{flex-direction:column;align-items:stretch;gap:14px}
+  .filters{overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none;padding-bottom:4px;margin:0 -18px;padding-left:18px;padding-right:18px}
+  .filters::-webkit-scrollbar{display:none}
+  .pill{white-space:nowrap;flex:none}
+  .search input{font-size:16px}
+  .work-actions .btn{flex:1;justify-content:center}
+  .foot-grid{grid-template-columns:1fr;gap:30px}
+  .foot-base{flex-direction:column;align-items:flex-start}
+  .foot-base .top-btn{width:100%;text-align:center}
+  .sec-head{flex-direction:column;align-items:flex-start}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .line{transform:none}
+}
+@media print{
+  header,#prog,.bench-preview,.toolbar,footer,body::after{display:none!important}
+  body{background:#fff}
+}
+</style>
+
+<link rel="alternate" type="text/plain" href="/llms.txt" title="LLM index — Hariom Lohar" />
+<link rel="alternate" type="text/plain" href="/llms-full.txt" title="LLM full dump — Hariom Lohar" />
+<link rel="alternate" type="text/plain" href="/ai.txt" title="AI entity card — Hariom Lohar" />
+<link rel="me" href="https://github.com/hariomlohardev" />
+<link rel="me" href="https://x.com/HariomloharAGI" />
+<link rel="me" href="https://www.linkedin.com/in/hariomlohar" />
+<meta property="og:image:width" content="2246" />
+<meta property="og:image:height" content="1588" />
+<meta property="og:image:alt" content="Projects by Hariom Lohar — Hariom Lohar GitHub archive" />
+<meta name="twitter:image" content="https://hariomlohardev.github.io/certificates/1.png" />
+<meta name="twitter:image:alt" content="Projects by Hariom Lohar — Hariom Lohar 2026" />
 <link rel="icon" type="image/png" href="/favicon.png" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Fragment+Mono:ital@0;1&display=swap" rel="stylesheet">
-<script>document.documentElement.classList.add('js')</script>
-<style>
-  :root{
-    --paper:#FFFEFB;--paper-2:#F3F0E8;--paper-3:#EAE6DA;--sheet:#FFFFFF;
-    --ink:#0B1220;--muted:#6E7D9A;--muted-2:#8A9AB6;
-    --line:#D9E2EF;--line-2:#B9C8E2;--grid:#E3ECFB;--grid-2:#C9D8F0;
-    --signal:#FFD400;--signal-soft:rgba(255,212,0,.18);
-    --red:#E10600;--red-soft:rgba(225,6,0,.08);
-    --blue:#0050FF;--green:#0E9F6E;--green-soft:rgba(14,159,110,.10);
-    --max:1280px;--pad:clamp(18px,4vw,52px);
-    --mono:'Fragment Mono',ui-monospace,monospace;
-    --display:'Bricolage Grotesque',system-ui,sans-serif;
-    --serif:'Instrument Serif',Georgia,serif;
-    --sans:'Instrument Sans',system-ui,sans-serif;
-    --ease:cubic-bezier(.22,1,.36,1);--ease2:cubic-bezier(.16,1,.3,1);
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;
-    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px),linear-gradient(var(--grid-2) 1px,transparent 1px),linear-gradient(90deg,var(--grid-2) 1px,transparent 1px);
-    background-size:24px 24px,24px 24px,120px 120px,120px 120px;background-position:-1px -1px}
-  ::selection{background:var(--signal);color:var(--ink)}
-  a{color:inherit;text-decoration:none}
-  a:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
-  #prog{position:fixed;top:0;left:0;height:3px;width:0;background:var(--signal);z-index:90}
-  .wrap{max-width:var(--max);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad);position:relative}
-  header{position:sticky;top:0;z-index:40;background:rgba(255,254,251,.88);backdrop-filter:saturate(150%) blur(10px);border-bottom:1px solid var(--line)}
-  .head-top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0 12px;border-bottom:1px dashed var(--line);font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-  .head-top b{color:var(--ink);font-weight:500}
-  .head-main{display:flex;align-items:center;justify-content:space-between;gap:24px;height:56px}
-  .logo{font-family:var(--mono);font-size:13px;letter-spacing:.02em;font-weight:500;display:flex;align-items:center;gap:10px}
-  .logo-mark{width:28px;height:28px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-family:var(--mono);font-size:11px;font-weight:600}
-  .logo i{font-style:normal;color:var(--muted);font-weight:400}
-  nav{display:flex;gap:22px}
-  nav a{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:6px 0;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
-  nav a:hover,nav a.active{color:var(--ink);border-bottom-color:var(--signal)}
-  .avail{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--green);color:var(--green);padding:6px 10px;background:var(--green-soft)}
-  .avail i{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
-  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(14,159,110,.4)}70%{box-shadow:0 0 0 6px rgba(14,159,110,0)}100%{box-shadow:0 0 0 0 rgba(14,159,110,0)}}
-  .marginalia{border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);background:var(--ink);color:#C8D2E6;overflow:hidden;padding:10px 0}
-  .marginalia .track{display:flex;width:max-content;animation:marq 28s linear infinite}
-  .marginalia:hover .track{animation-play-state:paused}
-  .marginalia .track span{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:0 18px;white-space:nowrap;display:flex;align-items:center;gap:10px}
-  .marginalia .track span.dot{color:var(--signal)}
-  @keyframes marq{to{transform:translateX(-50%)}}
-  .hero{padding:36px 0 18px;position:relative;overflow:hidden}
-  .watermark{position:absolute;right:-2%;top:4%;z-index:0;pointer-events:none;user-select:none;font-family:var(--display);font-weight:800;font-size:clamp(10rem,30vw,26rem);line-height:.8;letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1.5px var(--grid-2);opacity:.55;max-width:100vw;overflow:hidden}
-  .eyebrow{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:12px 0;margin-bottom:22px;position:relative;z-index:1}
-  .eyebrow .rec{display:inline-flex;align-items:center;gap:8px}
-  .eyebrow .rec i{width:8px;height:8px;border-radius:50%;background:var(--red);animation:pulseR 1.6s infinite}
-  @keyframes pulseR{0%{box-shadow:0 0 0 0 rgba(225,6,0,.45)}70%{box-shadow:0 0 0 7px rgba(225,6,0,0)}100%{box-shadow:0 0 0 0 rgba(225,6,0,0)}}
-  .hero-head{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;flex-wrap:wrap;margin-bottom:22px;position:relative;z-index:1}
-  h1{font-family:var(--display);font-weight:800;letter-spacing:-.045em;line-height:.86;font-size:clamp(2.8rem,7.5vw,6rem);text-transform:uppercase}
-  h1 .line2{display:block;position:relative}
-  h1 .line2 span{position:relative;z-index:1}
-  h1 .line2::after{content:"";position:absolute;left:-4px;right:8%;bottom:.18em;height:.32em;background:var(--signal);z-index:0;transform:rotate(-.6deg)}
-  h1 .caret{color:var(--blue);font-weight:400;animation:blink 1s steps(1) infinite}
-  @keyframes blink{50%{opacity:0}}
-  .hero-count{display:flex;flex-direction:column;gap:6px;align-items:flex-end;padding-bottom:8px}
-  .hero-count .big-n{font-family:var(--display);font-weight:800;font-size:clamp(2.4rem,5vw,3.6rem);line-height:1;letter-spacing:-.03em}
-  .hero-count .big-n em{font-style:normal;background:var(--signal);padding:0 6px;border:1px solid var(--ink);transform:rotate(-.4deg);display:inline-block}
-  .hero-count .n-lab{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
-  .featured{position:relative;border:1px solid var(--ink);background:var(--sheet);display:grid;grid-template-columns:1.05fr .95fr;min-height:460px;box-shadow:0 1px 0 rgba(11,18,32,.06),0 16px 40px rgba(11,18,32,.08);overflow:hidden}
-  .featured::before{content:"";position:absolute;top:-10px;left:50%;transform:translateX(-50%) rotate(-1deg);width:140px;height:18px;background:rgba(255,255,255,.78);border:1px solid rgba(11,18,32,.06);box-shadow:0 1px 6px rgba(0,0,0,.07);z-index:3}
-  .f-left{padding:clamp(22px,3.5vw,36px);display:flex;flex-direction:column;position:relative;z-index:1;background:var(--sheet)}
-  .f-top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
-  .f-idx{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--blue);font-weight:600}
-  .f-badges{display:flex;gap:8px;flex-wrap:wrap}
-  .f-badge{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:4px 9px;border:1px solid}
-  .f-badge.ship{color:var(--blue);border-color:var(--blue);background:rgba(0,80,255,.08)}
-  .f-badge.cat{color:var(--muted);border-color:var(--line-2);background:var(--paper-2)}
-  .f-name{font-family:var(--display);font-weight:800;letter-spacing:-.035em;line-height:.9;font-size:clamp(2rem,4.2vw,3.6rem);text-transform:uppercase;margin-bottom:10px}
-  .f-name .out{color:transparent;-webkit-text-stroke:1.5px var(--ink)}
-  .f-name .f-arw{display:inline-block;color:var(--blue);-webkit-text-stroke:0;transition:transform .25s var(--ease2)}
-  .featured:hover .f-arw{transform:translate(4px,-4px)}
-  .f-desc{font-size:14px;color:#334155;line-height:1.65;max-width:48ch;margin-bottom:14px}
-  .f-desc b{color:var(--ink);font-weight:600;background:linear-gradient(transparent 60%,var(--signal) 60%);padding:0 1px}
-  .f-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:auto}
-  .f-chips span{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;background:var(--paper-2);border:1px solid var(--line);padding:4px 8px;color:var(--muted)}
-  .f-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-  .f-btn{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;padding:12px 18px;display:inline-flex;align-items:center;gap:8px;border:1px solid;transition:transform .2s,box-shadow .2s,background .2s}
-  .f-btn.primary{background:var(--ink);color:var(--paper);border-color:var(--ink)}
-  .f-btn.primary:hover{background:var(--blue);border-color:var(--blue);transform:translateY(-1px)}
-  .f-btn.ghost{background:var(--paper);color:var(--ink);border-color:var(--ink)}
-  .f-btn.ghost:hover{background:var(--signal)}
-  .f-stretched-link::after{content:"";position:absolute;inset:0;z-index:1}
-  .f-right{background:var(--paper-2);border-left:1px solid var(--ink);display:flex;flex-direction:column;position:relative;overflow:hidden}
-  .t-head{display:flex;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid var(--ink);background:var(--ink);color:#E8EEFB;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase}
-  .t-head .live{display:inline-flex;align-items:center;gap:6px;color:var(--signal)}
-  .t-head .live i{width:6px;height:6px;border-radius:50%;background:var(--signal);animation:pulseR 1.2s infinite}
-  .t-body{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px 18px;gap:18px;position:relative;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:20px 20px}
-  .t-msg{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);background:var(--sheet);border:1px solid var(--line);padding:6px 10px}
-  .t-tokens{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;min-height:90px;align-items:center;max-width:360px}
-  .t-tk{font-family:var(--mono);font-size:12px;padding:6px 9px;border:1px solid var(--line);background:var(--sheet);color:var(--ink);opacity:0;transform:scale(.85) translateY(6px);transition:all .32s var(--ease2)}
-  .t-tk.in{opacity:1;transform:none}
-  .t-tk.r{border-color:var(--red);color:var(--red);background:var(--red-soft)}
-  .t-tk.g{border-color:var(--green);color:var(--green);background:var(--green-soft)}
-  .t-tk.n{border-style:dashed;color:var(--muted)}
-  .t-verdict{display:flex;align-items:center;gap:16px;min-height:56px}
-  .t-stamp{font-family:var(--display);font-weight:800;font-size:1.45rem;letter-spacing:.04em;text-transform:uppercase;border:2px solid currentColor;padding:2px 12px;transform:rotate(-5deg) scale(1.6);opacity:0;transition:transform .34s cubic-bezier(.34,1.56,.64,1),opacity .2s;background:var(--sheet)}
-  .t-stamp.on{opacity:1;transform:rotate(-5deg) scale(1)}
-  .t-stamp.spam{color:var(--red)} .t-stamp.ham{color:var(--green)}
-  .t-pct{font-family:var(--mono);font-size:1.35rem;font-weight:700;font-variant-numeric:tabular-nums}
-  .t-pct.spam{color:var(--red)} .t-pct.ham{color:var(--green)}
-  .t-pct-lab{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-  .t-progress{height:8px;background:var(--paper-2);border-top:1px solid var(--ink);position:relative;overflow:hidden}
-  .t-progress i{position:absolute;inset:0 auto 0 0;width:0;background:var(--signal);border-right:2px solid var(--ink);transition:width .2s linear}
-  .marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;background:var(--paper);padding:12px 0;margin-top:22px;position:relative;z-index:1}
-  .marquee .track{display:flex;width:max-content;animation:marq 26s linear infinite}
-  .marquee:hover .track{animation-play-state:paused}
-  .marquee .track span{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:0 18px;white-space:nowrap}
-  .marquee .track span.dot{color:var(--signal)}
-  .archive{padding:36px 0 18px}
-  .sec-head{display:flex;align-items:end;gap:18px;flex-wrap:wrap;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--ink)}
-  .sec-head .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:10px}
-  .sec-head .kicker i{width:28px;height:1px;background:var(--ink)}
-  .sec-head h2{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-height:.9;font-size:clamp(1.6rem,3.5vw,2.4rem);text-transform:uppercase}
-  .sec-head .tag{margin-left:auto;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:6px 10px;background:var(--paper)}
-  .filter-bar{display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin:18px 0 16px;padding:12px 14px;background:var(--sheet);border:1px solid var(--ink);box-shadow:0 1px 0 rgba(11,18,32,.05)}
-  .tabs{display:flex;gap:8px;flex-wrap:wrap}
-  .tab{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:8px 12px;border:1px solid var(--line);background:var(--paper-2);color:var(--muted);cursor:pointer;transition:all .15s}
-  .tab.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
-  .tab.active .count{background:var(--signal);color:var(--ink)}
-  .tab .count{margin-left:6px;padding:2px 6px;border:1px solid var(--line);background:var(--paper);font-size:10px}
-  .search-wrap{position:relative;display:flex;align-items:center}
-  .search-wrap input{font-family:var(--mono);font-size:12px;padding:9px 36px 9px 12px;border:1px solid var(--line);background:var(--paper);min-width:240px}
-  .search-wrap span{position:absolute;right:10px;color:var(--muted)}
-  .repo-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  .repo-card{background:var(--sheet);border:1px solid var(--ink);position:relative;padding:18px 18px 16px;display:flex;flex-direction:column;gap:10px;box-shadow:0 1px 0 rgba(11,18,32,.05);transition:transform .2s,box-shadow .2s}
-  .repo-card:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(11,18,32,.08)}
-  .repo-card::before{content:"";position:absolute;top:-8px;left:16px;width:74px;height:12px;background:rgba(255,255,255,.78);border:1px solid rgba(11,18,32,.06);transform:rotate(-1deg)}
-  .repo-top{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-  .repo-idx{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--blue);font-weight:600}
-  .status{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:4px 8px;border:1px solid;display:inline-flex;align-items:center;gap:6px}
-  .status.live{color:var(--red);border-color:var(--red);background:var(--red-soft)} .status.live i{width:6px;height:6px;border-radius:50%;background:var(--red);animation:pulseR 1.2s infinite}
-  .status.shipped{color:var(--blue);border-color:var(--blue);background:rgba(0,80,255,.08)}
-  .status.oss{color:var(--green);border-color:var(--green);background:var(--green-soft)}
-  .repo-card h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;text-transform:uppercase;font-size:1.35rem;line-height:.95}
-  .repo-card p{color:#475569;font-size:13px;line-height:1.65}
-  .chips{display:flex;flex-wrap:wrap;gap:6px}
-  .chips span{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;background:var(--paper-2);border:1px solid var(--line);padding:4px 8px;color:var(--muted)}
-  .langbar{display:flex;height:6px;border:1px solid var(--ink);overflow:hidden;background:var(--paper-2);max-width:260px}
-  .langbar i{display:block;height:100%}
-  .repo-meta{font-family:var(--mono);font-size:11px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap}
-  .repo-meta .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
-  .repo-arrow{position:absolute;top:14px;right:14px;width:30px;height:30px;display:grid;place-items:center;border:1px solid var(--line);background:var(--paper);transition:background .2s,color .2s}
-  .repo-card:hover .repo-arrow{background:var(--ink);color:var(--paper)}
-  .next-wrap{padding:28px 0 36px}
-  .next-card{border:1.5px dashed var(--line-2);background:var(--sheet);padding:22px 22px 20px;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:10px}
-  .next-card::before{content:"SOON";position:absolute;right:-8px;bottom:-18px;font-family:var(--display);font-weight:800;font-size:clamp(5rem,14vw,10rem);line-height:1;color:transparent;-webkit-text-stroke:1.5px var(--grid-2);opacity:.6;pointer-events:none}
-  .next-lab{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);display:inline-flex;align-items:center;gap:8px}
-  .next-lab i{width:7px;height:7px;border-radius:50%;background:var(--blue);animation:pulseR 1.4s infinite}
-  .next-title{font-family:var(--display);font-weight:800;letter-spacing:-.02em;font-size:clamp(1.4rem,3vw,2rem);text-transform:uppercase}
-  .next-title .rot{color:var(--blue);display:inline-block;min-width:8ch}
-  .next-sub{font-family:var(--mono);font-size:12px;color:var(--muted);max-width:52ch;line-height:1.6}
-  footer{border-top:2px solid var(--ink);margin-top:18px;background:var(--paper-2)}
-  .foot-in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center;padding:18px 0;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-  .foot-in a:hover{color:var(--ink)}
-  .kbd{border:1px solid var(--line-2);padding:2px 6px;border-radius:3px;color:var(--ink);font-weight:600;background:var(--paper)}
-  html.js [data-reveal]{opacity:0;transform:translateY(12px);transition:opacity .6s var(--ease2),transform .6s var(--ease2)}
-  html.js [data-reveal].in{opacity:1;transform:none}
-  @media(max-width:980px){.featured{grid-template-columns:1fr}.f-right{border-left:none;border-top:1px solid var(--ink);min-height:360px}.watermark{font-size:42vw}}
-  @media(max-width:760px){nav{display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}.repo-grid{grid-template-columns:1fr}.head-top{flex-wrap:wrap}nav a{padding:10px 6px;min-height:44px;display:grid;place-items:center;white-space:nowrap}nav::-webkit-scrollbar{display:none}}
-  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}[data-reveal]{opacity:1!important;transform:none!important}}
-</style>
+<meta name="keywords" content="Hariom Lohar, Hariom Lohar projects, hariomlohardev, Hariom Lohar spam classifier, AGI Research" />
+
 </head>
 <body>
-<a href="#main" class="skip" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden">Skip to content</a>
-<style>.skip:focus{left:16px;top:10px;width:auto;height:auto;padding:8px 12px;background:var(--ink);color:var(--paper);z-index:100;border:1px solid var(--signal);font-family:var(--mono);font-size:12px}</style>
+<a href="#main" class="skip">Skip to content</a>
 <div id="prog" aria-hidden="true"></div>
+
 <header id="top">
   <div class="wrap">
-    <div class="head-top">
-      <span>LAB NOTEBOOK <b>No. 01</b> · ARCHIVE · INDIA — UTC+5:30</span>
-      <span style="display:flex;gap:14px;flex-wrap:wrap">
-        <span id="hdrCount">— projects</span>
-        <span style="color:var(--muted)">EST. 2026</span>
-      </span>
-    </div>
     <div class="head-main">
-      <a class="logo" href="index.html"><span class="logo-mark">HL</span> hariomlohardev <i>— build log</i></a>
-      <nav aria-label="Primary">
-        <a href="index.html">Home</a>
-        <a href="projects.html" class="active" aria-current="page">Projects</a>
-        <a href="opensource.html">Open Source</a>
-        <a href="blog.html">Blog</a>
-        <a href="index.html#contact">Contact</a>
+      <a class="logo" href="/" aria-label="Hariom Lohar — home">
+        <span class="logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 44 44" fill="none">
+            <path d="M7 6 V38" stroke="#181611" stroke-width="5"/>
+            <path d="M23 6 V38" stroke="#181611" stroke-width="5"/>
+            <path d="M7 22 H23" stroke="#B93A13" stroke-width="5"/>
+            <path d="M23 38 H38" stroke="#181611" stroke-width="5"/>
+            <circle cx="37" cy="7" r="3.4" fill="#B93A13"/>
+          </svg>
+        </span>
+        <span class="logo-word">hariomlohardev<i>lab notebook №01</i></span>
+      </a>
+      <nav class="desk" aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="/projects.html" class="active" aria-current="page">Projects</a>
+        <a href="/opensource.html">Open Source</a>
+        <a href="/blog.html">Blog</a>
+        <a href="/#about">About</a>
+        <a href="/#contact">Contact</a>
       </nav>
-      <a class="avail" href="index.html#contact"><i></i> Available for freelance</a>
+      <div class="head-right">
+        <a class="gh-pill" href="https://github.com/hariomlohardev" target="_blank" rel="noopener"><i aria-hidden="true"></i><span>Github&nbsp;↗</span></a>
+        <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobilePanel" aria-label="Open menu">
+          <span class="bars" aria-hidden="true"><span></span><span></span></span> Menu
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="mobile-panel" id="mobilePanel" aria-hidden="true">
+    <nav aria-label="Mobile primary">
+      <a href="/"><span>Home</span><span class="no">01</span></a>
+      <a href="/projects.html" class="active"><span>Projects</span><span class="no">02</span></a>
+      <a href="/opensource.html"><span>Open Source</span><span class="no">03</span></a>
+      <a href="/blog.html"><span>Blog &amp; Logs</span><span class="no">04</span></a>
+      <a href="/#about"><span>About</span><span class="no">05</span></a>
+      <a href="/#contact"><span>Contact</span><span class="no">06</span></a>
+    </nav>
+    <div class="mp-actions">
+      <a href="/feed.xml">RSS Feed</a>
+      <a class="alt" href="https://github.com/hariomlohardev" target="_blank" rel="noopener">GitHub ↗</a>
     </div>
   </div>
 </header>
-<div class="marginalia" aria-hidden="true"><div class="track" data-track></div></div>
 
 <main id="main">
+
+  <!-- ══ HERO ══ -->
   <section class="hero">
     <div class="wrap">
-      <div class="watermark" aria-hidden="true">LAB</div>
-      <div class="eyebrow" data-reveal>
-        <span class="rec"><i></i> Public archive · built in the open</span>
-        <span>Every project has a lab note</span>
+      <p class="eyebrow rv"><i aria-hidden="true"></i><span id="eyebrow" data-text="PUBLIC ARCHIVE · BUILT IN THE OPEN">PUBLIC ARCHIVE · BUILT IN THE OPEN</span></p>
+      <h1>
+        <span class="mask"><span class="line">Project</span></span>
+        <span class="mask"><span class="line d2"><em>Archive</em></span></span>
+      </h1>
+      <p class="lede rv">Every build gets a lab note — real code, real data, runnable in your browser. From the live Naive Bayes bench to the daily AGI research log. All of it on <a href="https://github.com/hariomlohardev" target="_blank" rel="noopener">GitHub</a>, all of it open.</p>
+      <div class="stats rv" id="statStrip">
+        <div class="stat"><b id="stBuilds">—</b><span>Total builds</span></div>
+        <div class="stat"><b id="stShipped">—</b><span>Shipped live</span></div>
+        <div class="stat"><b id="stOss">—</b><span>Open source</span></div>
+        <div class="stat"><b id="stLive">—</b><span>Interactive benches</span></div>
       </div>
-      <div class="hero-head" data-reveal>
-        <h1>Pro<span style="background:var(--signal);padding:0 6px;border:1px solid var(--ink);transform:rotate(-.4deg);display:inline-block">ject</span><span class="line2"><span>Archive<span class="caret">_</span></span></span></h1>
-        <div class="hero-count">
-          <span class="big-n" id="countBig"><em>04</em> / 04</span>
-          <span class="n-lab" id="countLab">1 shipped · 2 open source · 1 log</span>
-        </div>
+    </div>
+  </section>
+
+  <!-- ══ FEATURED BENCH ══ -->
+  <section id="featured">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="kicker"><i></i> 01 — Lead bench</span>
+        <h2>Try it <em>live</em></h2>
+        <span class="sec-tag">runs in your browser</span>
       </div>
 
-      <!-- LEAD BENCH — Spam Classifier -->
-      <article class="featured" data-reveal aria-labelledby="benchTitle">
-        <div class="f-left">
-          <div class="f-top">
-            <span class="f-idx">BENCH 01 · 2026</span>
-            <div class="f-badges">
-              <span class="f-badge ship">✓ Shipped</span>
-              <span class="f-badge cat">ML · Naive Bayes</span>
+      <article class="bench rv" aria-labelledby="benchTitle">
+        <div class="bench-info">
+          <div class="bench-top">
+            <span class="bench-idx">BENCH 01 · 2026</span>
+            <div class="bench-badges">
+              <span class="bbadge ship">✓ Shipped</span>
+              <span class="bbadge cat">ML · Naive Bayes</span>
             </div>
           </div>
-          <h2 class="f-name" id="benchTitle">Spam <span class="out">Classifier</span> <span class="f-arw">↗</span></h2>
-          <p class="f-desc">A Naive Bayes filter that <b>shows its work</b>. Type a message, see it split into tokens scored <b>red</b> (spam) or <b>green</b> (ham), weak signals filtered, then a verdict with <b>P(spam | message)</b>. Trained in your browser on <b>data.csv</b> — nothing mocked.</p>
-          <div class="f-chips" aria-label="Technologies">
+          <h2 class="bench-name" id="benchTitle">Spam <em>Classifier</em> <span class="arw">↗</span></h2>
+          <p class="bench-desc">A Naive Bayes filter that <b>shows its work</b>. Type a message, see it split into tokens scored <b>red</b> (spam) or <b>green</b> (ham), weak signals filtered, then a verdict with <b>P(spam | message)</b>. Trained in your browser on <b>data.csv</b> — nothing mocked.</p>
+          <div class="bench-chips" aria-label="Technologies">
             <span>Python</span><span>Naive Bayes</span><span>Pandas</span><span>Pyodide</span><span>NLP</span><span>Live</span>
           </div>
-          <div class="f-actions">
-            <a class="f-btn primary" href="projects/spam_classifier.html">Open live bench →</a>
-            <a class="f-btn ghost" href="projects/p/spam-classifier/" style="position:relative;z-index:2">Details · FAQ →</a>
-            <a class="f-btn ghost" href="https://github.com/hariomlohardev/spam_classifier" target="_blank" rel="noopener" style="position:relative;z-index:2">Code ↗</a>
+          <div class="bench-actions">
+            <a class="btn solid" href="projects/spam_classifier.html">Open live bench →</a>
+            <a class="btn" href="projects/p/spam-classifier/">Details · FAQ →</a>
+            <a class="btn" href="https://github.com/hariomlohardev/spam_classifier" target="_blank" rel="noopener">Code ↗</a>
           </div>
-          <p style="margin-top:10px;font-family:var(--mono);font-size:11px;color:var(--muted)">Runs entirely in your browser. No data leaves your device.</p>
+          <p class="bench-note">Runs entirely in your browser. No data leaves your device.</p>
         </div>
-        <div class="f-right" aria-hidden="true">
-          <div class="t-head">
+
+        <div class="bench-preview" aria-hidden="true">
+          <div class="bp-head">
             <span>bayes_bench — live preview</span>
             <span class="live"><i></i> bench running</span>
           </div>
-          <div class="t-body">
-            <div class="t-msg" id="tMsg">scoring…</div>
-            <div class="t-tokens" id="tTokens"></div>
-            <div class="t-verdict">
-              <span class="t-stamp" id="tStamp">SPAM</span>
+          <div class="bp-body">
+            <div class="bp-msg" id="tMsg">scoring…</div>
+            <div class="bp-tokens" id="tTokens"></div>
+            <div class="bp-verdict">
+              <span class="stamp" id="tStamp">SPAM</span>
               <div>
-                <div class="t-pct" id="tPct">—</div>
-                <div class="t-pct-lab">P(spam | message)</div>
+                <div class="pct" id="tPct">—</div>
+                <div class="pct-lab">P(spam | message)</div>
               </div>
             </div>
           </div>
-          <div class="t-progress"><i id="tProg"></i></div>
+          <div class="bp-progress"><i id="tProg"></i></div>
         </div>
         <a class="f-stretched-link" href="projects/spam_classifier.html" aria-label="Open spam classifier live bench"></a>
       </article>
-
-      <div class="marquee" aria-hidden="true"><div class="track" data-track-alt></div></div>
     </div>
   </section>
 
-  <section class="archive">
+  <!-- ══ ARCHIVE ══ -->
+  <section id="archive">
     <div class="wrap">
-      <div class="sec-head" data-reveal>
-        <span class="kicker"><i></i> Full list</span>
-        <h2>All builds</h2>
-        <span class="tag" id="archiveTag">Loading archive…</span>
+      <div class="sec-head rv">
+        <span class="kicker"><i></i> 02 — Full list</span>
+        <h2>All <em>builds</em></h2>
+        <span class="sec-tag" id="archiveTag">Loading archive…</span>
       </div>
-      <div class="filter-bar" data-reveal>
-        <div class="tabs" role="tablist" aria-label="Project filters">
-          <button class="tab active" data-filter="all" role="tab" aria-selected="true">All <span class="count" id="tabCountAll">4</span></button>
-          <button class="tab" data-filter="live" role="tab" aria-selected="false">Live · interactive <span class="count" id="tabCountLive">1</span></button>
-          <button class="tab" data-filter="repo" role="tab" aria-selected="false">Code · repos <span class="count" id="tabCountRepo">3</span></button>
+
+      <div class="toolbar">
+        <label class="search">
+          <span class="lens">Search</span>
+          <input id="projSearch" type="search" placeholder="try Bayes, DSA, AGI… ( / )" autocomplete="off" spellcheck="false" aria-label="Search projects" />
+        </label>
+        <div class="filters" role="group" aria-label="Filter projects">
+          <button class="pill" data-filter="all" aria-pressed="true">All <span class="n" id="tabCountAll"></span></button>
+          <button class="pill" data-filter="live" aria-pressed="false">Live · interactive <span class="n" id="tabCountLive"></span></button>
+          <button class="pill" data-filter="repo" aria-pressed="false">Code · repos <span class="n" id="tabCountRepo"></span></button>
         </div>
-        <label class="search-wrap" aria-label="Search projects"><input id="projSearch" type="search" placeholder="Search — try Bayes, DSA, AGI…" autocomplete="off" /><span>⌕</span></label>
       </div>
-      <div id="archiveGrid" class="repo-grid" aria-live="polite"></div>
-      <p id="noResults" style="display:none;margin-top:12px;font-family:var(--mono);font-size:12px;color:var(--muted);border:1px dashed var(--line);padding:12px;background:var(--paper)">No projects match that filter — try All or clear search.</p>
-      <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap" data-reveal>
-        <a href="https://github.com/hariomlohardev?tab=repositories" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--ink);padding:11px 14px;background:var(--sheet)">View all on GitHub ↗</a>
-        <a href="index.html#work" style="font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;background:var(--signal);border:1px solid var(--ink);padding:11px 14px">Back to selected work ↓</a>
+
+      <div class="result-note" id="resultNote" aria-live="polite"></div>
+
+      <div id="archiveGrid" class="proj-grid" aria-live="polite" aria-busy="true">
+        <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+      </div>
+
+      <div class="work-actions rv">
+        <a href="https://github.com/hariomlohardev?tab=repositories" target="_blank" rel="noopener" class="btn">All repos on GitHub ↗</a>
+        <a href="/#work" class="btn solid">Back to selected work →</a>
       </div>
     </div>
   </section>
 
-  <section class="next-wrap">
+  <!-- ══ NEXT ══ -->
+  <section id="next">
     <div class="wrap">
-      <div class="sec-head" data-reveal>
-        <span class="kicker"><i></i> Next</span>
-        <h2>On the bench</h2>
-        <span class="tag">The archive grows</span>
+      <div class="sec-head rv">
+        <span class="kicker"><i></i> 03 — Next</span>
+        <h2>On the <em>bench</em></h2>
+        <span class="sec-tag">the archive grows</span>
       </div>
-      <div class="next-card" data-reveal>
-        <span class="next-lab"><i></i> In the lab — coming soon</span>
+      <div class="next-card rv">
+        <span class="kicker" style="margin-bottom:0"><i></i> In the lab · coming soon</span>
         <div class="next-title">Next: <span class="rot" id="rotNext">Sentiment</span></div>
         <p class="next-sub">Every project here gets a lab note — real code, real data, runnable in your browser. The next bench is already training. Follow commits on GitHub or check back.</p>
       </div>
@@ -332,206 +504,242 @@
 </main>
 
 <footer>
-  <div class="wrap foot-in">
-    <span>© <span id="yr"></span> <b>Hariom Lohar</b> — Lab Notebook No.01 · <a href="https://github.com/hariomlohardev" style="text-decoration:underline">hariomlohardev on GitHub</a> · India.</span>
-    <span><a href="index.html">Hariom Lohar — Home</a> · press <span class="kbd">G</span> → GitHub · <a href="#top">Back to top ↑</a></span>
-    <span>IST <span class="clock">--:--:--</span></span>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <p>"One log at a time — rebuilding AGI from first principles, in public."</p>
+        <div class="fsub">Hariom Lohar · Lab Notebook №01</div>
+      </div>
+      <div class="fcol"><h4>Sitemap</h4><ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/projects.html">Projects</a></li>
+        <li><a href="/opensource.html">Open Source</a></li>
+        <li><a href="/blog.html">Blog &amp; Logs</a></li>
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#contact">Contact</a></li>
+      </ul></div>
+      <div class="fcol"><h4>Elsewhere</h4><ul>
+        <li><a href="https://github.com/hariomlohardev" target="_blank" rel="noopener">GitHub<span class="arr">↗</span></a></li>
+        <li><a href="https://x.com/HariomloharAGI" target="_blank" rel="noopener">X / Twitter<span class="arr">↗</span></a></li>
+        <li><a href="https://www.linkedin.com/in/hariomlohar" target="_blank" rel="noopener">LinkedIn<span class="arr">↗</span></a></li>
+        <li><a href="https://huggingface.co/hariomlohardev" target="_blank" rel="noopener">Hugging Face<span class="arr">↗</span></a></li>
+      </ul></div>
+      <div class="fcol"><h4>The lab</h4><ul>
+        <li><a href="/feed.xml">RSS — /feed.xml</a></li>
+        <li><a href="https://buttondown.com/hariomlohar" target="_blank" rel="noopener">Newsletter<span class="arr">↗</span></a></li>
+        <li><a href="https://github.com/hariomlohardev/AGI_Research" target="_blank" rel="noopener">AGI_Research<span class="arr">↗</span></a></li>
+      </ul></div>
+    </div>
+    <div class="foot-base">
+      <span>© <span id="yr"></span> Hariom Lohar — Lab Notebook №01</span>
+      <span>press <span class="kbd">G</span> → github · IST <span class="clock">--:--:--</span></span>
+      <button class="top-btn" id="topBtn" type="button">Back to top ↑</button>
+    </div>
   </div>
 </footer>
 
 <script>
 (function(){
-  "use strict";
-  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var ghUrl = 'https://github.com/hariomlohardev';
-  function $(id){ return document.getElementById(id); }
-  function wait(ms){ return new Promise(function(r){ setTimeout(r, reduced?0:ms); }); }
+"use strict";
+var reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var ghUrl='https://github.com/hariomlohardev';
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function wait(ms){return new Promise(function(r){setTimeout(r,reduced?0:ms);});}
+document.getElementById('yr').textContent=new Date().getFullYear();
 
-  // live bench cycling (lab paper style)
-  var TEASER = [
-    { msg:"spam · sms dataset", verdict:"spam", pct:97.3, words:[["free","r"],["money","r"],["!!!","n"],["click","r"],["now","r"],["to","g"],["claim","r"],["your","g"],["prize","r"]] },
-    { msg:"ham · personal", verdict:"ham", pct:3.8, words:[["hey","g"],["are","g"],["we","g"],["still","g"],["on","g"],["for","g"],["lunch","g"],["tomorrow","g"],["?","n"]] },
-    { msg:"spam · phishing", verdict:"spam", pct:92.1, words:[["urgent","r"],["your","g"],["account","n"],["is","g"],["suspended","r"],["verify","r"],["now","r"],["!","n"]] },
-    { msg:"ham · work", verdict:"ham", pct:6.4, words:[["the","g"],["paper","g"],["deadline","g"],["moved","g"],["to","g"],["friday","g"],["review","g"],["my","g"],["draft","g"]] },
-    { msg:"spam · promo", verdict:"spam", pct:88.9, words:[["50","n"],["%","n"],["off","r"],["everything","g"],["free","r"],["shipping","r"],["buy","r"],["now","r"]] }
-  ];
-  var tTokens=$('tTokens'), tStamp=$('tStamp'), tPct=$('tPct'), tMsg=$('tMsg'), tProg=$('tProg');
-  var idx=0, alive=true;
-  async function playBench(){
-    while(alive){
-      var ex=TEASER[idx%TEASER.length]; idx++;
-      tStamp.classList.remove('on','spam','ham'); tPct.textContent='—'; tPct.className='t-pct'; tMsg.textContent=ex.msg; tTokens.innerHTML='';
-      tProg.style.transition='none'; tProg.style.width='0';
-      ex.words.forEach(function(w,i){
-        var el=document.createElement('span'); el.className='t-tk '+w[1]; el.textContent=w[0]; el.style.transitionDelay=(i*55)+'ms'; tTokens.appendChild(el);
-      });
-      requestAnimationFrame(function(){ requestAnimationFrame(function(){ tTokens.querySelectorAll('.t-tk').forEach(function(e){ e.classList.add('in'); }); }); });
-      await wait(ex.words.length*55+420);
-      var isSpam=ex.verdict==='spam';
-      tStamp.textContent=ex.verdict; tStamp.classList.add(isSpam?'spam':'ham');
-      requestAnimationFrame(function(){ requestAnimationFrame(function(){ tStamp.classList.add('on'); }); });
-      tPct.className='t-pct '+(isSpam?'spam':'ham');
-      var s0=performance.now(), DUR=reduced?1:680;
-      (function cnt(now){ var t=Math.min(1,(now-s0)/DUR), e=1-Math.pow(1-t,3); tPct.textContent=(e*ex.pct).toFixed(1)+'%'; if(t<1&&alive) requestAnimationFrame(cnt); })(s0);
-      var HOLD=2600; tProg.style.transition='width '+HOLD+'ms linear'; requestAnimationFrame(function(){ tProg.style.width='100%'; }); await wait(HOLD+380);
-    }
-  }
-  playBench();
+/* ── scroll progress + header shadow ── */
+var hdr=document.querySelector('header'),prog=document.getElementById('prog'),qd=false;
+function onScroll(){if(qd)return;qd=true;requestAnimationFrame(function(){qd=false;var h=document.documentElement.scrollHeight-window.innerHeight;if(prog)prog.style.width=(h>0?(window.scrollY/h)*100:0)+'%';if(hdr)hdr.classList.toggle('scrolled',window.scrollY>8);});}
+window.addEventListener('scroll',onScroll,{passive:true});onScroll();
 
-  var NEXT=['Sentiment','CNN Vision','Chat App','Task CLI','RAG Search'];
-  var rotEl=$('rotNext'), ri=0;
-  if(!reduced){
-    setInterval(function(){
-      rotEl.style.opacity='0'; rotEl.style.transform='translateY(6px)';
-      setTimeout(function(){ ri=(ri+1)%NEXT.length; rotEl.textContent=NEXT[ri]; rotEl.style.opacity='1'; rotEl.style.transform='none'; },220);
-    },2400);
-    rotEl.style.transition='opacity .24s, transform .24s var(--ease2)';
-  }
+/* ── mobile menu ── */
+var menuBtn=document.getElementById('menuBtn'),panel=document.getElementById('mobilePanel');
+function setMenu(o){menuBtn.setAttribute('aria-expanded',String(o));menuBtn.setAttribute('aria-label',o?'Close menu':'Open menu');menuBtn.classList.toggle('open',o);panel.classList.toggle('open',o);panel.setAttribute('aria-hidden',String(!o));}
+menuBtn.addEventListener('click',function(){setMenu(menuBtn.getAttribute('aria-expanded')!=='true');});
+panel.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){setMenu(false);});});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&panel.classList.contains('open'))setMenu(false);});
+document.addEventListener('click',function(e){if(panel.classList.contains('open')&&!panel.contains(e.target)&&!menuBtn.contains(e.target))setMenu(false);});
+window.addEventListener('resize',function(){if(window.innerWidth>760&&panel.classList.contains('open'))setMenu(false);});
 
-  // archive grid from projects-data.json — tabs: All / Live · interactive / Code · repos
-  var fullList = null;
-  var currentFilter = (location.hash.replace('#','') || 'all');
-  if(['all','live','repo'].indexOf(currentFilter)===-1) currentFilter='all';
-  var searchTerm = '';
+/* ── eyebrow scramble ── */
+(function(){
+  var el=document.getElementById('eyebrow');if(!el)return;
+  var t=el.getAttribute('data-text');
+  if(reduced){el.textContent=t;return;}
+  var g='AEHLNORSTU№#%&·/',f=0;el.textContent='';
+  var iv=setInterval(function(){f++;var o='';for(var i=0;i<t.length;i++){var c=t[i];o+=(c===' ')?' ':(i<f*.9?c:g[Math.floor(Math.random()*g.length)]);}el.textContent=o;if(f*.9>=t.length){clearInterval(iv);el.textContent=t;}},26);
+})();
 
-  function getFiltered(list){
-    var term = searchTerm.trim().toLowerCase();
-    return list.filter(function(p){
-      var kind = p.kind || (p.demoUrl ? 'live' : 'repo');
-      var okKind = currentFilter==='all' || kind===currentFilter;
-      if(!okKind) return false;
-      if(!term) return true;
-      var hay = [p.name, p.description, (p.chips||[]).join(' '), (p.highlights||[]).join(' '), p.statusLabel].join(' ').toLowerCase();
-      return hay.indexOf(term)!==-1;
+/* ── clock + G shortcut + top ── */
+var clockEls=document.querySelectorAll('.clock');
+var tf=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+function tick(){var s=tf.format(new Date());clockEls.forEach(function(e){e.textContent=s;});}
+tick();setInterval(tick,1000);
+window.addEventListener('keydown',function(ev){if(ev.metaKey||ev.ctrlKey||ev.altKey)return;var t=(document.activeElement&&document.activeElement.tagName)||'';if(t==='INPUT'||t==='TEXTAREA')return;if(ev.key==='g'||ev.key==='G')window.open(ghUrl,'_blank','noopener');});
+document.getElementById('topBtn').addEventListener('click',function(){window.scrollTo({top:0,behavior:reduced?'auto':'smooth'});});
+document.addEventListener('keydown',function(e){if(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){e.preventDefault();var s=$('projSearch');if(s)s.focus();}});
+
+/* ── live bench cycling ── */
+var TEASER=[
+  {msg:"spam · sms dataset",verdict:"spam",pct:97.3,words:[["free","r"],["money","r"],["!!!","n"],["click","r"],["now","r"],["to","g"],["claim","r"],["your","g"],["prize","r"]]},
+  {msg:"ham · personal",verdict:"ham",pct:3.8,words:[["hey","g"],["are","g"],["we","g"],["still","g"],["on","g"],["for","g"],["lunch","g"],["tomorrow","g"],["?","n"]]},
+  {msg:"spam · phishing",verdict:"spam",pct:92.1,words:[["urgent","r"],["your","g"],["account","n"],["is","g"],["suspended","r"],["verify","r"],["now","r"],["!","n"]]},
+  {msg:"ham · work",verdict:"ham",pct:6.4,words:[["the","g"],["paper","g"],["deadline","g"],["moved","g"],["to","g"],["friday","g"],["review","g"],["my","g"],["draft","g"]]},
+  {msg:"spam · promo",verdict:"spam",pct:88.9,words:[["50","n"],["%","n"],["off","r"],["everything","g"],["free","r"],["shipping","r"],["buy","r"],["now","r"]]}
+];
+var tTokens=$('tTokens'),tStamp=$('tStamp'),tPct=$('tPct'),tMsg=$('tMsg'),tProg=$('tProg');
+var idx=0,alive=true;
+async function playBench(){
+  while(alive){
+    var ex=TEASER[idx%TEASER.length];idx++;
+    tStamp.classList.remove('on','spam','ham');tPct.textContent='—';tPct.className='pct';tMsg.textContent=ex.msg;tTokens.innerHTML='';
+    tProg.style.transition='none';tProg.style.width='0';
+    ex.words.forEach(function(w,i){
+      var el=document.createElement('span');el.className='tk '+w[1];el.textContent=w[0];el.style.transitionDelay=(i*55)+'ms';tTokens.appendChild(el);
     });
+    requestAnimationFrame(function(){requestAnimationFrame(function(){tTokens.querySelectorAll('.tk').forEach(function(e){e.classList.add('in');});});});
+    await wait(ex.words.length*55+420);
+    var isSpam=ex.verdict==='spam';
+    tStamp.textContent=ex.verdict;tStamp.classList.add(isSpam?'spam':'ham');
+    requestAnimationFrame(function(){requestAnimationFrame(function(){tStamp.classList.add('on');});});
+    tPct.className='pct '+(isSpam?'spam':'ham');
+    var s0=performance.now(),DUR=reduced?1:680;
+    (function cnt(now){var t=Math.min(1,(now-s0)/DUR),e=1-Math.pow(1-t,3);tPct.textContent=(e*ex.pct).toFixed(1)+'%';if(t<1&&alive)requestAnimationFrame(cnt);})(s0);
+    var HOLD=2600;tProg.style.transition='width '+HOLD+'ms linear';requestAnimationFrame(function(){tProg.style.width='100%';});await wait(HOLD+380);
   }
+}
+playBench();
 
-  function renderArchive(list){
-    fullList = list;
-    var grid=$('archiveGrid');
-    var noEl=$('noResults');
-    // header counts (always full list)
-    $('archiveTag').textContent = list.length + ' builds';
-    $('hdrCount').textContent = list.length + ' builds';
-    $('countBig').innerHTML = '<em>'+String(list.length).padStart(2,'0')+'</em> / '+String(list.length).padStart(2,'0');
-    var liveCount = list.filter(function(p){ return (p.kind|| (p.demoUrl?'live':'repo'))==='live'; }).length;
-    var repoCount = list.length - liveCount;
-    var shipped = list.filter(function(p){return p.status==='shipped'}).length;
-    var oss = list.filter(function(p){return p.status==='open-source'}).length;
-    var log = list.length - shipped - oss;
-    if($('tabCountAll')) $('tabCountAll').textContent = String(list.length);
-    if($('tabCountLive')) $('tabCountLive').textContent = String(liveCount);
-    if($('tabCountRepo')) $('tabCountRepo').textContent = String(repoCount);
-    $('countLab').textContent = shipped+' shipped · '+oss+' open source · '+log+' log';
-    // set active tab
-    document.querySelectorAll('.tab').forEach(function(b){
-      var isActive = b.getAttribute('data-filter')===currentFilter;
-      b.classList.toggle('active', isActive);
-      b.setAttribute('aria-selected', isActive ? 'true' : 'false');
-    });
-    var filtered = getFiltered(list);
-    grid.innerHTML='';
-    if(!filtered.length){
-      if(noEl) noEl.style.display='block';
-      armReveal();
-      return;
-    }
-    if(noEl) noEl.style.display='none';
-    filtered.forEach(function(p,i){
-      var kind = p.kind || (p.demoUrl ? 'live' : 'repo');
-      var isLive = kind==='live';
-      var isOss=p.status==='open-source', isShipped=p.status==='shipped';
-      var slug = p.slug || p.id;
-      var detailHref = p.detailUrl ? p.detailUrl.replace('https://hariomlohardev.github.io','') : ('projects/p/'+slug+'/');
-      // ensure leading slash for consistency handled as relative without leading slash for local preview
-      if(detailHref.indexOf('/')===0) detailHref = detailHref.slice(1);
-      var a=document.createElement('a');
-      a.className='repo-card'; a.href=detailHref; a.setAttribute('data-reveal','');
-      a.target='_self';
-      a.setAttribute('aria-label', p.name + ' — ' + p.statusLabel + (isLive ? ' · live' : ''));
-      var statusHtml = isLive ? '<span class="status live"><i></i>'+p.statusLabel+'</span>' : isOss? '<span class="status oss">⑂ '+p.statusLabel+'</span>' : isShipped? '<span class="status shipped">✓ '+p.statusLabel+'</span>' : '<span class="status oss">'+p.statusLabel+'</span>';
-      var langbar = (p.languages && p.languages.length>1) ? '<div class="langbar">'+p.languages.map(function(l){return '<i style="width:'+l.pct+'%;background:'+l.color+'"></i>';}).join('')+'</div>' : '';
-      var meta = (p.languages||[]).map(function(l){return '<span style="display:inline-flex;align-items:center;gap:6px"><i class="dot" style="background:'+l.color+'"></i>'+l.name+'</span>';}).join(' · ');
-      var chipHtml = (p.chips||[]).map(function(c){return '<span>'+c+'</span>';}).join('');
-      var extra = isLive ? '<span style="margin-left:6px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--red);border:1px solid var(--red);padding:2px 6px;background:var(--red-soft)">LIVE</span>' : '<span style="margin-left:6px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--green);border:1px solid var(--green);padding:2px 6px;background:var(--green-soft)">CODE</span>';
-      a.innerHTML='<span class="repo-arrow">↗</span><div class="repo-top"><span class="repo-idx">0'+(i+1)+'</span>'+statusHtml+extra+'</div><h3>'+p.name+'</h3><p>'+p.description+'</p><div class="chips">'+chipHtml+'</div>'+langbar+'<div class="repo-meta" style="margin-top:6px">'+meta+'</div>';
-      grid.appendChild(a);
-    });
-    armReveal();
-  }
-  function rerender(){ if(fullList) renderArchive(fullList); }
+/* ── rotating "next" ── */
+var NEXT=['Sentiment','CNN Vision','Chat App','Task CLI','RAG Search'];
+var rotEl=$('rotNext'),ri=0;
+if(!reduced&&rotEl){
+  rotEl.style.transition='opacity .24s, transform .24s var(--ease)';
+  setInterval(function(){
+    rotEl.style.opacity='0';rotEl.style.transform='translateY(6px)';
+    setTimeout(function(){ri=(ri+1)%NEXT.length;rotEl.textContent=NEXT[ri];rotEl.style.opacity='1';rotEl.style.transform='none';},220);
+  },2400);
+}
 
-  // tab + search wiring
-  document.querySelectorAll('.tab').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      currentFilter = btn.getAttribute('data-filter');
-      history.replaceState(null,'','#'+currentFilter);
-      rerender();
-    });
+/* ── archive ── */
+var fullList=null,currentFilter=(location.hash.replace('#','')||'all');
+if(['all','live','repo'].indexOf(currentFilter)===-1)currentFilter='all';
+var searchTerm='';
+
+function kindOf(p){return p.kind||(p.demoUrl?'live':'repo');}
+function getFiltered(list){
+  var term=searchTerm.trim().toLowerCase();
+  return list.filter(function(p){
+    var okKind=currentFilter==='all'||kindOf(p)===currentFilter;
+    if(!okKind)return false;
+    if(!term)return true;
+    var hay=[p.name,p.description,(p.chips||[]).join(' '),p.statusLabel].join(' ').toLowerCase();
+    return hay.indexOf(term)!==-1;
   });
-  var searchInput = $('projSearch');
-  if(searchInput){
-    // init from query param ?q=
-    try{ var u=new URL(location.href); var q=u.searchParams.get('q'); if(q){ searchTerm=q; searchInput.value=q; }}catch(e){}
-    searchInput.addEventListener('input', function(){
-      searchTerm = searchInput.value;
-      rerender();
-      // reflect in URL without reload
-      try{ var uu=new URL(location.href); if(searchTerm) uu.searchParams.set('q', searchTerm); else uu.searchParams.delete('q'); history.replaceState(null,'',uu.pathname+uu.search+(location.hash||'')); }catch(e){}
-    });
-  }
-  window.addEventListener('hashchange', function(){
-    var h=(location.hash.replace('#','')||'all');
-    if(['all','live','repo'].indexOf(h)!==-1){ currentFilter=h; rerender(); }
+}
+function langColor(l){return l.color||'#6E6858';}
+
+function renderArchive(list){
+  fullList=list;
+  var grid=$('archiveGrid');
+  var liveCount=list.filter(function(p){return kindOf(p)==='live';}).length;
+  var repoCount=list.length-liveCount;
+  var shipped=list.filter(function(p){return p.status==='shipped';}).length;
+  var oss=list.filter(function(p){return p.status==='open-source';}).length;
+
+  $('archiveTag').textContent=list.length+' builds';
+  $('stBuilds').textContent=list.length;
+  $('stShipped').textContent=shipped;
+  $('stOss').textContent=oss;
+  $('stLive').textContent=liveCount;
+  if($('tabCountAll'))$('tabCountAll').textContent=list.length;
+  if($('tabCountLive'))$('tabCountLive').textContent=liveCount;
+  if($('tabCountRepo'))$('tabCountRepo').textContent=repoCount;
+
+  document.querySelectorAll('.pill').forEach(function(b){
+    b.setAttribute('aria-pressed',String(b.getAttribute('data-filter')===currentFilter));
   });
 
-  var fallback = [
-    {"id":"agi-research","slug":"agi-research","name":"AGI_Research","kind":"repo","url":"https://github.com/hariomlohardev/AGI_Research","detailUrl":"https://hariomlohardev.github.io/projects/p/agi-research/","status":"in-progress","statusLabel":"Daily log · in progress","description":"Public lab notebook — committed daily since July 2026. Math from axioms → neural nets in NumPy → now CNNs, Transformers and PyTorch.","chips":["backprop ✓","NumPy","CNNs","Transformers","PyTorch","daily commits"],"languages":[{"name":"Jupyter Notebook","pct":86.4,"color":"#DA5B0B"},{"name":"Python","pct":13.6,"color":"#3572A5"}]},
-    {"id":"spam-classifier","slug":"spam-classifier","name":"spam_classifier","kind":"live","url":"projects/spam_classifier.html","detailUrl":"https://hariomlohardev.github.io/projects/p/spam-classifier/","demoUrl":"projects/spam_classifier.html","repoUrl":"https://github.com/hariomlohardev/spam_classifier","status":"shipped","statusLabel":"Shipped · live demo","description":"Type a message, watch it split into tokens, score red (spam) or green (ham), filter the weak signals, then stamp a verdict with P(spam|message). 5,572 messages, Naive Bayes trained in your browser — nothing mocked.","chips":["Naive Bayes","NLP","Pyodide","Pandas","live"],"languages":[{"name":"Python","pct":72,"color":"#3572A5"},{"name":"HTML","pct":28,"color":"#E34C26"}]},
-    {"id":"practice-code","slug":"practice-code","name":"practice_code","kind":"repo","url":"https://github.com/hariomlohardev/practice_code","detailUrl":"https://hariomlohardev.github.io/projects/p/practice-code/","status":"open-source","statusLabel":"Open source","description":"60+ Python solutions for algorithms and data structures, grouped by topic. Each notes time and space.","chips":["algorithms","data structures","Python","DSA"],"languages":[{"name":"Python","pct":100,"color":"#3572A5"}]},
-    {"id":"pkg-jupy","slug":"pkg-jupy","name":"pkg_jupy","kind":"repo","url":"https://github.com/hariomlohardev/pkg_jupy","detailUrl":"https://hariomlohardev.github.io/projects/p/pkg-jupy/","status":"open-source","statusLabel":"Open source","description":"Jupyter experiments that grew up — small packages, notebooks and visualisation scratches.","chips":["Jupyter","packages","utilities","experiments"],"languages":[{"name":"Jupyter Notebook","pct":100,"color":"#DA5B0B"}]}
-  ];
-  var fallbackTo = setTimeout(function(){ if(!document.getElementById('archiveGrid').children.length) renderArchive(fallback); }, 3000);
-  try{
-    fetch('projects-data.json',{cache:'no-store'}).then(function(r){ if(!r.ok) throw new Error(); return r.json(); }).then(function(j){
-      clearTimeout(fallbackTo); var list = (j.projects||j); renderArchive(Array.isArray(list)?list:fallback);
-    }).catch(function(){ clearTimeout(fallbackTo); renderArchive(fallback); });
-  }catch(e){ clearTimeout(fallbackTo); renderArchive(fallback); }
+  var filtered=getFiltered(list);
+  $('resultNote').innerHTML='<span><b style="color:var(--ink);font-weight:400">'+filtered.length+'</b> shown of <b style="color:var(--ink);font-weight:400">'+list.length+'</b></span>';
+  grid.setAttribute('aria-busy','false');
 
-  var marquee=['Spam Classifier','Naive Bayes','AGI Research','Python','Pyodide','5,572 rows','Pandas','Live Bench','Open Archive'];
-  function fill(sel, rev){
-    var t=document.querySelector(sel); if(!t) return;
-    var html='', list=rev? marquee.slice().reverse():marquee;
-    for(var pass=0;pass<2;pass++) list.forEach(function(s){ html+='<span>'+s+'</span><span class="dot">✦</span>'; });
-    t.innerHTML=html;
+  if(!filtered.length){
+    grid.innerHTML='<div class="empty">No projects match — try another search,<br>or switch back to <b>All</b>.</div>';
+    return;
   }
-  fill('[data-track]',false); fill('[data-track-alt]',true);
+  grid.innerHTML=filtered.map(function(p,i){
+    var kind=kindOf(p),isLive=kind==='live';
+    var slug=p.slug||p.id;
+    var detailHref=p.detailUrl?p.detailUrl.replace('https://hariomlohardev.github.io',''):('projects/p/'+slug+'/');
+    if(detailHref.indexOf('/')===0)detailHref=detailHref.slice(1);
+    var statusHtml=isLive?'<span class="status live"><i></i>'+esc(p.statusLabel)+'</span>'
+      :p.status==='shipped'?'<span class="status shipped">'+esc(p.statusLabel)+'</span>'
+      :p.status==='open-source'?'<span class="status oss">'+esc(p.statusLabel)+'</span>'
+      :'<span class="status log">'+esc(p.statusLabel)+'</span>';
+    var kindTag=isLive?'<span class="kind live">Live</span>':'<span class="kind code">Code</span>';
+    var langbar=(p.languages&&p.languages.length>1)?'<div class="langbar">'+p.languages.map(function(l){return '<i style="width:'+l.pct+'%;background:'+langColor(l)+'"></i>';}).join('')+'</div>':'';
+    var meta=(p.languages||[]).map(function(l){return '<span style="display:inline-flex;align-items:center;gap:6px"><i class="dot" style="background:'+langColor(l)+'"></i>'+esc(l.name)+'</span>';}).join(' · ');
+    var chipHtml=(p.chips||[]).map(function(c){return '<span>'+esc(c)+'</span>';}).join('');
+    return '<a class="proj-card rv" href="'+esc(detailHref)+'" style="transition-delay:'+(Math.min(i,6)*45)+'ms" aria-label="'+esc(p.name)+' — '+esc(p.statusLabel)+'">'+
+      '<span class="proj-arrow" aria-hidden="true">↗</span>'+
+      '<div class="proj-top"><span class="proj-idx">0'+(i+1)+'</span>'+statusHtml+kindTag+'</div>'+
+      '<h3>'+esc(p.name)+'</h3>'+
+      '<p>'+esc(p.description)+'</p>'+
+      '<div class="chips">'+chipHtml+'</div>'+langbar+
+      (meta?'<div class="proj-meta">'+meta+'</div>':'')+
+    '</a>';
+  }).join('');
+  observeReveals(grid);
+}
 
-  function armReveal(){
-    var els=document.querySelectorAll('[data-reveal]');
-    if('IntersectionObserver' in window && !reduced){
-      var io=new IntersectionObserver(function(entries){ entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }}); },{threshold:0.12});
-      els.forEach(function(el,i){ el.style.transitionDelay=(Math.min(i,5)*45)+'ms'; io.observe(el); });
-    } else { els.forEach(function(e){ e.classList.add('in'); });}
-  }
-  armReveal();
-  var prog=$('prog');
-  var q=false;
-  function onScroll(){ if(q) return; q=true; requestAnimationFrame(function(){ q=false; var h=document.documentElement.scrollHeight-window.innerHeight; prog.style.width=(h>0?(window.scrollY/h)*100:0)+'%'; }); }
-  window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
-  $('yr') && ($('yr').textContent=new Date().getFullYear());
-  var clockEls=document.querySelectorAll('.clock');
-  var tf=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
-  function tick(){ var s=tf.format(new Date()); clockEls.forEach(function(e){ e.textContent=s; }); }
-  tick(); setInterval(tick,1000);
-  window.addEventListener('keydown',function(ev){
-    if(ev.metaKey||ev.ctrlKey||ev.altKey) return;
-    var tag=(document.activeElement&&document.activeElement.tagName)||''; if(tag==='INPUT'||tag==='TEXTAREA') return;
-    if(ev.key==='g'||ev.key==='G') window.open(ghUrl,'_blank','noopener');
+document.querySelectorAll('.pill').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    currentFilter=btn.getAttribute('data-filter');
+    history.replaceState(null,'','#'+currentFilter);
+    if(fullList)renderArchive(fullList);
   });
-  document.getElementById('yr') && (document.getElementById('yr').textContent=new Date().getFullYear());
+});
+var searchInput=$('projSearch');
+if(searchInput){
+  try{var u=new URL(location.href);var q=u.searchParams.get('q');if(q){searchTerm=q;searchInput.value=q;}}catch(e){}
+  searchInput.addEventListener('input',function(){
+    searchTerm=searchInput.value;
+    if(fullList)renderArchive(fullList);
+    try{var uu=new URL(location.href);if(searchTerm)uu.searchParams.set('q',searchTerm);else uu.searchParams.delete('q');history.replaceState(null,'',uu.pathname+uu.search+(location.hash||''));}catch(e){}
+  });
+  searchInput.addEventListener('keydown',function(e){if(e.key==='Escape'){searchTerm='';searchInput.value='';if(fullList)renderArchive(fullList);}});
+}
+window.addEventListener('hashchange',function(){
+  var h=(location.hash.replace('#','')||'all');
+  if(['all','live','repo'].indexOf(h)!==-1){currentFilter=h;if(fullList)renderArchive(fullList);}
+});
+
+var fallback=[
+  {"id":"agi-research","slug":"agi-research","name":"AGI_Research","kind":"repo","url":"https://github.com/hariomlohardev/AGI_Research","detailUrl":"https://hariomlohardev.github.io/projects/p/agi-research/","status":"in-progress","statusLabel":"Daily log · in progress","description":"Public lab notebook — committed daily since July 2026. Math from axioms → neural nets in NumPy → now CNNs, Transformers and PyTorch.","chips":["backprop ✓","NumPy","CNNs","Transformers","PyTorch","daily commits"],"languages":[{"name":"Jupyter Notebook","pct":86.4,"color":"#DA5B0B"},{"name":"Python","pct":13.6,"color":"#3572A5"}]},
+  {"id":"spam-classifier","slug":"spam-classifier","name":"spam_classifier","kind":"live","url":"projects/spam_classifier.html","detailUrl":"https://hariomlohardev.github.io/projects/p/spam-classifier/","demoUrl":"projects/spam_classifier.html","repoUrl":"https://github.com/hariomlohardev/spam_classifier","status":"shipped","statusLabel":"Shipped · live demo","description":"Type a message, watch it split into tokens, score red (spam) or green (ham), filter the weak signals, then stamp a verdict with P(spam|message). 5,572 messages, Naive Bayes trained in your browser — nothing mocked.","chips":["Naive Bayes","NLP","Pyodide","Pandas","live"],"languages":[{"name":"Python","pct":72,"color":"#3572A5"},{"name":"HTML","pct":28,"color":"#E34C26"}]},
+  {"id":"practice-code","slug":"practice-code","name":"practice_code","kind":"repo","url":"https://github.com/hariomlohardev/practice_code","detailUrl":"https://hariomlohardev.github.io/projects/p/practice-code/","status":"open-source","statusLabel":"Open source","description":"60+ Python solutions for algorithms and data structures, grouped by topic. Each notes time and space.","chips":["algorithms","data structures","Python","DSA"],"languages":[{"name":"Python","pct":100,"color":"#3572A5"}]},
+  {"id":"pkg-jupy","slug":"pkg-jupy","name":"pkg_jupy","kind":"repo","url":"https://github.com/hariomlohardev/pkg_jupy","detailUrl":"https://hariomlohardev.github.io/projects/p/pkg-jupy/","status":"open-source","statusLabel":"Open source","description":"Jupyter experiments that grew up — small packages, notebooks and visualisation scratches.","chips":["Jupyter","packages","utilities","experiments"],"languages":[{"name":"Jupyter Notebook","pct":100,"color":"#DA5B0B"}]}
+];
+var fallbackTo=setTimeout(function(){if(!$('archiveGrid').querySelector('.proj-card'))renderArchive(fallback);},3000);
+try{
+  fetch('projects-data.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error();return r.json();}).then(function(j){
+    clearTimeout(fallbackTo);var list=(j.projects||j);renderArchive(Array.isArray(list)?list:fallback);
+  }).catch(function(){clearTimeout(fallbackTo);renderArchive(fallback);});
+}catch(e){clearTimeout(fallbackTo);renderArchive(fallback);}
+
+/* ── reveal ── */
+function observeReveals(scope){
+  var els=(scope||document).querySelectorAll('.rv:not(.in)');
+  if('IntersectionObserver' in window&&!reduced){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.08});
+    els.forEach(function(el){io.observe(el);});
+  }else els.forEach(function(el){el.classList.add('in');});
+}
+observeReveals();
 })();
 </script>
-<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7c8c6879055d45ba894f6ac0ce1cc51a"}'></script><!-- End Cloudflare Web Analytics -->
+<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7c8c6879055d45ba894f6ac0ce1cc51a"}'></script>
 </body>
 </html>
