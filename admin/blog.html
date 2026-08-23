@@ -198,7 +198,9 @@ document.getElementById('saveBtn').addEventListener('click', async ()=>{
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+token()},
       body: JSON.stringify({action: id?'update':'create', id: id||undefined, post})
     });
-    const j=await r.json();
+    const text=await r.text();
+    let j;
+    try{ j=JSON.parse(text); }catch{ throw new Error(text.slice(0,300) || 'A server error occurred — check Vercel logs'); }
     if(!r.ok||!j.ok) throw new Error(j.error||'Save failed');
     msg.textContent='Saved ✓'; msg.style.color='var(--green)';
     document.getElementById('formBox').style.display='none';

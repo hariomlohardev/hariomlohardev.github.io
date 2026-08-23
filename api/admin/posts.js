@@ -59,8 +59,9 @@ function mdToHtml(md){
 }
 
 module.exports=async(req,res)=>{
+  try{
   const sb=await getSb();
-  if(!sb) return res.status(500).json({ok:false, error:'SUPABASE not configured'});
+  if(!sb) return res.status(500).json({ok:false, error:'SUPABASE not configured — add SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in Vercel'});
 
   if(req.method==='GET'){
     // Public read — return published posts for admin list (all if authed)
@@ -108,4 +109,5 @@ module.exports=async(req,res)=>{
   }
 
   return res.status(400).json({ok:false, error:'Unknown action'});
+  }catch(e){ console.error(e); return res.status(500).json({ok:false, error: e.message || 'A server error occurred'}); }
 };
