@@ -384,10 +384,6 @@ function render(){
       return '<div class="join-card"><span class="join-no">'+b.span+'</span><h3>'+b.name+'</h3><p style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">'+b.label+'</p><p>'+b.desc+'</p></div>';
     }).join('');
   }
-  // batch filter pills
-  renderMembers();
-    });
-  });
   renderMembers();
   observeReveals();
 }
