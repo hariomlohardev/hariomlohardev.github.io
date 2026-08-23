@@ -76,13 +76,13 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
     <div class="head-top"><span>LAB NOTEBOOK <b>No.01</b> · POST · INDIA — UTC+5:30</span><span id="hdrDate" style="color:var(--muted)">—</span></div>
     <div class="head-main">
       <a class="logo" href="/"><span class="logo-mark">HL</span> hariomlohardev</a>
-      <nav aria-label="Primary"><a href="/">Home</a><a href="/projects.html">Projects</a><a href="/blog.html">Blog</a><a href="/#contact">Contact</a></nav>
+      <nav aria-label="Primary"><a href="/">Home</a><a href="/projects">Projects</a><a href="/blog">Blog</a><a href="/#contact">Contact</a></nav>
       <a href="https://github.com/hariomlohardev" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--green);color:var(--green);padding:6px 10px;text-decoration:none">GitHub ↗</a>
     </div>
   </div>
 </header>
 <main class="wrap" id="main">
-  <div class="breadcrumb"><a href="/">Hariom Lohar</a><span>›</span><a href="/blog.html">Blog</a><span>›</span><span id="crumb">Post</span></div>
+  <div class="breadcrumb"><a href="/">Hariom Lohar</a><span>›</span><a href="/blog">Blog</a><span>›</span><span id="crumb">Post</span></div>
   <div id="hero">
     <div class="eyebrow"><i></i> <span id="kicker">Loading…</span></div>
     <h1 id="title">Loading…</h1>
@@ -98,8 +98,8 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
     <noscript><p style="font-family:var(--mono);font-size:12px;color:var(--muted)"><a href="https://github.com/hariomlohardev/hariomlohardev.github.io/discussions" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:underline">Open Discussions →</a></p></noscript>
   </section>
   <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
-    <a href="/blog.html" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--ink);padding:11px 14px;background:white;text-decoration:none">← Back to blog</a>
-    <a id="canonicalLink" href="/blog.html" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:var(--ink);color:white;padding:11px 14px;border:1px solid var(--ink);text-decoration:none;display:none">Open canonical →</a>
+    <a href="/blog" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--ink);padding:11px 14px;background:white;text-decoration:none">← Back to blog</a>
+    <a id="canonicalLink" href="/blog" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:var(--ink);color:white;padding:11px 14px;border:1px solid var(--ink);text-decoration:none;display:none">Open canonical →</a>
   </div>
   <noscript>
     <div style="margin-top:18px;background:var(--sheet);border:1px solid var(--ink);padding:16px">
@@ -111,7 +111,7 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
 <footer>
   <div class="wrap foot-in">
     <span>© <span id="yr"></span> <b>Hariom Lohar</b> — Lab Notebook No.01 · <a href="https://github.com/hariomlohardev" style="text-decoration:underline">hariomlohardev on GitHub</a></span>
-    <span><a href="/blog.html">Blog</a> · <a href="/feed.xml">RSS</a> · <a href="#top">Top ↑</a></span>
+    <span><a href="/blog">Blog</a> · <a href="/feed.xml">RSS</a> · <a href="#top">Top ↑</a></span>
   </div>
 </footer>
 <script>
@@ -131,7 +131,7 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
   var slug = (params.get('slug')||params.get('p')||location.hash.replace(/^#/,'')||location.pathname.split('/').filter(Boolean).pop()||'').trim().toLowerCase();
   if(slug==='p' || slug==='blog') slug='';
   if(!slug){
-    document.getElementById('status').innerHTML='No slug — open <a href="/blog.html" style="color:var(--blue);text-decoration:underline">/blog.html</a> and click a post, or use its static URL <code>/blog/p/&lt;slug&gt;/</code>.';
+    document.getElementById('status').innerHTML='No slug — open <a href="/blog" style="color:var(--blue);text-decoration:underline">/blog.html</a> and click a post, or use its static URL <code>/blog/p/&lt;slug&gt;/</code>.';
     document.getElementById('title').textContent='Post — choose one';
     return;
   }
@@ -185,7 +185,7 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
   }).then(function(arr){
     var post = (arr||[]).find(function(p){ return String(p.slug).toLowerCase()===slug; });
     if(!post){
-      document.getElementById('status').innerHTML='Post <code>'+esc(slug)+'</code> not found. See <a href="/blog.html" style="color:var(--blue);text-decoration:underline">/blog.html</a> or <a href="/blog/p/'+esc(slug)+'/" style="color:var(--blue);text-decoration:underline">/blog/p/'+esc(slug)+'/</a>.';
+      document.getElementById('status').innerHTML='Post <code>'+esc(slug)+'</code> not found. See <a href="/blog" style="color:var(--blue);text-decoration:underline">/blog.html</a> or <a href="/blog/p/'+esc(slug)+'/" style="color:var(--blue);text-decoration:underline">/blog/p/'+esc(slug)+'/</a>.';
       document.getElementById('title').textContent='Not found';
       return;
     }
@@ -197,7 +197,7 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
     document.getElementById('kicker').textContent = ((post.tags||[]).indexOf('daily-log')!==-1 ? 'Daily Log' : 'Article')+' · '+fmt(post.date)+' · '+(post.readingMinutes||3)+' min · Hariom Lohar';
     document.getElementById('title').textContent = post.title;
     document.getElementById('desc').textContent = post.description||'';
-    var tagsHtml=(post.tags||[]).map(function(t){ return '<a href="/blog.html#tag='+encodeURIComponent(t)+'" style="border:1px solid var(--line);background:var(--paper-2);padding:4px 8px;color:var(--muted)">'+esc(t)+'</a>'; }).join(' ');
+    var tagsHtml=(post.tags||[]).map(function(t){ return '<a href="/blog#tag='+encodeURIComponent(t)+'" style="border:1px solid var(--line);background:var(--paper-2);padding:4px 8px;color:var(--muted)">'+esc(t)+'</a>'; }).join(' ');
     document.getElementById('meta').innerHTML = '<span><b>By Hariom Lohar</b></span><span>·</span><span>'+fmt(post.date)+'</span><span>·</span><span>'+(post.wordCount||'—')+' words</span><span>·</span><span>'+tagsHtml+'</span>';
     var cl=document.getElementById('canonicalLink'); cl.href=canon; cl.style.display='inline-flex'; cl.textContent='Open canonical →';
     // try to load static HTML for body
