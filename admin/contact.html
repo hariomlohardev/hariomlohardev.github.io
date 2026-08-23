@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Admin — Edit Contact · Hariom Lab</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-mono/latin-400.css">
+<style>
+:root{--paper:#F6F4EE;--paper-2:#EFECE2;--sheet:#FBFAF6;--ink:#181611;--muted:#5F594A;--line:#DAD5C6;--accent:#B93A13;--max:900px;--pad:clamp(18px,4vw,48px);--mono:'Space Mono',monospace;--serif:'Fraunces',serif;--sans:'Archivo',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--paper);color:#3B382E}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+header{position:sticky;top:0;background:rgba(246,244,238,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:10}
+.head-main{height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{font-family:var(--mono);font-size:13px}
+.box{background:var(--sheet);border:1px solid var(--ink);padding:18px;margin-top:16px}
+.input, .textarea{width:100%;font-family:var(--sans);font-size:14px;padding:11px 13px;border:1px solid var(--line);background:#F6F4EE;outline:none}
+.textarea{min-height:84px;resize:vertical}
+.label{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:grid;gap:6px}
+.btn{font-family:var(--mono);font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;border:1px solid var(--ink);padding:12px 18px;display:inline-flex;gap:8px;align-items:center;min-height:44px;transition:.2s;cursor:pointer}
+.btn.solid{background:var(--ink);color:#F6F4EE}
+.btn.solid:hover{background:var(--accent);border-color:var(--accent)}
+.btn.ghost{background:var(--sheet)}
+.clink-row{border:1px solid var(--line);background:var(--paper-2);padding:12px;display:grid;gap:8px;margin-top:8px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:700px){ .grid2{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap head-main">
+    <a class="logo" href="/admin/">← Admin</a>
+    <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">Contact — file & links</span>
+  </div>
+</header>
+
+<main class="wrap" style="padding:28px 0 40px">
+  <h1 style="font-family:var(--serif);font-weight:600;font-size:clamp(1.6rem,4vw,2.2rem)">Edit Contact</h1>
+  <p style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px">Edits save to Supabase <code>site_content (key=contact)</code>. Contact page reads from here.</p>
+
+  <div id="gate" class="box" style="display:none">
+    <p style="font-family:var(--mono);font-size:12px;color:var(--muted)">Not logged in → <a href="/admin/" style="color:var(--accent);text-decoration:underline">login</a></p>
+  </div>
+
+  <form id="form" style="display:none">
+    <div class="box">
+      <h2 style="font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase">Hero</h2>
+      <label class="label" style="margin-top:12px">Eyebrow <input id="eyebrow" class="input" placeholder="Get in touch — freelance & collaborations" /></label>
+      <label class="label" style="margin-top:12px">H1 (supports &lt;em&gt;) <input id="h1" class="input" placeholder="Contact file" /></label>
+      <label class="label" style="margin-top:12px">Lede <textarea id="lede" class="textarea" rows="2"></textarea></label>
+    </div>
+
+    <div class="box">
+      <h2 style="font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase">Top — Let’s ship</h2>
+      <label class="label" style="margin-top:12px">H2 <input id="topH2" class="input" /></label>
+      <label class="label" style="margin-top:12px">P <textarea id="topP" class="textarea" rows="2"></textarea></label>
+      <label class="label" style="margin-top:12px">Avail <input id="avail" class="input" /></label>
+    </div>
+
+    <div class="box">
+      <h2 style="font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase">Contact Files (6)</h2>
+      <div id="clinksBox"></div>
+      <button type="button" id="addClink" class="btn" style="margin-top:10px">+ Add link</button>
+    </div>
+
+    <div class="box">
+      <h2 style="font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase">Raw JSON (all Contact)</h2>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button type="button" id="syncRaw" class="btn ghost" style="font-size:11px;padding:8px 12px">Sync → JSON</button>
+        <button type="button" id="fmtRaw" class="btn ghost" style="font-size:11px;padding:8px 12px">Format</button>
+        <span id="rawMsg" style="font-family:var(--mono);font-size:11px;color:var(--muted);align-self:center"></span>
+      </div>
+      <textarea id="rawJson" class="textarea" style="margin-top:10px;min-height:300px;font-family:var(--mono);font-size:12px;white-space:pre" spellcheck="false"></textarea>
+    </div>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">
+      <button class="btn solid" type="submit" id="saveBtn">Save to Supabase →</button>
+      <a class="btn" href="/contact.html" target="_blank">View Contact ↗</a>
+      <span id="msg" style="font-family:var(--mono);font-size:11px;color:var(--muted);align-self:center"></span>
+    </div>
+  </form>
+</main>
+
+<script>
+function token(){ return localStorage.getItem('admin_token'); }
+async function check(){
+  const t=token();
+  if(!t) return false;
+  try{ const r=await fetch('/api/admin/verify?token='+encodeURIComponent(t)); const j=await r.json(); return j.ok; }catch{ return false; }
+}
+let cache=null;
+function renderClinks(clinks){
+  const box=document.getElementById('clinksBox');
+  box.innerHTML=(clinks||[]).map((c,i)=>`
+    <div class="clink-row" data-idx="${i}">
+      <div class="grid2">
+        <label class="label">No <input class="input" data-k="no" value="${(c.no||'').replace(/"/g,'&quot;')}" /></label>
+        <label class="label">Name <input class="input" data-k="name" value="${(c.name||'').replace(/"/g,'&quot;')}" /></label>
+      </div>
+      <label class="label">URL <input class="input" data-k="url" value="${(c.url||'').replace(/"/g,'&quot;')}" /></label>
+      <label class="label">Display <input class="input" data-k="display" value="${(c.display||'').replace(/"/g,'&quot;')}" /></label>
+      <button type="button" class="btn" onclick="this.closest('.clink-row').remove(); syncToRaw();">Remove</button>
+    </div>`).join('');
+}
+async function load(){
+  const ok=await check();
+  if(!ok){ document.getElementById('gate').style.display='block'; return; }
+  document.getElementById('form').style.display='block';
+  const t=token();
+  const r=await fetch('/api/admin/contact?token='+encodeURIComponent(t));
+  const j=await r.json();
+  const d=j.data||j;
+  cache=d;
+  document.getElementById('eyebrow').value=d.hero?.eyebrow||'';
+  document.getElementById('h1').value=d.hero?.h1||'Contact file';
+  document.getElementById('lede').value=d.hero?.lede||'';
+  document.getElementById('topH2').value=d.top?.h2||'';
+  document.getElementById('topP').value=d.top?.p||'';
+  document.getElementById('avail').value=d.top?.avail||'';
+  renderClinks(d.clinks||[]);
+  document.getElementById('rawJson').value=JSON.stringify(d,null,2);
+  document.getElementById('msg').textContent='Loaded from '+(j.source||'supabase');
+}
+function collect(){
+  const clinks=[...document.querySelectorAll('#clinksBox .clink-row')].map(row=>{
+    const o={};
+    row.querySelectorAll('[data-k]').forEach(el=> o[el.dataset.k]=el.value);
+    return o;
+  });
+  return {
+    hero:{ eyebrow: document.getElementById('eyebrow').value, h1: document.getElementById('h1').value, lede: document.getElementById('lede').value },
+    top:{ h2: document.getElementById('topH2').value, p: document.getElementById('topP').value, avail: document.getElementById('avail').value },
+    clinks
+  };
+}
+function syncToRaw(){
+  try{
+    let raw;
+    try{ raw=JSON.parse(document.getElementById('rawJson').value); }catch{ raw={...cache}; }
+    const c=collect();
+    raw.hero=c.hero; raw.top=c.top; raw.clinks=c.clinks;
+    document.getElementById('rawJson').value=JSON.stringify(raw,null,2);
+    document.getElementById('rawMsg').textContent='synced ✓';
+  }catch(e){ document.getElementById('rawMsg').textContent=e.message; }
+}
+window.syncToRaw=syncToRaw;
+document.getElementById('addClink').addEventListener('click', ()=>{
+  const box=document.getElementById('clinksBox');
+  const div=document.createElement('div');
+  div.className='clink-row';
+  div.innerHTML='<div class=\"grid2\"><label class=\"label\">No <input class=\"input\" data-k=\"no\" /></label><label class=\"label\">Name <input class=\"input\" data-k=\"name\" /></label></div><label class=\"label\">URL <input class=\"input\" data-k=\"url\" /></label><label class=\"label\">Display <input class=\"input\" data-k=\"display\" /></label><button type=\"button\" class=\"btn\" onclick=\"this.closest(\\\'.clink-row\\\').remove()\">Remove</button>';
+  box.appendChild(div);
+});
+document.getElementById('syncRaw').addEventListener('click', syncToRaw);
+document.getElementById('fmtRaw').addEventListener('click', ()=>{
+  try{ const j=JSON.parse(document.getElementById('rawJson').value); document.getElementById('rawJson').value=JSON.stringify(j,null,2); }catch(e){ alert(e.message); }
+});
+document.getElementById('form').addEventListener('input', syncToRaw);
+document.getElementById('form').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  syncToRaw();
+  let payload;
+  try{ payload=JSON.parse(document.getElementById('rawJson').value); }catch(e){ alert('Invalid JSON: '+e.message); return; }
+  const btn=document.getElementById('saveBtn');
+  const msg=document.getElementById('msg');
+  btn.textContent='Saving…'; btn.disabled=true;
+  try{
+    const r=await fetch('/api/admin/contact', { method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token()}, body: JSON.stringify(payload) });
+    const j=await r.json();
+    if(!r.ok||!j.ok) throw new Error(j.error||'Save failed');
+    msg.textContent='Saved ✓'; msg.style.color='var(--green)';
+  }catch(err){ msg.textContent=err.message; msg.style.color='var(--accent)'; }
+  finally{ btn.textContent='Save to Supabase →'; btn.disabled=false; }
+});
+load();
+</script>
+</body>
+</html>
