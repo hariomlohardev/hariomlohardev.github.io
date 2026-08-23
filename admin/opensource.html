@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Admin — Edit Open Source · Hariom Lab</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-mono/latin-400.css">
+<style>
+:root{--paper:#F6F4EE;--paper-2:#EFECE2;--sheet:#FBFAF6;--ink:#181611;--muted:#5F594A;--line:#DAD5C6;--accent:#B93A13;--green:#1E7A4E;--max:900px;--pad:clamp(18px,4vw,48px);--mono:'Space Mono',monospace;--serif:'Fraunces',serif;--sans:'Archivo',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--paper);color:#3B382E}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+header{position:sticky;top:0;background:rgba(246,244,238,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:10}
+.head-main{height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{font-family:var(--mono);font-size:13px}
+.box{background:var(--sheet);border:1px solid var(--ink);padding:18px;margin-top:16px}
+.input, .textarea{width:100%;font-family:var(--sans);font-size:14px;padding:11px 13px;border:1px solid var(--line);background:#F6F4EE;outline:none}
+.textarea{min-height:84px;resize:vertical}
+.label{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:grid;gap:6px}
+.btn{font-family:var(--mono);font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;border:1px solid var(--ink);padding:12px 18px;display:inline-flex;gap:8px;align-items:center;min-height:44px;transition:.2s;cursor:pointer}
+.btn.solid{background:var(--ink);color:#F6F4EE}
+.btn.solid:hover{background:var(--accent);border-color:var(--accent)}
+.btn.ghost{background:var(--sheet)}
+.pr-card{border:1px solid var(--ink);background:var(--sheet);padding:14px;display:grid;gap:10px;margin-top:12px}
+.pr-card.merged{border-color:var(--green)}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap head-main">
+    <a class="logo" href="/admin/">← Admin</a>
+    <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">Open Source — curated PRs</span>
+  </div>
+</header>
+
+<main class="wrap" style="padding:28px 0 40px">
+  <h1 style="font-family:var(--serif);font-weight:600;font-size:clamp(1.6rem,4vw,2.2rem)">Edit Open Source</h1>
+  <p style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px">Curated list from <code>opensource-curated.json</code> → Supabase <code>site_content (key=opensource)</code>. Paste a GitHub PR URL to auto-fetch.</p>
+
+  <div id="gate" class="box" style="display:none">
+    <p style="font-family:var(--mono);font-size:12px;color:var(--muted)">Not logged in → <a href="/admin/" style="color:var(--accent);text-decoration:underline">login</a></p>
+  </div>
+
+  <div id="editor" style="display:none">
+    <div class="box">
+      <h2 style="font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase">Add by URL</h2>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+        <input id="prUrl" class="input" placeholder="https://github.com/numpy/numpy/pull/32223" style="flex:1;min-width:260px" />
+        <button class="btn solid" id="addByUrl" type="button">Fetch & Add →</button>
+      </div>
+      <p id="urlMsg" style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:8px;min-height:16px"></p>
+      <p style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px">Or run locally: <code>node scripts/curate-opensource.js &lt;url&gt;</code></p>
+    </div>
+
+    <div id="list"></div>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">
+      <button class="btn solid" id="saveBtn" type="button">Save to Supabase →</button>
+      <a class="btn" href="/opensource.html" target="_blank">View Open Source ↗</a>
+      <span id="msg" style="font-family:var(--mono);font-size:11px;color:var(--muted);align-self:center"></span>
+    </div>
+
+    <div class="box">
+      <h2 style="font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase">Raw JSON (prs array)</h2>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button type="button" id="syncRaw" class="btn ghost" style="font-size:11px;padding:8px 12px">Sync cards → JSON</button>
+        <button type="button" id="fmtRaw" class="btn ghost" style="font-size:11px;padding:8px 12px">Format</button>
+      </div>
+      <textarea id="rawJson" class="textarea" style="margin-top:10px;min-height:300px;font-family:var(--mono);font-size:12px;white-space:pre" spellcheck="false"></textarea>
+    </div>
+  </div>
+</main>
+
+<script>
+function token(){ return localStorage.getItem('admin_token'); }
+async function check(){
+  const t=token();
+  if(!t) return false;
+  try{ const r=await fetch('/api/admin/verify?token='+encodeURIComponent(t)); const j=await r.json(); return j.ok; }catch{ return false; }
+}
+let prs=[];
+
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function cardHtml(p,i){
+  return `
+  <div class="pr-card ${p.merged?'merged':''}" data-idx="${i}">
+    <div style="display:flex;gap:8px;justify-content:space-between;align-items:center">
+      <span style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:${p.merged?'var(--green)':'var(--muted)'}">${p.merged?'✓ merged':'PR · '+esc(p.state||'open')} · ${esc(p.repo||'')}</span>
+      <button type="button" class="btn ghost" style="padding:6px 10px;font-size:11px" onclick="this.closest('.pr-card').remove(); syncToRaw();">Remove</button>
+    </div>
+    <label class="label">Title <input class="input" data-k="title" value="${esc(p.title||'')}" /></label>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <label class="label">Repo <input class="input" data-k="repo" value="${esc(p.repo||'')}" placeholder="numpy/numpy" /></label>
+      <label class="label">State <select class="input" data-k="state"><option ${p.state==='merged'?'selected':''}>merged</option><option ${p.state==='open'?'selected':''}>open</option><option ${p.state==='closed'?'selected':''}>closed</option></select></label>
+    </div>
+    <label class="label">URL <input class="input" data-k="html_url" value="${esc(p.html_url||p.url||'')}" placeholder="https://github.com/.../pull/..." /></label>
+    <label class="label">Body (short) <textarea class="textarea" data-k="body" rows="2">${esc(p.body||'')}</textarea></label>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <label class="label">Updated At <input class="input" data-k="updated_at" value="${esc(p.updated_at||'')}" placeholder="2026-08-21T02:12:16Z" /></label>
+      <label class="label">Merged? <select class="input" data-k="merged"><option value="true" ${p.merged?'selected':''}>true</option><option value="false" ${!p.merged?'selected':''}>false</option></select></label>
+    </div>
+  </div>`;
+}
+
+function render(){
+  const list=document.getElementById('list');
+  list.innerHTML = prs.map((p,i)=> cardHtml(p,i)).join('');
+  document.getElementById('rawJson').value = JSON.stringify(prs, null, 2);
+  list.querySelectorAll('input, textarea, select').forEach(el=> el.addEventListener('input', syncToRaw));
+}
+
+function syncToRaw(){
+  const cards=[...document.querySelectorAll('.pr-card')];
+  const arr=cards.map(card=>{
+    const o={};
+    card.querySelectorAll('[data-k]').forEach(el=>{
+      const k=el.dataset.k;
+      let v=el.value;
+      if(k==='merged') v = v==='true';
+      o[k]=v;
+    });
+    // alias url
+    if(o.html_url && !o.url) o.url=o.html_url;
+    return o;
+  });
+  prs=arr;
+  document.getElementById('rawJson').value = JSON.stringify(prs, null, 2);
+}
+window.syncToRaw=syncToRaw;
+
+async function load(){
+  const ok=await check();
+  if(!ok){ document.getElementById('gate').style.display='block'; return; }
+  document.getElementById('editor').style.display='block';
+  const t=token();
+  const r=await fetch('/api/admin/opensource?token='+encodeURIComponent(t));
+  const j=await r.json();
+  prs=j.prs||[];
+  render();
+  document.getElementById('msg').textContent='Loaded from '+(j.source||'supabase')+' · '+prs.length+' PRs';
+}
+
+document.getElementById('addByUrl').addEventListener('click', async ()=>{
+  const url=document.getElementById('prUrl').value.trim();
+  const msg=document.getElementById('urlMsg');
+  if(!url.match(/github\.com\/.+\/.+\/pull\/\d+/)){ msg.textContent='Paste a full PR URL like https://github.com/numpy/numpy/pull/32223'; return; }
+  msg.textContent='Fetching…';
+  try{
+    // Use the same logic as curate script but via GitHub API from browser (no token, 60/hr)
+    const m=url.match(/github\.com\/([^\/]+\/[^\/]+)\/pull\/(\d+)/);
+    const api=`https://api.github.com/repos/${m[1]}/pulls/${m[2]}`;
+    const r=await fetch(api, { headers:{'Accept':'application/vnd.github+json'} });
+    if(!r.ok) throw new Error('GitHub API '+r.status);
+    const j=await r.json();
+    const pr={
+      title: j.title, repo: j.base.repo.full_name, html_url: j.html_url, url: j.html_url,
+      state: j.merged_at ? 'merged' : j.state, merged: !!j.merged_at,
+      body: (j.body||'').slice(0,200).replace(/\s+/g,' ').trim(),
+      updated_at: j.updated_at, created_at: j.created_at, number: j.number
+    };
+    prs.unshift(pr);
+    render();
+    msg.textContent='Added '+pr.repo+' #'+pr.number;
+    document.getElementById('prUrl').value='';
+  }catch(e){ msg.textContent=e.message; msg.style.color='var(--accent)'; }
+});
+
+document.getElementById('syncRaw').addEventListener('click', syncToRaw);
+document.getElementById('fmtRaw').addEventListener('click', ()=>{
+  try{ const j=JSON.parse(document.getElementById('rawJson').value); document.getElementById('rawJson').value=JSON.stringify(j,null,2); }catch(e){ alert(e.message); }
+});
+document.getElementById('rawJson').addEventListener('change', ()=>{
+  try{ const arr=JSON.parse(document.getElementById('rawJson').value); if(Array.isArray(arr)){ prs=arr; render(); } }catch{}
+});
+
+document.getElementById('saveBtn').addEventListener('click', async ()=>{
+  syncToRaw();
+  let payload;
+  try{ payload=JSON.parse(document.getElementById('rawJson').value); }catch(e){ alert('Invalid JSON: '+e.message); return; }
+  const btn=document.getElementById('saveBtn');
+  const msg=document.getElementById('msg');
+  btn.textContent='Saving…'; btn.disabled=true;
+  try{
+    const r=await fetch('/api/admin/opensource', { method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token()}, body: JSON.stringify(payload) });
+    const j=await r.json();
+    if(!r.ok||!j.ok) throw new Error(j.error||'Save failed');
+    msg.textContent='Saved ✓ · '+j.count+' PRs'; msg.style.color='var(--green)';
+  }catch(e){ msg.textContent=e.message; msg.style.color='var(--accent)'; }
+  finally{ btn.textContent='Save to Supabase →'; btn.disabled=false; }
+});
+
+load();
+</script>
+</body>
+</html>

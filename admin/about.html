@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Admin — Edit About · Hariom Lab</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-mono/latin-400.css">
+<style>
+:root{--paper:#F6F4EE;--paper-2:#EFECE2;--sheet:#FBFAF6;--ink:#181611;--muted:#5F594A;--line:#DAD5C6;--accent:#B93A13;--max:900px;--pad:clamp(18px,4vw,48px);--mono:'Space Mono',monospace;--serif:'Fraunces',serif;--sans:'Archivo',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--paper);color:#3B382E}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+header{position:sticky;top:0;background:rgba(246,244,238,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:10}
+.head-main{height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{font-family:var(--mono);font-size:13px}
+.box{background:var(--sheet);border:1px solid var(--ink);padding:18px;margin-top:16px}
+.input, .textarea{width:100%;font-family:var(--sans);font-size:14px;padding:11px 13px;border:1px solid var(--line);background:#F6F4EE;outline:none}
+.textarea{min-height:84px;resize:vertical}
+.label{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:grid;gap:6px}
+.btn{font-family:var(--mono);font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;border:1px solid var(--ink);padding:12px 18px;display:inline-flex;gap:8px;align-items:center;min-height:44px;transition:.2s;cursor:pointer}
+.btn.solid{background:var(--ink);color:#F6F4EE}
+.btn.solid:hover{background:var(--accent);border-color:var(--accent)}
+.btn.ghost{background:var(--sheet)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:700px){ .grid2{grid-template-columns:1fr} }
+.fact-row,.tl-row{border:1px solid var(--line);background:var(--paper-2);padding:12px;display:grid;gap:8px;margin-top:8px}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap head-main">
+    <a class="logo" href="/admin/">← Admin</a>
+    <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">About — field notes & timeline</span>
+  </div>
+</header>
+
+<main class="wrap" style="padding:28px 0 40px">
+  <h1 style="font-family:var(--serif);font-weight:600;font-size:clamp(1.6rem,4vw,2.2rem)">Edit About</h1>
+  <p style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px">Edits save to Supabase <code>site_content (key=about)</code>. About → <code>/about.html</code> reads from here.</p>
+
+  <div id="gate" class="box" style="display:none">
+    <p style="font-family:var(--mono);font-size:12px;color:var(--muted)">Not logged in → <a href="/admin/" style="color:var(--accent);text-decoration:underline">login</a></p>
+  </div>
+
+  <form id="form" style="display:none">
+    <div class="box">
+      <h2 style="font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase">Hero</h2>
+      <label class="label" style="margin-top:12px">Lead (supports &lt;em&gt;) <textarea id="lead" class="textarea" rows="2" placeholder="Self-taught from India, rebuilding intelligence <em>from scratch</em> — one proof, one commit at a time."></textarea></label>
+      <label class="label" style="margin-top:12px">Body <textarea id="body" class="textarea" rows="4" placeholder="I finished 12th grade and chose the longer road — no bootcamp, no shortcut..."></textarea></label>
+    </div>
+
+    <div class="box">
+      <h2 style="font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase">Facts (4)</h2>
+      <div id="factsBox"></div>
+      <button type="button" id="addFact" class="btn" style="margin-top:10px">+ Add fact</button>
+    </div>
+
+    <div class="box">
+      <h2 style="font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase">Timeline</h2>
+      <div id="timelineBox"></div>
+      <button type="button" id="addTl" class="btn" style="margin-top:10px">+ Add item</button>
+    </div>
+
+    <div class="box">
+      <h2 style="font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase">Raw JSON (all About)</h2>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button type="button" id="syncRaw" class="btn ghost" style="font-size:11px;padding:8px 12px">Sync → JSON</button>
+        <button type="button" id="fmtRaw" class="btn ghost" style="font-size:11px;padding:8px 12px">Format</button>
+        <span id="rawMsg" style="font-family:var(--mono);font-size:11px;color:var(--muted);align-self:center"></span>
+      </div>
+      <textarea id="rawJson" class="textarea" style="margin-top:10px;min-height:300px;font-family:var(--mono);font-size:12px;white-space:pre" spellcheck="false"></textarea>
+    </div>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">
+      <button class="btn solid" type="submit" id="saveBtn">Save to Supabase →</button>
+      <a class="btn" href="/about.html" target="_blank">View About ↗</a>
+      <span id="msg" style="font-family:var(--mono);font-size:11px;color:var(--muted);align-self:center"></span>
+    </div>
+  </form>
+</main>
+
+<script>
+function token(){ return localStorage.getItem('admin_token'); }
+async function check(){
+  const t=token();
+  if(!t) return false;
+  try{ const r=await fetch('/api/admin/verify?token='+encodeURIComponent(t)); const j=await r.json(); return j.ok; }catch{ return false; }
+}
+let cache=null;
+function renderFacts(facts){
+  const box=document.getElementById('factsBox');
+  box.innerHTML=(facts||[]).map((f,i)=>`
+    <div class="fact-row" data-idx="${i}">
+      <div class="grid2">
+        <label class="label">DT <input class="input" data-k="dt" value="${(f.dt||'').replace(/"/g,'&quot;')}" placeholder="Location" /></label>
+        <label class="label">DD (supports &lt;b&gt;) <input class="input" data-k="dd" value="${(f.dd||'').replace(/"/g,'&quot;')}" placeholder="India · <b>IST</b>" /></label>
+      </div>
+      <button type="button" class="btn" onclick="this.closest('.fact-row').remove(); syncToRaw();">Remove</button>
+    </div>`).join('');
+}
+function renderTimeline(tl){
+  const box=document.getElementById('timelineBox');
+  box.innerHTML=(tl||[]).map((t,i)=>`
+    <div class="tl-row" data-idx="${i}">
+      <label class="label">Date <input class="input" data-k="date" value="${(t.date||'').replace(/"/g,'&quot;')}" placeholder="2026 · Now" /></label>
+      <label class="label">Title <input class="input" data-k="title" value="${(t.title||'').replace(/"/g,'&quot;')}" placeholder="CNNs, Transformers & PyTorch" /></label>
+      <label class="label">Desc <textarea class="textarea" data-k="desc" rows="2" placeholder="Attention by hand...">${t.desc||''}</textarea></label>
+      <button type="button" class="btn" onclick="this.closest('.tl-row').remove(); syncToRaw();">Remove</button>
+    </div>`).join('');
+}
+
+async function load(){
+  const ok=await check();
+  if(!ok){ document.getElementById('gate').style.display='block'; return; }
+  document.getElementById('form').style.display='block';
+  const t=token();
+  const r=await fetch('/api/admin/about?token='+encodeURIComponent(t));
+  const j=await r.json();
+  const d=j.data||j;
+  cache=d;
+  document.getElementById('lead').value=d.lead||'';
+  document.getElementById('body').value=d.body||'';
+  renderFacts(d.facts||[]);
+  renderTimeline(d.timeline||[]);
+  document.getElementById('rawJson').value=JSON.stringify(d,null,2);
+  document.getElementById('msg').textContent='Loaded from '+(j.source||'supabase');
+}
+
+function collect(){
+  const facts=[...document.querySelectorAll('#factsBox .fact-row')].map(row=>{
+    const o={};
+    row.querySelectorAll('[data-k]').forEach(el=> o[el.dataset.k]=el.value);
+    return o;
+  });
+  const timeline=[...document.querySelectorAll('#timelineBox .tl-row')].map(row=>{
+    const o={};
+    row.querySelectorAll('[data-k]').forEach(el=> o[el.dataset.k]=el.value);
+    return o;
+  });
+  return { lead: document.getElementById('lead').value, body: document.getElementById('body').value, facts, timeline };
+}
+
+function syncToRaw(){
+  try{
+    let raw;
+    try{ raw=JSON.parse(document.getElementById('rawJson').value); }catch{ raw={...cache}; }
+    const c=collect();
+    raw.lead=c.lead; raw.body=c.body; raw.facts=c.facts; raw.timeline=c.timeline;
+    document.getElementById('rawJson').value=JSON.stringify(raw,null,2);
+    document.getElementById('rawMsg').textContent='synced ✓';
+  }catch(e){ document.getElementById('rawMsg').textContent=e.message; }
+}
+window.syncToRaw=syncToRaw;
+
+document.getElementById('addFact').addEventListener('click', ()=>{
+  const box=document.getElementById('factsBox');
+  const div=document.createElement('div');
+  div.className='fact-row';
+  div.innerHTML='<div class=\"grid2\"><label class=\"label\">DT <input class=\"input\" data-k=\"dt\" placeholder=\"Focus\" /></label><label class=\"label\">DD <input class=\"input\" data-k=\"dd\" placeholder=\"AGI from first principles\" /></label></div><button type=\"button\" class=\"btn\" onclick=\"this.closest(\\\'.fact-row\\\').remove()\">Remove</button>';
+  box.appendChild(div);
+});
+document.getElementById('addTl').addEventListener('click', ()=>{
+  const box=document.getElementById('timelineBox');
+  const div=document.createElement('div');
+  div.className='tl-row';
+  div.innerHTML='<label class=\"label\">Date <input class=\"input\" data-k=\"date\" /></label><label class=\"label\">Title <input class=\"input\" data-k=\"title\" /></label><label class=\"label\">Desc <textarea class=\"textarea\" data-k=\"desc\" rows=\"2\"></textarea></label><button type=\"button\" class=\"btn\" onclick=\"this.closest(\\\'.tl-row\\\').remove()\">Remove</button>';
+  box.appendChild(div);
+});
+document.getElementById('syncRaw').addEventListener('click', syncToRaw);
+document.getElementById('fmtRaw').addEventListener('click', ()=>{
+  try{ const j=JSON.parse(document.getElementById('rawJson').value); document.getElementById('rawJson').value=JSON.stringify(j,null,2); }catch(e){ alert(e.message); }
+});
+document.getElementById('form').addEventListener('input', syncToRaw);
+
+document.getElementById('form').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  syncToRaw();
+  let payload;
+  try{ payload=JSON.parse(document.getElementById('rawJson').value); }catch(e){ alert('Invalid JSON: '+e.message); return; }
+  const btn=document.getElementById('saveBtn');
+  const msg=document.getElementById('msg');
+  btn.textContent='Saving…'; btn.disabled=true;
+  try{
+    const r=await fetch('/api/admin/about', { method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token()}, body: JSON.stringify(payload) });
+    const j=await r.json();
+    if(!r.ok||!j.ok) throw new Error(j.error||'Save failed');
+    msg.textContent='Saved ✓'; msg.style.color='var(--green)';
+  }catch(err){ msg.textContent=err.message; msg.style.color='var(--accent)'; }
+  finally{ btn.textContent='Save to Supabase →'; btn.disabled=false; }
+});
+
+load();
+</script>
+</body>
+</html>
