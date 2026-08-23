@@ -5,7 +5,7 @@
   "installCommand": "npm install --silent || echo 'no deps to install'",
   "buildCommand": "npm run build",
   "outputDirectory": ".",
-  "cleanUrls": false,
+  "cleanUrls": true,
   "trailingSlash": false,
   "github": {
     "silent": true
