@@ -26,8 +26,9 @@ function verify(req){
 async function getSb(){
   const url=process.env.SUPABASE_URL, key=process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
   if(!url||!key) return null;
+  try{ global.WebSocket = require('ws'); }catch{}
   const {createClient}=require('@supabase/supabase-js');
-  return createClient(url,key);
+  return createClient(url,key,{ auth:{ persistSession:false, autoRefreshToken:false }, realtime:{ transport: undefined }});
 }
 function mdToHtml(md){
   let s=String(md||'').replace(/\r\n/g,'\n');

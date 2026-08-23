@@ -5,7 +5,7 @@
   "description": "Hariom Lohar — Lab Notebook No.01 · hariomlohardev.github.io — static site, builds via Node scripts, ships to GitHub Pages and Vercel",
   "type": "commonjs",
   "engines": {
-    "node": "20.x"
+    "node": "22.x"
   },
   "scripts": {
     "build": "node scripts/generate-blog.js && node scripts/generate-projects.js && node scripts/generate-llms.js && node scripts/generate-opensource.js",
@@ -32,8 +32,9 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.0",
-    "jsonwebtoken": "^9.0.2",
     "bcryptjs": "^2.4.3",
-    "cookie": "^0.6.0"
+    "cookie": "^0.6.0",
+    "jsonwebtoken": "^9.0.2",
+    "ws": "^8.21.3"
   }
 }

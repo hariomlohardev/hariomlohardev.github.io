@@ -27,7 +27,7 @@ async function getSupabase(){
   const key=process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
   if(!url || !key) return null;
   const { createClient } = require('@supabase/supabase-js');
-  return createClient(url, key);
+  return createClient(url, key,{ auth:{ persistSession:false, autoRefreshToken:false }, realtime:{ transport: undefined }});
 }
 
 module.exports = async (req, res) => {
