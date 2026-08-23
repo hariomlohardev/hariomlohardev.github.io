@@ -377,6 +377,7 @@ footer{margin-top:clamp(48px,6vw,84px);border-top:1px solid var(--ink);backgroun
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <meta name="keywords" content="Hariom Lohar, Hariom Lohar blog, hariomlohardev, Hariom Lohar CS50P, daily logs" />
 
+<meta name="supabase-anon" content="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJnbXZocHRlYmtzbGtqbGVvaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0NDQwMTAsImV4cCI6MjEwMzAyMDAxMH0.nnaZiyKNOx-eT_5JTQNDwk5b3PCDKZv4f9Yc6wQtk_k" />
 </head>
 <body>
 <a href="#main" class="skip">Skip to content</a>
@@ -917,10 +918,15 @@ footer{margin-top:clamp(48px,6vw,84px);border-top:1px solid var(--ink);backgroun
     applyHash(); buildStats(); buildTags(); render();
   }
 
-  fetch('posts.json',{cache:'no-store'})
-    .then(function(r){ if(!r.ok) throw new Error('no posts.json'); return r.json(); })
-    .then(init)
-    .catch(function(){ init(FALLBACK); });
+  // Supabase only — no posts.json fallback
+  fetch('/api/admin/posts',{cache:'no-store'})
+    .then(function(r){ if(!r.ok) throw new Error('no supabase posts'); return r.json(); })
+    .then(function(j){ init(j.posts||[]); })
+    .catch(function(e){
+      var m=document.getElementById('metaRow');
+      if(m) m.innerHTML='<span style="color:var(--accent)">Failed to load posts from Supabase — '+ (e.message||'') +'</span>';
+      init([]);
+    });
 })();
 </script>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7c8c6879055d45ba894f6ac0ce1cc51a"}'></script><!-- End Cloudflare Web Analytics -->
