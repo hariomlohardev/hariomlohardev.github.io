@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#F6F4EE" />
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
+<title>Admin — Hariom Lohar Lab</title>
+<meta name="description" content="Admin — Hariom Lohar Lab Notebook" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-mono/latin-400.css">
+<style>
+:root{--paper:#F6F4EE;--paper-2:#EFECE2;--sheet:#FBFAF6;--ink:#181611;--muted:#5F594A;--line:#DAD5C6;--accent:#B93A13;--green:#1E7A4E;--max:900px;--pad:clamp(18px,4vw,48px);--mono:'Space Mono',monospace;--serif:'Fraunces',serif;--sans:'Archivo',sans-serif;--ease:cubic-bezier(.22,1,.36,1)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--paper);color:#3B382E}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+header{position:sticky;top:0;background:rgba(246,244,238,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:10}
+.head-main{height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{font-family:var(--mono);font-size:13px;color:#181611;display:flex;gap:10px;align-items:center}
+.logo i{font-size:9.5px;color:var(--muted);letter-spacing:.18em;text-transform:uppercase}
+.box{background:var(--sheet);border:1px solid var(--ink);padding:22px;box-shadow:0 8px 24px rgba(24,22,17,.06)}
+.hero{padding:48px 0 24px;border-bottom:1px solid var(--ink)}
+.hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(2rem,6vw,3.2rem);letter-spacing:-.03em;color:#181611}
+.hero p{margin-top:12px;color:var(--muted);max-width:60ch}
+.btn{font-family:var(--mono);font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;border:1px solid var(--ink);padding:12px 18px;display:inline-flex;gap:8px;align-items:center;min-height:44px;transition:.2s}
+.btn.solid{background:var(--ink);color:#F6F4EE}
+.btn.solid:hover{background:var(--accent);border-color:var(--accent)}
+.btn.ghost{background:var(--sheet)}
+.input{width:100%;font-family:var(--sans);font-size:15px;padding:11px 13px;border:1px solid var(--line);background:#F6F4EE;outline:none}
+.input:focus{border-color:var(--accent)}
+.card{border:1px solid var(--ink);background:var(--sheet);padding:16px;display:flex;justify-content:space-between;gap:12px;align-items:center}
+.card:hover{box-shadow:0 8px 20px rgba(24,22,17,.07)}
+.badge{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);padding:4px 8px;color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap head-main">
+    <a class="logo" href="/">hariomlohardev <i>lab — admin</i></a>
+    <span id="who" style="font-family:var(--mono);font-size:11px;color:var(--muted)"></span>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Admin — Lab Notebook</h1>
+    <p>Single login (<span style="font-family:var(--mono);font-size:12px">hariomlohar</span>) → manage every page. Supabase in the back, Vercel env holds the password.</p>
+  </div>
+
+  <!-- LOGIN -->
+  <section id="loginBox" class="box" style="max-width:520px;margin:28px 0">
+    <h2 style="font-family:var(--serif);font-weight:600;font-size:1.4rem">Login</h2>
+    <p style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px">Only one user — stored in Vercel env <code>ADMIN_USERNAME / ADMIN_PASSWORD</code> (never in code).</p>
+    <form id="loginForm" style="display:grid;gap:12px;margin-top:16px">
+      <label style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Username <input id="u" class="input" placeholder="hariomlohar" autocomplete="username" required /></label>
+      <label style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Password <input id="p" type="password" class="input" placeholder="••••••••" autocomplete="current-password" required /></label>
+      <button class="btn solid" type="submit" style="justify-content:center">Login →</button>
+      <p id="loginMsg" style="font-family:var(--mono);font-size:11px;color:var(--muted);min-height:16px"></p>
+    </form>
+  </section>
+
+  <!-- DASHBOARD -->
+  <section id="dash" style="display:none">
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:18px 0">
+      <span style="font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)">Pages — tap to edit</span>
+      <button id="logoutBtn" class="btn ghost" style="margin-left:auto">Logout</button>
+    </div>
+    <div id="pagesGrid" style="display:grid;gap:12px"></div>
+    <p style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:14px">Home is live now — others are listed and will open their editors next. All edits save to Supabase <code>site_content</code> (key=home) with file fallback.</p>
+  </section>
+</main>
+
+<script>
+const pages = [
+  { slug:'home', name:'Home — hero / mission / stats', desc:'Taglines, hero typed lines, stats ledger, mission note', href:'admin/home.html', status:'live — edit now', badge:'Home · /' },
+  { slug:'about', name:'About — field notes', desc:'Lead, body, facts, timeline', href:'admin/about.html', status:'soon', badge:'About · /about.html' },
+  { slug:'blog', name:'Blog & Daily Logs', desc:'5 posts via posts.json / Supabase posts', href:'admin/blog.html', status:'soon', badge:'Blog · 5' },
+  { slug:'projects', name:'Projects Archive', desc:'4 builds via projects-data.json', href:'admin/projects.html', status:'soon', badge:'Projects · 4' },
+  { slug:'opensource', name:'Open Source (curated)', desc:'2 curated PRs via opensource-curated.json', href:'admin/opensource.html', status:'soon', badge:'Curated · 2' },
+  { slug:'contact', name:'Contact — file', desc:'Form + Instagram + SIGMOID band', href:'admin/contact.html', status:'soon', badge:'Contact' },
+  { slug:'community', name:'Community — SIGMOID', desc:'Batches + members via community-data.json', href:'admin/community.html', status:'soon', badge:'SIGMOID · 6' },
+];
+
+function token(){ return localStorage.getItem('admin_token'); }
+function setToken(t){ if(t) localStorage.setItem('admin_token', t); else localStorage.removeItem('admin_token'); }
+
+async function check(){
+  const t=token();
+  if(!t) return false;
+  try{
+    const r=await fetch('/api/admin/verify?token='+encodeURIComponent(t));
+    const j=await r.json();
+    return j.ok;
+  }catch{ return false; }
+}
+async function render(){
+  const ok=await check();
+  document.getElementById('loginBox').style.display = ok ? 'none' : 'block';
+  document.getElementById('dash').style.display = ok ? 'block' : 'none';
+  if(ok){
+    document.getElementById('who').textContent = 'logged in as hariomlohar · ' + new Date().toLocaleDateString('en-GB');
+    const grid=document.getElementById('pagesGrid');
+    grid.innerHTML = pages.map(p=> `
+      <div class="card">
+        <div>
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">${p.badge} · <span style="color:${p.status.includes('live') ? 'var(--accent)' : 'var(--muted)'}">${p.status}</span></div>
+          <div style="font-family:var(--serif);font-weight:600;margin-top:4px">${p.name}</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:4px">${p.desc}</div>
+        </div>
+        <a class="btn ${p.slug==='home' ? 'solid' : 'ghost'}" href="${p.href}" style="flex:none">${p.slug==='home' ? 'Edit →' : 'Open →'}</a>
+      </div>
+    `).join('');
+  } else {
+    document.getElementById('who').textContent = 'not logged in';
+  }
+}
+
+document.getElementById('loginForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const u=document.getElementById('u').value.trim();
+  const p=document.getElementById('p').value;
+  const msg=document.getElementById('loginMsg');
+  msg.textContent='Checking…';
+  try{
+    const r=await fetch('/api/admin/login', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ username:u, password:p })
+    });
+    const j=await r.json();
+    if(!r.ok || !j.ok) throw new Error(j.error || 'Login failed');
+    setToken(j.token);
+    msg.textContent='Logged in ✓';
+    await render();
+  }catch(err){
+    msg.textContent=err.message;
+    msg.style.color='var(--accent)';
+  }
+});
+
+document.getElementById('logoutBtn').addEventListener('click', async ()=>{
+  setToken(null);
+  // also clear cookie
+  await fetch('/api/admin/verify', { method:'POST' }).catch(()=>{});
+  document.cookie='admin_token=; Max-Age=0; Path=/';
+  render();
+});
+
+render();
+</script>
+</body>
+</html>

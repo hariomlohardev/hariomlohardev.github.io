@@ -17,11 +17,23 @@
     "generate:opensource": "node scripts/generate-opensource.js",
     "check": "node --check scripts/generate-blog.js && node --check scripts/generate-projects.js && echo 'ok'"
   },
-  "keywords": ["hariomlohardev", "Hariom Lohar", "CS50P", "AGI", "portfolio"],
+  "keywords": [
+    "hariomlohardev",
+    "Hariom Lohar",
+    "CS50P",
+    "AGI",
+    "portfolio"
+  ],
   "author": "Hariom Lohar <hariomlohar.new@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/hariomlohardev/hariomlohardev.github.io"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "jsonwebtoken": "^9.0.2",
+    "bcryptjs": "^2.4.3",
+    "cookie": "^0.6.0"
   }
 }

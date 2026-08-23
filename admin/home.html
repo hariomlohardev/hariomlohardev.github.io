@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Admin — Edit Home · Hariom Lab</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-mono/latin-400.css">
+<style>
+:root{--paper:#F6F4EE;--paper-2:#EFECE2;--sheet:#FBFAF6;--ink:#181611;--muted:#5F594A;--line:#DAD5C6;--accent:#B93A13;--max:900px;--pad:clamp(18px,4vw,48px);--mono:'Space Mono',monospace;--serif:'Fraunces',serif;--sans:'Archivo',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--paper);color:#3B382E}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+header{position:sticky;top:0;background:rgba(246,244,238,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:10}
+.head-main{height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{font-family:var(--mono);font-size:13px}
+.box{background:var(--sheet);border:1px solid var(--ink);padding:18px;margin-top:16px}
+.input, .textarea{width:100%;font-family:var(--sans);font-size:14px;padding:11px 13px;border:1px solid var(--line);background:#F6F4EE;outline:none}
+.textarea{min-height:84px;resize:vertical}
+.label{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:grid;gap:6px}
+.btn{font-family:var(--mono);font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;border:1px solid var(--ink);padding:12px 18px;display:inline-flex;gap:8px;align-items:center;min-height:44px;transition:.2s}
+.btn.solid{background:var(--ink);color:#F6F4EE}
+.btn.solid:hover{background:var(--accent);border-color:var(--accent)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:700px){ .grid2{grid-template-columns:1fr} }
+.stat-row{display:grid;grid-template-columns:80px 80px 1fr auto;gap:8px;align-items:center;margin-top:8px}
+@media(max-width:700px){ .stat-row{grid-template-columns:1fr 1fr} }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap head-main">
+    <a class="logo" href="/admin/">← Admin</a>
+    <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">Home — edit & save to Supabase</span>
+  </div>
+</header>
+
+<main class="wrap" style="padding:28px 0 40px">
+  <h1 style="font-family:var(--serif);font-weight:600;font-size:clamp(1.6rem,4vw,2.2rem)">Edit Home</h1>
+  <p style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px">Edits save to Supabase <code>site_content (key=home)</code> with <code>data.json</code> fallback. Vercel env holds the password.</p>
+
+  <div id="gate" class="box" style="display:none">
+    <p style="font-family:var(--mono);font-size:12px;color:var(--muted)">Not logged in → <a href="/admin/" style="color:var(--accent);text-decoration:underline">login</a></p>
+  </div>
+
+  <form id="form" style="display:none">
+    <div class="box">
+      <h2 style="font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase">Mission</h2>
+      <div class="grid2" style="margin-top:12px">
+        <label class="label">Start Date <input id="startDate" class="input" placeholder="2026-07-01" /></label>
+        <label class="label">Total Days <input id="totalDays" class="input" type="number" placeholder="548" /></label>
+      </div>
+      <label class="label" style="margin-top:12px">Note <textarea id="note" class="textarea" placeholder="Rebuilding intelligence from scratch — one day at a time."></textarea></label>
+      <label class="label" style="margin-top:12px">Repo URL <input id="repoUrl" class="input" placeholder="https://github.com/hariomlohardev/AGI_Research" /></label>
+    </div>
+
+    <div class="box">
+      <h2 style="font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase">Stats ledger (4)</h2>
+      <div id="statsBox"></div>
+      <button type="button" id="addStat" class="btn" style="margin-top:10px">+ Add stat</button>
+    </div>
+
+    <div class="box">
+      <h2 style="font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase">Taglines (typed hero)</h2>
+      <label class="label" style="margin-top:12px">One per line <textarea id="taglines" class="textarea" rows="6" placeholder="Rebuilding AGI from first principles.&#10;Harvard CS50P — certified 2026."></textarea></label>
+    </div>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">
+      <button class="btn solid" type="submit" id="saveBtn">Save to Supabase →</button>
+      <a class="btn" href="/">View Home ↗</a>
+      <span id="msg" style="font-family:var(--mono);font-size:11px;color:var(--muted);align-self:center"></span>
+    </div>
+  </form>
+</main>
+
+<script>
+function token(){ return localStorage.getItem('admin_token'); }
+async function check(){
+  const t=token();
+  if(!t) return false;
+  try{
+    const r=await fetch('/api/admin/verify?token='+encodeURIComponent(t));
+    const j=await r.json();
+    return j.ok;
+  }catch{ return false; }
+}
+
+let dataCache=null;
+
+function renderStats(stats){
+  const box=document.getElementById('statsBox');
+  box.innerHTML = (stats||[]).map((s,i)=>`
+    <div class="stat-row" data-idx="${i}">
+      <input class="input" placeholder="value" value="${s.value||''}" data-k="value" />
+      <input class="input" placeholder="suffix" value="${s.suffix||''}" data-k="suffix" />
+      <input class="input" placeholder="label (supports <br>)" value="${(s.label||'').replace(/"/g,'&quot;')}" data-k="label" />
+      <button type="button" class="btn" onclick="this.parentElement.remove()">✕</button>
+    </div>
+  `).join('');
+}
+
+async function load(){
+  const ok=await check();
+  if(!ok){
+    document.getElementById('gate').style.display='block';
+    return;
+  }
+  document.getElementById('form').style.display='block';
+  // Fetch home data (Supabase first, fallback to data.json)
+  const t=token();
+  const r=await fetch('/api/admin/home?token='+encodeURIComponent(t));
+  const j=await r.json();
+  const d=j.data||j;
+  dataCache=d;
+  // Mission
+  document.getElementById('startDate').value = d.mission?.startDate || '2026-07-01';
+  document.getElementById('totalDays').value = d.mission?.totalDays || 548;
+  document.getElementById('note').value = d.mission?.note || '';
+  document.getElementById('repoUrl').value = d.mission?.repoUrl || '';
+  // Stats
+  renderStats(d.stats||[]);
+  // Taglines
+  document.getElementById('taglines').value = (d.taglines||[]).join('\n');
+  document.getElementById('msg').textContent = 'Loaded from ' + (j.source||'supabase');
+}
+
+document.getElementById('addStat').addEventListener('click', ()=>{
+  const box=document.getElementById('statsBox');
+  const div=document.createElement('div');
+  div.className='stat-row';
+  div.innerHTML='<input class="input" placeholder="value" data-k="value" /><input class="input" placeholder="suffix" data-k="suffix" /><input class="input" placeholder="label" data-k="label" /><button type="button" class="btn" onclick="this.parentElement.remove()">✕</button>';
+  box.appendChild(div);
+});
+
+document.getElementById('form').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const t=token();
+  const stats=[...document.querySelectorAll('#statsBox .stat-row')].map(row=>{
+    const vals={};
+    row.querySelectorAll('input').forEach(inp=> vals[inp.dataset.k]=inp.value);
+    // value as number if possible
+    const v=parseInt(vals.value,10);
+    vals.value = isNaN(v) ? vals.value : v;
+    return vals;
+  });
+  const taglines=document.getElementById('taglines').value.split('\n').map(s=>s.trim()).filter(Boolean);
+  const payload = {
+    ...dataCache,
+    mission: {
+      ...dataCache.mission,
+      startDate: document.getElementById('startDate').value.trim() || '2026-07-01',
+      totalDays: parseInt(document.getElementById('totalDays').value,10) || 548,
+      note: document.getElementById('note').value.trim(),
+      repoUrl: document.getElementById('repoUrl').value.trim(),
+    },
+    stats,
+    taglines
+  };
+  const btn=document.getElementById('saveBtn');
+  const msg=document.getElementById('msg');
+  btn.textContent='Saving…'; btn.disabled=true;
+  try{
+    const r=await fetch('/api/admin/home', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer '+t },
+      body: JSON.stringify(payload)
+    });
+    const j=await r.json();
+    if(!r.ok || !j.ok) throw new Error(j.error||'Save failed');
+    msg.textContent='Saved ✓ — reload Home to see';
+    msg.style.color='var(--green)';
+  }catch(err){
+    msg.textContent=err.message;
+    msg.style.color='var(--accent)';
+  }finally{
+    btn.textContent='Save to Supabase →'; btn.disabled=false;
+  }
+});
+
+load();
+</script>
+</body>
+</html>
