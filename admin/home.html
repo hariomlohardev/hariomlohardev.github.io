@@ -69,6 +69,18 @@ header{position:sticky;top:0;background:rgba(246,244,238,.94);backdrop-filter:bl
       <label class="label" style="margin-top:12px">One per line <textarea id="taglines" class="textarea" rows="6" placeholder="Rebuilding AGI from first principles.&#10;Harvard CS50P — certified 2026."></textarea></label>
     </div>
 
+    <div class="box">
+      <h2 style="font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase">All Home Data — Full JSON (advanced)</h2>
+      <p style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px">This is the full <code>site_content</code> for Home. Edit anything here — <code>mission</code>, <code>stats</code>, <code>taglines</code>, <code>marquee</code>, <code>projects</code>, <code>status</code>, <code>skills</code>, <code>phases</code>, <code>links</code>, <code>certificates</code>. Structured fields above sync into this JSON on save.</p>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+        <button type="button" id="syncToRaw" class="btn ghost" style="font-size:11px;padding:8px 12px">Sync structured → JSON</button>
+        <button type="button" id="formatJson" class="btn ghost" style="font-size:11px;padding:8px 12px">Format JSON</button>
+        <span id="rawMsg" style="font-family:var(--mono);font-size:11px;color:var(--muted);align-self:center"></span>
+      </div>
+      <textarea id="rawJson" class="textarea" style="margin-top:10px;min-height:340px;font-family:var(--mono);font-size:12px;line-height:1.5;white-space:pre" spellcheck="false"></textarea>
+      <p style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:6px">Tip: Edit <code>mission.note</code>, <code>stats</code> (ledger), <code>taglines</code> (typed hero), <code>marquee</code>, <code>projects</code> (4 cards), <code>status.now</code> etc., then Save.</p>
+    </div>
+
     <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">
       <button class="btn solid" type="submit" id="saveBtn">Save to Supabase →</button>
       <a class="btn" href="/">View Home ↗</a>
@@ -125,7 +137,10 @@ async function load(){
   renderStats(d.stats||[]);
   // Taglines
   document.getElementById('taglines').value = (d.taglines||[]).join('\n');
+  // Raw JSON
+  document.getElementById('rawJson').value = JSON.stringify(d, null, 2);
   document.getElementById('msg').textContent = 'Loaded from ' + (j.source||'supabase');
+  document.getElementById('rawMsg').textContent = 'structured + raw in sync';
 }
 
 document.getElementById('addStat').addEventListener('click', ()=>{
@@ -134,6 +149,33 @@ document.getElementById('addStat').addEventListener('click', ()=>{
   div.className='stat-row';
   div.innerHTML='<input class="input" placeholder="value" data-k="value" /><input class="input" placeholder="suffix" data-k="suffix" /><input class="input" placeholder="label" data-k="label" /><button type="button" class="btn" onclick="this.parentElement.remove()">✕</button>';
   box.appendChild(div);
+});
+
+document.getElementById('syncToRaw').addEventListener('click', ()=>{
+  try{
+    const stats=[...document.querySelectorAll('#statsBox .stat-row')].map(row=>{
+      const vals={};
+      row.querySelectorAll('input').forEach(inp=> vals[inp.dataset.k]=inp.value);
+      const v=parseInt(vals.value,10);
+      vals.value = isNaN(v) ? vals.value : v;
+      return vals;
+    });
+    const taglines=document.getElementById('taglines').value.split('\n').map(s=>s.trim()).filter(Boolean);
+    let raw;
+    try{ raw=JSON.parse(document.getElementById('rawJson').value); }catch{ raw={...dataCache}; }
+    raw.mission = { ...raw.mission, startDate: document.getElementById('startDate').value.trim() || '2026-07-01', totalDays: parseInt(document.getElementById('totalDays').value,10) || 548, note: document.getElementById('note').value.trim(), repoUrl: document.getElementById('repoUrl').value.trim() };
+    raw.stats = stats;
+    raw.taglines = taglines;
+    document.getElementById('rawJson').value = JSON.stringify(raw, null, 2);
+    document.getElementById('rawMsg').textContent='synced ✓'; setTimeout(()=> document.getElementById('rawMsg').textContent='', 1500);
+  }catch(e){ document.getElementById('rawMsg').textContent=e.message; }
+});
+document.getElementById('formatJson').addEventListener('click', ()=>{
+  try{
+    const j=JSON.parse(document.getElementById('rawJson').value);
+    document.getElementById('rawJson').value = JSON.stringify(j, null, 2);
+    document.getElementById('rawMsg').textContent='formatted ✓';
+  }catch(e){ document.getElementById('rawMsg').textContent='invalid JSON: '+e.message; }
 });
 
 document.getElementById('form').addEventListener('submit', async (e)=>{
@@ -148,18 +190,30 @@ document.getElementById('form').addEventListener('submit', async (e)=>{
     return vals;
   });
   const taglines=document.getElementById('taglines').value.split('\n').map(s=>s.trim()).filter(Boolean);
-  const payload = {
-    ...dataCache,
-    mission: {
-      ...dataCache.mission,
-      startDate: document.getElementById('startDate').value.trim() || '2026-07-01',
-      totalDays: parseInt(document.getElementById('totalDays').value,10) || 548,
-      note: document.getElementById('note').value.trim(),
-      repoUrl: document.getElementById('repoUrl').value.trim(),
-    },
-    stats,
-    taglines
-  };
+  // Prefer raw JSON as source of truth if valid — it contains all home fields
+  let payload;
+  try{
+    const raw = JSON.parse(document.getElementById('rawJson').value);
+    payload = raw;
+    // Ensure structured fields overwrite raw (so top form always wins)
+    payload.mission = { ...payload.mission, startDate: document.getElementById('startDate').value.trim() || '2026-07-01', totalDays: parseInt(document.getElementById('totalDays').value,10) || 548, note: document.getElementById('note').value.trim(), repoUrl: document.getElementById('repoUrl').value.trim() };
+    payload.stats = stats;
+    payload.taglines = taglines;
+  }catch(e){
+    // Fallback to structured only
+    payload = {
+      ...dataCache,
+      mission: {
+        ...dataCache.mission,
+        startDate: document.getElementById('startDate').value.trim() || '2026-07-01',
+        totalDays: parseInt(document.getElementById('totalDays').value,10) || 548,
+        note: document.getElementById('note').value.trim(),
+        repoUrl: document.getElementById('repoUrl').value.trim(),
+      },
+      stats,
+      taglines
+    };
+  }
   const btn=document.getElementById('saveBtn');
   const msg=document.getElementById('msg');
   btn.textContent='Saving…'; btn.disabled=true;

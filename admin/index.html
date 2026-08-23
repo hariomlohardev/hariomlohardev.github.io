@@ -48,7 +48,7 @@ header{position:sticky;top:0;background:rgba(246,244,238,.94);backdrop-filter:bl
 <main class="wrap">
   <div class="hero">
     <h1>Admin — Lab Notebook</h1>
-    <p>Single login (<span style="font-family:var(--mono);font-size:12px">hariomlohar</span>) → manage every page. Supabase in the back, Vercel env holds the password.</p>
+    <p>Single login (<span style="font-family:var(--mono);font-size:12px">username</span>) → manage every page. Supabase in the back, Vercel env holds the password.</p>
   </div>
 
   <!-- LOGIN -->
@@ -56,7 +56,7 @@ header{position:sticky;top:0;background:rgba(246,244,238,.94);backdrop-filter:bl
     <h2 style="font-family:var(--serif);font-weight:600;font-size:1.4rem">Login</h2>
     <p style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px">Only one user — stored in Vercel env <code>ADMIN_USERNAME / ADMIN_PASSWORD</code> (never in code).</p>
     <form id="loginForm" style="display:grid;gap:12px;margin-top:16px">
-      <label style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Username <input id="u" class="input" placeholder="hariomlohar" autocomplete="username" required /></label>
+      <label style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Username <input id="u" class="input" placeholder="username" autocomplete="off" spellcheck="false" autocapitalize="off" data-lpignore="true" data-1p-ignore="true" required /></label>
       <label style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Password <input id="p" type="password" class="input" placeholder="••••••••" autocomplete="current-password" required /></label>
       <button class="btn solid" type="submit" style="justify-content:center">Login →</button>
       <p id="loginMsg" style="font-family:var(--mono);font-size:11px;color:var(--muted);min-height:16px"></p>
@@ -102,7 +102,7 @@ async function render(){
   document.getElementById('loginBox').style.display = ok ? 'none' : 'block';
   document.getElementById('dash').style.display = ok ? 'block' : 'none';
   if(ok){
-    document.getElementById('who').textContent = 'logged in as hariomlohar · ' + new Date().toLocaleDateString('en-GB');
+    document.getElementById('who').textContent = 'logged in · ' + new Date().toLocaleDateString('en-GB');
     const grid=document.getElementById('pagesGrid');
     grid.innerHTML = pages.map(p=> `
       <div class="card">
