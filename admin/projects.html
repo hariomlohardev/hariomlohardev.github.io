@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Admin — Edit Projects · Hariom Lab</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-mono/latin-400.css">
+<style>
+:root{--paper:#F6F4EE;--paper-2:#EFECE2;--sheet:#FBFAF6;--ink:#181611;--muted:#5F594A;--line:#DAD5C6;--accent:#B93A13;--green:#1E7A4E;--max:1000px;--pad:clamp(18px,4vw,48px);--mono:'Space Mono',monospace;--serif:'Fraunces',serif;--sans:'Archivo',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--paper);color:#3B382E}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+header{position:sticky;top:0;background:rgba(246,244,238,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:10}
+.head-main{height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{font-family:var(--mono);font-size:13px}
+.box{background:var(--sheet);border:1px solid var(--ink);padding:18px;margin-top:16px}
+.input, .textarea, .select{width:100%;font-family:var(--sans);font-size:14px;padding:11px 13px;border:1px solid var(--line);background:#F6F4EE;outline:none}
+.textarea{min-height:84px;resize:vertical}
+.label{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:grid;gap:6px}
+.btn{font-family:var(--mono);font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;border:1px solid var(--ink);padding:12px 18px;display:inline-flex;gap:8px;align-items:center;min-height:44px;transition:.2s;cursor:pointer}
+.btn.solid{background:var(--ink);color:#F6F4EE}
+.btn.solid:hover{background:var(--accent);border-color:var(--accent)}
+.btn.ghost{background:var(--sheet)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:700px){ .grid2{grid-template-columns:1fr} }
+.proj-card{border:1px solid var(--ink);background:var(--sheet);padding:16px;margin-top:12px;position:relative}
+.proj-card.featured{border-color:var(--accent);box-shadow:0 8px 20px rgba(24,22,17,.08)}
+.badge{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);padding:4px 8px;color:var(--muted);display:inline-block}
+.lang-row{display:flex;gap:8px;align-items:center;margin-top:6px}
+.lang-row input{flex:1}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap head-main">
+    <a class="logo" href="/admin/">← Admin</a>
+    <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">Projects — archive + home featured</span>
+  </div>
+</header>
+
+<main class="wrap" style="padding:28px 0 40px">
+  <h1 style="font-family:var(--serif);font-weight:600;font-size:clamp(1.6rem,4vw,2.2rem)">Edit Projects</h1>
+  <p style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px">4 builds — <code>projects-data.json</code> + Home Featured. Saves to Supabase <code>site_content (key=projects)</code> and syncs Home. Vercel env holds password.</p>
+
+  <div id="gate" class="box" style="display:none">
+    <p style="font-family:var(--mono);font-size:12px;color:var(--muted)">Not logged in → <a href="/admin/" style="color:var(--accent);text-decoration:underline">login</a></p>
+  </div>
+
+  <div id="editor" style="display:none">
+    <div id="list"></div>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">
+      <button class="btn" id="addBtn" type="button">+ Add project</button>
+      <button class="btn solid" id="saveBtn" type="button">Save to Supabase →</button>
+      <a class="btn" href="/projects.html" target="_blank">View Archive ↗</a>
+      <span id="msg" style="font-family:var(--mono);font-size:11px;color:var(--muted);align-self:center"></span>
+    </div>
+
+    <div class="box" style="margin-top:18px">
+      <h2 style="font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase">Raw JSON (all 4)</h2>
+      <p style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px">Advanced — full array. Structured cards above sync into this on Save.</p>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button type="button" id="syncRaw" class="btn ghost" style="font-size:11px;padding:8px 12px">Sync cards → JSON</button>
+        <button type="button" id="fmtRaw" class="btn ghost" style="font-size:11px;padding:8px 12px">Format</button>
+      </div>
+      <textarea id="rawJson" class="textarea" style="margin-top:10px;min-height:320px;font-family:var(--mono);font-size:12px;white-space:pre" spellcheck="false"></textarea>
+    </div>
+  </div>
+</main>
+
+<script>
+function token(){ return localStorage.getItem('admin_token'); }
+async function check(){
+  const t=token();
+  if(!t) return false;
+  try{ const r=await fetch('/api/admin/verify?token='+encodeURIComponent(t)); const j=await r.json(); return j.ok; }catch{ return false; }
+}
+let projects=[];
+
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function cardHtml(p,i){
+  const isLive = p.kind==='live';
+  return `
+  <div class="proj-card ${p.featured?'featured':''}" data-idx="${i}">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+      <span class="badge">${i+1 <10 ? '0'+(i+1) : i+1} · ${p.status||'repo'} ${p.featured?'· featured':''}</span>
+      <label style="font-family:var(--mono);font-size:11px"><input type="checkbox" ${p.featured?'checked':''} data-k="featured" onchange="this.closest('.proj-card').classList.toggle('featured', this.checked)"> Featured</label>
+      <button type="button" class="btn ghost" style="padding:6px 10px;font-size:11px" onclick="this.closest('.proj-card').remove(); syncToRaw();">Remove</button>
+    </div>
+    <div class="grid2" style="margin-top:12px">
+      <label class="label">Name <input class="input" data-k="name" value="${esc(p.name||'')}" placeholder="AGI_Research" /></label>
+      <label class="label">Slug <input class="input" data-k="slug" value="${esc(p.slug||'')}" placeholder="agi-research" /></label>
+    </div>
+    <div class="grid2" style="margin-top:10px">
+      <label class="label">Kind <select class="select" data-k="kind"><option value="repo" ${p.kind==='repo'?'selected':''}>repo · Code</option><option value="live" ${isLive?'selected':''}>live · Interactive</option></select></label>
+      <label class="label">Status <input class="input" data-k="status" value="${esc(p.status||'')}" placeholder="in-progress / shipped / open-source" /></label>
+    </div>
+    <label class="label" style="margin-top:10px">Status Label <input class="input" data-k="statusLabel" value="${esc(p.statusLabel||'')}" placeholder="Daily log · in progress" /></label>
+    <label class="label" style="margin-top:10px">Description <textarea class="textarea" data-k="description" rows="2" placeholder="Public lab notebook — committed daily...">${esc(p.description||'')}</textarea></label>
+    <label class="label" style="margin-top:10px">Detail URL <input class="input" data-k="detailUrl" value="${esc(p.detailUrl||'')}" placeholder="https://hariomlohardev.github.io/projects/p/agi-research/" /></label>
+    <div class="grid2" style="margin-top:10px">
+      <label class="label">URL (card link) <input class="input" data-k="url" value="${esc(p.url||'')}" placeholder="https://github.com/..." /></label>
+      <label class="label">Demo URL (if live) <input class="input" data-k="demoUrl" value="${esc(p.demoUrl||'')}" placeholder="projects/spam_classifier.html" /></label>
+    </div>
+    <label class="label" style="margin-top:10px">Chips (comma separated) <input class="input" data-k="chips" value="${esc((p.chips||[]).join(', '))}" placeholder="backprop ✓, NumPy, CNNs" /></label>
+    <label class="label" style="margin-top:10px">Languages JSON <textarea class="textarea" data-k="languages" rows="2" placeholder='[{"name":"Python","pct":100,"color":"#3572A5"}]'>${esc(JSON.stringify(p.languages||[], null, 1))}</textarea></label>
+  </div>`;
+}
+
+function render(){
+  const list=document.getElementById('list');
+  list.innerHTML = projects.map((p,i)=> cardHtml(p,i)).join('');
+  document.getElementById('rawJson').value = JSON.stringify(projects, null, 2);
+  // live sync on input
+  list.querySelectorAll('input, textarea, select').forEach(el=>{
+    el.addEventListener('input', syncToRaw);
+    el.addEventListener('change', syncToRaw);
+  });
+}
+function syncToRaw(){
+  // collect from cards into projects array and update raw
+  const cards=[...document.querySelectorAll('.proj-card')];
+  const arr=cards.map(card=>{
+    const obj={};
+    card.querySelectorAll('[data-k]').forEach(el=>{
+      const k=el.dataset.k;
+      let v= el.type==='checkbox' ? el.checked : el.value;
+      if(k==='chips') v = v.split(',').map(s=>s.trim()).filter(Boolean);
+      if(k==='languages'){
+        try{ v = v.trim() ? JSON.parse(v) : []; }catch{ v = []; }
+      }
+      if(k==='featured') v = !!v;
+      obj[k]=v;
+    });
+    // keep id if exists
+    const idx=parseInt(card.dataset.idx,10);
+    if(projects[idx] && projects[idx].id) obj.id=projects[idx].id;
+    if(!obj.slug && obj.name) obj.slug=obj.name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+    return obj;
+  });
+  projects=arr;
+  document.getElementById('rawJson').value = JSON.stringify(projects, null, 2);
+}
+window.syncToRaw = syncToRaw;
+
+async function load(){
+  const ok=await check();
+  if(!ok){ document.getElementById('gate').style.display='block'; return; }
+  document.getElementById('editor').style.display='block';
+  const t=token();
+  const r=await fetch('/api/admin/projects?token='+encodeURIComponent(t));
+  const j=await r.json();
+  projects = j.projects||[];
+  if(!projects.length){
+    projects = [
+      {name:"AGI_Research",slug:"agi-research",kind:"repo",status:"in-progress",statusLabel:"Daily log · in progress",description:"Public lab notebook — committed daily since July 2026.",chips:["backprop ✓","NumPy"],languages:[{name:"Jupyter Notebook",pct:86.4,color:"#DA5B0B"}]},
+    ];
+  }
+  render();
+  document.getElementById('msg').textContent='Loaded from '+(j.source||'supabase')+' · '+projects.length+' projects';
+}
+
+document.getElementById('addBtn').addEventListener('click', ()=>{
+  projects.push({name:"New Project",slug:"new-project",kind:"repo",status:"open-source",statusLabel:"Open source",description:"",chips:[],languages:[]});
+  render();
+});
+document.getElementById('syncRaw').addEventListener('click', syncToRaw);
+document.getElementById('fmtRaw').addEventListener('click', ()=>{
+  try{
+    const j=JSON.parse(document.getElementById('rawJson').value);
+    document.getElementById('rawJson').value=JSON.stringify(j,null,2);
+  }catch(e){ alert('Invalid JSON: '+e.message); }
+});
+// If raw edited, sync back to cards on blur
+document.getElementById('rawJson').addEventListener('change', ()=>{
+  try{
+    const arr=JSON.parse(document.getElementById('rawJson').value);
+    if(Array.isArray(arr)){ projects=arr; render(); }
+  }catch{}
+});
+
+document.getElementById('saveBtn').addEventListener('click', async ()=>{
+  syncToRaw();
+  // Prefer raw JSON as source of truth
+  let payload;
+  try{ payload=JSON.parse(document.getElementById('rawJson').value); }catch(e){ alert('Invalid JSON: '+e.message); return; }
+  const btn=document.getElementById('saveBtn');
+  const msg=document.getElementById('msg');
+  btn.textContent='Saving…'; btn.disabled=true;
+  try{
+    const r=await fetch('/api/admin/projects', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer '+token() },
+      body: JSON.stringify(payload)
+    });
+    const j=await r.json();
+    if(!r.ok||!j.ok) throw new Error(j.error||'Save failed');
+    msg.textContent='Saved ✓ · '+j.count+' projects — reload /projects.html to see'; msg.style.color='var(--green)';
+  }catch(e){ msg.textContent=e.message; msg.style.color='var(--accent)'; }
+  finally{ btn.textContent='Save to Supabase →'; btn.disabled=false; }
+});
+
+load();
+</script>
+</body>
+</html>
