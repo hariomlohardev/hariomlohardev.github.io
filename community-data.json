@@ -1,0 +1,15 @@
+{
+  "batches": [
+    {"id":"batch-01","name":"Batch 01","label":"Batch 01 — Foundations","span":"Jul 2026 → Sep 2026","desc":"Math from axioms, NumPy, backprop by hand. The first cohort."},
+    {"id":"batch-02","name":"Batch 02","label":"Batch 02 — Deep Learning","span":"Oct 2026 → Dec 2026","desc":"CNNs, Transformers, PyTorch — building the visual cortex."},
+    {"id":"batch-03","name":"Batch 03","label":"Batch 03 — Toward AGI","span":"Jan 2027 →","desc":"LLMs, RAG at scale, open research. Applications open via Telegram."}
+  ],
+  "members": [
+    {"name":"Hariom Lohar","handle":"hariomlohardev","github":"https://github.com/hariomlohardev","role":"Author · Host","batch":"batch-01","avatar":"HL","featured":true,"bio":"Harvard CS50P 2026 · rebuilding AGI from first principles, daily in public."},
+    {"name":"Batch 01 Member","handle":"your-handle","github":"https://github.com/hariomlohardev","role":"Member","batch":"batch-01","avatar":"B1"},
+    {"name":"Batch 01 Member","handle":"your-handle","github":"https://github.com/hariomlohardev","role":"Member","batch":"batch-01","avatar":"B1"},
+    {"name":"Batch 02 Member","handle":"your-handle","github":"https://github.com/hariomlohardev","role":"Member","batch":"batch-02","avatar":"B2"},
+    {"name":"Batch 02 Member","handle":"your-handle","github":"https://github.com/hariomlohardev","role":"Member","batch":"batch-02","avatar":"B2"},
+    {"name":"Batch 03 Member","handle":"your-handle","github":"https://github.com/hariomlohardev","role":"Member","batch":"batch-03","avatar":"B3"}
+  ]
+}

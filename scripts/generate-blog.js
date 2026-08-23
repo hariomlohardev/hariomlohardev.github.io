@@ -488,8 +488,9 @@ html:not(.js) .rv{opacity:1;transform:none}
         <a href="/projects.html">Projects</a>
         <a href="/opensource.html">Open Source</a>
         <a href="/blog.html" class="active" aria-current="page">Blog</a>
-        <a href="/#about">About</a>
-        <a href="/#contact">Contact</a>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/community.html">Community</a>
       </nav>
       <div class="head-right">
         <a class="gh-pill" href="https://github.com/hariomlohardev" target="_blank" rel="noopener"><i aria-hidden="true"></i><span>Github&nbsp;↗</span></a>
@@ -505,8 +506,9 @@ html:not(.js) .rv{opacity:1;transform:none}
       <a href="/projects.html"><span>Projects</span><span class="no">02</span></a>
       <a href="/opensource.html"><span>Open Source</span><span class="no">03</span></a>
       <a href="/blog.html" class="active"><span>Blog &amp; Logs</span><span class="no">04</span></a>
-      <a href="/#about"><span>About</span><span class="no">05</span></a>
-      <a href="/#contact"><span>Contact</span><span class="no">06</span></a>
+      <a href="/about.html"><span>About</span><span class="no">05</span></a>
+      <a href="/contact.html"><span>Contact</span><span class="no">06</span></a>
+      <a href="/community.html"><span>Community</span><span class="no">07</span></a>
     </nav>
     <div class="mp-actions">
       <a href="/feed.xml">RSS Feed</a>
