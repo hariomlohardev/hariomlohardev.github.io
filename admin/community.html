@@ -27,7 +27,7 @@ header{position:sticky;top:0;background:rgba(246,244,238,.94);backdrop-filter:bl
 .btn.solid:hover{background:var(--accent);border-color:var(--accent)}
 .btn.ghost{background:var(--sheet)}
 .badge{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);padding:4px 8px;color:var(--muted)}
-.batch-row, .member-row{border:1px solid var(--line);background:var(--paper-2);padding:12px;display:grid;gap:8px;margin-top:8px}
+.group-row, .member-row{border:1px solid var(--line);background:var(--paper-2);padding:12px;display:grid;gap:8px;margin-top:8px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:700px){ .grid2{grid-template-columns:1fr} }
 </style>
@@ -42,7 +42,7 @@ header{position:sticky;top:0;background:rgba(246,244,238,.94);backdrop-filter:bl
 
 <main class="wrap" style="padding:28px 0 40px">
   <h1 style="font-family:var(--serif);font-weight:600;font-size:clamp(1.6rem,4vw,2.2rem)">Edit Community</h1>
-  <p style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px">SIGMOID — batches + members. Saves to Supabase <code>site_content (key=community)</code> and <code>community-data.json</code>.</p>
+  <p style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px">SIGMOID — members. Saves to Supabase <code>site_content (key=community)</code> and <code>community-data.json</code>.</p>
 
   <div id="gate" class="box" style="display:none">
     <p style="font-family:var(--mono);font-size:12px;color:var(--muted)">Not logged in → <a href="/admin/" style="color:var(--accent);text-decoration:underline">login</a></p>
@@ -50,14 +50,8 @@ header{position:sticky;top:0;background:rgba(246,244,238,.94);backdrop-filter:bl
 
   <form id="form" style="display:none">
     <div class="box">
-      <h2 style="font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase">Batches (3)</h2>
-      <div id="batchesBox"></div>
-      <button type="button" id="addBatch" class="btn" style="margin-top:10px">+ Add batch</button>
-    </div>
-
-    <div class="box">
       <h2 style="font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase">Members — author on top</h2>
-      <p style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px">Top card is featured author (Hariom). Add members with name, handle, GitHub, batch, avatar, role, bio.</p>
+      <p style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px">Top card is featured author (Hariom). Add members with name, handle, GitHub, avatar, role, bio.</p>
       <div id="membersBox"></div>
       <button type="button" id="addMember" class="btn" style="margin-top:10px">+ Add member</button>
     </div>
@@ -89,18 +83,15 @@ async function check(){
 }
 let cache=null;
 
-function renderBatches(batches){
-  const box=document.getElementById('batchesBox');
-  box.innerHTML=(batches||[]).map((b,i)=>`
-    <div class="batch-row" data-idx="${i}">
+">
       <div class="grid2">
-        <label class="label">ID <input class="input" data-k="id" value="${(b.id||'').replace(/"/g,'&quot;')}" placeholder="batch-01" /></label>
-        <label class="label">Name <input class="input" data-k="name" value="${(b.name||'').replace(/"/g,'&quot;')}" placeholder="Batch 01" /></label>
+        <label class="label">ID <input class="input" data-k="id" value="${(b.id||'').replace(/"/g,'&quot;')}" placeholder="" /></label>
+        <label class="label">Name <input class="input" data-k="name" value="${(b.name||'').replace(/"/g,'&quot;')}" placeholder="Member" /></label>
       </div>
-      <label class="label">Label <input class="input" data-k="label" value="${(b.label||'').replace(/"/g,'&quot;')}" placeholder="Batch 01 — Foundations" /></label>
+      <label class="label">Label <input class="input" data-k="label" value="${(b.label||'').replace(/"/g,'&quot;')}" placeholder="Member — Foundations" /></label>
       <label class="label">Span <input class="input" data-k="span" value="${(b.span||'').replace(/"/g,'&quot;')}" placeholder="Jul 2026 → Sep 2026" /></label>
       <label class="label">Desc <textarea class="textarea" data-k="desc" rows="2">${b.desc||''}</textarea></label>
-      <button type="button" class="btn" onclick="this.closest('.batch-row').remove(); syncToRaw();">Remove</button>
+      <button type="button" class="btn" onclick="this.closest('.group-row').remove(); syncToRaw();">Remove</button>
     </div>`).join('');
 }
 function renderMembers(members){
@@ -108,7 +99,7 @@ function renderMembers(members){
   box.innerHTML=(members||[]).map((m,i)=>`
     <div class="member-row" data-idx="${i}" style="${m.featured?'border-color:var(--accent);background:var(--paper)':''}">
       <div style="display:flex;gap:8px;align-items:center;justify-content:space-between">
-        <span class="badge">${m.featured?'★ Author · Host':'Member'} · ${m.batch||'batch-01'}</span>
+        <span class="badge">${m.featured?'★ Author · Host':'Member'} · ${m.group||''}</span>
         <label style="font-family:var(--mono);font-size:11px"><input type="checkbox" data-k="featured" ${m.featured?'checked':''}> Featured (top)</label>
         <button type="button" class="btn ghost" style="padding:6px 10px;font-size:11px" onclick="this.closest('.member-row').remove(); syncToRaw();">Remove</button>
       </div>
@@ -119,7 +110,7 @@ function renderMembers(members){
       <label class="label">GitHub <input class="input" data-k="github" value="${(m.github||'').replace(/"/g,'&quot;')}" placeholder="https://github.com/..." /></label>
       <div class="grid2">
         <label class="label">Role <input class="input" data-k="role" value="${(m.role||'').replace(/"/g,'&quot;')}" placeholder="Member" /></label>
-        <label class="label">Batch <input class="input" data-k="batch" value="${(m.batch||'').replace(/"/g,'&quot;')}" placeholder="batch-01" /></label>
+        
       </div>
       <div class="grid2">
         <label class="label">Avatar (1-2 letters) <input class="input" data-k="avatar" value="${(m.avatar||'').replace(/"/g,'&quot;')}" placeholder="HL" /></label>
@@ -137,14 +128,14 @@ async function load(){
   const j=await r.json();
   const d=j.data||j;
   cache=d;
-  renderBatches(d.batches||[]);
+
   renderMembers(d.members||[]);
   document.getElementById('rawJson').value=JSON.stringify(d,null,2);
   document.getElementById('msg').textContent='Loaded from '+(j.source||'supabase');
 }
 
 function collect(){
-  const batches=[...document.querySelectorAll('#batchesBox .batch-row')].map(row=>{
+// groupes removed
     const o={};
     row.querySelectorAll('[data-k]').forEach(el=> o[el.dataset.k]=el.value);
     return o;
@@ -160,32 +151,32 @@ function collect(){
     o.featured = !!o.featured;
     return o;
   });
-  return { batches, members };
+  return { groupes, members };
 }
 function syncToRaw(){
   try{
     let raw;
     try{ raw=JSON.parse(document.getElementById('rawJson').value); }catch{ raw={...cache}; }
     const c=collect();
-    raw.batches=c.batches; raw.members=c.members;
+    raw.members=c.members;
     document.getElementById('rawJson').value=JSON.stringify(raw,null,2);
     document.getElementById('rawMsg').textContent='synced ✓';
   }catch(e){ document.getElementById('rawMsg').textContent=e.message; }
 }
 window.syncToRaw=syncToRaw;
 
-document.getElementById('addBatch').addEventListener('click', ()=>{
-  const box=document.getElementById('batchesBox');
+// add removed
+  const box=document.getElementById('groupesBox');
   const div=document.createElement('div');
-  div.className='batch-row';
-  div.innerHTML='<div class=\"grid2\"><label class=\"label\">ID <input class=\"input\" data-k=\"id\" /></label><label class=\"label\">Name <input class=\"input\" data-k=\"name\" /></label></div><label class=\"label\">Label <input class=\"input\" data-k=\"label\" /></label><label class=\"label\">Span <input class=\"input\" data-k=\"span\" /></label><label class=\"label\">Desc <textarea class=\"textarea\" data-k=\"desc\" rows=\"2\"></textarea></label><button type=\"button\" class=\"btn\" onclick=\"this.closest(\\\'.batch-row\\\').remove()\">Remove</button>';
+  div.className='group-row';
+  div.innerHTML='<div class=\"grid2\"><label class=\"label\">ID <input class=\"input\" data-k=\"id\" /></label><label class=\"label\">Name <input class=\"input\" data-k=\"name\" /></label></div><label class=\"label\">Label <input class=\"input\" data-k=\"label\" /></label><label class=\"label\">Span <input class=\"input\" data-k=\"span\" /></label><label class=\"label\">Desc <textarea class=\"textarea\" data-k=\"desc\" rows=\"2\"></textarea></label><button type=\"button\" class=\"btn\" onclick=\"this.closest(\\\'.group-row\\\').remove()\">Remove</button>';
   box.appendChild(div);
 });
 document.getElementById('addMember').addEventListener('click', ()=>{
   const box=document.getElementById('membersBox');
   const div=document.createElement('div');
   div.className='member-row';
-  div.innerHTML='<div class=\"grid2\"><label class=\"label\">Name <input class=\"input\" data-k=\"name\" /></label><label class=\"label\">Handle <input class=\"input\" data-k=\"handle\" /></label></div><label class=\"label\">GitHub <input class=\"input\" data-k=\"github\" /></label><div class=\"grid2\"><label class=\"label\">Role <input class=\"input\" data-k=\"role\" value=\"Member\" /></label><label class=\"label\">Batch <input class=\"input\" data-k=\"batch\" value=\"batch-01\" /></label></div><div class=\"grid2\"><label class=\"label\">Avatar <input class=\"input\" data-k=\"avatar\" /></label><label class=\"label\">Bio <input class=\"input\" data-k=\"bio\" /></label></div><button type=\"button\" class=\"btn\" onclick=\"this.closest(\\\'.member-row\\\').remove()\">Remove</button>';
+  div.innerHTML='<div class=\"grid2\"><label class=\"label\">Name <input class=\"input\" data-k=\"name\" /></label><label class=\"label\">Handle <input class=\"input\" data-k=\"handle\" /></label></div><label class=\"label\">GitHub <input class=\"input\" data-k=\"github\" /></label><div class=\"grid2\"><label class=\"label\">Role <input class=\"input\" data-k=\"role\" value=\"Member\" /></label><label class=\"label\"> <input class=\"input\" data-k=\"group\" value=\"\" /></label></div><div class=\"grid2\"><label class=\"label\">Avatar <input class=\"input\" data-k=\"avatar\" /></label><label class=\"label\">Bio <input class=\"input\" data-k=\"bio\" /></label></div><button type=\"button\" class=\"btn\" onclick=\"this.closest(\\\'.member-row\\\').remove()\">Remove</button>';
   box.appendChild(div);
 });
 document.getElementById('syncRaw').addEventListener('click', syncToRaw);

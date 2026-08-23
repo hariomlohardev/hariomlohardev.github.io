@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#F6F4EE" />
 <meta name="color-scheme" content="light" />
 <title>SIGMOID — Community · Hariom Lohar Lab | hariomlohardev</title>
-<meta name="description" content="SIGMOID — the open lab community by Hariom Lohar. Telegram channel, group, and members. Batches, daily logs, and open notebooks. Join via @sigmoid_dev." />
+<meta name="description" content="SIGMOID — the open lab community by Hariom Lohar. Telegram channel, group, and members. Daily logs, and open notebooks. Join via @sigmoid_dev." />
 <meta name="author" content="Hariom Lohar" />
 <meta name="robots" content="index, follow, max-image-preview:large" />
 <link rel="canonical" href="https://hariomlohardev.github.io/community.html" />
@@ -24,7 +24,7 @@
 <meta property="og:image" content="https://hariomlohardev.github.io/certificates/1.png" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="SIGMOID — Community · Hariom Lohar" />
-<meta name="twitter:description" content="Open lab community SIGMOID — channel, group, batches and members." />
+<meta name="twitter:description" content="Open lab community SIGMOID — channel, group and members." />
 <meta name="twitter:creator" content="@HariomloharAGI" />
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://hariomlohardev.github.io/#person","name":"Hariom Lohar","url":"https://hariomlohardev.github.io/","sameAs":["https://github.com/hariomlohardev","https://t.me/sigmoid_dev"]}, {"@type":"CollectionPage","@id":"https://hariomlohardev.github.io/community.html#webpage","url":"https://hariomlohardev.github.io/community.html","name":"SIGMOID — Community","isPartOf":{"@id":"https://hariomlohardev.github.io/#website"},"about":{"@id":"https://hariomlohardev.github.io/#person"},"breadcrumb":{"@id":"https://hariomlohardev.github.io/community.html#breadcrumb"}}, {"@type":"BreadcrumbList","@id":"https://hariomlohardev.github.io/community.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home — Hariom Lohar","item":"https://hariomlohardev.github.io/"},{"@type":"ListItem","position":2,"name":"SIGMOID Community","item":"https://hariomlohardev.github.io/community.html"}]}]}</script>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -147,9 +147,6 @@ section+section{border-top:1px solid var(--line)}
 .btn.ghost{background:var(--paper);color:var(--ink)}
 .btn.ghost:hover{background:var(--sheet)}
 .members-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px}
-.batch-filter{display:flex;gap:8px;flex-wrap:wrap}
-.batch-pill{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);padding:8px 12px;cursor:pointer;transition:all .15s}
-.batch-pill.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .members-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
 @media(max-width:960px){ .members-grid{grid-template-columns:1fr 1fr} }
 @media(max-width:640px){ .members-grid{grid-template-columns:1fr} }
@@ -165,7 +162,6 @@ section+section{border-top:1px solid var(--line)}
 .member-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase}
 .member-meta span{border:1px solid var(--line);padding:3px 8px;background:var(--paper)}
 .member-meta span.role{background:var(--ink);color:var(--paper);border-color:var(--ink)}
-.member-meta span.batch{background:var(--accent);color:var(--paper);border-color:var(--accent)}
 .member-arrow{position:absolute;top:14px;right:14px;width:32px;height:32px;display:grid;place-items:center;border:1px solid var(--line);background:var(--paper);transition:background .2s,color .2s}
 .member-card:hover .member-arrow{background:var(--ink);color:var(--paper)}
 .member-card.author .member-arrow{background:var(--accent);color:var(--paper);border-color:var(--accent)}
@@ -237,10 +233,9 @@ html.js .rv.in{opacity:1;transform:none}
     <div class="wrap">
       <p class="eyebrow rv"><i></i> Lab community — open notebook, open doors</p>
       <h1><span class="mask"><span class="line">SIGM</span></span><span class="mask"><span class="line d2"><em>OID</em></span></span></h1>
-      <p class="lede rv">A small, serious lab community around the notebooks — daily logs, paper clubs, and hands-on builds. Hosted by Hariom Lohar. One batch at a time.</p>
-      <div class="stats rv">
+      <p class="lede rv">A small, serious lab community around the notebooks — daily logs, paper clubs, and hands-on builds. Hosted by Hariom Lohar. One log at a time.</p>
+      <div class="stats rv" style="grid-template-columns:repeat(2,1fr)">
         <div class="stat"><b id="stMembers">—</b><span>Members</span></div>
-        <div class="stat"><b id="stBatches">—</b><span>Batches</span></div>
         <div class="stat"><b>Daily</b><span>Logs & discussions</span></div>
       </div>
     </div>
@@ -267,7 +262,7 @@ html.js .rv.in{opacity:1;transform:none}
         <div class="join-card">
           <span class="join-no">03 — WhatsApp · coming soon</span>
           <h3>WhatsApp Community</h3>
-          <p>For quick pings and batch updates. Link activates soon — check back.</p>
+          <p>For quick pings and updates. Link activates soon — check back.</p>
           <span class="meta" id="waMeta">will open here when live</span>
           <button class="btn ghost" id="waBtn" type="button" style="margin-top:8px">Get WhatsApp Link →</button>
         </div>
@@ -279,20 +274,14 @@ html.js .rv.in{opacity:1;transform:none}
   <section id="members">
     <div class="wrap">
       <div class="sec-head rv"><span class="kicker"><i></i> 02 — Members</span><h2>The <em>roster</em></h2><span class="sec-tag" id="memberCount">Loading…</span></div>
-      <div class="members-head rv">
-        <div class="batch-filter" id="batchFilter"></div>
-        <span style="margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--muted)">Author on top · batches filter the list</span>
+      <div class="members-head rv" style="justify-content:flex-end">
+        <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">Author on top</span>
       </div>
       <div class="members-grid rv" id="membersGrid" aria-live="polite"></div>
     </div>
   </section>
 
-  <section id="batches">
-    <div class="wrap">
-      <div class="sec-head rv"><span class="kicker"><i></i> 03 — Batches</span><h2>By <em>batch</em></h2><span class="sec-tag">simple, sequential</span></div>
-      <div class="join-grid rv" id="batchesGrid"></div>
-    </div>
-  </section>
+
 </main>
 
 <footer>
@@ -354,54 +343,32 @@ if(waBtn){
   });
 }
 
-// Community data — edit community-data.json or this fallback to add members/batches
+// Community data — edit community-data.json or this fallback to add members
 var FALLBACK={
-  batches:[
-    {id:"batch-01", name:"Batch 01", label:"Batch 01 — Foundations", span:"Jul 2026 → Sep 2026", desc:"Math from axioms, NumPy, backprop by hand. The first cohort."},
-    {id:"batch-02", name:"Batch 02", label:"Batch 02 — Deep Learning", span:"Oct 2026 → Dec 2026", desc:"CNNs, Transformers, PyTorch — building the visual cortex."},
-    {id:"batch-03", name:"Batch 03", label:"Batch 03 — Toward AGI", span:"Jan 2027 →", desc:"LLMs, RAG at scale, open research. Applications open via Telegram."}
-  ],
+
   members:[
-    {name:"Hariom Lohar", handle:"hariomlohardev", github:"https://github.com/hariomlohardev", role:"Author · Host", batch:"batch-01", avatar:"HL", featured:true, bio:"Harvard CS50P 2026 · rebuilding AGI from first principles, daily in public."},
-    {name:"Member — Batch 01", handle:"your-handle", github:"https://github.com/hariomlohardev", role:"Member", batch:"batch-01", avatar:"B1"},
-    {name:"Member — Batch 01", handle:"your-handle", github:"https://github.com/hariomlohardev", role:"Member", batch:"batch-01", avatar:"B1"},
-    {name:"Member — Batch 02", handle:"your-handle", github:"https://github.com/hariomlohardev", role:"Member", batch:"batch-02", avatar:"B2"},
-    {name:"Member — Batch 02", handle:"your-handle", github:"https://github.com/hariomlohardev", role:"Member", batch:"batch-02", avatar:"B2"},
-    {name:"Member — Batch 03", handle:"your-handle", github:"https://github.com/hariomlohardev", role:"Member", batch:"batch-03", avatar:"B3"}
+    {name:"Hariom Lohar", handle:"hariomlohardev", github:"https://github.com/hariomlohardev", role:"Author · Host",, avatar:"HL", featured:true, bio:"Harvard CS50P 2026 · rebuilding AGI from first principles, daily in public."},
+    {name:"Member", handle:"your-handle", github:"https://github.com/hariomlohardev", role:"Member",, avatar:"B1"},
+    {name:"Member", handle:"your-handle", github:"https://github.com/hariomlohardev", role:"Member",, avatar:"B1"},
+    {name:"Member", handle:"your-handle", github:"https://github.com/hariomlohardev", role:"Member", avatar:"B2"},
+    {name:"Member", handle:"your-handle", github:"https://github.com/hariomlohardev", role:"Member", avatar:"B2"},
+    {name:"Member", handle:"your-handle", github:"https://github.com/hariomlohardev", role:"Member", avatar:"B3"}
   ]
 };
 
-var DATA=null, FILTER='all';
+var DATA=null;
 function loadData(){
   fetch('community-data.json',{cache:'no-store'}).then(function(r){ if(!r.ok) throw 0; return r.json(); }).then(function(j){ DATA=j; render(); }).catch(function(){ DATA=FALLBACK; render(); });
 }
 function render(){
   if(!DATA) return;
-  var batches=DATA.batches||FALLBACK.batches;
   var members=DATA.members||FALLBACK.members;
   // stats
   document.getElementById('stMembers').textContent=members.length;
-  document.getElementById('stBatches').textContent=batches.length;
-  document.getElementById('memberCount').textContent=members.length+' members · '+batches.length+' batches';
-  // batches grid
-  var bGrid=document.getElementById('batchesGrid');
-  if(bGrid){
-    bGrid.innerHTML=batches.map(function(b){
-      return '<div class="join-card"><span class="join-no">'+b.span+'</span><h3>'+b.name+'</h3><p style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">'+b.label+'</p><p>'+b.desc+'</p></div>';
-    }).join('');
-  }
-  // batch filter pills
-  var filterEl=document.getElementById('batchFilter');
-  var uniq=['all'].concat(batches.map(function(b){return b.id}));
-  filterEl.innerHTML=uniq.map(function(id){
-    var label=id==='all'?'All': (batches.find(function(b){return b.id===id})||{name:id}).name;
-    return '<button class="batch-pill'+(FILTER===id?' active':'')+'" data-batch="'+id+'">'+label+'</button>';
-  }).join('');
-  filterEl.querySelectorAll('.batch-pill').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      FILTER=btn.getAttribute('data-batch');
-      filterEl.querySelectorAll('.batch-pill').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-batch')===FILTER); });
-      renderMembers();
+  
+  document.getElementById('memberCount').textContent=members.length+' members';
+// members
+renderMembers();
     });
   });
   renderMembers();
@@ -410,7 +377,7 @@ function render(){
 function renderMembers(){
   var members=DATA.members||FALLBACK.members;
   var grid=document.getElementById('membersGrid');
-  var filtered = FILTER==='all' ? members : members.filter(function(m){ return m.batch===FILTER; });
+  var filtered = members;
   // author on top (featured)
   filtered.sort(function(a,b){ if(a.featured&&!b.featured) return -1; if(!a.featured&&b.featured) return 1; return 0; });
   grid.innerHTML=filtered.map(function(m){
@@ -423,7 +390,7 @@ function renderMembers(){
       + '<div style="min-width:0">'
       + '<div class="member-name">'+m.name+'</div>'
       + '<div class="member-handle">@'+m.handle+'</div>'
-      + '<div class="member-meta" style="margin-top:8px"><span class="role">'+m.role+'</span><span class="batch">'+m.batch+'</span></div>'
+      + '<div class="member-meta" style="margin-top:8px"><span class="role">'+m.role+'</span></div>'
       + (m.bio?'<p style="margin-top:8px;font-size:13px;color:var(--body)">'+m.bio+'</p>':'')
       + '</div>'
       + '<span class="member-arrow">↗</span>'
