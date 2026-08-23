@@ -690,7 +690,7 @@ document.getElementById('copyBtn').addEventListener('click',function(){
 for(const post of posts){
   const dir = path.join(BLOG_P_DIR, post.slug);
   fs.mkdirSync(dir, {recursive:true});
-  fs.writeFileSync(path.join(dir,"/"), postPage(post));
+  fs.writeFileSync(path.join(dir,"index.html"), postPage(post));
   console.log(`→ blog/p/${post.slug}/index.html`);
   // og svg — $0, Lab Notebook chrome
   if(!post.cover){

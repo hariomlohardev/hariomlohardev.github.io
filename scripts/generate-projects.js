@@ -299,7 +299,7 @@ for(const p of projects){
   const dir = path.join(PROJECTS_P_DIR, slug);
   fs.mkdirSync(dir, {recursive:true});
   const html = projectPage({...p, slug});
-  fs.writeFileSync(path.join(dir,"/"), html);
+  fs.writeFileSync(path.join(dir,"index.html"), html);
   console.log(`→ projects/p/${slug}/index.html`);
   // og svg if no cover
   if(!p.cover){
