@@ -171,7 +171,7 @@ footer{border-top:1px solid var(--ink);background:var(--paper);margin-top:clamp(
 .foot-base .top-btn:hover{border-color:var(--ink);background:var(--ink);color:var(--paper)}
 html.js .rv{opacity:0;transform:translateY(16px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
 html.js .rv.in{opacity:1;transform:none}
-@media(max-width:1020px){ .about-grid{grid-template-columns:1fr} }
+@media(max-width:1020px){ .about-grid{grid-template-columns:1fr} #principles div[style*="grid-template-columns:repeat(3,1fr)"]{grid-template-columns:1fr} }
 @media(max-width:860px){ .foot-grid{grid-template-columns:1fr 1fr} }
 @media(max-width:760px){ nav.desk{display:none} .menu-btn{display:inline-flex} .mobile-panel{display:block} .gh-pill{display:none} }
 @media(max-width:640px){ :root{--pad:18px} .head-main{height:62px} .timeline{margin-left:6px} .foot-grid{grid-template-columns:1fr;gap:30px} .foot-base{flex-direction:column;align-items:flex-start} }
@@ -250,7 +250,6 @@ html.js .rv.in{opacity:1;transform:none}
             <div><dt>Log</dt><dd id="factDay">Day — of —</dd></div>
             <div><dt>Open to</dt><dd>Freelance & collabs</dd></div>
           </dl>
-          <ul class="nowlist" id="nowList"></ul>
           <div style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap">
             <a class="btn solid" href="contact.html">Hire me →</a>
             <a class="btn" href="https://github.com/hariomlohardev" target="_blank" rel="noopener">GitHub ↗</a>
@@ -261,29 +260,27 @@ html.js .rv.in{opacity:1;transform:none}
     </div>
   </section>
 
-  <section id="timeline">
+  <section id="principles">
     <div class="wrap">
-      <div class="sec-head rv"><span class="kicker"><i></i> 02 — Timeline</span><h2>The <em>long road</em></h2><span class="sec-tag">No shortcuts</span></div>
-      <div class="timeline rv">
-        <div class="tl-item active">
-          <div class="tl-date">2026 · Now</div>
-          <div class="tl-title">CNNs, Transformers & PyTorch</div>
-          <div class="tl-desc">Attention by hand, 4-head residual, layernorm — forward/backward in NumPy, grads checked at 1e-4. Shipping live benches.</div>
+      <div class="sec-head rv"><span class="kicker"><i></i> 02 — How I work</span><h2>Three <em>rules</em></h2><span class="sec-tag">No shortcuts</span></div>
+      <div class="rv" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+        <div style="background:var(--sheet);border:1px solid var(--ink);padding:18px;position:relative">
+          <div style="position:absolute;top:-8px;left:12px;width:48px;height:10px;background:rgba(255,255,255,.78);border:1px solid rgba(11,18,32,.06);transform:rotate(-1deg)"></div>
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--accent)">01</div>
+          <h3 style="font-family:var(--serif);font-weight:600;margin-top:8px">Derive before you import</h3>
+          <p style="font-size:14px;color:var(--body);margin-top:8px;line-height:1.6">Do not use what you cannot derive. Math from axioms first, then architectures by hand in NumPy.</p>
         </div>
-        <div class="tl-item">
-          <div class="tl-date">2026 · Q1</div>
-          <div class="tl-title">Math from axioms → Backprop</div>
-          <div class="tl-desc">Linear algebra, calculus, probability, then neural nets and optimizers SGD→Adam — all derived, no autograd.</div>
+        <div style="background:var(--sheet);border:1px solid var(--ink);padding:18px;position:relative">
+          <div style="position:absolute;top:-8px;left:12px;width:48px;height:10px;background:rgba(255,255,255,.78);border:1px solid rgba(11,18,32,.06);transform:rotate(-1deg)"></div>
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--accent)">02</div>
+          <h3 style="font-family:var(--serif);font-weight:600;margin-top:8px">Eight hours, every day</h3>
+          <p style="font-size:14px;color:var(--body);margin-top:8px;line-height:1.6">One deep-work block, documented in AGI_Research so the log stays honest. Committed daily.</p>
         </div>
-        <div class="tl-item">
-          <div class="tl-date">2026</div>
-          <div class="tl-title">Harvard CS50P — certified</div>
-          <div class="tl-desc">Nine problem sets + final project, David J. Malan. Verified 544021b8-ab89-4eb2-a433-9c0b949e658f.</div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-date">After 12th</div>
-          <div class="tl-title">Chose the long road</div>
-          <div class="tl-desc">Self-taught — 8h/day, open notebook, proof before import. India · IST.</div>
+        <div style="background:var(--sheet);border:1px solid var(--ink);padding:18px;position:relative">
+          <div style="position:absolute;top:-8px;left:12px;width:48px;height:10px;background:rgba(255,255,255,.78);border:1px solid rgba(11,18,32,.06);transform:rotate(-1deg)"></div>
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--accent)">03</div>
+          <h3 style="font-family:var(--serif);font-weight:600;margin-top:8px">Build in public</h3>
+          <p style="font-size:14px;color:var(--body);margin-top:8px;line-height:1.6">Errors, proofs and small wins are all commits. The notebook stays open on GitHub.</p>
         </div>
       </div>
     </div>
@@ -291,14 +288,17 @@ html.js .rv.in{opacity:1;transform:none}
 
   <section id="cta">
     <div class="wrap">
-      <div class="community-band rv" style="background:var(--ink);color:var(--paper);border-color:var(--ink)">
+      <div class="rv" style="background:var(--sheet);border:1px solid var(--ink);padding:28px 24px;position:relative;box-shadow:0 8px 24px rgba(24,22,17,.06);display:grid;grid-template-columns:1.2fr auto;gap:24px;align-items:center">
+        <div style="position:absolute;top:-10px;left:20px;width:80px;height:14px;background:rgba(255,255,255,.78);border:1px solid rgba(11,18,32,.06);transform:rotate(-1deg);box-shadow:0 1px 4px rgba(0,0,0,.06)"></div>
         <div>
-          <h3 style="color:var(--paper)">Let’s build something that lasts.</h3>
-          <p style="color:var(--paper);opacity:.85;margin-top:8px">Backends, apps, RAG — or join SIGMOID and build in public with the lab.</p>
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)">Ready when you are</div>
+          <h3 style="font-family:var(--serif);font-weight:600;font-size:clamp(1.5rem,3vw,2rem);margin-top:8px;color:var(--ink)">Let’s build something that <em style="font-style:italic;font-weight:400">lasts.</em></h3>
+          <p style="margin-top:10px;color:var(--body);font-size:15px;line-height:1.6;max-width:52ch">Backends that stay up, apps that feel native, and search over your data — or join SIGMOID and build in public, one log at a time.</p>
         </div>
-        <div style="display:flex;gap:12px;flex-wrap:wrap">
-          <a class="btn solid" href="contact.html" style="background:var(--paper);color:var(--ink);border-color:var(--paper)">Contact →</a>
-          <a class="btn" href="community.html" style="border-color:var(--paper);color:var(--paper)">Community ↗</a>
+        <div style="display:flex;flex-direction:column;gap:10px;min-width:180px">
+          <a class="btn solid" href="contact.html" style="justify-content:center">Start a project →</a>
+          <a class="btn" href="community.html" style="justify-content:center">Join SIGMOID ↗</a>
+          <span style="font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:center">Usually replies &lt; 24h · IST</span>
         </div>
       </div>
     </div>
