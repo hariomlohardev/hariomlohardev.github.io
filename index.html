@@ -17,6 +17,7 @@
 <link rel="me" href="https://x.com/HariomloharAGI" />
 <link rel="me" href="https://www.linkedin.com/in/hariomlohar" />
 <link rel="manifest" href="/site.webmanifest" />
+<meta name="supabase-anon" content="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJnbXZocHRlYmtzbGtqbGVvaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0NDQwMTAsImV4cCI6MjEwMzAyMDAxMH0.nnaZiyKNOx-eT_5JTQNDwk5b3PCDKZv4f9Yc6wQtk_k" />
 <link rel="alternate" type="application/rss+xml" title="Hariom Lohar — Blog & Daily Logs" href="https://hariomlohardev.github.io/feed.xml" />
 <meta property="og:site_name" content="Hariom Lohar — Lab Notebook №01" />
 <meta property="og:locale" content="en_IN" />
@@ -808,24 +809,39 @@ function init(data){
   document.getElementById('yr').textContent=new Date().getFullYear();
   phrases=data.taglines&&data.taglines.length?data.taglines:phrases;
 
-  try{
-    fetch('posts.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(posts){
-      var box=document.getElementById('latestList');box.setAttribute('aria-busy','false');
+  // Supabase-only latest logs — /api/admin/posts with direct REST fallback, 3-card render (same card UI)
+  (function(){
+    var box=document.getElementById('latestList');
+    function renderLatest(posts){
+      if(!box) return;
+      box.setAttribute('aria-busy','false');
       posts=(posts||[]).slice(0,3);
-      if(!posts.length){box.innerHTML='<div style="grid-column:1/-1;padding:20px;font-family:var(--mono);font-size:12px;color:var(--muted);text-align:center">No posts yet. <a href="/blog" style="color:var(--accent);text-decoration:underline">Open blog</a></div>';return;}
+      if(!posts.length){ box.innerHTML='<div style="grid-column:1/-1;padding:20px;font-family:var(--mono);font-size:12px;color:var(--muted);text-align:center">No posts yet. <a href="/blog" style="color:var(--accent);text-decoration:underline">Open blog</a></div>'; return; }
       box.innerHTML=posts.map(function(p){
         var isLog=(p.tags||[]).join(' ').toLowerCase().indexOf('daily-log')!==-1;
         var badge=isLog?'<span class="lc-badge">◎ Daily log</span>':'<span class="lc-badge art">✎ Article</span>';
         var href=p.url||('blog/p/'+p.slug+'/');
         var d=p.date;
-        try{d=new Date(p.date+'T00:00:00+05:30').toLocaleDateString('en-GB',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric'}).toUpperCase();}catch(e){}
-        return '<a href="'+href+'" class="latest-card"><div class="lc-meta">'+badge+'<span>'+d+'</span><span>·</span><span>'+(p.readingMinutes||3)+' min</span></div><h4>'+p.title+'</h4><p>'+(p.description||'')+'</p><span class="open">Open →</span></a>';
+        try{ d=new Date(p.date+'T00:00:00+05:30').toLocaleDateString('en-GB',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric'}).toUpperCase(); }catch(e){}
+        var mins=p.readingMinutes||p.reading_minutes||p.minutes||3;
+        return '<a href="'+href+'" class="latest-card"><div class="lc-meta">'+badge+'<span>'+d+'</span><span>·</span><span>'+mins+' min</span></div><h4>'+p.title+'</h4><p>'+(p.description||'')+'</p><span class="open">Open →</span></a>';
       }).join('');
+    }
+    fetch('/api/admin/posts',{cache:'no-store'}).then(function(r){ if(!r.ok) throw new Error('api '+r.status); return r.json(); }).then(function(j){
+      var posts=j.posts||j||[];
+      posts=posts.filter(function(p){ return p.published!==false; }).sort(function(a,b){ return String(b.date).localeCompare(String(a.date)); }).slice(0,3);
+      if(!posts.length) throw new Error('no posts');
+      renderLatest(posts);
     }).catch(function(){
-      var box=document.getElementById('latestList');box.setAttribute('aria-busy','false');
-      box.innerHTML='<div style="grid-column:1/-1;padding:20px;font-family:var(--mono);font-size:12px;color:var(--muted);text-align:center">Couldn\'t load logs. <a href="/blog" style="color:var(--accent);text-decoration:underline">Open blog</a></div>';
+      var anon=document.querySelector('meta[name="supabase-anon"]')?.content || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJnbXZocHRlYmtzbGtqbGVvaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0NDQwMTAsImV4cCI6MjEwMzAyMDAxMH0.nnaZiyKNOx-eT_5JTQNDwk5b3PCDKZv4f9Yc6wQtk_k';
+      var url='https://rgmvhptebkslkjleoilc.supabase.co/rest/v1/posts?select=*&order=date.desc&limit=3&published=eq.true';
+      return fetch(url,{headers: anon?{apikey:anon,Authorization:'Bearer '+anon}:{}}).then(function(r){ if(!r.ok) throw new Error('rest '+r.status); return r.json(); }).then(function(arr){
+        renderLatest(arr||[]);
+      });
+    }).catch(function(){
+      if(box){ box.setAttribute('aria-busy','false'); if(!box.innerHTML || box.innerHTML.indexOf('skeleton')!==-1) box.innerHTML='<div style="grid-column:1/-1;padding:20px;font-family:var(--mono);font-size:12px;color:var(--muted);text-align:center">No posts yet. <a href="/blog" style="color:var(--accent);text-decoration:underline">Open blog</a></div>'; }
     });
-  }catch(e){}
+  })();
 
   armObservers();fireDay();startTyping();
 }

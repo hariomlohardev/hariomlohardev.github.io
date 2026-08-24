@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#FFD400" />
 <meta name="color-scheme" content="light" />
+<meta name="supabase-anon" content="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJnbXZocHRlYmtzbGtqbGVvaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0NDQwMTAsImV4cCI6MjEwMzAyMDAxMH0.nnaZiyKNOx-eT_5JTQNDwk5b3PCDKZv4f9Yc6wQtk_k" />
 <title>Post — Hariom Lohar | Lab Notebook No.01 — Blog & Logs</title>
 <meta name="description" content="Post by Hariom Lohar (hariomlohardev) — Lab Notebook No.01. AGI from first principles, daily commits and builds since July 2026. Harvard CS50P 2026, Python..." />
 <meta name="robots" content="noindex, follow, max-image-preview:large" />
@@ -187,7 +188,7 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
     if(!j.ok||!j.post) throw new Error('no post');
     return [j.post];
   }).catch(function(){
-    var anon=document.querySelector('meta[name="supabase-anon"]')?.content || '';
+    var anon=document.querySelector('meta[name="supabase-anon"]')?.content || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJnbXZocHRlYmtzbGtqbGVvaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0NDQwMTAsImV4cCI6MjEwMzAyMDAxMH0.nnaZiyKNOx-eT_5JTQNDwk5b3PCDKZv4f9Yc6wQtk_k';
     var url='https://rgmvhptebkslkjleoilc.supabase.co/rest/v1/posts?slug=eq.'+encodeURIComponent(slug)+'&select=*';
     return fetch(url, {headers: anon?{apikey:anon, Authorization:'Bearer '+anon}:{}}).then(function(r){ if(!r.ok) throw new Error('rest '+r.status); return r.json(); }).then(function(arr2){
       if(!arr2||!arr2.length) throw new Error('no rest');
@@ -251,7 +252,7 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
       }
     });
   }).catch(function(err){
-    document.getElementById('status').textContent='Failed to load posts.json: '+err.message+'. Run node scripts/generate-blog.js.';
+    document.getElementById('status').innerHTML='Failed to load post from Supabase: '+esc(err.message||String(err))+'. Try its <a href="/blog/p/'+esc(slug)+'/" style="color:var(--blue);text-decoration:underline">static page</a> or <a href="/blog" style="color:var(--blue);text-decoration:underline">/blog</a>.';
   });
 })();
 </script>
