@@ -192,6 +192,8 @@ html.js .rv.in{opacity:1;transform:none}
 </style>
 <script>if(location.hostname==='hariomlohardev.github.io' && location.pathname!=='/' && location.pathname!=='/index.html' && !location.pathname.startsWith('/admin')){location.replace('https://hariomlohardev.vercel.app'+location.pathname+location.search+location.hash);}</script>
 <link rel="alternate" type="text/plain" href="/ai.txt" />
+<meta name="supabase-url" content="https://rgmvhptebkslkjleoilc.supabase.co" />
+<meta name="supabase-anon" content="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJnbXZocHRlYmtzbGtqbGVvaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0NDQwMTAsImV4cCI6MjEwMzAyMDAxMH0.nnaZiyKNOx-eT_5JTQNDwk5b3PCDKZv4f9Yc6wQtk_k" />
 </head>
 <body>
 <a href="#main" class="skip">Skip to content</a>
@@ -244,7 +246,7 @@ html.js .rv.in{opacity:1;transform:none}
     <div class="wrap">
       <p class="eyebrow rv"><i></i> Get in touch — freelance & collaborations</p>
       <h1><span class="mask"><span class="line">Contact</span></span> <span class="mask"><span class="line d2"><em>file</em></span></span></h1>
-      <p class="lede rv" style="font-family:var(--serif);font-style:italic;margin-top:24px;max-width:62ch">Backends that stay up, apps that feel native, and search over your data — or just say hi. Replies via email, usually &lt;24h. Also on Instagram, and inside the SIGMOID lab.</p>
+      <p class="lede rv" id="contactLede" style="font-family:var(--serif);font-style:italic;margin-top:24px;max-width:62ch">Backends that stay up, apps that feel native, and search over your data — or just say hi. Replies via email, usually &lt;24h. Also on Instagram, and inside the SIGMOID lab.</p>
     </div>
   </section>
 
@@ -252,9 +254,9 @@ html.js .rv.in{opacity:1;transform:none}
     <div class="wrap">
       <div class="sec-head rv"><span class="kicker"><i></i> 01 — Contact</span><h2>Let’s ship <em>something that lasts.</em></h2><span class="sec-tag">Let’s talk</span></div>
       <div class="contact-top rv">
-        <h2>Let’s ship<br>something that<br><em>lasts.</em></h2>
+        <h2 id="contactTopTitle">Let’s ship<br>something that<br><em>lasts.</em></h2>
         <div>
-          <p>Open to part-time work — backends with Django & FastAPI, Flutter apps, and search over your data with RAG. I hand over clean code and clear docs. Community host at SIGMOID.</p>
+          <p id="contactTopDesc">Open to part-time work — backends with Django & FastAPI, Flutter apps, and search over your data with RAG. I hand over clean code and clear docs. Community host at SIGMOID.</p>
           <div class="avail"><i></i> Currently available — ask about this month</div>
         </div>
       </div>
@@ -342,6 +344,31 @@ function observeReveals(){
   }else els.forEach(function(el){el.classList.add('in');});
 }
 observeReveals();
+// Supabase-first for Contact (site_content key=contact) — updates lede, top, avail, clinks from admin
+try{
+  (function(){
+    var anon=document.querySelector('meta[name="supabase-anon"]')?.content||"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJnbXZocHRlYmtzbGtqbGVvaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0NDQwMTAsImV4cCI6MjEwMzAyMDAxMH0.nnaZiyKNOx-eT_5JTQNDwk5b3PCDKZv4f9Yc6wQtk_k";
+    var url="https://rgmvhptebkslkjleoilc.supabase.co/rest/v1/site_content?key=eq.contact&select=data";
+    fetch(url,{headers:{apikey:anon, Authorization:'Bearer '+anon}, cache:'no-store'}).then(function(r){ if(!r.ok) throw 0; return r.json(); }).then(function(arr){
+      var d=(arr&&arr[0]&&arr[0].data)||null; if(!d) throw 0;
+      if(d.lede){ var e=document.getElementById('contactLede'); if(e) e.innerHTML=d.lede; }
+      if(d.top){
+        if(d.top.title){ var e=document.getElementById('contactTopTitle'); if(e) e.innerHTML=d.top.title; }
+        if(d.top.desc){ var e=document.getElementById('contactTopDesc'); if(e) e.textContent=d.top.desc; }
+        if(d.top.avail){ var e=document.querySelector('.contact-top .avail'); if(e) e.innerHTML='<i></i> '+d.top.avail; }
+      }
+      if(d.clinks && Array.isArray(d.clinks)){
+        var grid=document.getElementById('clinks');
+        if(grid){
+          grid.innerHTML=d.clinks.map(function(c,i){
+            var feat=c.featured?' clink featured':''; var no=String(i+1).padStart(2,'0')+' · '+(c.no||'FILE'); var arrow=c.featured?'→':'↗';
+            return '<a class="clink'+feat+'" href="'+c.href+'" target="_blank" rel="noopener"><span class="c-no">'+no+'</span><span class="c-name">'+c.name+'</span><span class="c-url">'+c.url+'</span><span class="c-arrow">'+arrow+'</span></a>';
+          }).join('');
+        }
+      }
+    }).catch(function(){});
+  })();
+}catch(e){}
 })();
 </script>
 <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7c8c6879055d45ba894f6ac0ce1cc51a"}'></script>

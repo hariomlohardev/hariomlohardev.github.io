@@ -139,16 +139,47 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
   try{
     document.getElementById('hdrDate').textContent = new Date().toLocaleDateString('en-GB',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric'}).toUpperCase();
   }catch(e){}
-  var params = new URLSearchParams(location.search);
-  var slug = (params.get('slug')||params.get('p')||location.hash.replace(/^#/,'')||location.pathname.split('/').filter(Boolean).pop()||'').trim().toLowerCase();
-  if(slug==='p' || slug==='blog') slug='';
+  // Robust slug resolver: handles both /blog/p/:slug (Vercel rewrite) and /post.html?slug=:slug
+  // Priority: ?slug= / ?p=  →  #hash  →  /blog/p/:slug clean URL
+  function resolveSlug(){
+    var params = new URLSearchParams(location.search);
+    var q = (params.get('slug') || params.get('p') || '').trim().toLowerCase();
+    if(q){
+      q = q.replace(/^\/+|\/+$/g,'').split('/').pop().replace(/\.html$/,'');
+      if(q && q!=='p' && q!=='blog' && q!=='post' && q!=='post.html') return q;
+    }
+    var h = (location.hash || '').replace(/^#/,'').trim().toLowerCase();
+    if(h){
+      h = h.replace(/^\/+|\/+$/g,'').split('/').pop().replace(/\.html$/,'');
+      if(h && h!=='p' && h!=='blog' && h!=='post' && h!=='post.html') return h;
+    }
+    // Clean URL /blog/p/:slug  (browser pathname still shows /blog/p/:slug after Vercel rewrite)
+    var segs = location.pathname.split('/').filter(Boolean).map(function(s){ return s.toLowerCase(); });
+    // /blog/p/:slug or /blog/p/:slug/
+    if(segs.length>=3 && segs[0]==='blog' && segs[1]==='p' && segs[2]){
+      var cand = segs[2].replace(/\.html$/,'');
+      if(cand && cand!=='p' && cand!=='blog') return cand;
+    }
+    // /blog/p/:slug/index.html edge case
+    if(segs.length>=2 && segs[segs.length-1]==='index.html' && segs[segs.length-2] && segs[segs.length-2]!=='p' && segs[segs.length-2]!=='blog'){
+      return segs[segs.length-2].replace(/\.html$/,'');
+    }
+    // Fallback: last segment if it looks like a slug (not a generic page name)
+    var last = segs.length ? segs[segs.length-1].replace(/\.html$/,'') : '';
+    if(last && last!=='post' && last!=='blog' && last!=='p' && last!=='index') return last;
+    return '';
+  }
+  var slug = resolveSlug();
   if(!slug){
     document.getElementById('status').innerHTML='No slug — open <a href="/blog" style="color:var(--blue);text-decoration:underline">/blog</a> and click a post, or use its static URL <code>/blog/p/&lt;slug&gt;/</code>.';
     document.getElementById('title').textContent='Post — choose one';
     return;
   }
-  // normalize: strip leading slash stuff
-  slug = slug.replace(/^\/+|\/+$/g,'').split('/').pop();
+  if(!/^[a-z0-9-]{1,64}$/.test(slug)){
+    document.getElementById('status').innerHTML='Invalid slug <code>'+String(slug).replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</code>. See <a href="/blog" style="color:var(--blue);text-decoration:underline">/blog</a>.';
+    document.getElementById('title').textContent='Invalid slug';
+    return;
+  }
 
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function fmt(d){ try{ return new Date(d+'T00:00:00+05:30').toLocaleDateString('en-GB',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric'}).toUpperCase(); }catch(e){ return d; } }
@@ -183,13 +214,14 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
     root.appendChild(s);
   }
 
-  // Supabase-only: try API first, then direct REST
+  // Supabase-only: try API first, then direct REST (anon + RLS, published=true)
   fetch('/api/blog/post?slug='+encodeURIComponent(slug),{cache:'no-store'}).then(function(r){ if(!r.ok) throw new Error('api '+r.status); return r.json(); }).then(function(j){
     if(!j.ok||!j.post) throw new Error('no post');
     return [j.post];
   }).catch(function(){
     var anon=document.querySelector('meta[name="supabase-anon"]')?.content || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJnbXZocHRlYmtzbGtqbGVvaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0NDQwMTAsImV4cCI6MjEwMzAyMDAxMH0.nnaZiyKNOx-eT_5JTQNDwk5b3PCDKZv4f9Yc6wQtk_k';
-    var url='https://rgmvhptebkslkjleoilc.supabase.co/rest/v1/posts?slug=eq.'+encodeURIComponent(slug)+'&select=*';
+    // Defense in depth: filter published=eq.true even though RLS already restricts anon to published rows
+    var url='https://rgmvhptebkslkjleoilc.supabase.co/rest/v1/posts?slug=eq.'+encodeURIComponent(slug)+'&published=eq.true&select=slug,title,description,date,tags,cover,html,raw,word_count,reading_minutes,published';
     return fetch(url, {headers: anon?{apikey:anon, Authorization:'Bearer '+anon}:{}}).then(function(r){ if(!r.ok) throw new Error('rest '+r.status); return r.json(); }).then(function(arr2){
       if(!arr2||!arr2.length) throw new Error('no rest');
       return arr2.map(function(p){ return {slug:p.slug,title:p.title,description:p.description,date:p.date,tags:p.tags||[],cover:p.cover,html:p.html,raw:p.raw,wordCount:p.word_count,readingMinutes:p.reading_minutes,url:'https://hariomlohardev.github.io/blog/p/'+p.slug+'/', file:p.slug+'.md'}; });
@@ -212,8 +244,9 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
     var tagsHtml=(post.tags||[]).map(function(t){ return '<a href="/blog#tag='+encodeURIComponent(t)+'" style="border:1px solid var(--line);background:var(--paper-2);padding:4px 8px;color:var(--muted)">'+esc(t)+'</a>'; }).join(' ');
     document.getElementById('meta').innerHTML = '<span><b>By Hariom Lohar</b></span><span>·</span><span>'+fmt(post.date)+'</span><span>·</span><span>'+(post.wordCount||'—')+' words</span><span>·</span><span>'+tagsHtml+'</span>';
     var cl=document.getElementById('canonicalLink'); cl.href=canon; cl.style.display='inline-flex'; cl.textContent='Open canonical →';
-    // try to load static HTML for body
-    fetch('blog/p/'+post.slug+'/',{cache:'no-store'}).then(function(r){ if(!r.ok) throw new Error('static '+r.status); return r.text(); }).then(function(html){
+    // Supabase-only body render — try static HTML cache first, then Supabase html/raw (no posts/*.md fetch)
+    // Absolute path: works from both /post.html?slug=:slug and /blog/p/:slug clean URL
+    fetch('/blog/p/'+encodeURIComponent(post.slug)+'/',{cache:'no-store'}).then(function(r){ if(!r.ok) throw new Error('static '+r.status); return r.text(); }).then(function(html){
       var m=html.match(/<div class="prose">([\s\S]*?)<\/div>\s*<\/article>/i) || html.match(/<div class="prose">([\s\S]*?)<\/div>/i);
       if(m){
         document.getElementById('prose').innerHTML = m[1];
@@ -222,34 +255,36 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
         loadComments(post.slug);
       } else throw new Error('no prose');
     }).catch(function(){
-      // fallback: try to fetch markdown source if file field present
-      var mdPath = post.file ? 'posts/'+post.file : null;
-      if(mdPath){
-        fetch(mdPath,{cache:'no-store'}).then(function(r){ if(!r.ok) throw new Error('md '+r.status); return r.text(); }).then(function(raw){
-          // strip frontmatter
-          var body = raw.replace(/^---[\s\S]*?---\s*/,'');
-          // tiny md → html (same as generator, simplified)
-          var s=body.replace(/\r\n/g,'\n');
-          var codes=[];
-          s=s.replace(/```[a-zA-Z0-9_-]*\n([\s\S]*?)```/g,function(_,c){ var i=codes.length; codes.push('<pre><code>'+esc(c.trimEnd())+'</code></pre>'); return '__CODE_'+i+'__'; });
-          s=s.replace(/`([^`]+?)`/g,function(_,c){ return '<code>'+esc(c)+'</code>'; });
-          s=s.replace(/^###\s+(.+)$/gm,'<h3>$1</h3>').replace(/^##\s+(.+)$/gm,'<h2>$1</h2>').replace(/^#\s+(.+)$/gm,'<h1>$1</h1>');
-          s=s.replace(/\[([^\]]+?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g,'<a href="$2">$1</a>');
-          s=s.replace(/\*\*([^*]+?)\*\*/g,'<strong>$1</strong>');
-          s=s.replace(/^\s*[-*]\s+(.+)$/gm,'<li>$1</li>');
-          s=s.replace(/(?:<li>.*<\/li>\n?)+/g,function(m){ return '<ul>\n'+m.trim().split('\n').join('\n')+'\n</ul>'; });
-          var blocks=s.split(/\n{2,}/).map(function(b){ b=b.trim(); if(!b) return ''; if(b.startsWith('<h')||b.startsWith('<pre')||b.startsWith('<ul')||b.startsWith('__CODE_')) return b; return '<p>'+b.replace(/\n/g,'<br />\n')+'</p>'; }).join('\n\n');
-          codes.forEach(function(html,i){ blocks=blocks.replace('__CODE_'+i+'__', html); });
-          document.getElementById('prose').innerHTML = blocks;
-          document.getElementById('article').style.display='block';
-          document.getElementById('status').style.display='none';
-          loadComments(post.slug);
-        }).catch(function(){
-          document.getElementById('status').innerHTML='Post found but body not loaded. Open canonical: <a href="'+esc(canon)+'" style="color:var(--blue);text-decoration:underline">'+esc(canon)+'</a>';
-        });
-      } else {
-        document.getElementById('status').innerHTML='Post found. Open canonical: <a href="'+esc(canon)+'" style="color:var(--blue);text-decoration:underline">'+esc(canon)+'</a>';
+      // Supabase-only fallback — no posts/*.md fetch — use html/raw from Supabase record
+      var html = post.html || '';
+      if(html && String(html).trim()){
+        document.getElementById('prose').innerHTML = html;
+        document.getElementById('article').style.display='block';
+        document.getElementById('status').style.display='none';
+        loadComments(post.slug);
+        return;
       }
+      var raw = post.raw || '';
+      if(raw && String(raw).trim()){
+        var body = String(raw).replace(/^---[\s\S]*?---\s*/,'');
+        var s=body.replace(/\r\n/g,'\n');
+        var codes=[];
+        s=s.replace(/```[a-zA-Z0-9_-]*\n([\s\S]*?)```/g,function(_,c){ var i=codes.length; codes.push('<pre><code>'+esc(c.trimEnd())+'</code></pre>'); return '__CODE_'+i+'__'; });
+        s=s.replace(/`([^`]+?)`/g,function(_,c){ return '<code>'+esc(c)+'</code>'; });
+        s=s.replace(/^###\s+(.+)$/gm,'<h3>$1</h3>').replace(/^##\s+(.+)$/gm,'<h2>$1</h2>').replace(/^#\s+(.+)$/gm,'<h1>$1</h1>');
+        s=s.replace(/\[([^\]]+?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g,'<a href="$2">$1</a>');
+        s=s.replace(/\*\*([^*]+?)\*\*/g,'<strong>$1</strong>');
+        s=s.replace(/^\s*[-*]\s+(.+)$/gm,'<li>$1</li>');
+        s=s.replace(/(?:<li>.*<\/li>\n?)+/g,function(m){ return '<ul>\n'+m.trim().split('\n').join('\n')+'\n</ul>'; });
+        var blocks=s.split(/\n{2,}/).map(function(b){ b=b.trim(); if(!b) return ''; if(b.startsWith('<h')||b.startsWith('<pre')||b.startsWith('<ul')||b.startsWith('__CODE_')) return b; return '<p>'+b.replace(/\n/g,'<br />\n')+'</p>'; }).join('\n\n');
+        codes.forEach(function(html,i){ blocks=blocks.replace('__CODE_'+i+'__', html); });
+        document.getElementById('prose').innerHTML = blocks;
+        document.getElementById('article').style.display='block';
+        document.getElementById('status').style.display='none';
+        loadComments(post.slug);
+        return;
+      }
+      document.getElementById('status').innerHTML='Post found but body not loaded from Supabase. Open canonical: <a href="'+esc(canon)+'" style="color:var(--blue);text-decoration:underline">'+esc(canon)+'</a>';
     });
   }).catch(function(err){
     document.getElementById('status').innerHTML='Failed to load post from Supabase: '+esc(err.message||String(err))+'. Try its <a href="/blog/p/'+esc(slug)+'/" style="color:var(--blue);text-decoration:underline">static page</a> or <a href="/blog" style="color:var(--blue);text-decoration:underline">/blog</a>.';

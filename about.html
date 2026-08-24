@@ -182,6 +182,8 @@ html.js .rv.in{opacity:1;transform:none}
 </style>
 <script>if(location.hostname==='hariomlohardev.github.io' && location.pathname!=='/' && location.pathname!=='/index.html' && !location.pathname.startsWith('/admin')){location.replace('https://hariomlohardev.vercel.app'+location.pathname+location.search+location.hash);}</script>
 <link rel="alternate" type="text/plain" href="/ai.txt" title="AI — Hariom Lohar" />
+<meta name="supabase-url" content="https://rgmvhptebkslkjleoilc.supabase.co" />
+<meta name="supabase-anon" content="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJnbXZocHRlYmtzbGtqbGVvaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0NDQwMTAsImV4cCI6MjEwMzAyMDAxMH0.nnaZiyKNOx-eT_5JTQNDwk5b3PCDKZv4f9Yc6wQtk_k" />
 </head>
 <body>
 <a href="#main" class="skip">Skip to content</a>
@@ -248,13 +250,13 @@ html.js .rv.in{opacity:1;transform:none}
           <figcaption><span>fig. 00 — hariom, thinking</span><span>India · IST</span></figcaption>
         </figure>
         <div class="about-copy rv">
-          <p class="lead">Self-taught from India, rebuilding intelligence <em>from scratch</em> — one proof, one commit at a time.</p>
-          <p class="body">I finished 12th grade and chose the longer road — no bootcamp, no shortcut. I build backends with Django and FastAPI, cross-platform apps with Flutter, and retrieval pipelines with LangChain and RAG. The rest of the day I rebuild intelligence from first principles: math from axioms, neural nets and backprop by hand in NumPy, now CNNs, Transformers and PyTorch. All in public.</p>
+          <p class="lead" id="aboutLead">Self-taught from India, rebuilding intelligence <em>from scratch</em> — one proof, one commit at a time.</p>
+          <p class="body" id="aboutBody">I finished 12th grade and chose the longer road — no bootcamp, no shortcut. I build backends with Django and FastAPI, cross-platform apps with Flutter, and retrieval pipelines with LangChain and RAG. The rest of the day I rebuild intelligence from first principles: math from axioms, neural nets and backprop by hand in NumPy, now CNNs, Transformers and PyTorch. All in public.</p>
           <dl class="facts">
-            <div><dt>Location</dt><dd>India · <b>IST</b></dd></div>
-            <div><dt>Focus</dt><dd>AGI from first principles</dd></div>
+            <div><dt>Location</dt><dd id="factLocation">India · <b>IST</b></dd></div>
+            <div><dt>Focus</dt><dd id="factFocus">AGI from first principles</dd></div>
             <div><dt>Log</dt><dd id="factDay">Day — of —</dd></div>
-            <div><dt>Open to</dt><dd>Freelance & collabs</dd></div>
+            <div><dt>Open to</dt><dd id="factOpen">Freelance & collabs</dd></div>
           </dl>
           <div style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap">
             <a class="btn solid" href="/contact">Hire me →</a>
@@ -356,7 +358,32 @@ function observeReveals(){
   }else els.forEach(function(el){el.classList.add('in');});
 }
 observeReveals();
-// dynamic now + factDay from data.json (same as home)
+// Supabase-first for About (site_content key=about) — falls back to hardcoded HTML + data.json
+try{
+  (function(){
+    var anon=document.querySelector('meta[name="supabase-anon"]')?.content||"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJnbXZocHRlYmtzbGtqbGVvaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0NDQwMTAsImV4cCI6MjEwMzAyMDAxMH0.nnaZiyKNOx-eT_5JTQNDwk5b3PCDKZv4f9Yc6wQtk_k";
+    var url="https://rgmvhptebkslkjleoilc.supabase.co/rest/v1/site_content?key=eq.about&select=data";
+    fetch(url,{headers:{apikey:anon, Authorization:'Bearer '+anon}, cache:'no-store'}).then(function(r){ if(!r.ok) throw 0; return r.json(); }).then(function(arr){
+      var d=(arr&&arr[0]&&arr[0].data)||null; if(!d) throw 0;
+      var lead=document.getElementById('aboutLead'); if(lead && d.lead) lead.innerHTML=d.lead;
+      var body=document.getElementById('aboutBody'); if(body && d.body) body.innerHTML=d.body;
+      if(d.facts){
+        if(d.facts.location) { var e=document.getElementById('factLocation'); if(e) e.innerHTML=d.facts.location; }
+        if(d.facts.focus) { var e=document.getElementById('factFocus'); if(e) e.innerHTML=d.facts.focus; }
+        if(d.facts.openTo) { var e=document.getElementById('factOpen'); if(e) e.innerHTML=d.facts.openTo; }
+      }
+      // principles (3 cards) if provided as array
+      if(d.principles && Array.isArray(d.principles)){
+        var grid=document.querySelector('#principles .rv[style*="grid-template-columns"]')||document.querySelector('#principles div[style*="grid-template-columns"]');
+        if(grid){
+          grid.innerHTML=d.principles.map(function(pr,i){
+            return '<div style="background:var(--sheet);border:1px solid var(--ink);padding:18px;position:relative"><div style="position:absolute;top:-8px;left:12px;width:48px;height:10px;background:rgba(255,255,255,.78);border:1px solid rgba(11,18,32,.06);transform:rotate(-1deg)"></div><div style="font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--accent)">0'+(i+1)+'</div><h3 style="font-family:var(--serif);font-weight:600;margin-top:8px">'+pr.title+'</h3><p style="font-size:14px;color:var(--body);margin-top:8px;line-height:1.6">'+pr.desc+'</p></div>';
+          }).join('');
+        }
+      }
+    }).catch(function(){});
+  })();
+}catch(e2){}
 try{
   fetch('data.json',{cache:'no-store'}).then(function(r){ if(!r.ok) throw 0; return r.json();}).then(function(d){
     var total=d.mission.totalDays||548;
