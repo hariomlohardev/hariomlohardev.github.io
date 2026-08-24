@@ -53,6 +53,7 @@ header{position:sticky;top:0;background:rgba(246,244,238,.96);backdrop-filter:bl
 .toolbar{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
 .tool{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper);padding:6px 8px;cursor:pointer}
 .tool:hover{border-color:var(--ink)}
+.drop-active{border-color:var(--accent) !important;background:var(--accent-soft) !important}
 .kbd{font-family:var(--mono);font-size:10px;border:1px solid var(--line);padding:2px 5px;background:var(--paper)}
 </style>
 </head>
@@ -94,6 +95,11 @@ header{position:sticky;top:0;background:rgba(246,244,238,.96);backdrop-filter:bl
           </div>
           <label class="label" style="margin-top:12px">Description (lede) <textarea id="desc" class="textarea" rows="2" placeholder="One-line lede — what the reader learns..."></textarea></label>
           <label class="label" style="margin-top:12px">Cover (optional) <input id="cover" class="input" placeholder="/og/my-post.svg or https://..." /></label>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+            <input type="file" id="coverFile" accept="image/*" style="display:none" />
+            <button class="tool" type="button" id="coverUploadBtn">Upload cover image</button>
+            <span id="coverUploadMsg" style="font-family:var(--mono);font-size:11px;color:var(--muted)">JPG/PNG/WebP up to 8MB → Supabase blog-images</span>
+          </div>
           <div style="display:flex;gap:10px;margin-top:8px;font-family:var(--mono);font-size:11px;color:var(--muted)">
             <span id="wordCount">0 words</span><span>·</span><span id="readTime">0 min</span><span>·</span><span id="coverPreviewLink"></span>
           </div>
@@ -113,6 +119,12 @@ header{position:sticky;top:0;background:rgba(246,244,238,.96);backdrop-filter:bl
             <button class="tool" type="button" data-insert="- item\n">List</button>
             <button class="tool" type="button" data-insert="[text](https://)">Link</button>
             <button class="tool" type="button" data-insert="> quote\n">Quote</button>
+            <button class="tool" type="button" id="imageBtn">Image</button>
+            <input type="file" id="imageFile" accept="image/*" style="display:none" />
+          </div>
+          <div style="font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:6px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <span>Drag & drop or paste an image here — uploads to Supabase and inserts <code>![](url)</code></span>
+            <span id="imageUploadMsg" style="color:var(--muted)"></span>
           </div>
           <textarea id="raw" class="textarea" style="min-height:420px;font-family:var(--mono);font-size:13px;white-space:pre;margin-top:8px" placeholder="# Title
 
@@ -168,6 +180,8 @@ function mdToHtml(raw){
   s=s.replace(/```[a-zA-Z0-9_-]*\n([\s\S]*?)```/g,function(_,c){ var i=codes.length; codes.push('<pre><code>'+esc(c.trimEnd())+'</code></pre>'); return '__CODE_'+i+'__'; });
   s=s.replace(/`([^`]+?)`/g,function(_,c){ return '<code>'+esc(c)+'</code>'; });
   s=s.replace(/^###\s+(.+)$/gm,'<h3>$1</h3>').replace(/^##\s+(.+)$/gm,'<h2>$1</h2>').replace(/^#\s+(.+)$/gm,'<h1>$1</h1>');
+  // images before links — ![alt](url) with lazy loading
+  s=s.replace(/!\[([^\]]*?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g,'<img src="$2" alt="$1" loading="lazy" decoding="async" style="max-width:100%;height:auto;display:block;margin:10px 0;border:1px solid var(--line)" />');
   s=s.replace(/\[([^\]]+?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g,'<a href="$2">$1</a>');
   s=s.replace(/\*\*([^*]+?)\*\*/g,'<strong>$1</strong>').replace(/\*([^*]+?)\*/g,'<em>$1</em>');
   s=s.replace(/^\s*[-*]\s+(.+)$/gm,'<li>$1</li>');
@@ -244,12 +258,74 @@ function insertAtCursor(text){
   updatePreview();
 }
 
+async function uploadImage(file, msgEl){
+  if(!file || !file.type.startsWith('image/')){ if(msgEl) msgEl.textContent='Only images'; return null; }
+  if(file.size>8*1024*1024){ if(msgEl) msgEl.textContent='Too large (8MB max)'; return null; }
+  if(msgEl){ msgEl.textContent='Uploading…'; msgEl.style.color='var(--muted)'; }
+  try{
+    const b64 = await new Promise((res, rej)=>{
+      const fr=new FileReader();
+      fr.onload=()=> res(String(fr.result).split(',')[1]);
+      fr.onerror=()=> rej(new Error('read failed'));
+      fr.readAsDataURL(file);
+    });
+    const r=await fetch('/api/admin/upload', {method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token()}, body: JSON.stringify({filename:file.name, contentType:file.type, data:b64})});
+    const t=await r.text(); let j; try{ j=JSON.parse(t);}catch{ throw new Error(t.slice(0,300)); }
+    if(!r.ok||!j.ok) throw new Error(j.error||'Upload failed');
+    if(msgEl){ msgEl.textContent='Uploaded ✓'; msgEl.style.color='var(--green)'; setTimeout(()=>{ msgEl.textContent=''; msgEl.style.color='var(--muted)'; }, 2000); }
+    return j.url;
+  }catch(e){
+    if(msgEl){ msgEl.textContent=e.message; msgEl.style.color='var(--accent)'; }
+    return null;
+  }
+}
+
 async function init(){
   const ok=await check();
   if(!ok){ document.getElementById('gate').style.display='block'; return; }
   document.getElementById('editor').style.display='block';
   bindPreview();
   document.querySelectorAll('.tool').forEach(b=> b.addEventListener('click', ()=> insertAtCursor(b.dataset.insert)));
+  // cover upload
+  const coverBtn=document.getElementById('coverUploadBtn');
+  const coverFile=document.getElementById('coverFile');
+  const coverMsg=document.getElementById('coverUploadMsg');
+  if(coverBtn && coverFile){
+    coverBtn.addEventListener('click', ()=> coverFile.click());
+    coverFile.addEventListener('change', async ()=>{
+      const f=coverFile.files[0]; if(!f) return;
+      const url=await uploadImage(f, coverMsg);
+      if(url){ document.getElementById('cover').value=url; updatePreview(); coverFile.value=''; }
+    });
+  }
+  // image upload for markdown
+  const imageBtn=document.getElementById('imageBtn');
+  const imageFile=document.getElementById('imageFile');
+  const imageMsg=document.getElementById('imageUploadMsg');
+  if(imageBtn && imageFile){
+    imageBtn.addEventListener('click', ()=> imageFile.click());
+    imageFile.addEventListener('change', async ()=>{
+      const f=imageFile.files[0]; if(!f) return;
+      const url=await uploadImage(f, imageMsg);
+      if(url){ insertAtCursor(`![${f.name.replace(/\.[^.]+$/,'')}](${url})`); imageFile.value=''; }
+    });
+  }
+  // drag & drop + paste for raw textarea
+  const rawEl=document.getElementById('raw');
+  if(rawEl){
+    rawEl.addEventListener('dragover', e=>{ e.preventDefault(); rawEl.classList.add('drop-active'); });
+    rawEl.addEventListener('dragleave', ()=> rawEl.classList.remove('drop-active'));
+    rawEl.addEventListener('drop', async e=>{
+      e.preventDefault(); rawEl.classList.remove('drop-active');
+      const f=e.dataTransfer.files[0]; if(!f || !f.type.startsWith('image/')) return;
+      const url=await uploadImage(f, imageMsg);
+      if(url) insertAtCursor(`![${f.name.replace(/\.[^.]+$/,'')}](${url})`);
+    });
+    rawEl.addEventListener('paste', async e=>{
+      const items=e.clipboardData?.items; if(!items) return;
+      for(const it of items){ if(it.type.startsWith('image/')){ e.preventDefault(); const f=it.getAsFile(); if(!f) continue; const url=await uploadImage(f, imageMsg); if(url) insertAtCursor(`![image](${url})`); break; } }
+    });
+  }
 
   const params=new URLSearchParams(location.search);
   const id=params.get('id')||params.get('slug')||'';
