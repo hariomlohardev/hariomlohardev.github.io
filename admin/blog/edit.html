@@ -95,11 +95,6 @@ header{position:sticky;top:0;background:rgba(246,244,238,.96);backdrop-filter:bl
           </div>
           <label class="label" style="margin-top:12px">Description (lede) <textarea id="desc" class="textarea" rows="2" placeholder="One-line lede — what the reader learns..."></textarea></label>
           <label class="label" style="margin-top:12px">Cover (optional) <input id="cover" class="input" placeholder="/og/my-post.svg or https://..." /></label>
-          <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
-            <input type="file" id="coverFile" accept="image/*" style="display:none" />
-            <button class="tool" type="button" id="coverUploadBtn">Upload cover image</button>
-            <span id="coverUploadMsg" style="font-family:var(--mono);font-size:11px;color:var(--muted)">JPG/PNG/WebP up to 8MB → Supabase blog-images</span>
-          </div>
           <div style="display:flex;gap:10px;margin-top:8px;font-family:var(--mono);font-size:11px;color:var(--muted)">
             <span id="wordCount">0 words</span><span>·</span><span id="readTime">0 min</span><span>·</span><span id="coverPreviewLink"></span>
           </div>
@@ -286,19 +281,7 @@ async function init(){
   document.getElementById('editor').style.display='block';
   bindPreview();
   document.querySelectorAll('.tool').forEach(b=> b.addEventListener('click', ()=> insertAtCursor(b.dataset.insert)));
-  // cover upload
-  const coverBtn=document.getElementById('coverUploadBtn');
-  const coverFile=document.getElementById('coverFile');
-  const coverMsg=document.getElementById('coverUploadMsg');
-  if(coverBtn && coverFile){
-    coverBtn.addEventListener('click', ()=> coverFile.click());
-    coverFile.addEventListener('change', async ()=>{
-      const f=coverFile.files[0]; if(!f) return;
-      const url=await uploadImage(f, coverMsg);
-      if(url){ document.getElementById('cover').value=url; updatePreview(); coverFile.value=''; }
-    });
-  }
-  // image upload for markdown
+  // image upload for markdown (in-content only — cover is URL only)
   const imageBtn=document.getElementById('imageBtn');
   const imageFile=document.getElementById('imageFile');
   const imageMsg=document.getElementById('imageUploadMsg');
