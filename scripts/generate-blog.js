@@ -255,7 +255,7 @@ function ogSvg(post){
   // 2246×1588
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="2246" height="1588" viewBox="0 0 2246 1588" role="img" aria-label="${escSvg(title)}">
-<rect width="2246" height="1588" fill="#FFFEFB"/>
+<rect width="2246" height="1588" fill="#F6F4EE"/>
 <!-- grid 24px subtle -->
 <defs><pattern id="g" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0 H0 V24" fill="none" stroke="#E3ECFB" stroke-width="1"/></pattern><pattern id="g2" width="120" height="120" patternUnits="userSpaceOnUse"><path d="M120 0 H0 V120" fill="none" stroke="#C9D8F0" stroke-width="1"/></pattern></defs>
 <rect width="2246" height="1588" fill="url(#g)"/><rect width="2246" height="1588" fill="url(#g2)"/>

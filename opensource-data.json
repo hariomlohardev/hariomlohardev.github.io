@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-22T19:17:44+05:30",
-  "generated_at_iso": "2026-08-22T19:17:44.543Z",
+  "generated_at": "2026-08-24T07:58:02+05:30",
+  "generated_at_iso": "2026-08-24T07:58:02.669Z",
   "user": "hariomlohardev",
   "site": "https://hariomlohardev.github.io",
   "stats": {
@@ -10,6 +10,21 @@
     "stars_total": 5
   },
   "repos": [
+    {
+      "id": 1330016114,
+      "name": "peek",
+      "full_name": "hariomlohardev/peek",
+      "html_url": "https://github.com/hariomlohardev/peek",
+      "description": "",
+      "language": "Python",
+      "stars": 1,
+      "forks": 12,
+      "updated_at": "2026-08-23",
+      "pushed_at": "2026-08-23",
+      "fork": false,
+      "topics": [],
+      "is_fork": false
+    },
     {
       "id": 1324988681,
       "name": "inkdown",
@@ -44,21 +59,6 @@
         "plugins",
         "systems"
       ],
-      "is_fork": false
-    },
-    {
-      "id": 1330016114,
-      "name": "peek",
-      "full_name": "hariomlohardev/peek",
-      "html_url": "https://github.com/hariomlohardev/peek",
-      "description": "",
-      "language": "Python",
-      "stars": 1,
-      "forks": 12,
-      "updated_at": "2026-08-21",
-      "pushed_at": "2026-08-21",
-      "fork": false,
-      "topics": [],
       "is_fork": false
     },
     {
@@ -100,8 +100,8 @@
       "language": "HTML",
       "stars": 0,
       "forks": 0,
-      "updated_at": "2026-08-22",
-      "pushed_at": "2026-08-22",
+      "updated_at": "2026-08-24",
+      "pushed_at": "2026-08-24",
       "fork": false,
       "topics": [],
       "is_fork": false
@@ -213,6 +213,20 @@
     }
   ],
   "prs": [
+    {
+      "id": 5099039781,
+      "number": 6861,
+      "title": "fix(upload): handle unknown event handlers",
+      "html_url": "https://github.com/reflex-dev/reflex/pull/6861",
+      "repo": "reflex-dev/reflex",
+      "repository_url": "https://api.github.com/repos/reflex-dev/reflex",
+      "state": "open",
+      "merged": false,
+      "created_at": "2026-08-08",
+      "updated_at": "2026-08-23",
+      "body": "### All Submissions:\r\n\r\n* [x] Have you followed the guidelines stated in https://github.com/reflex-dev/reflex/blob/main/CONTRIBUTING.md file?\r\n* [x] Have you checked to ensure ther",
+      "user": "hariomlohardev"
+    },
     {
       "id": 5221118827,
       "number": 22,
@@ -618,262 +632,248 @@
       "updated_at": "2026-08-16",
       "body": "## What\n\nP0 — Don't lose words (from `internal/plan/02-roadmap.md`):\n\n- `main.js`: `hideSplash` 4000→1200ms + `performance.mark/measure` for `boot` (goal < 1.5s)\n- `ui.js`: `before",
       "user": "hariomlohardev"
-    },
-    {
-      "id": 5157058338,
-      "number": 3286,
-      "title": "Add peek — htop for codebases to Code Analysis",
-      "html_url": "https://github.com/vinta/awesome-python/pull/3286",
-      "repo": "vinta/awesome-python",
-      "repository_url": "https://api.github.com/repos/vinta/awesome-python",
-      "state": "closed",
-      "merged": false,
-      "created_at": "2026-08-15",
-      "updated_at": "2026-08-16",
-      "body": "### What\n\nAdds [peek](https://github.com/hariomlohardev/peek) — *the htop for codebases* — to **Code Analysis** under Developer Tools.\n\n- **One-liner:** `pip install peek-code && p",
-      "user": "hariomlohardev"
     }
   ],
   "activity": [
     {
-      "type": "WatchEvent",
-      "kind": "star",
-      "repo": "hariomlohardev/inkdown",
-      "title": "Starred hariomlohardev/inkdown",
-      "url": "https://github.com/hariomlohardev/inkdown",
-      "at": "2026-08-22"
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-24"
     },
     {
-      "type": "PullRequestReviewEvent",
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-24"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-24"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-24"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-23"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-23"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-23"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-23"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-23"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-23"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-23"
+    },
+    {
+      "type": "IssueCommentEvent",
       "kind": "activity",
-      "repo": "hariomlohardev/peek",
-      "title": "PullRequestReview",
-      "url": "https://github.com/hariomlohardev/peek",
-      "at": "2026-08-22"
+      "repo": "reflex-dev/reflex",
+      "title": "IssueComment",
+      "url": "https://github.com/reflex-dev/reflex",
+      "at": "2026-08-23"
     },
     {
-      "type": "PullRequestReviewEvent",
+      "type": "IssueCommentEvent",
       "kind": "activity",
-      "repo": "hariomlohardev/peek",
-      "title": "PullRequestReview",
-      "url": "https://github.com/hariomlohardev/peek",
-      "at": "2026-08-22"
-    },
-    {
-      "type": "PullRequestReviewCommentEvent",
-      "kind": "activity",
-      "repo": "hariomlohardev/peek",
-      "title": "PullRequestReviewComment",
-      "url": "https://github.com/hariomlohardev/peek",
-      "at": "2026-08-22"
-    },
-    {
-      "type": "PullRequestReviewCommentEvent",
-      "kind": "activity",
-      "repo": "hariomlohardev/peek",
-      "title": "PullRequestReviewComment",
-      "url": "https://github.com/hariomlohardev/peek",
-      "at": "2026-08-22"
-    },
-    {
-      "type": "PullRequestReviewCommentEvent",
-      "kind": "activity",
-      "repo": "hariomlohardev/peek",
-      "title": "PullRequestReviewComment",
-      "url": "https://github.com/hariomlohardev/peek",
-      "at": "2026-08-22"
-    },
-    {
-      "type": "PullRequestReviewCommentEvent",
-      "kind": "activity",
-      "repo": "hariomlohardev/peek",
-      "title": "PullRequestReviewComment",
-      "url": "https://github.com/hariomlohardev/peek",
-      "at": "2026-08-22"
+      "repo": "reflex-dev/reflex",
+      "title": "IssueComment",
+      "url": "https://github.com/reflex-dev/reflex",
+      "at": "2026-08-23"
     },
     {
       "type": "PushEvent",
       "kind": "push",
-      "repo": "hariomlohardev/claude-system",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
       "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/claude-system/commits",
-      "at": "2026-08-22"
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-23"
     },
     {
       "type": "PushEvent",
       "kind": "push",
-      "repo": "hariomlohardev/claude-system",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
       "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/claude-system/commits",
-      "at": "2026-08-22"
-    },
-    {
-      "type": "ReleaseEvent",
-      "kind": "activity",
-      "repo": "hariomlohardev/claude-system",
-      "title": "Release",
-      "url": "https://github.com/hariomlohardev/claude-system",
-      "at": "2026-08-22"
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-23"
     },
     {
       "type": "PushEvent",
       "kind": "push",
-      "repo": "hariomlohardev/claude-system",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
       "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/claude-system/commits",
-      "at": "2026-08-22"
-    },
-    {
-      "type": "ReleaseEvent",
-      "kind": "activity",
-      "repo": "hariomlohardev/claude-system",
-      "title": "Release",
-      "url": "https://github.com/hariomlohardev/claude-system",
-      "at": "2026-08-22"
-    },
-    {
-      "type": "PullRequestEvent",
-      "kind": "pr",
-      "repo": "hariomlohardev/claude-system",
-      "title": "merged PR #22 — PullRequestEvent",
-      "url": "https://github.com/hariomlohardev/claude-system",
-      "at": "2026-08-22"
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-23"
     },
     {
       "type": "PushEvent",
       "kind": "push",
-      "repo": "hariomlohardev/claude-system",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
       "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/claude-system/commits",
-      "at": "2026-08-22"
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-23"
     },
     {
-      "type": "PullRequestEvent",
-      "kind": "pr",
-      "repo": "hariomlohardev/claude-system",
-      "title": "opened PR #22 — PullRequestEvent",
-      "url": "https://github.com/hariomlohardev/claude-system",
-      "at": "2026-08-22"
-    },
-    {
-      "type": "CreateEvent",
-      "kind": "create",
-      "repo": "hariomlohardev/claude-system",
-      "title": "Created branch system/design-scribe",
-      "url": "https://github.com/hariomlohardev/claude-system",
-      "at": "2026-08-22"
-    },
-    {
-      "type": "DeleteEvent",
-      "kind": "activity",
-      "repo": "hariomlohardev/claude-system",
-      "title": "Delete",
-      "url": "https://github.com/hariomlohardev/claude-system",
-      "at": "2026-08-22"
+      "type": "ForkEvent",
+      "kind": "fork",
+      "repo": "django/django",
+      "title": "Forked django/django",
+      "url": "https://github.com/django/django",
+      "at": "2026-08-23"
     },
     {
       "type": "PushEvent",
       "kind": "push",
-      "repo": "hariomlohardev/claude-system",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
       "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/claude-system/commits",
-      "at": "2026-08-22"
-    },
-    {
-      "type": "PullRequestEvent",
-      "kind": "pr",
-      "repo": "hariomlohardev/claude-system",
-      "title": "merged PR #21 — PullRequestEvent",
-      "url": "https://github.com/hariomlohardev/claude-system",
-      "at": "2026-08-22"
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-23"
     },
     {
       "type": "PushEvent",
       "kind": "push",
-      "repo": "hariomlohardev/claude-system",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
       "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/claude-system/commits",
-      "at": "2026-08-22"
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-23"
     },
     {
       "type": "PushEvent",
       "kind": "push",
-      "repo": "hariomlohardev/claude-system",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
       "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/claude-system/commits",
-      "at": "2026-08-22"
-    },
-    {
-      "type": "PullRequestEvent",
-      "kind": "pr",
-      "repo": "hariomlohardev/claude-system",
-      "title": "opened PR #21 — PullRequestEvent",
-      "url": "https://github.com/hariomlohardev/claude-system",
-      "at": "2026-08-22"
-    },
-    {
-      "type": "CreateEvent",
-      "kind": "create",
-      "repo": "hariomlohardev/claude-system",
-      "title": "Created branch system/curriculum-system",
-      "url": "https://github.com/hariomlohardev/claude-system",
-      "at": "2026-08-22"
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-23"
     },
     {
       "type": "PushEvent",
       "kind": "push",
-      "repo": "hariomlohardev/claude-system",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
       "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/claude-system/commits",
-      "at": "2026-08-22"
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-23"
     },
     {
       "type": "PushEvent",
       "kind": "push",
-      "repo": "hariomlohardev/claude-system",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
       "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/claude-system/commits",
-      "at": "2026-08-21"
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-23"
     },
     {
       "type": "PushEvent",
       "kind": "push",
-      "repo": "hariomlohardev/peek",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
       "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/peek/commits",
-      "at": "2026-08-21"
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-23"
     },
     {
       "type": "PushEvent",
       "kind": "push",
-      "repo": "hariomlohardev/claude-system",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
       "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/claude-system/commits",
-      "at": "2026-08-21"
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-23"
     },
     {
       "type": "PushEvent",
       "kind": "push",
-      "repo": "hariomlohardev/claude-system",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
       "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/claude-system/commits",
-      "at": "2026-08-21"
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-23"
     },
     {
       "type": "PushEvent",
       "kind": "push",
-      "repo": "hariomlohardev/claude-system",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
       "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/claude-system/commits",
-      "at": "2026-08-21"
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-23"
     },
     {
       "type": "PushEvent",
       "kind": "push",
-      "repo": "hariomlohardev/claude-system",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
       "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/claude-system/commits",
-      "at": "2026-08-21"
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-23"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-23"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-23"
     }
   ]
 }
