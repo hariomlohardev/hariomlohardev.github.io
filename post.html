@@ -66,6 +66,8 @@ h1{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-height:
 .prose pre{background:#0B1220;color:#E8EEFB;padding:14px;overflow:auto;border:1px solid var(--ink);font-family:var(--mono);font-size:12px;line-height:1.6;margin:14px 0}
 .prose code{font-family:var(--mono);font-size:.9em;background:var(--paper-2);border:1px solid var(--line);padding:1px 4px}
 .prose pre code{background:none;border:none;padding:0;color:inherit}
+.prose img{max-width:100%;height:auto;display:block;margin:12px 0;border:1px solid var(--line);background:var(--paper-2)}
+.prose img[loading="lazy"]{content-visibility:auto}
 .skeleton{height:22px;border:1px solid var(--line);background:linear-gradient(90deg,var(--paper-2) 25%,var(--sheet) 37%,var(--paper-2) 63%);background-size:400% 100%;animation:shimmer 1.2s infinite;margin:8px 0}
 @keyframes shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
 @media(prefers-reduced-motion:reduce){.skeleton{animation:none}}

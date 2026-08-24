@@ -463,6 +463,8 @@ nav.desk a.active::after{transform:scaleX(1)}
 .prose code{font-family:var(--mono);font-size:.85em;background:var(--paper-2);padding:2px 6px;color:var(--ink)}
 .prose pre{background:var(--ink);color:var(--paper);padding:20px 22px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.8;margin:36px 0;border:none}
 .prose pre code{background:none;border:none;padding:0;color:inherit;font-size:inherit;white-space:pre}
+.prose img{max-width:100%;height:auto;display:block;margin:24px 0;border:1px solid var(--line);background:var(--paper-2)}
+.prose img[loading="lazy"]{content-visibility:auto}
 .codeblock{margin:38px 0;background:var(--ink);overflow:hidden;box-shadow:0 8px 24px rgba(24,22,17,.10)}
 .code-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 18px;background:rgba(246,244,238,.05);border-bottom:1px solid rgba(246,244,238,.12)}
 .code-lang{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(246,244,238,.5);display:flex;align-items:center;gap:8px}
