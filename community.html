@@ -196,6 +196,8 @@ html.js .rv.in{opacity:1;transform:none}
 <link rel="alternate" type="text/plain" href="/llms.txt" />
 <link rel="alternate" type="text/plain" href="/llms-full.txt" />
 <link rel="alternate" type="text/plain" href="/ai.txt" />
+<meta name="supabase-url" content="https://rgmvhptebkslkjleoilc.supabase.co" />
+<meta name="supabase-anon" content="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJnbXZocHRlYmtzbGtqbGVvaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0NDQwMTAsImV4cCI6MjEwMzAyMDAxMH0.nnaZiyKNOx-eT_5JTQNDwk5b3PCDKZv4f9Yc6wQtk_k" />
 </head>
 <body>
 <a href="#main" class="skip">Skip to content</a>
@@ -378,7 +380,15 @@ var FALLBACK={
 
 var DATA=null, FILTER='all';
 function loadData(){
-  fetch('community-data.json',{cache:'no-store'}).then(function(r){ if(!r.ok) throw 0; return r.json(); }).then(function(j){ DATA=j; render(); }).catch(function(){ DATA=FALLBACK; render(); });
+  // Supabase-first (site_content key=community) → community-data.json → FALLBACK
+  var anon=document.querySelector('meta[name="supabase-anon"]')?.content||"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJnbXZocHRlYmtzbGtqbGVvaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0NDQwMTAsImV4cCI6MjEwMzAyMDAxMH0.nnaZiyKNOx-eT_5JTQNDwk5b3PCDKZv4f9Yc6wQtk_k";
+  var url="https://rgmvhptebkslkjleoilc.supabase.co/rest/v1/site_content?key=eq.community&select=data";
+  fetch(url,{headers:{apikey:anon, Authorization:'Bearer '+anon}, cache:'no-store'}).then(function(r){ if(!r.ok) throw 0; return r.json(); }).then(function(arr){
+    var d=(arr&&arr[0]&&arr[0].data)||null; if(!d||(!d.members&&!d.batches)) throw 0;
+    DATA=d; render();
+  }).catch(function(){
+    fetch('community-data.json',{cache:'no-store'}).then(function(r){ if(!r.ok) throw 0; return r.json(); }).then(function(j){ DATA=j; render(); }).catch(function(){ DATA=FALLBACK; render(); });
+  });
 }
 function render(){
   if(!DATA) return;

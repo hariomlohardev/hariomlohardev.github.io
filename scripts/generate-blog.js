@@ -2,8 +2,22 @@
 "use strict";
 /**
  * generate-blog.js — zero-deps static blog builder for hariomlohardev.github.io
- * Reads posts/*.md → posts.json + feed.xml + blog/p/<slug>/index.html + patches sitemap.xml
- * Free, deterministic, Node-only. Run locally: node scripts/generate-blog.js
+ *
+ * SOURCE OF TRUTH: Supabase `public.posts` (published=true).
+ * `posts.json` and `posts/*.md` are DEPRECATED build artifacts — do NOT edit by hand.
+ * Regenerate posts.json via `node scripts/sync-posts.js` (Supabase → posts.json).
+ * See scripts/sync-posts.js header.
+ *
+ * This script is Supabase-primary: it tries Supabase REST (published=true, order date.desc)
+ * when SUPABASE_URL + SUPABASE_ANON_KEY (or SERVICE_ROLE_KEY) are present.
+ * On failure it falls back to posts.json (deprecated artifact, from sync-posts.js),
+ * then as last resort to posts/*.md (deprecated) with warnings. Supabase is canonical;
+ * file fallbacks exist only for local/offline builds without env.
+ * feed.xml and sitemap.xml are always derived from whatever posts source wins,
+ * so new Supabase posts appear in sitemap/feed without a manual posts/*.md commit.
+ *
+ * Reads Supabase posts (fallback posts.json → fallback posts/*.md) → posts.json + feed.xml + blog/p/<slug>/index.html + patches sitemap.xml
+ * Free, deterministic, Node-only. Run locally: SUPABASE_URL=... SUPABASE_ANON_KEY=... node scripts/generate-blog.js
  * Also invoked by .github/workflows/pages.yml before deploy.
  */
 const fs = require("fs");
@@ -116,67 +130,120 @@ function mdToHtml(md){
 }
 function wordCount(s){ return String(s).trim().split(/\s+/).filter(Boolean).length; }
 
-// ── scan posts ──────────────────────────────────────────────────────
-if(!fs.existsSync(POSTS_DIR)) { console.error("posts/ missing"); process.exit(1); }
-const files = fs.readdirSync(POSTS_DIR).filter(f=>f.endsWith(".md") && f!=="README.md").sort();
-const posts=[];
-
-for(const file of files){
-  const raw = fs.readFileSync(path.join(POSTS_DIR,file),"utf8");
-  const {data, body} = parseFrontmatter(raw);
-  if(data.draft===true || String(data.draft).toLowerCase()==="true") { console.log(`skip draft ${file}`); continue; }
-  const title = data.title || toSlug(file.replace(/\.md$/,""));
-  const dateStr = data.date || file.slice(0,10);
-  if(!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)){ console.warn(`skip ${file}: bad date ${dateStr}`); continue; }
-  const slug = data.slug ? toSlug(data.slug) : toSlug(file.replace(/^\d{4}-\d{2}-\d{2}-/,"").replace(/\.md$/,"")) || toSlug(title);
-  const description = data.description || body.split("\n").find(l=>l.trim() && !l.trim().startsWith("#"))?.slice(0,155) || "";
-  const tags = Array.isArray(data.tags) ? data.tags : (data.tags? [String(data.tags)] : []);
-  const cover = data.cover || data.image || data.og || null;
-  const html = mdToHtml(body.trim());
-  const wc = wordCount(body);
-  const reading = Math.max(1, Math.ceil(wc/200));
-  const url = `${SITE}/blog/p/${slug}/`;
-  posts.push({
-    slug, title: String(title), date: dateStr, description: String(description),
-    tags, html, raw: body, wordCount: wc, readingMinutes: reading, url,
-    file, cover: cover ? String(cover) : null
-  });
+// ── Supabase-primary posts loader ───────────────────────────────────
+// Supabase `public.posts` (published=true) is source of truth; posts.json and posts/*.md are DEPRECATED artifacts.
+async function loadPostsFromSupabase(){
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY;
+  if(!url || !key) return null;
+  try{
+    const endpoint = `${url.replace(/\/$/,'')}/rest/v1/posts?select=slug,title,description,date,tags,cover,html,raw,word_count,reading_minutes,published&published=eq.true&order=date.desc`;
+    const res = await fetch(endpoint, { headers: { apikey: key, Authorization: `Bearer ${key}` } });
+    if(!res.ok){
+      const txt = await res.text().catch(()=> '');
+      console.warn(`Supabase posts fetch ${res.status} ${txt.slice(0,200)} — falling back to posts.json (deprecated artifact)`);
+      return null;
+    }
+    const rows = await res.json();
+    if(!Array.isArray(rows) || rows.length===0){
+      console.warn("Supabase returned 0 published posts — falling back to posts.json (deprecated artifact)");
+      return null;
+    }
+    const posts = rows.map(r=>{
+      const dateStr = typeof r.date === 'string' ? r.date.slice(0,10) : String(r.date||'').slice(0,10);
+      const slug = toSlug(r.slug);
+      const title = String(r.title||slug);
+      const description = String(r.description||'');
+      const tags = Array.isArray(r.tags) ? r.tags : [];
+      const cover = r.cover ? String(r.cover) : null;
+      const raw = r.raw != null ? String(r.raw) : '';
+      // Prefer stored html, else render from raw
+      const html = r.html ? String(r.html) : mdToHtml((raw || description).trim());
+      const wc = r.word_count ?? r.wordCount ?? (raw ? wordCount(raw) : wordCount(description));
+      const reading = r.reading_minutes ?? r.readingMinutes ?? Math.max(1, Math.ceil(wc/200));
+      const file = `${dateStr}-${slug}.md`;
+      const postUrl = `${SITE}/blog/p/${slug}/`;
+      return { slug, title, date: dateStr, description, tags, html, raw, wordCount: wc, readingMinutes: reading, url: postUrl, file, cover };
+    }).filter(p=> /^\d{4}-\d{2}-\d{2}$/.test(p.date));
+    // Supabase already sorts date desc, but ensure
+    posts.sort((a,b)=> b.date.localeCompare(a.date));
+    console.log(`→ posts: Supabase (${posts.length} published) — source of truth`);
+    return posts;
+  }catch(e){
+    console.warn("Supabase fetch failed:", e.message, "— falling back to posts.json (deprecated artifact)");
+    return null;
+  }
 }
-posts.sort((a,b)=> b.date.localeCompare(a.date));
 
-// ── write posts.json ────────────────────────────────────────────────
-const jsonOut = posts.map(p=>({
-  slug:p.slug, title:p.title, date:p.date, description:p.description, tags:p.tags,
-  readingMinutes:p.readingMinutes, wordCount:p.wordCount, url:p.url, file:p.file, cover:p.cover
-}));
-fs.writeFileSync(POSTS_JSON, JSON.stringify(jsonOut,null,2)+" \n");
-console.log(`→ ${POSTS_JSON} (${posts.length} posts)`);
+function loadPostsFromJson(){
+  // DEPRECATED artifact — posts.json from sync-posts.js (Supabase → posts.json)
+  try{
+    if(!fs.existsSync(POSTS_JSON)){ console.warn("posts.json missing (deprecated artifact — run SUPABASE_URL=... SUPABASE_ANON_KEY=... node scripts/sync-posts.js)"); return null; }
+    const raw = JSON.parse(fs.readFileSync(POSTS_JSON,"utf8"));
+    if(!Array.isArray(raw) || !raw.length){ console.warn("posts.json empty (deprecated artifact)"); return null; }
+    // Enrich minimal posts.json with html/raw via mdToHtml if needed
+    const posts = raw.map(p=>{
+      const slug = toSlug(p.slug);
+      const dateStr = String(p.date).slice(0,10);
+      const title = String(p.title||slug);
+      const description = String(p.description||'');
+      const tags = Array.isArray(p.tags)?p.tags:[];
+      const cover = p.cover||null;
+      // posts.json from sync-posts lacks html/raw; synthesize minimally
+      const rawBody = p.raw || description;
+      const html = p.html || mdToHtml(String(rawBody).trim());
+      const wc = p.wordCount ?? p.word_count ?? wordCount(String(rawBody));
+      const reading = p.readingMinutes ?? p.reading_minutes ?? Math.max(1, Math.ceil(wc/200));
+      const postUrl = p.url || `${SITE}/blog/p/${slug}/`;
+      return { slug, title, date: dateStr, description, tags, html, raw: String(rawBody), wordCount: wc, readingMinutes: reading, url: postUrl, file: p.file||`${dateStr}-${slug}.md`, cover };
+    }).filter(p=> /^\d{4}-\d{2}-\d{2}$/.test(p.date));
+    posts.sort((a,b)=> b.date.localeCompare(a.date));
+    console.warn(`→ posts: posts.json fallback (${posts.length}) — DEPRECATED artifact; regenerate via node scripts/sync-posts.js (Supabase is source of truth)`);
+    return posts;
+  }catch(e){ console.warn("posts.json read failed (deprecated artifact)", e.message); return null; }
+}
 
-// ── write feed.xml ──────────────────────────────────────────────────
-function rssDate(d){ return new Date(d+"T00:00:00+05:30").toUTCString(); }
-const feedItems = posts.slice(0,50).map(p=>`  <item>
-    <title>${escXml(p.title)}</title>
-    <link>${escXml(p.url)}</link>
-    <guid isPermaLink="true">${escXml(p.url)}</guid>
-    <description>${escXml(p.description)}</description>
-    <pubDate>${rssDate(p.date)}</pubDate>
-    <category>${(p.tags||[]).map(t=>escXml(t)).join("</category>\n    <category>")}</category>
-  </item>`).join("\n");
-const feed = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-<channel>
-  <title>Hariom Lohar — Lab Notebook No.01 · Blog &amp; Daily Logs</title>
-  <link>${SITE}/blog</link>
-  <atom:link href="${SITE}/feed.xml" rel="self" type="application/rss+xml" />
-  <description>Daily AGI research logs and articles by Hariom Lohar (hariomlohardev) — Python, Django, Flutter, Harvard CS50P 2026.</description>
-  <language>en-IN</language>
-  <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
-${feedItems}
-</channel>
-</rss>
-`;
-fs.writeFileSync(FEED_XML, feed);
-console.log(`→ ${FEED_XML}`);
+function loadPostsFromFiles(){
+  // DEPRECATED path — posts/*.md last-resort fallback for local/offline builds
+  if(!fs.existsSync(POSTS_DIR)) { console.warn("posts/ missing and posts.json missing — no posts source (Supabase is source of truth; run sync-posts.js)"); return null; }
+  const files = fs.readdirSync(POSTS_DIR).filter(f=>f.endsWith(".md") && f!=="README.md").sort();
+  const posts=[];
+  for(const file of files){
+    const raw = fs.readFileSync(path.join(POSTS_DIR,file),"utf8");
+    const {data, body} = parseFrontmatter(raw);
+    if(data.draft===true || String(data.draft).toLowerCase()==="true") { console.log(`skip draft ${file}`); continue; }
+    const title = data.title || toSlug(file.replace(/\.md$/,""));
+    const dateStr = data.date || file.slice(0,10);
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)){ console.warn(`skip ${file}: bad date ${dateStr}`); continue; }
+    const slug = data.slug ? toSlug(data.slug) : toSlug(file.replace(/^\d{4}-\d{2}-\d{2}-/,"").replace(/\.md$/,"")) || toSlug(title);
+    const description = data.description || body.split("\n").find(l=>l.trim() && !l.trim().startsWith("#"))?.slice(0,155) || "";
+    const tags = Array.isArray(data.tags) ? data.tags : (data.tags? [String(data.tags)] : []);
+    const cover = data.cover || data.image || data.og || null;
+    const html = mdToHtml(body.trim());
+    const wc = wordCount(body);
+    const reading = Math.max(1, Math.ceil(wc/200));
+    const url = `${SITE}/blog/p/${slug}/`;
+    posts.push({
+      slug, title: String(title), date: dateStr, description: String(description),
+      tags, html, raw: body, wordCount: wc, readingMinutes: reading, url,
+      file, cover: cover ? String(cover) : null
+    });
+  }
+  posts.sort((a,b)=> b.date.localeCompare(a.date));
+  console.warn(`→ posts: posts/*.md fallback (${posts.length}) — DEPRECATED path; Supabase is source of truth (add SUPABASE_URL + ANON key or run node scripts/sync-posts.js)`);
+  return posts;
+}
+
+async function getPosts(){
+  const supa = await loadPostsFromSupabase();
+  if(supa) return { posts: supa, source: 'supabase' };
+  const json = loadPostsFromJson();
+  if(json && json.length) return { posts: json, source: 'posts.json (DEPRECATED artifact — Supabase is source of truth; regenerate via node scripts/sync-posts.js)' };
+  const files = loadPostsFromFiles();
+  if(files && files.length) return { posts: files, source: 'posts/*.md (DEPRECATED last-resort — Supabase is source of truth)' };
+  console.error("No posts source available — Supabase failed and no posts.json nor posts/*.md fallback found. Set SUPABASE_URL+ANON_KEY or run node scripts/sync-posts.js.");
+  process.exit(1);
+}
 
 // ── generate og/*.svg — per-post OG, Lab Notebook No.01, no deps, $0 ──
 function escSvg(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -679,53 +746,96 @@ document.getElementById('copyBtn').addEventListener('click',function(){
 </body>
 </html>`;
 }
-// generate
-for(const post of posts){
-  const dir = path.join(BLOG_P_DIR, post.slug);
-  fs.mkdirSync(dir, {recursive:true});
-  fs.writeFileSync(path.join(dir,"index.html"), postPage(post));
-  console.log(`→ blog/p/${post.slug}/index.html`);
-  // og svg — $0, Lab Notebook chrome
-  if(!post.cover){
-    try{
-      const svg = ogSvg(post);
-      fs.writeFileSync(path.join(OG_DIR, post.slug + ".svg"), svg);
-      console.log(`→ og/${post.slug}.svg`);
-    }catch(e){ console.warn('og fail', post.slug, e.message); }
-  }
-}
 
-// ── patch sitemap.xml ───────────────────────────────────────────────
-if(fs.existsSync(SITEMAP_XML)){
-  let sitemap = fs.readFileSync(SITEMAP_XML,"utf8");
-  const hasBlog = sitemap.includes("/blog");
-  const today = new Date().toISOString().slice(0,10);
-  if(!hasBlog){
-    const entries = [`  <url><loc>${SITE}/blog</loc><lastmod>${today}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>`]
-      .concat(posts.map(p=>`  <url><loc>${escXml(p.url)}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>`))
-      .join("\n");
-    sitemap = sitemap.replace("</urlset>", entries+"\n</urlset>");
-    fs.writeFileSync(SITEMAP_XML, sitemap);
-    console.log(`→ patched ${SITEMAP_XML} (+${posts.length+1} urls)`);
-  } else {
-    // inject any missing post urls incrementally and refresh lastmod to today
-    let added=0;
-    for(const p of posts){
-      if(!sitemap.includes(p.url)){
-        sitemap = sitemap.replace("</urlset>", `  <url><loc>${escXml(p.url)}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n</urlset>`);
-        added++;
-      } else {
-        // ensure lastmod is today
-        const re = new RegExp(`(<loc>${escXml(p.url)}<\\/loc>\\s*<lastmod>)[^<]+(<\\/lastmod>)`);
-        if(re.test(sitemap)) sitemap = sitemap.replace(re, `$1${today}$2`);
-      }
+async function main(){
+  const { posts, source } = await getPosts();
+
+  // ── write posts.json ────────────────────────────────────────────────
+  const jsonOut = posts.map(p=>({
+    slug:p.slug, title:p.title, date:p.date, description:p.description, tags:p.tags,
+    readingMinutes:p.readingMinutes, wordCount:p.wordCount, url:p.url, file:p.file, cover:p.cover
+  }));
+  fs.writeFileSync(POSTS_JSON, JSON.stringify(jsonOut,null,2)+" \n");
+  console.log(`→ ${POSTS_JSON} (${posts.length} posts from ${source})`);
+
+  // ── write feed.xml ──────────────────────────────────────────────────
+  // feed.xml is Supabase-primary via getPosts() so new Supabase posts appear without manual generate
+  function rssDate(d){ return new Date(d+"T00:00:00+05:30").toUTCString(); }
+  const feedItems = posts.slice(0,50).map(p=>`  <item>
+    <title>${escXml(p.title)}</title>
+    <link>${escXml(p.url)}</link>
+    <guid isPermaLink="true">${escXml(p.url)}</guid>
+    <description>${escXml(p.description)}</description>
+    <pubDate>${rssDate(p.date)}</pubDate>
+    <category>${(p.tags||[]).map(t=>escXml(t)).join("</category>\n    <category>")}</category>
+  </item>`).join("\n");
+  const feed = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>Hariom Lohar — Lab Notebook No.01 · Blog &amp; Daily Logs</title>
+  <link>${SITE}/blog</link>
+  <atom:link href="${SITE}/feed.xml" rel="self" type="application/rss+xml" />
+  <description>Daily AGI research logs and articles by Hariom Lohar (hariomlohardev) — Python, Django, Flutter, Harvard CS50P 2026.</description>
+  <language>en-IN</language>
+  <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+${feedItems}
+</channel>
+</rss>
+`;
+  fs.writeFileSync(FEED_XML, feed);
+  console.log(`→ ${FEED_XML} (${posts.length} posts from ${source})`);
+
+  // generate
+  for(const post of posts){
+    const dir = path.join(BLOG_P_DIR, post.slug);
+    fs.mkdirSync(dir, {recursive:true});
+    fs.writeFileSync(path.join(dir,"index.html"), postPage(post));
+    console.log(`→ blog/p/${post.slug}/index.html`);
+    // og svg — $0, Lab Notebook chrome
+    if(!post.cover){
+      try{
+        const svg = ogSvg(post);
+        fs.writeFileSync(path.join(OG_DIR, post.slug + ".svg"), svg);
+        console.log(`→ og/${post.slug}.svg`);
+      }catch(e){ console.warn('og fail', post.slug, e.message); }
     }
-    // also ensure /blog entry lastmod is today
-    const blogRe = new RegExp(`(<loc>${escXml(SITE)}/blog<\\/loc>\\s*<lastmod>)[^<]+(<\\/lastmod>)`);
-    if(blogRe.test(sitemap)) sitemap = sitemap.replace(blogRe, `$1${today}$2`);
-    if(added){ fs.writeFileSync(SITEMAP_XML, sitemap); console.log(`→ patched ${SITEMAP_XML} (+${added} missing post urls, refreshed lastmod → ${today})`); }
-    else { fs.writeFileSync(SITEMAP_XML, sitemap); console.log(`sitemap already has blog entries, refreshed lastmod → ${today}`); }
   }
+
+  // ── patch sitemap.xml ───────────────────────────────────────────────
+  // sitemap.xml is Supabase-primary via getPosts() so new Supabase posts appear without manual generate
+  if(fs.existsSync(SITEMAP_XML)){
+    let sitemap = fs.readFileSync(SITEMAP_XML,"utf8");
+    const hasBlog = sitemap.includes("/blog");
+    const today = new Date().toISOString().slice(0,10);
+    if(!hasBlog){
+      const entries = [`  <url><loc>${SITE}/blog</loc><lastmod>${today}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>`]
+        .concat(posts.map(p=>`  <url><loc>${escXml(p.url)}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>`))
+        .join("\n");
+      sitemap = sitemap.replace("</urlset>", entries+"\n</urlset>");
+      fs.writeFileSync(SITEMAP_XML, sitemap);
+      console.log(`→ patched ${SITEMAP_XML} (+${posts.length+1} urls from ${source})`);
+    } else {
+      // inject any missing post urls incrementally and refresh lastmod to today
+      let added=0;
+      for(const p of posts){
+        if(!sitemap.includes(p.url)){
+          sitemap = sitemap.replace("</urlset>", `  <url><loc>${escXml(p.url)}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n</urlset>`);
+          added++;
+        } else {
+          // ensure lastmod is today
+          const re = new RegExp(`(<loc>${escXml(p.url)}<\\/loc>\\s*<lastmod>)[^<]+(<\\/lastmod>)`);
+          if(re.test(sitemap)) sitemap = sitemap.replace(re, `$1${today}$2`);
+        }
+      }
+      // also ensure /blog entry lastmod is today
+      const blogRe = new RegExp(`(<loc>${escXml(SITE)}/blog<\\/loc>\\s*<lastmod>)[^<]+(<\\/lastmod>)`);
+      if(blogRe.test(sitemap)) sitemap = sitemap.replace(blogRe, `$1${today}$2`);
+      if(added){ fs.writeFileSync(SITEMAP_XML, sitemap); console.log(`→ patched ${SITEMAP_XML} (+${added} missing post urls from ${source}, refreshed lastmod → ${today})`); }
+      else { fs.writeFileSync(SITEMAP_XML, sitemap); console.log(`sitemap already has blog entries (${posts.length} from ${source}), refreshed lastmod → ${today}`); }
+    }
+  }
+
+  console.log(`done — ${posts.length} posts from ${source}`);
 }
 
-console.log(`done — ${posts.length} posts`);
+main().catch(e=>{ console.error(e); process.exit(1); });
