@@ -106,7 +106,7 @@ function cardHtml(p,i){
     <label class="label" style="margin-top:10px">Detail URL <input class="input" data-k="detailUrl" value="${esc(p.detailUrl||'')}" placeholder="https://hariomlohardev.github.io/projects/p/agi-research/" /></label>
     <div class="grid2" style="margin-top:10px">
       <label class="label">URL (card link) <input class="input" data-k="url" value="${esc(p.url||'')}" placeholder="https://github.com/..." /></label>
-      <label class="label">Demo URL (if live) <input class="input" data-k="demoUrl" value="${esc(p.demoUrl||'')}" placeholder="projects/spam_classifier.html" /></label>
+      <label class="label">Demo URL (if live) <input class="input" data-k="demoUrl" value="${esc(p.demoUrl||'')}" placeholder="projects/spam_classifier" /></label>
     </div>
     <label class="label" style="margin-top:10px">Chips (comma separated) <input class="input" data-k="chips" value="${esc((p.chips||[]).join(', '))}" placeholder="backprop ✓, NumPy, CNNs" /></label>
     <label class="label" style="margin-top:10px">Languages JSON <textarea class="textarea" data-k="languages" rows="2" placeholder='[{"name":"Python","pct":100,"color":"#3572A5"}]'>${esc(JSON.stringify(p.languages||[], null, 1))}</textarea></label>

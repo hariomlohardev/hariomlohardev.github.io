@@ -88,10 +88,10 @@ function ogSvg(project){
   const desc = (project.description||"").slice(0,108);
   const sub = project.statusLabel || (project.kind==="live" ? "Live demo in browser" : "Open source");
   return `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="${escSvg(project.name)}">
-<rect width="1200" height="630" fill="#F6F4EE"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="2246" height="1588" viewBox="0 0 2246 1588" role="img" aria-label="${escSvg(project.name)}">
+<rect width="2246" height="1588" fill="#F6F4EE"/>
 <defs><pattern id="g" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0 H0 V24" fill="none" stroke="#DAD5C6" stroke-width="1"/></pattern><pattern id="g2" width="120" height="120" patternUnits="userSpaceOnUse"><path d="M120 0 H0 V120" fill="none" stroke="#C4BEAC" stroke-width="1"/></pattern></defs>
-<rect width="1200" height="630" fill="url(#g)"/><rect width="1200" height="630" fill="url(#g2)"/>
+<rect width="2246" height="1588" fill="url(#g)"/><rect width="2246" height="1588" fill="url(#g2)"/>
 <rect x="0" y="0" width="1200" height="8" fill="#B93A13"/><rect x="0" y="8" width="1200" height="1" fill="#181611" opacity="0.12"/>
 <rect x="0" y="0" width="1200" height="40" fill="#181611"/>
 <text x="32" y="26" fill="#EFECE2" font-family="monospace" font-size="12" letter-spacing="1.2">LAB NOTEBOOK No.01 · HARIOM LOHAR — hariomlohardev · INDIA — UTC+5:30</text>
@@ -128,10 +128,13 @@ function projectPage(p){
   const relatedHtml = related.length ? `<section style="margin-top:18px"><div style="font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:10px"><i style="width:28px;height:1px;background:var(--ink)"></i> Related logs</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px">${related.map(r=>`<a href="${r.url}" style="display:block;border:1px solid var(--ink);background:var(--sheet);padding:14px;text-decoration:none"><div style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">${escHtml(r.date)} · ${r.readingMinutes} min</div><div style="font-family:var(--display);font-weight:800;text-transform:uppercase;margin-top:6px;line-height:1">${escHtml(r.title)}</div><div style="font-size:13px;color:#475569;margin-top:8px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${escHtml(r.description)}</div><div style="margin-top:10px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--blue)">Read →</div></a>`).join("")}</div></section>` : "";
   const ctaLive = p.demoUrl ? `<a href="/${p.demoUrl}" style="font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;padding:12px 18px;display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:var(--paper);border:1px solid var(--ink);text-decoration:none">Open live bench →</a>` : "";
   const ctaRepo = p.repoUrl ? `<a href="${p.repoUrl}" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;padding:12px 18px;display:inline-flex;align-items:center;gap:8px;background:var(--sheet);color:var(--ink);border:1px solid var(--ink);text-decoration:none">View code on GitHub ↗</a>` : "";
-  const graph = [
-    {"@type":"CreativeWork","@id":url+"#work","name":p.name+" — by Hariom Lohar","description":p.description,"url":url,"author":{"@id":SITE+"/#person"},"isPartOf":{"@id":SITE+"/#website"}},
-    {"@type":"BreadcrumbList","@id":url+"#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home — Hariom Lohar","item":SITE+"/"},{"@type":"ListItem","position":2,"name":"Projects — Hariom Lohar","item":SITE+"/projects"},{"@type":"ListItem","position":3,"name":p.name,"item":url}]}
-  ];
+  // Full graph: Person#person, WebSite#website, WebPage#webpage, BreadcrumbList#breadcrumb, CreativeWork#work (+FAQ) — all reference #person, no duplicate @ids
+  const personNode = {"@type":"Person","@id":SITE+"/#person","name":"Hariom Lohar","alternateName":["hariomlohardev","Hariom Lohar hariomlohardev"],"disambiguatingDescription":"The Hariom Lohar at hariomlohardev.github.io — GitHub hariomlohardev, Harvard CS50P 2026 cert 544021b8-ab89-4eb2-a433-9c0b949e658f — not any other person named Hariom Lohar.","identifier":"https://github.com/hariomlohardev","nationality":{"@type":"Country","name":"India"},"givenName":"Hariom","familyName":"Lohar","url":SITE+"/","image":SITE+"/certificates/1.png","jobTitle":"Python / Django / Flutter Developer & AGI Researcher","description":"Hariom Lohar — Harvard CS50P certified 2026. Python, Django, FastAPI & Flutter developer and AGI researcher from India, rebuilding intelligence from first principles since 1 July 2026 in public. GitHub: hariomlohardev. Canonical site hariomlohardev.github.io.","address":{"@type":"PostalAddress","addressCountry":"IN"},"sameAs":["https://github.com/hariomlohardev","https://x.com/HariomloharAGI","https://x.com/hariomlohardev","https://www.linkedin.com/in/hariomlohar","https://dev.to/hariomlohardev","https://huggingface.co/hariomlohardev","https://hashnode.com/@hariomlohardev","https://medium.com/@hariomlohardev",SITE+"/"],"knowsAbout":["Python","Django","FastAPI","Flutter","Dart","LangChain","RAG","NumPy","PyTorch","CNNs","Transformers","Computer Vision","Backpropagation","AGI","Attention","Residual Networks","LayerNorm","Harvard CS50P"],"hasCredential":{"@type":"EducationalOccupationalCredential","name":"CS50's Introduction to Programming with Python","credentialCategory":"certificate","recognizedBy":{"@type":"Organization","name":"Harvard University"},"url":"https://cs50.harvard.edu/certificates/544021b8-ab89-4eb2-a433-9c0b949e658f"}};
+  const websiteNode = {"@type":"WebSite","@id":SITE+"/#website","url":SITE+"/","name":"Hariom Lohar — Lab Notebook No.01","alternateName":"hariomlohardev.github.io","description":"Official site of Hariom Lohar (hariomlohardev on GitHub) — Python/Django/Flutter, Harvard CS50P 2026, and AGI research lab notebook.","inLanguage":"en-IN","publisher":{"@id":SITE+"/#person"}};
+  const webpageNode = {"@type":"WebPage","@id":url+"#webpage","url":url,"name":p.name+" — Hariom Lohar","isPartOf":{"@id":SITE+"/#website"},"about":{"@id":SITE+"/#person"},"author":{"@id":SITE+"/#person"},"description":p.description,"breadcrumb":{"@id":url+"#breadcrumb"},"inLanguage":"en-IN","primaryImageOfPage":{"@type":"ImageObject","contentUrl":ogImage}};
+  const breadcrumbNode = {"@type":"BreadcrumbList","@id":url+"#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home — Hariom Lohar","item":SITE+"/"},{"@type":"ListItem","position":2,"name":"Projects","item":SITE+"/projects"},{"@type":"ListItem","position":3,"name":p.name,"item":url}]};
+  const workNode = {"@type":"CreativeWork","@id":url+"#work","name":p.name+" — by Hariom Lohar","description":p.description,"url":url,"author":{"@id":SITE+"/#person"},"isPartOf":{"@id":SITE+"/#website"},"about":{"@id":SITE+"/#person"},"publisher":{"@id":SITE+"/#person"},"image":{"@type":"ImageObject","url":ogImage}};
+  const graph = [personNode, websiteNode, webpageNode, breadcrumbNode, workNode];
   if(faqJson.length) graph.push({"@type":"FAQPage","@id":url+"#faq","mainEntity":faqJson});
   const jsonLd = {"@context":"https://schema.org","@graph":graph};
 
@@ -155,8 +158,8 @@ function projectPage(p){
 <meta property="og:description" content="${escHtml(p.description)}" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="${ogImage}" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
+<meta property="og:image:width" content="2246" />
+<meta property="og:image:height" content="1588" />
 <meta property="og:image:alt" content="${escHtml(p.name)} — Hariom Lohar · Lab Notebook No.01" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Hariom Lohar — ${escHtml(p.name)}" />

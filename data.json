@@ -110,7 +110,7 @@
     },
     {
       "name": "spam_classifier",
-      "url": "projects/spam_classifier.html",
+      "url": "/projects/spam_classifier",
       "featured": true,
       "status": "shipped",
       "statusLabel": "Shipped · live demo",

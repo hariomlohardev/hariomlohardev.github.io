@@ -14,7 +14,7 @@ slug: spam-classifier-shipped
 - **Engine**: Naive Bayes + Laplace `k=1`, trained via **Pyodide** (Python in WASM)
 - **UX**: bench paper sheets, running verdict, gauge, weak-signal filter
 
-Try it: [/projects/spam_classifier.html](/projects/spam_classifier.html)
+Try it: [/projects/spam_classifier](/projects/spam_classifier)
 
 ## What I learned
 

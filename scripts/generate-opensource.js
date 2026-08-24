@@ -274,7 +274,7 @@ function patchSitemap(){
     return;
   }
   let sitemap = fs.readFileSync(SITEMAP_XML,"utf8");
-  const loc = `${SITE}/opensource.html`;
+  const loc = `${SITE}/opensource`;
   const today = todayISO();
   if(sitemap.includes(loc)){
     // update lastmod to today if older

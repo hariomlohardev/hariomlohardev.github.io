@@ -25,6 +25,7 @@ function fmtDate(d){ // YYYY-MM-DD → locale
   try{ return new Date(d+"T00:00:00+05:30").toLocaleDateString("en-GB",{timeZone:"Asia/Kolkata",day:"2-digit",month:"short",year:"numeric"}).toUpperCase(); }catch{ return d; }
 }
 function parseFrontmatter(raw){
+  raw = raw.replace(/\r\n/g, "\n");
   if(!raw.startsWith("---")) return {data:{}, body:raw};
   const end = raw.indexOf("\n---",3);
   if(end===-1) return {data:{}, body:raw};
@@ -165,7 +166,7 @@ const feed = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
   <title>Hariom Lohar — Lab Notebook No.01 · Blog &amp; Daily Logs</title>
-  <link>${SITE}/blog.html</link>
+  <link>${SITE}/blog</link>
   <atom:link href="${SITE}/feed.xml" rel="self" type="application/rss+xml" />
   <description>Daily AGI research logs and articles by Hariom Lohar (hariomlohardev) — Python, Django, Flutter, Harvard CS50P 2026.</description>
   <language>en-IN</language>
@@ -184,13 +185,13 @@ function ogSvg(post){
   const title = post.title.length > 64 ? post.title.slice(0,61)+'…' : post.title;
   const desc = (post.description||'').slice(0,110);
   const tag = (post.tags||[]).includes('daily-log') ? '◎ DAILY LOG' : '✎ ARTICLE';
-  // 1200×630, paper grid nod, signal bar
+  // 2246×1588
   return `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="${escSvg(title)}">
-<rect width="1200" height="630" fill="#FFFEFB"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="2246" height="1588" viewBox="0 0 2246 1588" role="img" aria-label="${escSvg(title)}">
+<rect width="2246" height="1588" fill="#FFFEFB"/>
 <!-- grid 24px subtle -->
 <defs><pattern id="g" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0 H0 V24" fill="none" stroke="#E3ECFB" stroke-width="1"/></pattern><pattern id="g2" width="120" height="120" patternUnits="userSpaceOnUse"><path d="M120 0 H0 V120" fill="none" stroke="#C9D8F0" stroke-width="1"/></pattern></defs>
-<rect width="1200" height="630" fill="url(#g)"/><rect width="1200" height="630" fill="url(#g2)"/>
+<rect width="2246" height="1588" fill="url(#g)"/><rect width="2246" height="1588" fill="url(#g2)"/>
 <!-- top bar -->
 <rect x="0" y="0" width="1200" height="8" fill="#FFD400"/>
 <rect x="0" y="8" width="1200" height="1" fill="#0B1220" opacity="0.12"/>
@@ -230,21 +231,13 @@ function postPage(post){
   const wordCount = post.wordCount;
   const reading = post.readingMinutes;
   const desc = post.description;
-  const jsonLd = {
-    "@context":"https://schema.org",
-    "@type":"BlogPosting",
-    headline: post.title,
-    description: post.description,
-    datePublished: post.date,
-    dateModified: post.date,
-    author: {"@type":"Person","@id":SITE+"/#person","name":"Hariom Lohar","alternateName":"hariomlohardev","url":SITE+"/","sameAs":["https://github.com/hariomlohardev","https://x.com/HariomloharAGI","https://www.linkedin.com/in/hariomlohar"]},
-    mainEntityOfPage: post.url,
-    url: post.url,
-    image: ogImage,
-    keywords: (post.tags||[]).join(", "),
-    wordCount: post.wordCount,
-    isPartOf: {"@type":"Blog","name":"Hariom Lohar — Lab Notebook"}
-  };
+  // Canonical JSON-LD graph: Person#person, WebSite#website, WebPage#webpage, BreadcrumbList#breadcrumb, BlogPosting#article — all reference #person, no duplicate @ids
+  const personNode = {"@type":"Person","@id":SITE+"/#person","name":"Hariom Lohar","alternateName":["hariomlohardev","Hariom Lohar hariomlohardev"],"disambiguatingDescription":"The Hariom Lohar at hariomlohardev.github.io — GitHub hariomlohardev, Harvard CS50P 2026 cert 544021b8-ab89-4eb2-a433-9c0b949e658f — not any other person named Hariom Lohar.","identifier":"https://github.com/hariomlohardev","nationality":{"@type":"Country","name":"India"},"givenName":"Hariom","familyName":"Lohar","url":SITE+"/","image":SITE+"/certificates/1.png","jobTitle":"Python / Django / Flutter Developer & AGI Researcher","description":"Hariom Lohar — Harvard CS50P certified 2026. Python, Django, FastAPI & Flutter developer and AGI researcher from India, rebuilding intelligence from first principles since 1 July 2026 in public. GitHub: hariomlohardev. Canonical site hariomlohardev.github.io.","address":{"@type":"PostalAddress","addressCountry":"IN"},"sameAs":["https://github.com/hariomlohardev","https://x.com/HariomloharAGI","https://x.com/hariomlohardev","https://www.linkedin.com/in/hariomlohar","https://dev.to/hariomlohardev","https://huggingface.co/hariomlohardev","https://hashnode.com/@hariomlohardev","https://medium.com/@hariomlohardev",SITE+"/"],"knowsAbout":["Python","Django","FastAPI","Flutter","Dart","LangChain","RAG","NumPy","PyTorch","CNNs","Transformers","Computer Vision","Backpropagation","AGI","Attention","Residual Networks","LayerNorm","Harvard CS50P"],"hasCredential":{"@type":"EducationalOccupationalCredential","name":"CS50's Introduction to Programming with Python","credentialCategory":"certificate","recognizedBy":{"@type":"Organization","name":"Harvard University"},"url":"https://cs50.harvard.edu/certificates/544021b8-ab89-4eb2-a433-9c0b949e658f"}};
+  const websiteNode = {"@type":"WebSite","@id":SITE+"/#website","url":SITE+"/","name":"Hariom Lohar — Lab Notebook No.01","alternateName":"hariomlohardev.github.io","description":"Official site of Hariom Lohar (hariomlohardev on GitHub) — Python/Django/Flutter, Harvard CS50P 2026, and AGI research lab notebook.","inLanguage":"en-IN","publisher":{"@id":SITE+"/#person"}};
+  const webpageNode = {"@type":"WebPage","@id":canonical+"#webpage","url":canonical,"name":post.title+" — Hariom Lohar","isPartOf":{"@id":SITE+"/#website"},"about":{"@id":SITE+"/#person"},"author":{"@id":SITE+"/#person"},"description":desc,"breadcrumb":{"@id":canonical+"#breadcrumb"},"inLanguage":"en-IN","primaryImageOfPage":{"@type":"ImageObject","contentUrl":ogImage},"datePublished":post.date+"T00:00:00+05:30","dateModified":post.date+"T00:00:00+05:30"};
+  const breadcrumbNode = {"@type":"BreadcrumbList","@id":canonical+"#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home — Hariom Lohar","item":SITE+"/"},{"@type":"ListItem","position":2,"name":"Blog","item":SITE+"/blog"},{"@type":"ListItem","position":3,"name":post.title,"item":canonical}]};
+  const blogPostingNode = {"@type":"BlogPosting","@id":canonical+"#article","headline":post.title,"name":post.title,"description":desc,"datePublished":post.date+"T00:00:00+05:30","dateModified":post.date+"T00:00:00+05:30","author":{"@id":SITE+"/#person"},"publisher":{"@id":SITE+"/#person"},"mainEntityOfPage":{"@id":canonical+"#webpage"},"url":canonical,"image":ogImage,"keywords":(post.tags||[]).join(", "),"wordCount":post.wordCount,"inLanguage":"en-IN","isPartOf":{"@id":SITE+"/#website"},"about":{"@id":SITE+"/#person"}};
+  const jsonLd = {"@context":"https://schema.org","@graph":[personNode, websiteNode, webpageNode, breadcrumbNode, blogPostingNode]};
   // Split title for hero: keep full title, but also use first part for breadcrumb
   const shortCur = post.title.length > 28 ? post.title.slice(0,26)+'…' : post.title;
   const encUrl = encodeURIComponent(post.url);
@@ -276,8 +269,8 @@ function postPage(post){
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="${post.date}" />
 <meta property="og:image" content="${ogImage}" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
+<meta property="og:image:width" content="2246" />
+<meta property="og:image:height" content="1588" />
 <meta property="og:image:alt" content="${escHtml(ogImageAlt)}" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="${escHtml(post.title)} — Hariom Lohar" />
@@ -706,24 +699,32 @@ for(const post of posts){
 if(fs.existsSync(SITEMAP_XML)){
   let sitemap = fs.readFileSync(SITEMAP_XML,"utf8");
   const hasBlog = sitemap.includes("/blog");
+  const today = new Date().toISOString().slice(0,10);
   if(!hasBlog){
-    const entries = [`  <url><loc>${SITE}/blog.html</loc><lastmod>${posts[0]?.date || new Date().toISOString().slice(0,10)}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>`]
-      .concat(posts.map(p=>`  <url><loc>${escXml(p.url)}</loc><lastmod>${p.date}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>`))
+    const entries = [`  <url><loc>${SITE}/blog</loc><lastmod>${today}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>`]
+      .concat(posts.map(p=>`  <url><loc>${escXml(p.url)}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>`))
       .join("\n");
     sitemap = sitemap.replace("</urlset>", entries+"\n</urlset>");
     fs.writeFileSync(SITEMAP_XML, sitemap);
     console.log(`→ patched ${SITEMAP_XML} (+${posts.length+1} urls)`);
   } else {
-    // inject any missing post urls incrementally
+    // inject any missing post urls incrementally and refresh lastmod to today
     let added=0;
     for(const p of posts){
       if(!sitemap.includes(p.url)){
-        sitemap = sitemap.replace("</urlset>", `  <url><loc>${escXml(p.url)}</loc><lastmod>${p.date}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n</urlset>`);
+        sitemap = sitemap.replace("</urlset>", `  <url><loc>${escXml(p.url)}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n</urlset>`);
         added++;
+      } else {
+        // ensure lastmod is today
+        const re = new RegExp(`(<loc>${escXml(p.url)}<\\/loc>\\s*<lastmod>)[^<]+(<\\/lastmod>)`);
+        if(re.test(sitemap)) sitemap = sitemap.replace(re, `$1${today}$2`);
       }
     }
-    if(added){ fs.writeFileSync(SITEMAP_XML, sitemap); console.log(`→ patched ${SITEMAP_XML} (+${added} missing post urls)`); }
-    else console.log(`sitemap already has blog entries, skipping patch`);
+    // also ensure /blog entry lastmod is today
+    const blogRe = new RegExp(`(<loc>${escXml(SITE)}/blog<\\/loc>\\s*<lastmod>)[^<]+(<\\/lastmod>)`);
+    if(blogRe.test(sitemap)) sitemap = sitemap.replace(blogRe, `$1${today}$2`);
+    if(added){ fs.writeFileSync(SITEMAP_XML, sitemap); console.log(`→ patched ${SITEMAP_XML} (+${added} missing post urls, refreshed lastmod → ${today})`); }
+    else { fs.writeFileSync(SITEMAP_XML, sitemap); console.log(`sitemap already has blog entries, refreshed lastmod → ${today}`); }
   }
 }
 

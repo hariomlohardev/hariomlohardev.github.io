@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Day 032 — CNN from Scratch, No Autograd">
-<rect width="1200" height="630" fill="#FFFEFB"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="2246" height="1588" viewBox="0 0 2246 1588" role="img" aria-label="Day 032 — CNN from Scratch, No Autograd">
+<rect width="2246" height="1588" fill="#FFFEFB"/>
 <!-- grid 24px subtle -->
 <defs><pattern id="g" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0 H0 V24" fill="none" stroke="#E3ECFB" stroke-width="1"/></pattern><pattern id="g2" width="120" height="120" patternUnits="userSpaceOnUse"><path d="M120 0 H0 V120" fill="none" stroke="#C9D8F0" stroke-width="1"/></pattern></defs>
-<rect width="1200" height="630" fill="url(#g)"/><rect width="1200" height="630" fill="url(#g2)"/>
+<rect width="2246" height="1588" fill="url(#g)"/><rect width="2246" height="1588" fill="url(#g2)"/>
 <!-- top bar -->
 <rect x="0" y="0" width="1200" height="8" fill="#FFD400"/>
 <rect x="0" y="8" width="1200" height="1" fill="#0B1220" opacity="0.12"/>

@@ -106,25 +106,52 @@
     {
       "source": "/projects/p/:slug/",
       "destination": "/projects/p/:slug/index.html"
-    },
-    {
-      "source": "/projects/spam_classifier.html",
-      "destination": "/projects/spam_classifier.html"
-    },
-    {
-      "source": "/post.html",
-      "destination": "/post.html"
     }
   ],
   "redirects": [
     {
-      "source": "/projects/spam_classifier",
-      "destination": "/projects/spam_classifier.html",
+      "source": "/about.html",
+      "destination": "/about",
+      "permanent": true
+    },
+    {
+      "source": "/blog.html",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/projects.html",
+      "destination": "/projects",
+      "permanent": true
+    },
+    {
+      "source": "/opensource.html",
+      "destination": "/opensource",
+      "permanent": true
+    },
+    {
+      "source": "/community.html",
+      "destination": "/community",
+      "permanent": true
+    },
+    {
+      "source": "/contact.html",
+      "destination": "/contact",
+      "permanent": true
+    },
+    {
+      "source": "/thanks.html",
+      "destination": "/thanks",
+      "permanent": true
+    },
+    {
+      "source": "/projects/spam_classifier.html",
+      "destination": "/projects/spam_classifier",
       "permanent": true
     },
     {
       "source": "/blog/p/:slug.html",
-      "destination": "/blog/p/:slug/",
+      "destination": "/blog/p/:slug",
       "permanent": true
     }
   ],
