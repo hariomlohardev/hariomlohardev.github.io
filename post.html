@@ -71,7 +71,47 @@ h1{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-height:
 .skeleton{height:22px;border:1px solid var(--line);background:linear-gradient(90deg,var(--paper-2) 25%,var(--sheet) 37%,var(--paper-2) 63%);background-size:400% 100%;animation:shimmer 1.2s infinite;margin:8px 0}
 @keyframes shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
 @media(prefers-reduced-motion:reduce){.skeleton{animation:none}}
-@media print{ header,.breadcrumb,#post-comments,footer{display:none!important} body{background:#fff;background-image:none} .paper{box-shadow:none}}
+/* hl rating + comments — matches static blog/p */
+.hl-card{background:var(--sheet);border:1px solid var(--ink);padding:16px;margin-top:12px}
+.hl-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:flex;gap:10px;align-items:center;margin-bottom:12px}
+.hl-kicker i{width:22px;height:1px;background:var(--ink)}
+.hl-avg{font-family:var(--display);font-size:24px;color:var(--ink);display:flex;gap:10px;align-items:baseline}
+.hl-avg small{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.hl-stars{display:flex;gap:3px}
+.hl-stars i{font-style:normal;font-size:16px;transition:transform .25s ease,color .2s}
+.hl-stars i.on{color:var(--signal);text-shadow:0 0 6px rgba(255,212,0,.35)}
+.hl-stars i.off{color:var(--line-2)}
+.hl-stars.pulse i{animation:hlPop .42s ease}
+@keyframes hlPop{0%{transform:scale(.86)}50%{transform:scale(1.18)}100%{transform:scale(1)}}
+.hl-range{width:100%;-webkit-appearance:none;appearance:none;height:6px;background:var(--line);border-radius:999px;margin:12px 0 8px}
+.hl-range::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(--ink);border:2px solid var(--paper);box-shadow:0 2px 8px rgba(11,18,32,.18);cursor:pointer;transition:transform .18s}
+.hl-range:active::-webkit-slider-thumb{transform:scale(1.12)}
+.hl-range::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--ink);border:2px solid var(--paper);cursor:pointer}
+.hl-meta{font-family:var(--mono);font-size:11px;color:var(--muted);display:flex;justify-content:space-between;gap:10px}
+.hl-dist{display:grid;gap:6px;margin-top:12px}
+.hl-dist-row{display:grid;grid-template-columns:16px 1fr 28px;gap:10px;align-items:center;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.hl-bar{height:6px;background:var(--paper-2);border:1px solid var(--line);overflow:hidden}
+.hl-bar i{display:block;height:100%;background:var(--signal);width:0;transition:width .6s ease}
+.hl-actions{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.hl-btn{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--ink);background:var(--ink);color:var(--paper);padding:10px 14px;cursor:pointer}
+.hl-btn.ghost{background:transparent;color:var(--ink)}
+.hl-note{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.hl-input,.hl-textarea{width:100%;font-family:var(--sans);font-size:14px;border:1px solid var(--line-2);background:var(--sheet);padding:10px 12px;outline:none}
+.hl-input:focus,.hl-textarea:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(11,18,32,.08)}
+.hl-textarea{min-height:90px;resize:vertical;line-height:1.6}
+.hl-hint{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.hl-c{border:1px solid var(--line);background:var(--paper-2);padding:12px;animation:hlIn .35s ease}
+@keyframes hlIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.hl-c.mine{border-color:var(--ink);background:var(--sheet)}
+.hl-c-head{display:flex;gap:10px;align-items:center}
+.hl-ava{width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-family:var(--mono);font-size:11px}
+.hl-who{font-family:var(--mono);font-size:12px;color:var(--ink);display:flex;gap:8px;align-items:center}
+.hl-body{margin-top:8px;font-size:14px;line-height:1.65;white-space:pre-wrap;word-break:break-word;color:#1e293b}
+.hl-reply{font-family:var(--mono);font-size:11px;color:var(--muted);border-bottom:1px dashed var(--line-2);margin-top:8px;display:inline-block;cursor:pointer}
+.hl-reply:hover{color:var(--ink)}
+.hl-children{margin-top:10px;margin-left:12px;border-left:2px solid var(--line);padding-left:12px;display:grid;gap:10px}
+.hl-empty{font-family:var(--mono);font-size:12px;color:var(--muted);border:1px dashed var(--line-2);padding:12px;background:var(--sheet)}
+@media print{ header,.breadcrumb,#prog,.hl-wrap,footer{display:none!important} body{background:#fff;background-image:none} .paper{box-shadow:none}}
 footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)}
 .foot-in{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:18px 0;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 </style>
@@ -110,12 +150,31 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
   </div>
   <article class="paper" id="article" style="display:none"><div class="prose" id="prose"></div></article>
   <div id="status" style="margin-top:18px;font-family:var(--mono);font-size:13px;color:var(--muted)">Loading post… If this hangs, run <code>node scripts/generate-blog.js</code> and use the static page at <code>/blog/p/&lt;slug&gt;/</code>.</div>
-  <!-- Comments — same Giscus/Utterances as static blog pages (no push needed until you enable Discussions) -->
-  <section id="post-comments" style="display:none;margin-top:22px;background:var(--sheet);border:1px solid var(--ink);padding:16px" aria-label="Comments">
-    <div style="font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><span>Discuss</span><span style="text-transform:none;letter-spacing:0;font-size:11px">via GitHub · free</span></div>
-    <div id="giscus-root-post" style="margin-top:12px"></div>
-    <noscript><p style="font-family:var(--mono);font-size:12px;color:var(--muted)"><a href="https://github.com/hariomlohardev/hariomlohardev.github.io/discussions" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:underline">Open Discussions →</a></p></noscript>
+  <div class="hl-wrap" id="hlWrap" style="display:none">
+  <section class="hl-card" id="hl-rating" aria-label="Rate this post" style="margin-top:22px">
+    <div class="hl-kicker"><i></i> Rate — slider 1–5 · anim <span style="margin-left:auto;font-size:10px;color:var(--muted)" id="hlRateSub">—</span></div>
+    <div class="hl-avg"><b id="hlAvg">—</b> <small>avg · <span id="hlCount">0</span> ratings</small></div>
+    <div class="hl-stars" id="hlStars" aria-hidden="true" style="margin-top:6px"><i>☆</i><i>☆</i><i>☆</i><i>☆</i><i>☆</i></div>
+    <input class="hl-range" id="hlRange" type="range" min="1" max="5" step="1" value="5" aria-label="Rating 1 to 5" />
+    <div class="hl-meta"><span>drag · tap 1–5</span><span id="hlMy">you: —</span></div>
+    <div class="hl-dist" id="hlDist"></div>
+    <div class="hl-actions"><button type="button" class="hl-btn" id="hlRateBtn">Rate <span id="hlRateVal">5</span>/5 →</button><span class="hl-note" id="hlRateNote">cookie hl_cid · no login</span></div>
   </section>
+  <section class="hl-card" id="hl-comments" aria-label="Comments" style="margin-top:16px">
+    <div class="hl-kicker"><i></i> Discuss — replies · rating <span style="margin-left:auto" id="hlCSub">0 comments</span></div>
+    <div style="display:grid;gap:10px;margin-top:12px">
+      <input class="hl-input" id="hlName" type="text" maxlength="32" placeholder="Name (optional) — cookie" autocomplete="nickname" />
+      <textarea class="hl-textarea" id="hlText" maxlength="2000" placeholder="Share a thought — replies, 2000 max…"></textarea>
+      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center">
+        <span class="hl-hint" id="hlReplyHint" style="display:none">↳ Replying to <b id="hlReplyWho"></b> · <button type="button" class="hl-reply" id="hlCancelReply" style="border:none;background:none;padding:0">cancel</button></span>
+        <span class="hl-hint" id="hlHint">cookie hl_cid · name optional · Enter to post (Ctrl+Enter)</span>
+      </div>
+      <div class="hl-actions" style="margin-top:0"><button type="button" class="hl-btn" id="hlPost">Post comment →</button><span class="hl-note" id="hlPostNote"></span></div>
+    </div>
+    <div id="hlList" style="display:grid;gap:12px;margin-top:16px"></div>
+    <noscript><p class="hl-hint" style="margin-top:12px">Enable JS for comments — Supabase, no GitHub.</p></noscript>
+  </section>
+  </div>
   <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
     <a href="/blog" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--ink);padding:11px 14px;background:white;text-decoration:none">← Back to blog</a>
     <a id="canonicalLink" href="/blog" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:var(--ink);color:white;padding:11px 14px;border:1px solid var(--ink);text-decoration:none;display:none">Open canonical →</a>
@@ -190,36 +249,90 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
 
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function fmt(d){ try{ return new Date(d+'T00:00:00+05:30').toLocaleDateString('en-GB',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric'}).toUpperCase(); }catch(e){ return d; } }
-  function loadComments(slug){
-    var box=document.getElementById('post-comments'); if(!box) return;
-    box.style.display='block';
-    var root=document.getElementById('giscus-root-post');
-    if(!root || root.children.length) return;
-    var s=document.createElement('script');
-    s.async=true; s.crossOrigin='anonymous';
-    s.src='https://giscus.app/client.js';
-    s.setAttribute('data-repo','hariomlohardev/hariomlohardev.github.io');
-    s.setAttribute('data-repo-id','R_kgDOTkm3vQ');
-    s.setAttribute('data-category','General');
-    s.setAttribute('data-category-id','DIC_kwDOTkm3vc4DDAjC');
-    s.setAttribute('data-mapping','pathname');
-    s.setAttribute('data-strict','0');
-    s.setAttribute('data-reactions-enabled','1');
-    s.setAttribute('data-emit-metadata','0');
-    s.setAttribute('data-input-position','bottom');
-    s.setAttribute('data-theme','preferred_color_scheme');
-    s.setAttribute('data-lang','en');
-    var hasIds = s.getAttribute('data-repo-id') && s.getAttribute('data-category-id');
-    if(!hasIds){
-      s.src='https://utteranc.es/client.js';
-      s.setAttribute('repo','hariomlohardev/hariomlohardev.github.io');
-      s.setAttribute('issue-term','pathname');
-      s.setAttribute('theme','github-light');
-      s.removeAttribute('data-repo'); s.removeAttribute('data-repo-id'); s.removeAttribute('data-category'); s.removeAttribute('data-category-id');
-      s.removeAttribute('data-mapping'); s.removeAttribute('data-strict'); s.removeAttribute('data-reactions-enabled'); s.removeAttribute('data-emit-metadata'); s.removeAttribute('data-input-position'); s.removeAttribute('data-lang');
+  // — HL comments + rating (cookie hl_cid, optional name) — replaces giscus
+  var _hlInited=false;
+  function hlLoad(slug){
+    if(_hlInited) return; _hlInited=true;
+    var wrap=document.getElementById('hlWrap'); if(wrap) wrap.style.display='block';
+    var reduced=false; try{reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}
+    function getCookie(n){try{var m=document.cookie.match(new RegExp('(?:^|; )'+n.replace(/[-\\^$*+?.()|[\]{}]/g,'\\$&')+'=([^;]*)'));return m?decodeURIComponent(m[1]):''}catch(e){return ''}}
+    function setCookie(n,v){try{document.cookie=n+'='+encodeURIComponent(v)+'; path=/; max-age='+60*60*24*365+'; SameSite=Lax'}catch(e){} try{localStorage.setItem(n,v)}catch(e){}}
+    function getCid(){var c=''; try{c=localStorage.getItem('hl_cid')||''}catch(e){} if(!c) c=getCookie('hl_cid'); if(!c){ try{c=crypto.randomUUID().replace(/-/g,'')}catch(e){c=Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2)} c=c.replace(/[^A-Za-z0-9]/g,'').slice(0,24)||('hl'+Date.now()); } c=c.replace(/[^A-Za-z0-9_-]/g,'').slice(0,32); if(c.length<6) c='hl-'+c+Date.now(); setCookie('hl_cid',c); try{localStorage.setItem('hl_cid',c)}catch(e){} return c}
+    function getName(){var n=''; try{n=localStorage.getItem('hl_name')||''}catch(e){} if(!n) n=getCookie('hl_name'); return (n||'').trim().slice(0,32)}
+    function setName(n){n=(n||'').trim().slice(0,32); if(!n) return; setCookie('hl_name',n); try{localStorage.setItem('hl_name',n)}catch(e){}}
+    var CID=getCid();
+    var el=function(id){return document.getElementById(id)};
+    var avgEl=el('hlAvg'), cntEl=el('hlCount'), starsEl=el('hlStars'), rangeEl=el('hlRange'), rateBtn=el('hlRateBtn'), rateVal=el('hlRateVal'), myEl=el('hlMy'), distEl=el('hlDist'), rateNote=el('hlRateNote');
+    var nameInput=el('hlName'), textInput=el('hlText');
+    if(nameInput && getName()) nameInput.value=getName();
+    function renderStars(v,avg){
+      if(!starsEl) return;
+      var val=v||Math.round(avg||0);
+      var html=''; for(var i=1;i<=5;i++) html+='<i class="'+(i<=val?'on':'off')+'">'+(i<=val?'★':'☆')+'</i>';
+      starsEl.innerHTML=html;
+      if(!reduced){ starsEl.classList.remove('pulse'); void starsEl.offsetWidth; starsEl.classList.add('pulse'); setTimeout(function(){starsEl.classList.remove('pulse')},500); }
     }
-    root.appendChild(s);
+    function renderDist(dist){ if(!distEl) return; var max=0; for(var k=1;k<=5;k++) max=Math.max(max,dist[k]||0); var html=''; for(var k=5;k>=1;k--){ var c=dist[k]||0; var pct=max?Math.round(c/max*100):0; html+='<div class="hl-dist-row"><span>'+k+'★</span><span class="hl-bar"><i style="width:'+pct+'%"></i></span><span>'+c+'</span></div>'; } distEl.innerHTML=html; }
+    function fetchRating(){
+      fetch('/api/blog/ratings?slug='+encodeURIComponent(slug)+'&client_id='+encodeURIComponent(CID)).then(function(r){return r.json()}).then(function(j){
+        if(!j||!j.ok) return;
+        avgEl.textContent=(j.avg||0).toFixed(1); cntEl.textContent=j.count||0;
+        renderStars(null,j.avg); renderDist(j.dist||{1:0,2:0,3:0,4:0,5:0});
+        if(j.myScore){ myEl.textContent='you: '+j.myScore+'/5'; rangeEl.value=j.myScore; rateVal.textContent=j.myScore; renderStars(j.myScore); }
+        else myEl.textContent='you: —';
+      }).catch(function(){});
+    }
+    if(rangeEl) rangeEl.addEventListener('input',function(){ var v=parseInt(rangeEl.value||'5',10); rateVal.textContent=v; renderStars(v); });
+    if(rateBtn) rateBtn.addEventListener('click',function(){
+      var v=parseInt(rangeEl.value||'5',10);
+      var nm=(nameInput&&nameInput.value||'').trim().slice(0,32); if(nm) setName(nm);
+      rateBtn.disabled=true; rateBtn.textContent='…';
+      fetch('/api/blog/ratings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug:slug,score:v,client_id:CID,author_name:nm||getName()||'Anonymous'})}).then(function(r){return r.json()}).then(function(j){
+        if(!j||!j.ok) throw new Error(j&&j.error||'failed');
+        avgEl.textContent=(j.avg||0).toFixed(1); cntEl.textContent=j.count||0; myEl.textContent='you: '+j.myScore+'/5'; renderStars(j.myScore,j.avg); renderDist(j.dist||{});
+        rateBtn.textContent='Rated '+j.myScore+'/5 ✓';
+        if(j.myScore===5 && !reduced){ var c=document.createElement('div'); c.textContent='✦ Thanks — 5/5 ✦'; c.style.cssText='position:fixed;left:50%;top:18%;transform:translateX(-50%);background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:12px;padding:10px 16px;border:1px solid var(--signal);z-index:999;animation:hlIn .5s ease'; document.body.appendChild(c); setTimeout(function(){c.remove()},2200); }
+        setTimeout(function(){rateBtn.disabled=false; rateBtn.innerHTML='Rate <span id="hlRateVal">'+rangeEl.value+'</span>/5 →';},1800);
+      }).catch(function(e){ rateBtn.disabled=false; rateBtn.textContent='Rate '+rangeEl.value+'/5 →'; rateNote.textContent=e.message||'failed'; setTimeout(function(){rateNote.textContent='cookie hl_cid · no login'},2500); });
+    });
+    fetchRating();
+    var listEl=el('hlList'), cSub=el('hlCSub'), postBtn=el('hlPost'), postNote=el('hlPostNote'), replyHint=el('hlReplyHint'), replyWho=el('hlReplyWho'), cancelReply=el('hlCancelReply');
+    var replyTo=null;
+    function timeAgo(iso){try{var d=new Date(iso),s=Math.floor((Date.now()-d)/1000); if(s<60) return 'just now'; if(s<3600) return Math.floor(s/60)+'m ago'; if(s<86400) return Math.floor(s/3600)+'h ago'; if(s<2592000) return Math.floor(s/86400)+'d ago'; return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}catch(e){return ''}}
+    function setReply(id,name){ replyTo=id; replyWho.textContent=name||'Anonymous'; replyHint.style.display=''; if(textInput){textInput.focus(); textInput.placeholder='Reply to '+(name||'Anonymous')+'…'} }
+    function clearReply(){ replyTo=null; replyHint.style.display='none'; if(textInput) textInput.placeholder='Share a thought — replies, 2000 max…'; }
+    if(cancelReply) cancelReply.addEventListener('click',clearReply);
+    function renderComments(rows){
+      if(!listEl) return;
+      if(!rows||!rows.length){ listEl.innerHTML='<div class="hl-empty">No comments yet — be the first.</div>'; if(cSub) cSub.textContent='0 comments'; return; }
+      if(cSub) cSub.textContent=rows.length+' comment'+(rows.length===1?'':'s');
+      var map={}; rows.forEach(function(r){ map[r.id]=Object.assign({},r,{children:[]}); });
+      var roots=[]; rows.forEach(function(r){ var n=map[r.id]; if(r.parent_id && map[r.parent_id]) map[r.parent_id].children.push(n); else roots.push(n); });
+      function nodeHtml(n){
+        var isMine=n.client_id===CID; var ava=(n.author_name||'A').trim().charAt(0).toUpperCase()||'A';
+        var html='<div class="hl-c'+(isMine?' mine':'')+'"><div class="hl-c-head"><span class="hl-ava">'+esc(ava)+'</span><span class="hl-who"><b>'+esc(n.author_name||'Anonymous')+'</b>'+(isMine?' <span style="font-size:10px;color:var(--signal)">· you</span>':'')+'<span class="hl-time" style="font-size:11px;color:var(--muted)">· '+esc(timeAgo(n.created_at))+'</span></span></div><div class="hl-body">'+esc(n.content)+'</div><button type="button" class="hl-reply" data-reply="'+esc(n.id)+'" data-who="'+esc(n.author_name||'Anonymous')+'">↳ Reply</button>';
+        if(n.children&&n.children.length){ html+='<div class="hl-children">'; n.children.forEach(function(ch){ html+=nodeHtml(ch); }); html+='</div>'; }
+        html+='</div>'; return html;
+      }
+      var out=''; roots.forEach(function(r){ out+=nodeHtml(r); }); listEl.innerHTML=out;
+      listEl.querySelectorAll('[data-reply]').forEach(function(b){ b.addEventListener('click',function(){ setReply(b.getAttribute('data-reply'), b.getAttribute('data-who')); window.scrollTo({top: document.getElementById('hl-comments').offsetTop - 80, behavior: reduced?'auto':'smooth'}); }); });
+    }
+    function fetchComments(){ fetch('/api/blog/comments?slug='+encodeURIComponent(slug)).then(function(r){return r.json()}).then(function(j){ if(j&&j.ok) renderComments(j.comments||[]); }).catch(function(){}); }
+    fetchComments();
+    if(postBtn) postBtn.addEventListener('click',function(){
+      var content=(textInput&&textInput.value||'').trim(); var nm=(nameInput&&nameInput.value||'').trim().slice(0,32);
+      if(!content){ postNote.textContent='write something first'; textInput.focus(); return; }
+      if(nm) setName(nm);
+      postBtn.disabled=true; postBtn.textContent='Posting…'; postNote.textContent='';
+      fetch('/api/blog/comments',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug:slug,content:content,author_name:nm||getName()||'Anonymous',parent_id:replyTo,client_id:CID})}).then(function(r){return r.json().then(function(j){return {status:r.status,body:j}})}).then(function(x){
+        if(!x.body||!x.body.ok) throw new Error(x.body&&x.body.error||'failed ('+x.status+')');
+        if(textInput) textInput.value=''; clearReply(); postNote.textContent='posted ✓'; fetchComments(); setTimeout(function(){postNote.textContent=''},2000);
+      }).catch(function(e){ postNote.textContent=e.message||'failed'; }).finally(function(){ postBtn.disabled=false; postBtn.textContent='Post comment →'; });
+    });
+    if(nameInput) nameInput.addEventListener('change',function(){ var v=nameInput.value.trim().slice(0,32); if(v) setName(v); });
+    if(textInput) textInput.addEventListener('keydown',function(e){ if((e.metaKey||e.ctrlKey)&&e.key==='Enter') postBtn.click(); });
   }
+  function loadComments(slug){ hlLoad(slug); }
 
   // Supabase-only: try API first, then direct REST (anon + RLS, published=true)
   fetch('/api/blog/post?slug='+encodeURIComponent(slug),{cache:'no-store'}).then(function(r){ if(!r.ok) throw new Error('api '+r.status); return r.json(); }).then(function(j){
