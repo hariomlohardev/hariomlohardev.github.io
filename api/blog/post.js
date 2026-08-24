@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
     if(!url || !key) return res.status(500).json({ ok:false, error:'Supabase not configured' });
     const { createClient } = require('@supabase/supabase-js');
     const sb = createClient(url, key, { auth:{ persistSession:false } });
-    const { data, error } = await sb.from('posts').select('*').eq('slug', slug).maybeSingle();
+    const { data, error } = await sb.from('posts').select('slug,title,description,date,tags,cover,html,raw,word_count,reading_minutes,published').eq('slug', slug).eq("published",true).maybeSingle();
     if(error) return res.status(500).json({ ok:false, error: error.message });
     if(!data) return res.status(404).json({ ok:false, error:'Not found' });
     // Normalize to the shape post.html expects

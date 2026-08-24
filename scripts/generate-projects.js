@@ -328,6 +328,7 @@ footer{border-top:2px solid var(--ink);margin-top:24px;background:var(--paper-2)
   </article>
   ${faqHtml ? `<section style="margin-top:18px"><div style="font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:10px"><i style="width:28px;height:1px;background:var(--ink)"></i> FAQ — ${escHtml(p.name)}</div><div style="display:grid;gap:10px">${faqHtml}</div></section>` : ""}
   ${relatedHtml}
+  ${relatedHydration}
   <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
     ${ctaLive}
     ${ctaRepo}

@@ -921,13 +921,31 @@ footer{margin-top:clamp(48px,6vw,84px);border-top:1px solid var(--ink);backgroun
     applyHash(); buildStats(); buildTags(); render();
   }
 
-  // Supabase only — no posts.json fallback
+  // fallback chain: /api/admin/posts -> Supabase REST (meta supabase-anon) -> posts.json -> init([])
   fetch('/api/admin/posts',{cache:'no-store'})
-    .then(function(r){ if(!r.ok) throw new Error('no supabase posts'); return r.json(); })
-    .then(function(j){ init(j.posts||[]); })
+    .then(function(r){ if(!r.ok) throw new Error('api '+r.status); return r.json(); })
+    .then(function(j){ var arr=j.posts||j||[]; if(!Array.isArray(arr)||!arr.length) throw new Error('no posts from api'); init(arr); })
+    .catch(function(){
+      var anonEl=document.querySelector('meta[name="supabase-anon"]');
+      var anon=anonEl ? anonEl.content : '';
+      if(!anon) throw new Error('missing anon');
+      var url='https://rgmvhptebkslkjleoilc.supabase.co/rest/v1/posts?select=*&order=date.desc&published=eq.true';
+      return fetch(url,{headers:{apikey:anon,Authorization:'Bearer '+anon}}).then(function(r){ if(!r.ok) throw new Error('rest '+r.status); return r.json(); }).then(function(arr){
+        if(!Array.isArray(arr)||!arr.length) throw new Error('no posts from rest');
+        init(arr);
+      });
+    })
+    .catch(function(){
+      return fetch('posts.json',{cache:'no-store'}).then(function(r){ if(!r.ok) throw new Error('posts.json '+r.status); return r.json(); }).then(function(j){
+        var arr=j.posts||j||[]; if(!Array.isArray(arr)) arr=[];
+        if(!arr.length) throw new Error('no posts from json');
+        init(arr);
+      });
+    })
     .catch(function(e){
       var m=document.getElementById('metaRow');
-      if(m) m.innerHTML='<span style="color:var(--accent)">Failed to load posts from Supabase — '+ (e.message||'') +'</span>';
+      if(m) m.innerHTML='<span style="color:var(--accent)">No posts loaded — check Supabase or posts.json · <a href="/feed.xml" style="text-decoration:underline">RSS</a></span>';
+      var qC=document.getElementById('qCount'); if(qC) qC.textContent='0/0';
       init([]);
     });
 })();
