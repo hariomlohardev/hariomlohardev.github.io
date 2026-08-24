@@ -2,6 +2,17 @@
 "use strict";
 /**
  * generate-projects.js — zero-deps static project-detail builder
+ *
+ * SOURCE OF TRUTH for blog posts: Supabase `posts` table (published=true).
+ * `posts.json` is DEPRECATED as a hand-edited source — it is a build artifact
+ * generated from Supabase via `node scripts/sync-posts.js` (and by
+ * `generate-blog.js` when run in Supabase mode). This script is Supabase-primary:
+ * it tries Supabase first for related-post lookups and falls back to posts.json
+ * for local/offline builds. Do NOT edit posts.json by hand.
+ *
+ * For sitemap/llms generation at build time, posts.json is retained only as a
+ * fallback build artifact from Supabase; the canonical data lives in Supabase.
+ *
  * Reads projects-data.json → projects/p/<slug>/index.html + og/<slug>.svg + patches sitemap.xml
  * Mirrors scripts/generate-blog.js pattern — Lab Notebook No.01, $0, Node only.
  * Run: node scripts/generate-projects.js
@@ -12,6 +23,8 @@ const path = require("path");
 
 const ROOT = path.resolve(__dirname, "..");
 const DATA_JSON = path.join(ROOT, "projects-data.json");
+// DEPRECATED — posts.json is a build artifact from Supabase (see sync-posts.js).
+// Supabase `posts` is the source of truth; this fallback is for local/offline.
 const POSTS_JSON = path.join(ROOT, "posts.json");
 const SITEMAP_XML = path.join(ROOT, "sitemap.xml");
 const PROJECTS_P_DIR = path.join(ROOT, "projects", "p");
@@ -67,19 +80,67 @@ function mdToHtml(md){
   return out;
 }
 
-// load data
+// load projects data (sync — projects-data.json remains file-based; Supabase site_content key=projects is separate concern)
 if(!fs.existsSync(DATA_JSON)){ console.error("projects-data.json missing"); process.exit(1); }
 const rawData = JSON.parse(fs.readFileSync(DATA_JSON,"utf8"));
 const projects = rawData.projects || rawData;
 if(!Array.isArray(projects)){ console.error("projects-data.json: expected array"); process.exit(1); }
 
-let postsBySlug = {};
-try{
-  if(fs.existsSync(POSTS_JSON)){
-    const posts = JSON.parse(fs.readFileSync(POSTS_JSON,"utf8"));
-    posts.forEach(p=>{ postsBySlug[p.slug]=p; });
+// ── Supabase-primary posts loader (for relatedSlugs) ─────────────────
+// posts.json is DEPRECATED; Supabase `posts` is source of truth. This loader
+// tries Supabase REST (fetch) when env is set, else falls back to posts.json
+// file artifact (generated via `node scripts/sync-posts.js`).
+async function loadPostsBySlug(){
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY;
+  if(url && key){
+    try{
+      const endpoint = `${url.replace(/\/$/,'')}/rest/v1/posts?select=slug,title,description,date,tags,cover,word_count,reading_minutes,published&published=eq.true&order=date.desc`;
+      const res = await fetch(endpoint, { headers: { apikey: key, Authorization: `Bearer ${key}` } });
+      if(res.ok){
+        const rows = await res.json();
+        if(Array.isArray(rows) && rows.length){
+          const map = {};
+          rows.forEach(r=>{
+            const slug = r.slug;
+            map[slug] = {
+              slug,
+              title: r.title,
+              date: typeof r.date === 'string' ? r.date.slice(0,10) : String(r.date).slice(0,10),
+              description: r.description || '',
+              tags: Array.isArray(r.tags) ? r.tags : [],
+              readingMinutes: r.reading_minutes ?? r.readingMinutes ?? 3,
+              wordCount: r.word_count ?? r.wordCount ?? 0,
+              url: `https://hariomlohardev.github.io/blog/p/${slug}/`,
+              file: `${(typeof r.date==='string'? r.date.slice(0,10): String(r.date).slice(0,10))}-${slug}.md`,
+              cover: r.cover || null,
+            };
+          });
+          console.log(`→ posts: Supabase (${rows.length} published) — source of truth for relatedSlugs`);
+          return map;
+        }
+        console.warn("Supabase returned 0 published posts — falling back to posts.json (deprecated artifact)");
+      } else {
+        const txt = await res.text().catch(()=> '');
+        console.warn(`Supabase posts fetch ${res.status} ${txt.slice(0,200)} — falling back to posts.json (deprecated artifact)`);
+      }
+    }catch(e){ console.warn("Supabase fetch failed for postsBySlug:", e.message, "— falling back to posts.json (deprecated artifact)"); }
+  } else {
+    if(url || key) console.warn("Supabase env partially set — need both SUPABASE_URL and ANON/SERVICE key; falling back to posts.json (deprecated artifact)");
   }
-}catch(e){ console.warn("posts.json read fail", e.message); }
+  // Fallback: posts.json file artifact
+  try{
+    if(fs.existsSync(POSTS_JSON)){
+      const posts = JSON.parse(fs.readFileSync(POSTS_JSON,"utf8"));
+      const map = {};
+      posts.forEach(p=>{ map[p.slug]=p; });
+      console.warn(`→ posts: posts.json fallback (${posts.length}) — DEPRECATED path; regenerate via node scripts/sync-posts.js (Supabase is source of truth)`);
+      return map;
+    }
+  }catch(e){ console.warn("posts.json read fail (deprecated artifact)", e.message); }
+  console.warn("No posts source available — relatedSlugs will be empty");
+  return {};
+}
 
 // og per project
 function ogSvg(project){
@@ -109,7 +170,7 @@ function ogSvg(project){
 </svg>`;
 }
 
-function projectPage(p){
+function projectPage(p, postsBySlug){
   const slug = p.slug ? toSlug(p.slug) : toSlug(p.id);
   const url = `${SITE}/projects/p/${slug}/`;
   const kindLabel = p.kind==="live" ? "Live · interactive" : "Code · repository";
@@ -292,44 +353,51 @@ footer{border-top:2px solid var(--ink);margin-top:24px;background:var(--paper-2)
 </html>`;
 }
 
-// generate
-try{ fs.mkdirSync(PROJECTS_P_DIR, {recursive:true}); }catch{}
-try{ fs.mkdirSync(OG_DIR, {recursive:true}); }catch{}
+async function main(){
+  // Supabase-primary: load related-post map from Supabase, fallback to posts.json artifact
+  const postsBySlug = await loadPostsBySlug();
 
-for(const p of projects){
-  const slug = p.slug ? toSlug(p.slug) : toSlug(p.id);
-  if(!slug || !p.name){ console.warn(`skip bad project ${p.id}`); continue; }
-  const dir = path.join(PROJECTS_P_DIR, slug);
-  fs.mkdirSync(dir, {recursive:true});
-  const html = projectPage({...p, slug});
-  fs.writeFileSync(path.join(dir,"index.html"), html);
-  console.log(`→ projects/p/${slug}/index.html`);
-  // og svg if no cover
-  if(!p.cover){
-    try{
-      const svg = ogSvg({...p, slug});
-      fs.writeFileSync(path.join(OG_DIR, slug + ".svg"), svg);
-      console.log(`→ og/${slug}.svg`);
-    }catch(e){ console.warn('og fail', slug, e.message); }
-  }
-}
+  // generate
+  try{ fs.mkdirSync(PROJECTS_P_DIR, {recursive:true}); }catch{}
+  try{ fs.mkdirSync(OG_DIR, {recursive:true}); }catch{}
 
-// patch sitemap.xml
-if(fs.existsSync(SITEMAP_XML)){
-  let sitemap = fs.readFileSync(SITEMAP_XML,"utf8");
-  let added=0;
-  const today = new Date().toISOString().slice(0,10);
   for(const p of projects){
     const slug = p.slug ? toSlug(p.slug) : toSlug(p.id);
-    const loc = `${SITE}/projects/p/${slug}/`;
-    if(!sitemap.includes(loc)){
-      const priority = p.kind==="live" ? "0.8" : "0.6";
-      sitemap = sitemap.replace("</urlset>", `  <url><loc>${escXml(loc)}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>${priority}</priority></url>\n</urlset>`);
-      added++;
+    if(!slug || !p.name){ console.warn(`skip bad project ${p.id}`); continue; }
+    const dir = path.join(PROJECTS_P_DIR, slug);
+    fs.mkdirSync(dir, {recursive:true});
+    const html = projectPage({...p, slug}, postsBySlug);
+    fs.writeFileSync(path.join(dir,"index.html"), html);
+    console.log(`→ projects/p/${slug}/index.html`);
+    // og svg if no cover
+    if(!p.cover){
+      try{
+        const svg = ogSvg({...p, slug});
+        fs.writeFileSync(path.join(OG_DIR, slug + ".svg"), svg);
+        console.log(`→ og/${slug}.svg`);
+      }catch(e){ console.warn('og fail', slug, e.message); }
     }
   }
-  if(added){ fs.writeFileSync(SITEMAP_XML, sitemap); console.log(`→ patched ${SITEMAP_XML} (+${added} project detail urls)`); }
-  else console.log(`sitemap already has project detail entries, skipping patch`);
+
+  // patch sitemap.xml
+  if(fs.existsSync(SITEMAP_XML)){
+    let sitemap = fs.readFileSync(SITEMAP_XML,"utf8");
+    let added=0;
+    const today = new Date().toISOString().slice(0,10);
+    for(const p of projects){
+      const slug = p.slug ? toSlug(p.slug) : toSlug(p.id);
+      const loc = `${SITE}/projects/p/${slug}/`;
+      if(!sitemap.includes(loc)){
+        const priority = p.kind==="live" ? "0.8" : "0.6";
+        sitemap = sitemap.replace("</urlset>", `  <url><loc>${escXml(loc)}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>${priority}</priority></url>\n</urlset>`);
+        added++;
+      }
+    }
+    if(added){ fs.writeFileSync(SITEMAP_XML, sitemap); console.log(`→ patched ${SITEMAP_XML} (+${added} project detail urls)`); }
+    else console.log(`sitemap already has project detail entries, skipping patch`);
+  }
+
+  console.log(`done — ${projects.length} project detail pages (posts for related: ${Object.keys(postsBySlug).length} via ${process.env.SUPABASE_URL ? 'Supabase or fallback' : 'posts.json deprecated artifact'})`);
 }
 
-console.log(`done — ${projects.length} project detail pages`);
+main().catch(e=>{ console.error(e); process.exit(1); });
