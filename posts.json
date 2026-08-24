@@ -1,0 +1,87 @@
+[
+  {
+    "slug": "day-040-multi-head-residual",
+    "title": "Day 040 — Multi-Head, Residual & Layernorm by Hand",
+    "date": "2026-08-10",
+    "description": "Stacked 4-head attention + residual + layernorm forward/backward in NumPy — same mask, new choreography, grads checked at 1e-4.",
+    "tags": [
+      "daily-log",
+      "Transformers",
+      "attention",
+      "NumPy"
+    ],
+    "readingMinutes": 2,
+    "wordCount": 259,
+    "url": "https://hariomlohardev.github.io/blog/p/day-040-multi-head-residual/",
+    "file": "2026-08-10-day-040-multi-head-residual.md",
+    "cover": null
+  },
+  {
+    "slug": "day-039-attention-by-hand",
+    "title": "Day 039 — Attention by Hand",
+    "date": "2026-08-08",
+    "description": "Derived scaled dot-product attention forward/backward in NumPy — QKᵀ, causal mask, softmax, and the gradient through it.",
+    "tags": [
+      "daily-log",
+      "Transformers",
+      "attention",
+      "NumPy"
+    ],
+    "readingMinutes": 1,
+    "wordCount": 156,
+    "url": "https://hariomlohardev.github.io/blog/p/day-039-attention-by-hand/",
+    "file": "2026-08-08-day-039-attention-by-hand.md",
+    "cover": null
+  },
+  {
+    "slug": "spam-classifier-shipped",
+    "title": "Spam Classifier Shipped — 5,572 Messages, Zero Mock",
+    "date": "2026-08-05",
+    "description": "Shipped a live Naive Bayes bench that tokenises, scores, and stamps P(spam|message) in your browser via Pyodide — nothing mocked.",
+    "tags": [
+      "article",
+      "Naive Bayes",
+      "NLP",
+      "Pyodide",
+      "ship"
+    ],
+    "readingMinutes": 1,
+    "wordCount": 147,
+    "url": "https://hariomlohardev.github.io/blog/p/spam-classifier-shipped/",
+    "file": "2026-08-05-spam-classifier-shipped.md",
+    "cover": null
+  },
+  {
+    "slug": "day-032-cnn-from-scratch",
+    "title": "Day 032 — CNN from Scratch, No Autograd",
+    "date": "2026-08-01",
+    "description": "Built 2D convolution forward + backward in pure NumPy — im2col, stride, padding, and the gradient that makes it learn.",
+    "tags": [
+      "daily-log",
+      "CNN",
+      "NumPy",
+      "backprop"
+    ],
+    "readingMinutes": 1,
+    "wordCount": 166,
+    "url": "https://hariomlohardev.github.io/blog/p/day-032-cnn-from-scratch/",
+    "file": "2026-08-01-day-032-cnn-from-scratch.md",
+    "cover": null
+  },
+  {
+    "slug": "hello-daily-logs-day-001",
+    "title": "Hello, Daily Logs — Day 001",
+    "date": "2026-07-01",
+    "description": "Day 001 — why I chose the long road after 12th and how this public lab notebook works.",
+    "tags": [
+      "daily-log",
+      "AGI",
+      "first-principles"
+    ],
+    "readingMinutes": 1,
+    "wordCount": 159,
+    "url": "https://hariomlohardev.github.io/blog/p/hello-daily-logs-day-001/",
+    "file": "2026-07-01-hello-daily-logs.md",
+    "cover": null
+  }
+] 
