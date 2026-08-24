@@ -508,7 +508,7 @@ document.getElementById('copyBtn').addEventListener('click',function(){
     distEl.innerHTML=html;
   }
   function fetchRating(){
-    fetch('/api/blog/ratings?slug='+encodeURIComponent(slug)+'&client_id='+encodeURIComponent(CID)).then(function(r){return r.json()}).then(function(j){
+    fetch('/api/blog/social?type=ratings&slug='+encodeURIComponent(slug)+'&client_id='+encodeURIComponent(CID)).then(function(r){return r.json()}).then(function(j){
       if(!j||!j.ok) return;
       avgEl.textContent=(j.avg||0).toFixed(1);
       cntEl.textContent=j.count||0;
@@ -524,7 +524,7 @@ document.getElementById('copyBtn').addEventListener('click',function(){
     var nm=(nameInput&&nameInput.value||'').trim().slice(0,32);
     if(nm) setName(nm);
     rateBtn.disabled=true; rateBtn.textContent='…';
-    fetch('/api/blog/ratings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug:slug,score:v,client_id:CID,author_name:nm||getName()||'Anonymous'})}).then(function(r){return r.json()}).then(function(j){
+    fetch('/api/blog/social?type=ratings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug:slug,score:v,client_id:CID,author_name:nm||getName()||'Anonymous'})}).then(function(r){return r.json()}).then(function(j){
       if(!j||!j.ok) throw new Error(j&&j.error||'failed');
       avgEl.textContent=(j.avg||0).toFixed(1); cntEl.textContent=j.count||0; myEl.textContent='you: '+j.myScore+'/5'; renderStars(j.myScore,j.avg); renderDist(j.dist||{},j.count);
       rateBtn.textContent='Rated '+j.myScore+'/5 ✓'; rateBtn.classList.add('done');
@@ -568,7 +568,7 @@ document.getElementById('copyBtn').addEventListener('click',function(){
     listEl.querySelectorAll('[data-reply]').forEach(function(b){ b.addEventListener('click',function(){ setReply(b.getAttribute('data-reply'), b.getAttribute('data-who')); window.scrollTo({top: document.getElementById('hlComposer').offsetTop - 88, behavior: reduced?'auto':'smooth'}); }); });
   }
   function fetchComments(){
-    fetch('/api/blog/comments?slug='+encodeURIComponent(slug)).then(function(r){return r.json()}).then(function(j){ if(j&&j.ok) renderComments(j.comments||[]); }).catch(function(){});
+    fetch('/api/blog/social?type=comments&slug='+encodeURIComponent(slug)).then(function(r){return r.json()}).then(function(j){ if(j&&j.ok) renderComments(j.comments||[]); }).catch(function(){});
   }
   fetchComments();
   if(postBtn){ postBtn.addEventListener('click',function(){
@@ -578,7 +578,7 @@ document.getElementById('copyBtn').addEventListener('click',function(){
     if(content.length>2000){ postNote.textContent='max 2000 chars'; return; }
     if(nm) setName(nm);
     postBtn.disabled=true; postBtn.textContent='Posting…'; postNote.textContent='';
-    fetch('/api/blog/comments',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug:slug,content:content,author_name:nm||getName()||'Anonymous',parent_id:replyTo,client_id:CID})}).then(function(r){return r.json().then(function(j){ return {status:r.status, body:j};})}).then(function(x){
+    fetch('/api/blog/social?type=comments',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug:slug,content:content,author_name:nm||getName()||'Anonymous',parent_id:replyTo,client_id:CID})}).then(function(r){return r.json().then(function(j){ return {status:r.status, body:j};})}).then(function(x){
       if(!x.body||!x.body.ok) throw new Error(x.body&&x.body.error||'failed ('+x.status+')');
       if(textInput) textInput.value=''; clearReply(); postNote.textContent='posted ✓';
       fetchComments();
