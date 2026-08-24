@@ -8,205 +8,170 @@
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <script>document.documentElement.classList.add('js')</script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-600.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-400.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-mono/latin-400.css">
 <style>
-:root{--paper:#F6F4EE;--paper-2:#EFECE2;--sheet:#FBFAF6;--ink:#181611;--muted:#5F594A;--line:#DAD5C6;--accent:#B93A13;--green:#1E7A4E;--max:1000px;--pad:clamp(18px,4vw,48px);--mono:'Space Mono',monospace;--serif:'Fraunces',serif;--sans:'Archivo',sans-serif}
+:root{--paper:#F6F4EE;--paper-2:#EFECE2;--sheet:#FBFAF6;--ink:#181611;--muted:#5F594A;--line:#DAD5C6;--accent:#B93A13;--green:#1E7A4E;--max:1100px;--pad:clamp(18px,4vw,48px);--mono:'Space Mono',monospace;--serif:'Fraunces',serif;--sans:'Archivo',sans-serif}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--sans);background:var(--paper);color:#3B382E}
 .wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
 header{position:sticky;top:0;background:rgba(246,244,238,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:10}
 .head-main{height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-.logo{font-family:var(--mono);font-size:13px}
-.box{background:var(--sheet);border:1px solid var(--ink);padding:18px;margin-top:16px}
-.input,.textarea,.select{width:100%;font-family:var(--sans);font-size:14px;padding:11px 13px;border:1px solid var(--line);background:#F6F4EE;outline:none}
-.textarea{min-height:120px;resize:vertical}
-.label{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:grid;gap:6px}
-.btn{font-family:var(--mono);font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;border:1px solid var(--ink);padding:12px 18px;display:inline-flex;gap:8px;align-items:center;min-height:44px;transition:.2s;cursor:pointer}
+.logo{font-family:var(--mono);font-size:13px;color:var(--muted);text-decoration:none}
+.logo b{color:var(--ink)}
+.box{background:var(--sheet);border:1px solid var(--ink);padding:18px}
+.btn{font-family:var(--mono);font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;border:1px solid var(--ink);padding:12px 18px;display:inline-flex;gap:8px;align-items:center;min-height:44px;transition:.2s;cursor:pointer;text-decoration:none}
 .btn.solid{background:var(--ink);color:#F6F4EE}
 .btn.solid:hover{background:var(--accent);border-color:var(--accent)}
-.btn.ghost{background:var(--sheet)}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:700px){ .grid2{grid-template-columns:1fr} }
-.post-card{border:1px solid var(--ink);background:var(--sheet);padding:14px;display:grid;gap:8px;margin-top:12px}
-.post-card.draft{opacity:.7;border-style:dashed}
-.badge{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);padding:4px 8px;color:var(--muted);display:inline-block}
+.btn.ghost{background:var(--sheet);color:var(--ink)}
+.btn.ghost:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(24,22,17,.06)}
+.input{width:100%;font-family:var(--sans);font-size:14px;padding:11px 13px;border:1px solid var(--line);background:#fff;outline:none}
+.input:focus{border-color:var(--accent)}
+.pill{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);padding:7px 12px;background:var(--paper);cursor:pointer;transition:.15s}
+.pill.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.pill:hover{border-color:var(--ink)}
+.post-card{border:1px solid var(--ink);background:var(--sheet);padding:16px;display:grid;gap:10px;position:relative;transition:transform .15s, box-shadow .15s}
+.post-card:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(24,22,17,.07)}
+.post-card.draft{border-style:dashed;opacity:.9}
+.badge{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);padding:4px 8px;display:inline-block}
+.badge.pub{background:var(--green);color:#fff;border-color:var(--green)}
+.badge.draft{background:var(--paper);color:var(--muted)}
+.kicker{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}
+.stat{background:var(--sheet);border:1px solid var(--ink);padding:14px 14px;display:grid;gap:6px}
+.stat b{font-family:var(--serif);font-weight:600;font-size:1.4rem;line-height:1}
+.stat span{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+@media(max-width:860px){ .stats{grid-template-columns:1fr 1fr} .toolbar{grid-template-columns:1fr !important} .post-actions{flex-wrap:wrap} }
+.toolbar{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;margin-top:16px}
+@media(max-width:640px){ .toolbar{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
 <header>
   <div class="wrap head-main">
-    <a class="logo" href="/admin/">← Admin</a>
-    <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">Blog — daily logs & articles</span>
+    <a class="logo" href="/admin/">← <b>Admin</b> · Blog</a>
+    <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">Supabase <code>posts</code> · live</span>
   </div>
 </header>
 
 <main class="wrap" style="padding:28px 0 40px">
-  <h1 style="font-family:var(--serif);font-weight:600;font-size:clamp(1.6rem,4vw,2.2rem)">Blog Posts</h1>
-  <p style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px">Create, edit, publish — saves to Supabase <code>posts</code> (public read). Writes <code>posts/*.md</code> via <code>generate-blog.js</code> on next deploy.</p>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:end;justify-content:space-between">
+    <div>
+      <h1 style="font-family:var(--serif);font-weight:600;font-size:clamp(1.7rem,4vw,2.3rem);color:var(--ink)">Blog</h1>
+      <p style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px">Daily logs & articles — Supabase is source of truth. Create in editor with live MD preview.</p>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <a class="btn ghost" href="/blog" target="_blank">View Blog ↗</a>
+      <a class="btn solid" href="/admin/blog/edit.html">+ New post →</a>
+    </div>
+  </div>
 
-  <div id="gate" class="box" style="display:none">
+  <div id="gate" class="box" style="display:none;margin-top:16px">
     <p style="font-family:var(--mono);font-size:12px;color:var(--muted)">Not logged in → <a href="/admin/" style="color:var(--accent);text-decoration:underline">login</a></p>
   </div>
 
-  <div id="editor" style="display:none">
-    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">
-      <button class="btn solid" id="newBtn">+ New post</button>
-      <a class="btn" href="/blog" target="_blank">View Blog ↗</a>
-      <span id="count" style="font-family:var(--mono);font-size:11px;color:var(--muted);align-self:center"></span>
-    </div>
+  <div id="app" style="display:none">
+    <div class="stats" id="stats"></div>
 
-    <div id="formBox" class="box" style="display:none">
-      <h2 style="font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase" id="formTitle">New post</h2>
-      <input type="hidden" id="editId" />
-      <div class="grid2" style="margin-top:12px">
-        <label class="label">Title <input id="title" class="input" placeholder="Day 041 — Something" /></label>
-        <label class="label">Slug <input id="slug" class="input" placeholder="day-041-something" /></label>
-      </div>
-      <div class="grid2" style="margin-top:10px">
-        <label class="label">Date <input id="date" class="input" type="date" /></label>
-        <label class="label">Tags (comma) <input id="tags" class="input" placeholder="daily-log, Transformers" /></label>
-      </div>
-      <label class="label" style="margin-top:10px">Description <textarea id="desc" class="textarea" rows="2" placeholder="One-line lede..."></textarea></label>
-      <label class="label" style="margin-top:10px">Cover (optional) <input id="cover" class="input" placeholder="/og/my-post.svg or https://..." /></label>
-      <label class="label" style="margin-top:10px">Markdown (raw) <textarea id="raw" class="textarea" style="min-height:260px;font-family:var(--mono);font-size:13px;white-space:pre" placeholder="# Hello&#10;Write **markdown** here..."></textarea></label>
-      <label style="font-family:var(--mono);font-size:11px;display:flex;gap:8px;align-items:center;margin-top:10px"><input type="checkbox" id="published" checked /> Published (public)</label>
-      <div style="display:flex;gap:10px;margin-top:14px">
-        <button class="btn solid" id="saveBtn" type="button">Save →</button>
-        <button class="btn ghost" id="cancelBtn" type="button">Cancel</button>
-        <span id="formMsg" style="font-family:var(--mono);font-size:11px;color:var(--muted);align-self:center"></span>
+    <div class="toolbar">
+      <input id="q" class="input" placeholder="Search title, slug, description, tags…" />
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+        <button class="pill active" data-filter="all">All</button>
+        <button class="pill" data-filter="published">Published</button>
+        <button class="pill" data-filter="draft">Drafts</button>
+        <button class="pill" data-filter="daily-log">Daily logs</button>
       </div>
     </div>
 
-    <div id="list" style="margin-top:16px"></div>
+    <div id="list" style="margin-top:16px;display:grid;gap:12px"></div>
+    <div id="empty" class="box" style="display:none;text-align:center;color:var(--muted);font-family:var(--mono);font-size:12px;margin-top:16px">No posts match — try another search or <a href="/admin/blog/edit.html" style="color:var(--accent);text-decoration:underline">create one</a>.</div>
   </div>
 </main>
 
 <script>
 function token(){ return localStorage.getItem('admin_token'); }
-async function check(){
-  const t=token();
-  if(!t) return false;
-  try{ const r=await fetch('/api/admin/verify?token='+encodeURIComponent(t)); const j=await r.json(); return j.ok; }catch{ return false; }
-}
+async function check(){ const t=token(); if(!t) return false; try{ const r=await fetch('/api/admin/verify?token='+encodeURIComponent(t)); const j=await r.json(); return j.ok; }catch{ return false; } }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 let posts=[];
+let filter='all';
+let q='';
 
-function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function renderStats(){
+  const total=posts.length;
+  const pub=posts.filter(p=>p.published).length;
+  const drafts=total-pub;
+  const daily=posts.filter(p=>(p.tags||[]).includes('daily-log')).length;
+  document.getElementById('stats').innerHTML=`
+    <div class="stat"><b>${total}</b><span>Total posts</span></div>
+    <div class="stat"><b>${pub}</b><span>Published</span></div>
+    <div class="stat"><b>${drafts}</b><span>Drafts</span></div>
+    <div class="stat"><b>${daily}</b><span>Daily logs</span></div>`;
+}
+
+function matches(p){
+  if(filter==='published' && !p.published) return false;
+  if(filter==='draft' && p.published) return false;
+  if(filter==='daily-log' && !(p.tags||[]).includes('daily-log')) return false;
+  if(!q) return true;
+  const hay=[p.title,p.slug,p.description,(p.tags||[]).join(' '),p.date].join(' ').toLowerCase();
+  return hay.includes(q.toLowerCase());
+}
 
 function render(){
   const list=document.getElementById('list');
-  document.getElementById('count').textContent=posts.length+' posts';
-  list.innerHTML=posts.map(p=>`
+  const empty=document.getElementById('empty');
+  const filtered=posts.filter(matches).sort((a,b)=> String(b.date).localeCompare(String(a.date)) );
+  if(!filtered.length){
+    list.innerHTML='';
+    empty.style.display='block';
+    return;
+  }
+  empty.style.display='none';
+  list.innerHTML=filtered.map(p=>`
     <div class="post-card ${p.published?'':'draft'}">
       <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between">
-        <span class="badge">${p.published?'Published':'Draft'} · ${p.date||''} · ${p.reading_minutes||3} min</span>
-        <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">${(p.tags||[]).join(', ')}</span>
+        <span class="badge ${p.published?'pub':'draft'}">${p.published?'Published':'Draft'} · ${p.date||''} · ${p.reading_minutes||p.readingMinutes||3} min · ${p.word_count||p.wordCount||'—'} w</span>
+        <span class="kicker">${(p.tags||[]).join(' · ')}</span>
       </div>
-      <div style="font-family:var(--serif);font-weight:600;font-size:1.15rem">${esc(p.title||'Untitled')}</div>
-      <div style="font-size:13px;color:var(--muted)">${esc(p.slug||'')} · ${esc(p.description||'')}</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
-        <button class="btn ghost" onclick="editPost('${p.id}')" style="padding:8px 12px;font-size:11px">Edit</button>
+      <div style="font-family:var(--serif);font-weight:600;font-size:1.2rem;line-height:1.15;color:var(--ink)">${esc(p.title||'Untitled')}</div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--muted)">/${esc(p.slug||'')}/ · ${esc(p.description||'')}</div>
+      <div class="post-actions" style="display:flex;gap:8px;margin-top:4px">
+        <a class="btn ghost" href="/admin/blog/edit.html?id=${encodeURIComponent(p.id)}" style="padding:8px 12px;font-size:11px">Edit →</a>
+        <a class="btn ghost" href="/blog/p/${encodeURIComponent(p.slug)}/" target="_blank" style="padding:8px 12px;font-size:11px">View ↗</a>
         <button class="btn ghost" onclick="delPost('${p.id}')" style="padding:8px 12px;font-size:11px">Delete</button>
-        <a class="btn ghost" href="/blog/p/${p.slug}/" target="_blank" style="padding:8px 12px;font-size:11px">View ↗</a>
+        <span style="margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--muted);align-self:center">/${p.slug}/</span>
       </div>
-    </div>`).join('') || '<div class="box" style="text-align:center;color:var(--muted);font-family:var(--mono);font-size:12px">No posts yet — create one.</div>';
+    </div>`).join('');
 }
-
-function slugify(s){ return String(s).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,64); }
 
 async function load(){
   const ok=await check();
   if(!ok){ document.getElementById('gate').style.display='block'; return; }
-  document.getElementById('editor').style.display='block';
+  document.getElementById('app').style.display='block';
   const t=token();
   const r=await fetch('/api/admin/posts?token='+encodeURIComponent(t));
   const j=await r.json();
   posts=j.posts||[];
+  renderStats();
   render();
 }
 
-function openNew(){
-  document.getElementById('editId').value='';
-  document.getElementById('formTitle').textContent='New post';
-  document.getElementById('title').value='';
-  document.getElementById('slug').value='';
-  document.getElementById('date').value=new Date().toISOString().slice(0,10);
-  document.getElementById('desc').value='';
-  document.getElementById('tags').value='daily-log';
-  document.getElementById('cover').value='';
-  document.getElementById('raw').value='# Title\n\nWrite here...';
-  document.getElementById('published').checked=true;
-  document.getElementById('formBox').style.display='block';
-  window.scrollTo({top:0, behavior:'smooth'});
-}
-function editPost(id){
-  const p=posts.find(x=>x.id===id);
-  if(!p) return;
-  document.getElementById('editId').value=p.id;
-  document.getElementById('formTitle').textContent='Edit — '+p.slug;
-  document.getElementById('title').value=p.title||'';
-  document.getElementById('slug').value=p.slug||'';
-  document.getElementById('date').value=p.date||'';
-  document.getElementById('desc').value=p.description||'';
-  document.getElementById('tags').value=(p.tags||[]).join(', ');
-  document.getElementById('cover').value=p.cover||'';
-  document.getElementById('raw').value=p.raw||'';
-  document.getElementById('published').checked=!!p.published;
-  document.getElementById('formBox').style.display='block';
-  window.scrollTo({top:0, behavior:'smooth'});
-}
-window.editPost=editPost;
-async function delPost(id){
+window.delPost=async function(id){
   if(!confirm('Delete this post?')) return;
   const t=token();
   const r=await fetch('/api/admin/posts', { method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+t}, body: JSON.stringify({action:'delete', id}) });
   const j=await r.json();
-  if(!j.ok) alert(j.error||'Delete failed');
-  else load();
-}
-window.delPost=delPost;
+  if(!j.ok) alert(j.error||'Delete failed'); else load();
+};
 
-document.getElementById('newBtn').addEventListener('click', openNew);
-document.getElementById('cancelBtn').addEventListener('click', ()=> document.getElementById('formBox').style.display='none');
-document.getElementById('title').addEventListener('input', e=>{
-  const slugEl=document.getElementById('slug');
-  if(!slugEl.value || slugEl.dataset.auto!=='0'){
-    slugEl.value=slugify(e.target.value);
-    slugEl.dataset.auto='1';
-  }
-});
-document.getElementById('slug').addEventListener('input', e=> e.target.dataset.auto='0');
-
-document.getElementById('saveBtn').addEventListener('click', async ()=>{
-  const id=document.getElementById('editId').value;
-  const post={
-    title: document.getElementById('title').value.trim(),
-    slug: document.getElementById('slug').value.trim() || slugify(document.getElementById('title').value),
-    date: document.getElementById('date').value,
-    description: document.getElementById('desc').value.trim(),
-    tags: document.getElementById('tags').value.split(',').map(s=>s.trim()).filter(Boolean),
-    cover: document.getElementById('cover').value.trim()||null,
-    raw: document.getElementById('raw').value,
-    published: document.getElementById('published').checked
-  };
-  if(!post.title || !post.slug || !post.date) return alert('Title, slug, date required');
-  const msg=document.getElementById('formMsg');
-  msg.textContent='Saving…';
-  try{
-    const r=await fetch('/api/admin/posts', {
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token()},
-      body: JSON.stringify({action: id?'update':'create', id: id||undefined, post})
-    });
-    const text=await r.text();
-    let j;
-    try{ j=JSON.parse(text); }catch{ throw new Error(text.slice(0,300) || 'A server error occurred — check Vercel logs'); }
-    if(!r.ok||!j.ok) throw new Error(j.error||'Save failed');
-    msg.textContent='Saved ✓'; msg.style.color='var(--green)';
-    document.getElementById('formBox').style.display='none';
-    load();
-  }catch(e){ msg.textContent=e.message; msg.style.color='var(--accent)'; }
-});
+document.getElementById('q').addEventListener('input', e=>{ q=e.target.value.trim(); render(); });
+document.querySelectorAll('.pill').forEach(b=> b.addEventListener('click', ()=>{
+  document.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  filter=b.dataset.filter;
+  render();
+}));
 
 load();
 </script>
