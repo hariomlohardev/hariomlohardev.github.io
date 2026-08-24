@@ -92,6 +92,30 @@
   ],
   "rewrites": [
     {
+      "source": "/api/blog/comments",
+      "destination": "/api/blog/social?type=comments"
+    },
+    {
+      "source": "/api/blog/comments/",
+      "destination": "/api/blog/social?type=comments"
+    },
+    {
+      "source": "/api/blog/ratings",
+      "destination": "/api/blog/social?type=ratings"
+    },
+    {
+      "source": "/api/blog/ratings/",
+      "destination": "/api/blog/social?type=ratings"
+    },
+    {
+      "source": "/api/admin/login",
+      "destination": "/api/admin/auth?action=login"
+    },
+    {
+      "source": "/api/admin/verify",
+      "destination": "/api/admin/auth?action=verify"
+    },
+    {
       "source": "/projects/p/:slug",
       "destination": "/projects/p/:slug/index.html"
     },

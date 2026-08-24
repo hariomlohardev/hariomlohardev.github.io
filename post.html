@@ -274,7 +274,7 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
     }
     function renderDist(dist){ if(!distEl) return; var max=0; for(var k=1;k<=5;k++) max=Math.max(max,dist[k]||0); var html=''; for(var k=5;k>=1;k--){ var c=dist[k]||0; var pct=max?Math.round(c/max*100):0; html+='<div class="hl-dist-row"><span>'+k+'★</span><span class="hl-bar"><i style="width:'+pct+'%"></i></span><span>'+c+'</span></div>'; } distEl.innerHTML=html; }
     function fetchRating(){
-      fetch('/api/blog/ratings?slug='+encodeURIComponent(slug)+'&client_id='+encodeURIComponent(CID)).then(function(r){return r.json()}).then(function(j){
+      fetch('/api/blog/social?type=ratings&slug='+encodeURIComponent(slug)+'&client_id='+encodeURIComponent(CID)).then(function(r){return r.json()}).then(function(j){
         if(!j||!j.ok) return;
         avgEl.textContent=(j.avg||0).toFixed(1); cntEl.textContent=j.count||0;
         renderStars(null,j.avg); renderDist(j.dist||{1:0,2:0,3:0,4:0,5:0});
@@ -287,7 +287,7 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
       var v=parseInt(rangeEl.value||'5',10);
       var nm=(nameInput&&nameInput.value||'').trim().slice(0,32); if(nm) setName(nm);
       rateBtn.disabled=true; rateBtn.textContent='…';
-      fetch('/api/blog/ratings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug:slug,score:v,client_id:CID,author_name:nm||getName()||'Anonymous'})}).then(function(r){return r.json()}).then(function(j){
+      fetch('/api/blog/social?type=ratings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug:slug,score:v,client_id:CID,author_name:nm||getName()||'Anonymous'})}).then(function(r){return r.json()}).then(function(j){
         if(!j||!j.ok) throw new Error(j&&j.error||'failed');
         avgEl.textContent=(j.avg||0).toFixed(1); cntEl.textContent=j.count||0; myEl.textContent='you: '+j.myScore+'/5'; renderStars(j.myScore,j.avg); renderDist(j.dist||{});
         rateBtn.textContent='Rated '+j.myScore+'/5 ✓';
@@ -317,14 +317,14 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
       var out=''; roots.forEach(function(r){ out+=nodeHtml(r); }); listEl.innerHTML=out;
       listEl.querySelectorAll('[data-reply]').forEach(function(b){ b.addEventListener('click',function(){ setReply(b.getAttribute('data-reply'), b.getAttribute('data-who')); window.scrollTo({top: document.getElementById('hl-comments').offsetTop - 80, behavior: reduced?'auto':'smooth'}); }); });
     }
-    function fetchComments(){ fetch('/api/blog/comments?slug='+encodeURIComponent(slug)).then(function(r){return r.json()}).then(function(j){ if(j&&j.ok) renderComments(j.comments||[]); }).catch(function(){}); }
+    function fetchComments(){ fetch('/api/blog/social?type=comments&slug='+encodeURIComponent(slug)).then(function(r){return r.json()}).then(function(j){ if(j&&j.ok) renderComments(j.comments||[]); }).catch(function(){}); }
     fetchComments();
     if(postBtn) postBtn.addEventListener('click',function(){
       var content=(textInput&&textInput.value||'').trim(); var nm=(nameInput&&nameInput.value||'').trim().slice(0,32);
       if(!content){ postNote.textContent='write something first'; textInput.focus(); return; }
       if(nm) setName(nm);
       postBtn.disabled=true; postBtn.textContent='Posting…'; postNote.textContent='';
-      fetch('/api/blog/comments',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug:slug,content:content,author_name:nm||getName()||'Anonymous',parent_id:replyTo,client_id:CID})}).then(function(r){return r.json().then(function(j){return {status:r.status,body:j}})}).then(function(x){
+      fetch('/api/blog/social?type=comments',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug:slug,content:content,author_name:nm||getName()||'Anonymous',parent_id:replyTo,client_id:CID})}).then(function(r){return r.json().then(function(j){return {status:r.status,body:j}})}).then(function(x){
         if(!x.body||!x.body.ok) throw new Error(x.body&&x.body.error||'failed ('+x.status+')');
         if(textInput) textInput.value=''; clearReply(); postNote.textContent='posted ✓'; fetchComments(); setTimeout(function(){postNote.textContent=''},2000);
       }).catch(function(e){ postNote.textContent=e.message||'failed'; }).finally(function(){ postBtn.disabled=false; postBtn.textContent='Post comment →'; });
