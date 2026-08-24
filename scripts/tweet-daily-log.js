@@ -17,6 +17,19 @@ const ROOT = path.resolve(__dirname, "..");
 const POSTS_JSON = path.join(ROOT, "posts.json");
 const SITE = "https://hariomlohardev.github.io";
 
+// Supabase-primary for tweet (fallback to posts.json artifact)
+const SUPA_URL = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || "https://rgmvhptebkslkjleoilc.supabase.co";
+const SUPA_ANON = process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJnbXZocHRlYmtzbGtqbGVvaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0NDQwMTAsImV4cCI6MjEwMzAyMDAxMH0.nnaZiyKNOx-eT_5JTQNDwk5b3PCDKZv4f9Yc6wQtk_k";
+async function loadPostsSupabase(){
+  try{
+    const r=await fetch(`${SUPA_URL}/rest/v1/posts?select=*&published=eq.true&order=date.desc`, {headers:{apikey:SUPA_ANON, Authorization:'Bearer '+SUPA_ANON}});
+    if(!r.ok) throw 0;
+    const arr=await r.json();
+    if(arr && arr.length) return arr.map(p=>({slug:p.slug,title:p.title,date:p.date,description:p.description,tags:p.tags,url:p.url||`${SITE}/blog/p/${p.slug}/`,readingMinutes:p.reading_minutes||p.readingMinutes||3,wordCount:p.word_count||p.wordCount}));
+  }catch(e){}
+  return null;
+}
+
 // --- helpers ---
 function esc(s){ return String(s); }
 
@@ -111,8 +124,14 @@ async function postTweet(text, creds, label){
 
 // --- main ---
 (async () => {
-  if(!fs.existsSync(POSTS_JSON)){ console.error("posts.json missing — run node scripts/generate-blog.js first"); process.exit(1); }
-  const posts = JSON.parse(fs.readFileSync(POSTS_JSON,"utf8"));
+  let posts = await loadPostsSupabase();
+  if(!posts){
+    if(!fs.existsSync(POSTS_JSON)){ console.error("posts.json missing and Supabase failed — run node scripts/generate-blog.js or set SUPABASE_URL+ANON"); process.exit(1); }
+    posts = JSON.parse(fs.readFileSync(POSTS_JSON,"utf8"));
+    console.log(`→ posts: posts.json fallback (${posts.length} posts)`);
+  } else {
+    console.log(`→ posts: Supabase (${posts.length} posts)`);
+  }
   if(!Array.isArray(posts) || !posts.length){ console.error("posts.json empty"); process.exit(1); }
 
   // Detect changed post vs latest: if env CHANGED_SLUG provided (from workflow git diff), use that; else latest

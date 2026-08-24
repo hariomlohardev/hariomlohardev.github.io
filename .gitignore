@@ -1,4 +1,4 @@
-﻿# claude local
+# claude local
 .claude/
 # private ops vault — never push
 PRIVATE/
@@ -16,3 +16,6 @@ node_modules
 .env
 .env.local
 .env*
+supabase/.temp/
+temp/readmes/
+.remember/
