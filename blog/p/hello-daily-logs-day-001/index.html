@@ -38,6 +38,8 @@
 <link rel="icon" type="image/png" href="/favicon.png" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <script>document.documentElement.classList.add('js')</script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://rgmvhptebkslkjleoilc.supabase.co" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-400.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-600.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-400-italic.css">
@@ -148,6 +150,8 @@ nav.desk a.active::after{transform:scaleX(1)}
 .prose code{font-family:var(--mono);font-size:.85em;background:var(--paper-2);padding:2px 6px;color:var(--ink)}
 .prose pre{background:var(--ink);color:var(--paper);padding:20px 22px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.8;margin:36px 0;border:none}
 .prose pre code{background:none;border:none;padding:0;color:inherit;font-size:inherit;white-space:pre}
+.prose img{max-width:100%;height:auto;display:block;margin:24px 0;border:1px solid var(--line);background:var(--paper-2)}
+.prose img[loading="lazy"]{content-visibility:auto}
 .codeblock{margin:38px 0;background:var(--ink);overflow:hidden;box-shadow:0 8px 24px rgba(24,22,17,.10)}
 .code-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 18px;background:rgba(246,244,238,.05);border-bottom:1px solid rgba(246,244,238,.12)}
 .code-lang{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(246,244,238,.5);display:flex;align-items:center;gap:8px}
@@ -164,10 +168,55 @@ nav.desk a.active::after{transform:scaleX(1)}
 .kicker{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:10px;margin-bottom:22px}
 .kicker i{width:24px;height:1px;background:var(--ink)}
 .kicker .sub{text-transform:none;letter-spacing:.02em;color:var(--muted-2);margin-left:auto}
-#giscus-root{min-height:80px}
-#giscus-setup{margin-top:14px;font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--muted)}
-#giscus-setup a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
-#giscus-setup code{font-family:var(--mono);font-size:.9em;background:var(--paper-2);padding:1px 5px}
+/* — hl rating + comments — Lab Notebook No.01 — */
+.hl-card{background:var(--sheet);border:1px solid var(--line);padding:18px}
+.hl-rating-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline}
+.hl-avg{font-family:var(--serif);font-size:28px;letter-spacing:-.02em;color:var(--ink);display:flex;align-items:baseline;gap:10px}
+.hl-avg b{font-size:28px}
+.hl-avg small{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.hl-stars{display:flex;gap:3px;align-items:center}
+.hl-stars i{width:18px;height:18px;display:grid;place-items:center;font-style:normal;font-size:16px;line-height:1;transition:transform .25s var(--ease),color .2s}
+.hl-stars i.on{color:var(--accent)}
+.hl-stars i.off{color:var(--line-2)}
+.hl-stars.pulse i{animation:hlPop .42s var(--ease)}
+@keyframes hlPop{0%{transform:scale(.86)}50%{transform:scale(1.18)}100%{transform:scale(1)}}
+.hl-range{width:100%;-webkit-appearance:none;appearance:none;height:6px;background:var(--line);border-radius:999px;outline:none;margin:14px 0 10px}
+.hl-range::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:var(--accent);border:3px solid var(--paper);box-shadow:0 2px 10px rgba(185,58,19,.32);cursor:pointer;transition:transform .18s var(--ease),box-shadow .18s}
+.hl-range:active::-webkit-slider-thumb{transform:scale(1.14);box-shadow:0 4px 16px rgba(185,58,19,.42)}
+.hl-range::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:var(--accent);border:3px solid var(--paper);box-shadow:0 2px 10px rgba(185,58,19,.32);cursor:pointer;transition:transform .18s var(--ease)}
+.hl-meta{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.hl-dist{display:grid;gap:6px;margin-top:14px}
+.hl-dist-row{display:grid;grid-template-columns:16px 1fr 34px;gap:10px;align-items:center;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.hl-bar{height:6px;background:var(--paper-2);border:1px solid var(--line);overflow:hidden}
+.hl-bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .6s var(--ease)}
+.hl-actions{display:flex;gap:10px;align-items:center;margin-top:14px;flex-wrap:wrap}
+.hl-btn{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--ink);background:var(--ink);color:var(--paper);padding:11px 16px;min-height:42px;transition:transform .15s var(--ease),background .2s,border-color .2s}
+.hl-btn:hover{background:var(--accent);border-color:var(--accent)}
+.hl-btn:active{transform:translateY(1px)}
+.hl-btn.ghost{background:transparent;color:var(--ink)}
+.hl-btn.ghost:hover{background:var(--sheet)}
+.hl-note{font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.6}
+.hl-comments-list{display:grid;gap:14px;margin-top:14px}
+.hl-c{border:1px solid var(--line);background:var(--paper-2);padding:14px;animation:hlIn .4s var(--ease)}
+@keyframes hlIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.hl-c.mine{border-color:var(--accent);background:var(--sheet);box-shadow:0 2px 12px rgba(185,58,19,.08)}
+.hl-c-head{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.hl-ava{width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-family:var(--mono);font-size:11px;flex:none}
+.hl-who{font-family:var(--mono);font-size:12px;color:var(--ink);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.hl-who b{font-weight:600}
+.hl-who .hl-time{font-size:11px;color:var(--muted);letter-spacing:.02em}
+.hl-body{margin-top:10px;font-size:15px;line-height:1.7;color:var(--body);white-space:pre-wrap;word-break:break-word}
+.hl-reply{margin-top:10px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:inline-flex;gap:6px;align-items:center;border-bottom:1px dashed var(--line-2);padding-bottom:2px}
+.hl-reply:hover{color:var(--accent);border-color:var(--accent)}
+.hl-children{margin-top:12px;margin-left:14px;border-left:2px solid var(--line);padding-left:12px;display:grid;gap:12px}
+.hl-composer{display:grid;gap:10px}
+.hl-row{display:flex;gap:10px;flex-wrap:wrap}
+.hl-input,.hl-textarea{width:100%;font-family:var(--sans);font-size:14px;border:1px solid var(--line-2);background:var(--sheet);color:var(--ink);padding:11px 12px;outline:none;transition:border-color .18s,box-shadow .18s}
+.hl-input:focus,.hl-textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.hl-textarea{min-height:92px;resize:vertical;line-height:1.6}
+.hl-input{flex:1;min-width:160px}
+.hl-hint{font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.6}
+.hl-empty{font-family:var(--mono);font-size:12px;color:var(--muted);border:1px dashed var(--line-2);padding:14px;background:var(--sheet)}
 .share-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
 .share-btn{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line-2);background:transparent;padding:12px 16px;transition:all .18s var(--ease);display:inline-flex;align-items:center;gap:8px;min-height:46px;color:var(--ink-2)}
 .share-btn:hover{border-color:var(--ink);color:var(--ink);background:var(--sheet)}
@@ -296,11 +345,38 @@ html:not(.js) .rv{opacity:1;transform:none}
       </div>
       <div class="endmark" aria-hidden="true">◆</div>
     </article>
-    <section class="flat-sec rv" aria-label="Comments">
-      <div class="kicker"><i></i> Discuss — powered by GitHub <span class="sub">free · no tracking · GitHub login to comment</span></div>
-      <div id="giscus-root"></div>
-      <noscript><p style="font-family:var(--mono);font-size:12px;color:var(--muted)">Enable JavaScript to load comments. Or <a href="https://github.com/hariomlohardev/hariomlohardev.github.io/discussions" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline">open Discussions →</a></p></noscript>
-      <p id="giscus-setup" style="display:none">Giscus not yet configured — <a href="https://giscus.app" target="_blank" rel="noopener">giscus.app</a> → pick <b>hariomlohardev/hariomlohardev.github.io</b> → enable Discussions → copy <code>data-repo-id</code> &amp; <code>data-category-id</code> into this page's script.</p>
+    <section class="flat-sec rv" id="hl-rating" aria-label="Rate this post" data-slug="hello-daily-logs-day-001">
+      <div class="kicker"><i></i> Rate this log <span class="sub">1 — 5 · slider · anim</span></div>
+      <div class="hl-card" id="hlRatingCard">
+        <div class="hl-rating-head">
+          <div class="hl-avg"><b id="hlAvg">—</b> <small>avg · <span id="hlCount">0</span> ratings</small></div>
+          <div class="hl-stars" id="hlStars" aria-hidden="true"><i>☆</i><i>☆</i><i>☆</i><i>☆</i><i>☆</i></div>
+        </div>
+        <input class="hl-range" id="hlRange" type="range" min="1" max="5" step="1" value="5" aria-label="Rating 1 to 5" />
+        <div class="hl-meta"><span>drag · tap 1–5</span><span id="hlMy">you: —</span></div>
+        <div class="hl-dist" id="hlDist" aria-hidden="true"></div>
+        <div class="hl-actions">
+          <button type="button" class="hl-btn" id="hlRateBtn">Rate <span id="hlRateVal">5</span>/5 →</button>
+          <span class="hl-note" id="hlRateNote">cookie hl_cid · no login</span>
+        </div>
+      </div>
+    </section>
+    <section class="flat-sec rv" id="hl-comments" aria-label="Comments" data-slug="hello-daily-logs-day-001">
+      <div class="kicker"><i></i> Discuss — replies · rating <span class="sub" id="hlCSub">0 comments</span></div>
+      <div class="hl-card hl-composer" id="hlComposer">
+        <div class="hl-row"><input class="hl-input" id="hlName" type="text" maxlength="32" placeholder="Name (optional) — stored in cookie" autocomplete="nickname" /></div>
+        <textarea class="hl-textarea" id="hlText" maxlength="2000" placeholder="Share a thought — reply threads, plain text, 2000 max…"></textarea>
+        <div class="hl-row" style="align-items:center;justify-content:space-between">
+          <span class="hl-hint" id="hlReplyHint" style="display:none">↳ Replying to <b id="hlReplyWho"></b> · <button type="button" class="hl-reply" id="hlCancelReply" style="border:none;background:none;padding:0;color:var(--accent)">cancel</button></span>
+          <span class="hl-hint" id="hlHint">cookie hl_cid identifies you · name optional</span>
+        </div>
+        <div class="hl-actions" style="margin-top:2px">
+          <button type="button" class="hl-btn" id="hlPost">Post comment →</button>
+          <span class="hl-note" id="hlPostNote"></span>
+        </div>
+      </div>
+      <div class="hl-comments-list" id="hlList" style="margin-top:16px"></div>
+      <noscript><p class="hl-hint" style="margin-top:12px">Enable JavaScript to load comments — served from Supabase, no GitHub login.</p></noscript>
     </section>
     <section class="flat-sec rv" aria-label="Share this post">
       <div class="kicker"><i></i> Share — Lab Notebook №01</div>
@@ -402,32 +478,116 @@ document.getElementById('topBtn').addEventListener('click',function(){window.scr
 document.getElementById('copyBtn').addEventListener('click',function(){
   copyText('https://hariomlohardev.github.io/blog/p/hello-daily-logs-day-001/',this,'Copy link');
 });
+/* — HL rating + comments (cookie hl_cid + optional name) — */
 (function(){
-  var s=document.createElement('script');
-  s.src='https://giscus.app/client.js';
-  s.async=true;s.crossOrigin='anonymous';
-  s.setAttribute('data-repo','hariomlohardev/hariomlohardev.github.io');
-  s.setAttribute('data-repo-id','R_kgDOTkm3vQ');
-  s.setAttribute('data-category','General');
-  s.setAttribute('data-category-id','DIC_kwDOTkm3vc4DDAjC');
-  s.setAttribute('data-mapping','pathname');
-  s.setAttribute('data-strict','0');
-  s.setAttribute('data-reactions-enabled','1');
-  s.setAttribute('data-emit-metadata','0');
-  s.setAttribute('data-input-position','bottom');
-  s.setAttribute('data-theme','preferred_color_scheme');
-  s.setAttribute('data-lang','en');
-  var hasIds=s.getAttribute('data-repo-id')&&s.getAttribute('data-category-id');
-  if(!hasIds){
-    var note=document.getElementById('giscus-setup');
-    if(note)note.style.display='block';
-    s.src='https://utteranc.es/client.js';
-    s.setAttribute('repo','hariomlohardev/hariomlohardev.github.io');
-    s.setAttribute('issue-term','pathname');
-    s.setAttribute('theme','github-light');
-    ['data-repo','data-repo-id','data-category','data-category-id','data-mapping','data-strict','data-reactions-enabled','data-emit-metadata','data-input-position','data-lang'].forEach(function(a){s.removeAttribute(a);});
+  var slug='hello-daily-logs-day-001';
+  function q(s){return document.querySelector(s)}
+  function el(s){return document.getElementById(s)}
+  // — cookie + client id —
+  function getCookie(n){try{var m=document.cookie.match(new RegExp('(?:^|; )'+n.replace(/[-\^$*+?.()|[]{}]/g,'\$&')+'=([^;]*)'));return m?decodeURIComponent(m[1]):''}catch(e){return ''}}
+  function setCookie(n,v){try{document.cookie=n+'='+encodeURIComponent(v)+'; path=/; max-age='+60*60*24*365+'; SameSite=Lax'}catch(e){} try{localStorage.setItem(n,v)}catch(e){}}
+  function getCid(){var c=''; try{c=localStorage.getItem('hl_cid')||''}catch(e){} if(!c) c=getCookie('hl_cid'); if(!c){ try{c=crypto.randomUUID().replace(/-/g,'')}catch(e){c=Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2)} c=c.replace(/[^A-Za-z0-9]/g,'').slice(0,24)||('hl'+Date.now()); } c=c.replace(/[^A-Za-z0-9_-]/g,'').slice(0,32); if(c.length<6) c='hl-'+c+Date.now(); setCookie('hl_cid',c); try{localStorage.setItem('hl_cid',c)}catch(e){} return c}
+  function getName(){var n=''; try{n=localStorage.getItem('hl_name')||''}catch(e){} if(!n) n=getCookie('hl_name'); return (n||'').trim().slice(0,32)}
+  function setName(n){n=(n||'').trim().slice(0,32); if(!n) return; setCookie('hl_name',n); try{localStorage.setItem('hl_name',n)}catch(e){}}
+  var CID=getCid();
+  var nameInput=el('hlName'), textInput=el('hlText');
+  if(nameInput && getName()) nameInput.value=getName();
+  // — rating —
+  var avgEl=el('hlAvg'), cntEl=el('hlCount'), starsEl=el('hlStars'), rangeEl=el('hlRange'), rateBtn=el('hlRateBtn'), rateVal=el('hlRateVal'), myEl=el('hlMy'), distEl=el('hlDist'), rateNote=el('hlRateNote');
+  function renderStars(v,avg){
+    if(!starsEl) return;
+    var val=v||Math.round(avg||0);
+    var html=''; for(var i=1;i<=5;i++) html+='<i class="'+(i<=val?'on':'off')+'">'+(i<=val?'★':'☆')+'</i>';
+    starsEl.innerHTML=html;
+    if(!reduced){ starsEl.classList.remove('pulse'); void starsEl.offsetWidth; starsEl.classList.add('pulse'); setTimeout(function(){starsEl.classList.remove('pulse')},500); }
   }
-  document.getElementById('giscus-root').appendChild(s);
+  function renderDist(dist,count){
+    if(!distEl) return;
+    var max=0; for(var k=1;k<=5;k++) max=Math.max(max, dist[k]||0);
+    var html=''; for(var k=5;k>=1;k--){ var c=dist[k]||0; var pct=max?Math.round(c/max*100):0; html+='<div class="hl-dist-row"><span>'+k+'★</span><span class="hl-bar"><i style="width:'+pct+'%"></i></span><span>'+c+'</span></div>'; }
+    distEl.innerHTML=html;
+  }
+  function fetchRating(){
+    fetch('/api/blog/ratings?slug='+encodeURIComponent(slug)+'&client_id='+encodeURIComponent(CID)).then(function(r){return r.json()}).then(function(j){
+      if(!j||!j.ok) return;
+      avgEl.textContent=(j.avg||0).toFixed(1);
+      cntEl.textContent=j.count||0;
+      renderStars(null,j.avg);
+      renderDist(j.dist||{1:0,2:0,3:0,4:0,5:0}, j.count);
+      if(j.myScore){ myEl.textContent='you: '+j.myScore+'/5'; rangeEl.value=j.myScore; rateVal.textContent=j.myScore; renderStars(j.myScore); }
+      else { myEl.textContent='you: —'; }
+    }).catch(function(){});
+  }
+  if(rangeEl){ rangeEl.addEventListener('input',function(){ var v=parseInt(rangeEl.value||'5',10); rateVal.textContent=v; renderStars(v); }); }
+  if(rateBtn){ rateBtn.addEventListener('click',function(){
+    var v=parseInt(rangeEl.value||'5',10); if(!(v>=1&&v<=5)) return;
+    var nm=(nameInput&&nameInput.value||'').trim().slice(0,32);
+    if(nm) setName(nm);
+    rateBtn.disabled=true; rateBtn.textContent='…';
+    fetch('/api/blog/ratings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug:slug,score:v,client_id:CID,author_name:nm||getName()||'Anonymous'})}).then(function(r){return r.json()}).then(function(j){
+      if(!j||!j.ok) throw new Error(j&&j.error||'failed');
+      avgEl.textContent=(j.avg||0).toFixed(1); cntEl.textContent=j.count||0; myEl.textContent='you: '+j.myScore+'/5'; renderStars(j.myScore,j.avg); renderDist(j.dist||{},j.count);
+      rateBtn.textContent='Rated '+j.myScore+'/5 ✓'; rateBtn.classList.add('done');
+      if(j.myScore===5 && !reduced){
+        // tiny confetti
+        var c=document.createElement('div'); c.textContent='✦ Thanks — 5/5 ✦'; c.style.cssText='position:fixed;left:50%;top:18%;transform:translateX(-50%);background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:12px;letter-spacing:.12em;padding:10px 16px;border:1px solid var(--accent);z-index:999;animation:hlIn .5s var(--ease)'; document.body.appendChild(c); setTimeout(function(){c.remove()},2200);
+      }
+      setTimeout(function(){rateBtn.disabled=false; rateBtn.innerHTML='Rate <span id="hlRateVal">'+rangeEl.value+'</span>/5 →';},1800);
+    }).catch(function(e){ rateBtn.disabled=false; rateBtn.textContent='Rate '+rangeEl.value+'/5 →'; rateNote.textContent=e.message||'failed'; setTimeout(function(){rateNote.textContent='cookie hl_cid · no login'},2500); });
+  }); }
+  fetchRating();
+  // — comments —
+  var listEl=el('hlList'), cSub=el('hlCSub'), postBtn=el('hlPost'), postNote=el('hlPostNote'), replyHint=el('hlReplyHint'), replyWho=el('hlReplyWho'), cancelReply=el('hlCancelReply');
+  var replyTo=null;
+  function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+  function timeAgo(iso){try{var d=new Date(iso),s=Math.floor((Date.now()-d)/1000); if(s<60) return 'just now'; if(s<3600) return Math.floor(s/60)+'m ago'; if(s<86400) return Math.floor(s/3600)+'h ago'; if(s<2592000) return Math.floor(s/86400)+'d ago'; return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}catch(e){return ''}}
+  function setReply(id,name){ replyTo=id; replyWho.textContent=name||'Anonymous'; replyHint.style.display=''; if(textInput){textInput.focus(); textInput.placeholder='Reply to '+(name||'Anonymous')+'…'} }
+  function clearReply(){ replyTo=null; replyHint.style.display='none'; if(textInput) textInput.placeholder='Share a thought — reply threads, plain text, 2000 max…'; }
+  if(cancelReply) cancelReply.addEventListener('click',clearReply);
+  function renderComments(rows){
+    if(!listEl) return;
+    if(!rows||!rows.length){ listEl.innerHTML='<div class="hl-empty">No comments yet — be the first to log a note.</div>'; if(cSub) cSub.textContent='0 comments'; return; }
+    if(cSub) cSub.textContent=rows.length+' comment'+(rows.length===1?'':'s');
+    var map={}; rows.forEach(function(r){ map[r.id]=Object.assign({},r,{children:[]}); });
+    var roots=[];
+    rows.forEach(function(r){ var n=map[r.id]; if(r.parent_id && map[r.parent_id]) map[r.parent_id].children.push(n); else roots.push(n); });
+    function nodeHtml(n,depth){
+      var isMine=n.client_id===CID;
+      var ava=(n.author_name||'A').trim().charAt(0).toUpperCase()||'A';
+      var html='<div class="hl-c'+(isMine?' mine':'')+'"><div class="hl-c-head"><span class="hl-ava">'+esc(ava)+'</span><span class="hl-who"><b>'+esc(n.author_name||'Anonymous')+'</b>'+(isMine?' <span style="font-size:10px;letter-spacing:.08em;color:var(--accent)">· you</span>':'')+'<span class="hl-time">· '+esc(timeAgo(n.created_at))+'</span></span></div><div class="hl-body">'+esc(n.content)+'</div><button type="button" class="hl-reply" data-reply="'+esc(n.id)+'" data-who="'+esc(n.author_name||'Anonymous')+'">↳ Reply</button>';
+      if(n.children&&n.children.length){
+        html+='<div class="hl-children">';
+        n.children.forEach(function(ch){ html+=nodeHtml(ch,depth+1); });
+        html+='</div>';
+      }
+      html+='</div>';
+      return html;
+    }
+    var out=''; roots.forEach(function(r){ out+=nodeHtml(r,0); });
+    listEl.innerHTML=out;
+    listEl.querySelectorAll('[data-reply]').forEach(function(b){ b.addEventListener('click',function(){ setReply(b.getAttribute('data-reply'), b.getAttribute('data-who')); window.scrollTo({top: document.getElementById('hlComposer').offsetTop - 88, behavior: reduced?'auto':'smooth'}); }); });
+  }
+  function fetchComments(){
+    fetch('/api/blog/comments?slug='+encodeURIComponent(slug)).then(function(r){return r.json()}).then(function(j){ if(j&&j.ok) renderComments(j.comments||[]); }).catch(function(){});
+  }
+  fetchComments();
+  if(postBtn){ postBtn.addEventListener('click',function(){
+    var content=(textInput&&textInput.value||'').trim();
+    var nm=(nameInput&&nameInput.value||'').trim().slice(0,32);
+    if(!content){ postNote.textContent='write something first'; textInput.focus(); return; }
+    if(content.length>2000){ postNote.textContent='max 2000 chars'; return; }
+    if(nm) setName(nm);
+    postBtn.disabled=true; postBtn.textContent='Posting…'; postNote.textContent='';
+    fetch('/api/blog/comments',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug:slug,content:content,author_name:nm||getName()||'Anonymous',parent_id:replyTo,client_id:CID})}).then(function(r){return r.json().then(function(j){ return {status:r.status, body:j};})}).then(function(x){
+      if(!x.body||!x.body.ok) throw new Error(x.body&&x.body.error||'failed ('+x.status+')');
+      if(textInput) textInput.value=''; clearReply(); postNote.textContent='posted ✓';
+      fetchComments();
+      setTimeout(function(){postNote.textContent=''},2000);
+    }).catch(function(e){ postNote.textContent=e.message||'failed'; }).finally(function(){ postBtn.disabled=false; postBtn.textContent='Post comment →'; });
+  }); }
+  if(nameInput){ nameInput.addEventListener('change',function(){ var v=nameInput.value.trim().slice(0,32); if(v) setName(v); }); }
+  if(textInput){ textInput.addEventListener('keydown',function(e){ if((e.metaKey||e.ctrlKey)&&e.key==='Enter'){ postBtn.click(); } }); }
+})();
 })();
 })();
 </script>
