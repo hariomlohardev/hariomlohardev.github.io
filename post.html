@@ -271,6 +271,7 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
       var html = post.html || '';
       if(html && String(html).trim()){
         document.getElementById('prose').innerHTML = html;
+        (function(){ var prose=document.getElementById('prose'); if(prose) prose.querySelectorAll('img').forEach(function(img){ if(!img.getAttribute('loading')) img.setAttribute('loading','lazy'); if(!img.getAttribute('decoding')) img.setAttribute('decoding','async'); img.style.maxWidth='100%'; img.style.height='auto'; img.style.display='block'; img.style.margin='12px 0'; }); })();
         document.getElementById('article').style.display='block';
         document.getElementById('status').style.display='none';
         loadComments(post.slug);
@@ -284,6 +285,7 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
         s=s.replace(/```[a-zA-Z0-9_-]*\n([\s\S]*?)```/g,function(_,c){ var i=codes.length; codes.push('<pre><code>'+esc(c.trimEnd())+'</code></pre>'); return '__CODE_'+i+'__'; });
         s=s.replace(/`([^`]+?)`/g,function(_,c){ return '<code>'+esc(c)+'</code>'; });
         s=s.replace(/^###\s+(.+)$/gm,'<h3>$1</h3>').replace(/^##\s+(.+)$/gm,'<h2>$1</h2>').replace(/^#\s+(.+)$/gm,'<h1>$1</h1>');
+        s=s.replace(/!\[([^\]]*?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g,'<img src="$2" alt="$1" loading="lazy" decoding="async" style="max-width:100%;height:auto;display:block;margin:12px 0;border:1px solid var(--line)" />');
         s=s.replace(/\[([^\]]+?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g,'<a href="$2">$1</a>');
         s=s.replace(/\*\*([^*]+?)\*\*/g,'<strong>$1</strong>');
         s=s.replace(/^\s*[-*]\s+(.+)$/gm,'<li>$1</li>');
@@ -291,6 +293,7 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
         var blocks=s.split(/\n{2,}/).map(function(b){ b=b.trim(); if(!b) return ''; if(b.startsWith('<h')||b.startsWith('<pre')||b.startsWith('<ul')||b.startsWith('__CODE_')) return b; return '<p>'+b.replace(/\n/g,'<br />\n')+'</p>'; }).join('\n\n');
         codes.forEach(function(html,i){ blocks=blocks.replace('__CODE_'+i+'__', html); });
         document.getElementById('prose').innerHTML = blocks;
+        (function(){ var prose=document.getElementById('prose'); if(prose) prose.querySelectorAll('img').forEach(function(img){ if(!img.getAttribute('loading')) img.setAttribute('loading','lazy'); if(!img.getAttribute('decoding')) img.setAttribute('decoding','async'); img.style.maxWidth='100%'; img.style.height='auto'; }); })();
         document.getElementById('article').style.display='block';
         document.getElementById('status').style.display='none';
         loadComments(post.slug);

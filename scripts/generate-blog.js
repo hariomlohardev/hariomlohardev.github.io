@@ -96,6 +96,8 @@ function mdToHtml(md){
   // blockquote > line
   s = s.replace(/^>\s?(.+)$/gm,"<blockquote>$1</blockquote>");
   s = s.replace(/(<\/blockquote>\n<blockquote>)/g,"\n");
+  // images ![alt](url) — before links
+  s = s.replace(/!\[([^\]]*?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g,'<img src="$2" alt="$1" loading="lazy" decoding="async" style="max-width:100%;height:auto;display:block;margin:12px 0;border:1px solid var(--line)" />');
   // links [text](url) — before bold to avoid conflict
   s = s.replace(/\[([^\]]+?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g,'<a href="$2" rel="noopener">$1</a>');
   // bold **text**
