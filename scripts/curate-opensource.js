@@ -19,8 +19,8 @@ function readCurated(){
   try{ return JSON.parse(fs.readFileSync(CURATED,"utf8")); }catch(e){ return {generated_at:new Date().toISOString(), prs:[], issues:[]}; }
 }
 function writeCurated(j){
-  j.generated_at = new Date().toLocaleString('en-GB',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric'}) + " " + new Date().toLocaleTimeString('en-GB',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit'});
-  j.generated_at_iso = new Date().toISOString();
+  j.generated_at = new Date().toISOString();
+  j.generated_at_iso = j.generated_at;
   fs.writeFileSync(CURATED, JSON.stringify(j,null,2)+"\n", "utf8");
   console.log(`wrote ${CURATED} — ${j.prs.length} prs`);
 }

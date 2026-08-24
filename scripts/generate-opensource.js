@@ -244,6 +244,10 @@ async function main(){
 
   const stars_total = repos.reduce((s,r)=> s + (r.stars||0), 0);
 
+  if (repos.length === 0) {
+    throw new Error("[opensource] abort: repos empty — refusing to write empty snapshot (check GITHUB_TOKEN / rate limit); keeping existing " + path.relative(ROOT, OUT_JSON));
+  }
+
   const out = {
     generated_at: todayISTISO(),
     generated_at_iso: new Date().toISOString(),

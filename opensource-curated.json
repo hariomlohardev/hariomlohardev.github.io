@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-22T22:00:00+05:30",
+  "generated_at": "2026-08-22T16:30:00.000Z",
   "generated_at_iso": "2026-08-22T16:30:00.000Z",
   "source": "curated — add PR urls to scripts/curate-opensource.js or edit this file manually. See README below.",
   "note": "Curated list of contributions Hariom wants to showcase. To add more: 1) copy the object shape, 2) paste new PR https://github.com/owner/repo/pull/12345 details, 3) set updated_at to PR updated_at. Or run: node scripts/curate-opensource.js https://github.com/owner/repo/pull/123",
@@ -14,17 +14,6 @@
       "updated_at": "2026-08-21T02:12:16Z",
       "number": 32223,
       "created_at": "2026-08-07T16:35:43Z"
-    },
-    {
-      "title": "feat: palette heading jump via Ctrl+P # (P1)",
-      "repo": "hariomlohardev/inkdown",
-      "html_url": "https://github.com/hariomlohardev/inkdown/pull/27",
-      "state": "merged",
-      "merged": true,
-      "body": "P1 Notion-level — Ctrl+P # heading jump: palette.js parses state.md headings H1..H6, fuzzy ranks, jumps via viewer + editor sync. Closes #14. 11 tests passed, node --check clean.",
-      "updated_at": "2026-08-17T06:55:24Z",
-      "number": 27,
-      "created_at": "2026-08-17T05:17:53Z"
     }
   ],
   "issues": []

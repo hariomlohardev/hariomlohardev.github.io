@@ -292,31 +292,7 @@ html:not(.js) .rv{opacity:1;transform:none}
     <div class="rule" aria-hidden="true"></div>
     <article class="rv">
       <div class="prose">
-<h2>Ship, don't demo</h2>
-
-<p><code>spam_classifier</code> is now a <strong>live bench</strong>, not a screenshot. Type a message → see tokens split, scored red/green, weak signals filtered, then a <code>SPAM / HAM</code> stamp with <code>P(spam|message)</code>.</p>
-
-<ul>
-<li><strong>Data</strong>: <code>5,572</code> rows, <code>data.csv</code> fetched in-browser</li>
-<li><strong>Engine</strong>: Naive Bayes + Laplace <code>k=1</code>, trained via <strong>Pyodide</strong> (Python in WASM)</li>
-<li><strong>UX</strong>: bench paper sheets, running verdict, gauge, weak-signal filter</li>
-</ul>
-Try it: <a href="/projects/spam_classifier" rel="noopener">/projects/spam_classifier</a>
-
-<h2>What I learned</h2>
-
-<p>Shipping in the browser surface uncovered what a notebook hides:</p>
-
-<ul>
-<li>Tokenisation is a design choice, not a step</li>
-<li>Thresholds are product, not math — <code>0.5</code> is a starting line, not an answer</li>
-<li>If you can't show <code>P(spam|message)</code> with real numbers, you didn't teach it</li>
-</ul>
-<h2>Lab note</h2>
-
-<p>Every shipped artifact here gets a bench. This one proves the loop: derive → build → let the user touch it.</p>
-
-<p>— Hariom · Lab Notebook No.01</p>
+<p>Shipped a live Naive Bayes bench that tokenises, scores, and stamps P(spam|message) in your browser via Pyodide — nothing mocked.</p>
       </div>
       <div class="endmark" aria-hidden="true">◆</div>
     </article>

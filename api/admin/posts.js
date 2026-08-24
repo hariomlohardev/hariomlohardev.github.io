@@ -68,8 +68,12 @@ module.exports=async(req,res)=>{
     // Public read — return published posts for admin list (all if authed)
     let authed=false;
     try{ verify(req); authed=true; }catch{}
-    let q=sb.from('posts').select('*').order('date',{ascending:false});
-    if(!authed) q=q.eq('published',true);
+    let q;
+    if(authed){
+      q=sb.from('posts').select('*').order('date',{ascending:false});
+    }else{
+      q=sb.from('posts').select('slug,title,description,date,tags,cover,word_count,reading_minutes,published').eq("published",true).order('date',{ascending:false}).limit(50);
+    }
     const {data,error}=await q;
     if(error) return res.status(500).json({ok:false, error:error.message});
     return res.status(200).json({ok:true, posts:data});

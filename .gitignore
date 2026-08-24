@@ -13,9 +13,22 @@ temp/
 # vercel
 .vercel
 node_modules
+
+# ── secrets: never commit ──
+# All env files are ignored except the whitelisted example.
+# Do NOT `git add -f .env`. Rotate leaked keys immediately (see SECURITY.md).
 .env
 .env.local
+.env.*.local
+.env.development
+.env.development.local
+.env.production
+.env.production.local
+# covers remaining .env variants (must stay before negations)
 .env*
+# whitelisted example - safe to commit (no real secrets)
+!.env.example
+!.env.sample
 supabase/.temp/
 temp/readmes/
 .remember/

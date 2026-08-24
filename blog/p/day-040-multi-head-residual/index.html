@@ -292,48 +292,7 @@ html:not(.js) .rv{opacity:1;transform:none}
     <div class="rule" aria-hidden="true"></div>
     <article class="rv">
       <div class="prose">
-<h2>The shape — yesterday's edge</h2>
-
-<p>Day 039 left me with single-head <code>softmax(QKᵀ/√dₖ)V</code> and its Jacobian. Today the choreography is stacking it.</p>
-
-<pre><code class="lang-">MultiHead(Q,K,V) = Concat(head₁,…,headₕ) W_O
-headᵢ = Attention(QW_Qᵢ, KW_Kᵢ, VW_Vᵢ)</code></pre>
-
-<p>Then: <code>x + MultiHead(LN(x))</code> — residual + layernorm, no framework.</p>
-
-<h2>Forward — 4 heads, one mask</h2>
-
-<pre><code class="lang-python">def layernorm(x, eps=1e-5):
-    m = x.mean(axis=-1, keepdims=True)
-    v = x.var(axis=-1, keepdims=True)
-    return (x - m) / np.sqrt(v + eps)  # gamma=1, beta=0 for now
-
-h = 4
-xn = layernorm(x)  # (T, d)
-heads = []
-for i in range(h):
-    Q = xn @ Wq[i]  # (T, d_h)
-    K = xn @ Wk[i]
-    V = xn @ Wv[i]
-    scores = (Q @ K.T) / np.sqrt(d_h) + mask
-    w = softmax(scores, axis=-1)
-    heads.append(w @ V)
-out = np.concatenate(heads, axis=-1) @ Wo  # (T, d)
-y = x + out  # residual</code></pre>
-
-<p><code>mask</code> is the same causal <code>0 / -inf</code> from Day 039 — trust the mask.</p>
-
-<h2>Backward — where it bit</h2>
-
-<p>Layernorm backward is the new trap: <code>dx = (1/√v) <em> (dy - mean(dy) - x_hat</em>mean(dy*x_hat))</code>. I derived it twice. Second time I stopped copying and wrote the <code>mean</code> terms out — <code>T=3, d=4</code> numeric grad at <code>1e-4</code> passed after fixing a missing <code>1/h</code> scale on the <code>Wo</code> grad.</p>
-
-<p>Residual helps: <code>dx_total = dy + dx_ln_path</code>. Without it the 4-head grad vanishes.</p>
-
-<h2>Reflection</h2>
-
-<p>Four heads don't learn four things — they learn four ways to look. Layernorm doesn't normalize — it lets the residual speak. Tomorrow: feed-forward + full block, still by hand.</p>
-
-<p>Day 040. Committed.</p>
+<p>Stacked 4-head attention + residual + layernorm forward/backward in NumPy — same mask, new choreography, grads checked at 1e-4.</p>
       </div>
       <div class="endmark" aria-hidden="true">◆</div>
     </article>

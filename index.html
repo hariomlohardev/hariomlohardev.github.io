@@ -809,14 +809,14 @@ function init(data){
   document.getElementById('yr').textContent=new Date().getFullYear();
   phrases=data.taglines&&data.taglines.length?data.taglines:phrases;
 
-  // Supabase-only latest logs — /api/admin/posts with direct REST fallback, 3-card render (same card UI)
+  // Latest logs — GH Pages safe chain: /api/admin/posts -> Supabase REST (meta supabase-anon) -> empty UI
   (function(){
     var box=document.getElementById('latestList');
     function renderLatest(posts){
       if(!box) return;
       box.setAttribute('aria-busy','false');
       posts=(posts||[]).slice(0,3);
-      if(!posts.length){ box.innerHTML='<div style="grid-column:1/-1;padding:20px;font-family:var(--mono);font-size:12px;color:var(--muted);text-align:center">No posts yet. <a href="/blog" style="color:var(--accent);text-decoration:underline">Open blog</a></div>'; return; }
+      if(!posts.length){ renderEmpty('No posts yet — check back soon.'); return; }
       box.innerHTML=posts.map(function(p){
         var isLog=(p.tags||[]).join(' ').toLowerCase().indexOf('daily-log')!==-1;
         var badge=isLog?'<span class="lc-badge">◎ Daily log</span>':'<span class="lc-badge art">✎ Article</span>';
@@ -827,19 +827,28 @@ function init(data){
         return '<a href="'+href+'" class="latest-card"><div class="lc-meta">'+badge+'<span>'+d+'</span><span>·</span><span>'+mins+' min</span></div><h4>'+p.title+'</h4><p>'+(p.description||'')+'</p><span class="open">Open →</span></a>';
       }).join('');
     }
+    function renderEmpty(msg){
+      if(!box) return;
+      box.setAttribute('aria-busy','false');
+      box.innerHTML='<div style="grid-column:1/-1;padding:22px;text-align:center;border:1px dashed var(--line-2);background:var(--sheet)"><div style="font-family:var(--mono);font-size:12px;color:var(--muted)">'+msg+'</div><div style="margin-top:10px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><a href="/blog" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);text-decoration:underline">Open blog →</a><span style="color:var(--muted)">·</span><a href="/feed.xml" style="font-family:var(--mono);font-size:11px;color:var(--accent);text-decoration:underline">RSS</a></div></div>';
+    }
     fetch('/api/admin/posts',{cache:'no-store'}).then(function(r){ if(!r.ok) throw new Error('api '+r.status); return r.json(); }).then(function(j){
       var posts=j.posts||j||[];
       posts=posts.filter(function(p){ return p.published!==false; }).sort(function(a,b){ return String(b.date).localeCompare(String(a.date)); }).slice(0,3);
       if(!posts.length) throw new Error('no posts');
       renderLatest(posts);
     }).catch(function(){
-      var anon=document.querySelector('meta[name="supabase-anon"]')?.content || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJnbXZocHRlYmtzbGtqbGVvaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0NDQwMTAsImV4cCI6MjEwMzAyMDAxMH0.nnaZiyKNOx-eT_5JTQNDwk5b3PCDKZv4f9Yc6wQtk_k';
+      var anonEl=document.querySelector('meta[name="supabase-anon"]');
+      var anon=anonEl ? anonEl.content : '';
+      if(!anon) throw new Error('missing anon');
       var url='https://rgmvhptebkslkjleoilc.supabase.co/rest/v1/posts?select=*&order=date.desc&limit=3&published=eq.true';
-      return fetch(url,{headers: anon?{apikey:anon,Authorization:'Bearer '+anon}:{}}).then(function(r){ if(!r.ok) throw new Error('rest '+r.status); return r.json(); }).then(function(arr){
-        renderLatest(arr||[]);
+      return fetch(url,{headers:{apikey:anon,Authorization:'Bearer '+anon}}).then(function(r){ if(!r.ok) throw new Error('rest '+r.status); return r.json(); }).then(function(arr){
+        var posts=(arr||[]).filter(function(p){ return p.published!==false; }).sort(function(a,b){ return String(b.date).localeCompare(String(a.date)); }).slice(0,3);
+        if(!posts.length) throw new Error('no posts from rest');
+        renderLatest(posts);
       });
     }).catch(function(){
-      if(box){ box.setAttribute('aria-busy','false'); if(!box.innerHTML || box.innerHTML.indexOf('skeleton')!==-1) box.innerHTML='<div style="grid-column:1/-1;padding:20px;font-family:var(--mono);font-size:12px;color:var(--muted);text-align:center">No posts yet. <a href="/blog" style="color:var(--accent);text-decoration:underline">Open blog</a></div>'; }
+      renderEmpty('No posts yet — check back soon.');
     });
   })();
 

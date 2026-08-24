@@ -184,12 +184,14 @@ section+section{border-top:1px solid var(--line)}
 .row-left .type-icon.pr{background:transparent;border:1.5px solid var(--green)}
 .row-left .type-icon.pr.merged{background:var(--green);border-color:var(--green)}
 .row-left .type-icon.pr.open{background:var(--paper);border-color:var(--accent)}
+.row-left .type-icon.pr.closed{background:var(--paper-2);border-color:var(--muted)}
 .row-left .type-icon.activity{background:var(--paper);border:1.5px solid var(--muted);border-radius:50%}
 .row-body{display:flex;flex-direction:column;gap:7px;min-width:0}
 .row-meta{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;align-items:center;line-height:1.8}
 .row-meta .tag{padding:2px 7px;border:1px solid var(--line);background:var(--sheet);color:var(--ink-2)}
 .row-meta .tag.merged{background:var(--green-soft);border-color:var(--green);color:var(--green)}
 .row-meta .tag.open{border-color:var(--accent);color:var(--accent)}
+.row-meta .tag.closed{background:var(--paper-2);border-color:var(--muted);color:var(--muted)}
 .row-meta .tag.type-issue{border-color:var(--accent);color:var(--accent)}
 .row h3{font-family:var(--serif);font-weight:600;font-size:clamp(1.2rem,2vw,1.5rem);letter-spacing:-.015em;line-height:1.2;color:var(--ink);transition:transform .3s var(--ease);overflow-wrap:anywhere}
 .row:hover h3{transform:translateX(6px)}
@@ -635,6 +637,8 @@ function flatten(j){
       }
     });
   }
+  // filter out own repos — external contributions only
+  items = items.filter(function(it){ return !it.repo.startsWith("hariomlohardev/"); });
   items.sort(function(a,b){return String(b.updated||'').localeCompare(String(a.updated||''));});
   items.forEach(function(it,i){it.__no=i+1;});
   return items;
@@ -685,10 +689,10 @@ function render(){
 
     var metaParts=[];
     if(it.type==='pr'){
-      var cls=it.state==='merged'?'merged':it.state==='open'?'open':'';
+      var cls=it.state==='merged'?'merged':it.state==='open'?'open':it.state==='closed'?'closed':'';
       metaParts.push('<span class="tag '+cls+'">PR · '+esc(it.state||'open')+'</span>');
     }else{
-      var cls=it.state==='open'?'type-issue':'';
+      var cls=it.state==='open'?'type-issue':it.state==='closed'?'closed':'';
       metaParts.push('<span class="tag '+cls+'">Issue · '+esc(it.state||'open')+'</span>');
     }
     if(it.repo)metaParts.push('<span>'+esc(it.repo)+'</span>');
@@ -759,30 +763,22 @@ function init(j){
   applyHash();render();observeReveals();
 }
 
-// Curated first — edit opensource-curated.json to control what shows. Falls back to auto snapshot.
-fetch('opensource-curated.json',{cache:'no-store'})
-  .then(function(r){if(!r.ok)throw 0;return r.json();})
-  .then(function(j){ if(j && ((j.prs&&j.prs.length)||(j.issues&&j.issues.length))) return j; throw 0; })
-  .then(init)
-  .catch(function(){
-    fetch('opensource-data.json',{cache:'no-store'})
-      .then(function(r){if(!r.ok)throw new Error('no snapshot');return r.json();})
-      .then(init)
-      .catch(function(){init(DEMO_DATA);});
-  });
+// Single loader — curated first, snapshot fallback; eliminates double-fetch duplication
+function fetchContribs(){
+  return fetch('opensource-curated.json',{cache:'no-store'})
+    .then(function(r){if(!r.ok)throw 0;return r.json();})
+    .then(function(j){ if(j && ((j.prs&&j.prs.length)||(j.issues&&j.issues.length))) return j; throw 0; })
+    .catch(function(){
+      return fetch('opensource-data.json',{cache:'no-store'})
+        .then(function(r){if(!r.ok)throw new Error('no snapshot');return r.json();});
+    });
+}
+fetchContribs().then(init).catch(function(){init(DEMO_DATA);});
 
 document.getElementById('refreshBtn').addEventListener('click',function(){
   var btn=this;btn.disabled=true;btn.textContent='Refreshing…';
-  fetch('opensource-curated.json',{cache:'no-store'})
-    .then(function(r){if(!r.ok)throw 0;return r.json();})
-    .then(function(j){ if(j && ((j.prs&&j.prs.length)||(j.issues&&j.issues.length))) return j; throw 0; })
-    .then(function(j){init(j);btn.disabled=false;btn.textContent='↻ Refresh';})
-    .catch(function(){
-      fetch('opensource-data.json',{cache:'no-store'})
-        .then(function(r){if(!r.ok)throw new Error();return r.json();})
-        .then(function(j){init(j);btn.disabled=false;btn.textContent='↻ Refresh';})
-        .catch(function(){init(DEMO_DATA);btn.disabled=false;btn.textContent='↻ Refresh';});
-    });
+  fetchContribs().then(function(j){init(j);btn.disabled=false;btn.textContent='↻ Refresh';})
+    .catch(function(){init(DEMO_DATA);btn.disabled=false;btn.textContent='↻ Refresh';});
 });
 })();
 </script>

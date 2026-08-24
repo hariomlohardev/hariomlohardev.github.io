@@ -32,11 +32,14 @@ module.exports = async (req, res) => {
   const token = jwt.sign({ user: username }, JWT_SECRET, { expiresIn: '7d' });
 
   // Set HttpOnly cookie for server verification + return token for localStorage
+  // Rate-limit hint: protect this endpoint with Vercel Firewall (Rate Limit rule)
+  // or edge middleware using @upstash/ratelimit (e.g. 5 req/min per IP).
+  // See https://vercel.com/docs/firewall/rate-limiting
   res.setHeader('Set-Cookie', cookie.serialize('admin_token', token, {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
-    path: '/',
+    path: '/api',
     maxAge: 60 * 60 * 24 * 7 // 7 days
   }));
 

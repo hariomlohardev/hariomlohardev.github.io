@@ -10,6 +10,9 @@ module.exports = async (req, res) => {
   const JWT_SECRET = process.env.ADMIN_JWT_SECRET;
   if (!JWT_SECRET) return res.status(500).json({ ok: false, error: 'ADMIN_JWT_SECRET not set' });
 
+  // Never cache auth responses
+  res.setHeader('Cache-Control', 'no-store');
+
   let token = null;
   // From cookie
   if (req.headers.cookie) {
@@ -21,11 +24,9 @@ module.exports = async (req, res) => {
     const m = req.headers.authorization.match(/^Bearer\s+(.+)$/);
     if (m) token = m[1];
   }
-  // From query ?token= (fallback for localStorage)
-  if (!token && req.query && req.query.token) token = req.query.token;
-  if (!token && req.url && req.url.includes('token=')) {
-    try { token = new URL(req.url, 'http://localhost').searchParams.get('token'); } catch {}
-  }
+  // SECURITY: ?token= query param is intentionally NOT supported.
+  // Query tokens leak via URL logs, Referer headers, browser history,
+  // and CDN cache keys. Only HttpOnly cookie and Authorization: Bearer accepted.
 
   if (!token) return res.status(401).json({ ok: false, error: 'No token' });
 
