@@ -54,6 +54,22 @@ async function sendCommentMail({slug,title,url,author,content}){
       return;
     }catch(e){ console.error('sendgrid error',e.message); }
   }
+  // FormSubmit — same as #contact Send a note — free, no tracking
+  try{
+    const fd=new URLSearchParams();
+    fd.append('_subject', subject);
+    fd.append('_template','table');
+    fd.append('_captcha','false');
+    fd.append('Post', `${title} — ${slug}`);
+    fd.append('URL', url);
+    fd.append('Author', author);
+    fd.append('Comment', content);
+    fd.append('View', `${url}#comments`);
+    const r=await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(to)}`,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded','Accept':'application/json','Origin':'https://hariomlohardev.github.io','Referer': url},body: fd.toString()});
+    const j=await r.json().catch(()=>({}));
+    if(r.ok) { console.log('comment mail via formsubmit to',to, j.message||'ok'); return; }
+    console.error('formsubmit failed', r.status, JSON.stringify(j).slice(0,300));
+  }catch(e){ console.error('formsubmit error',e.message); }
   console.log('comment mail (no provider) to',to,subject);
 }
 
