@@ -481,20 +481,17 @@ nav.desk a.active::after{transform:scaleX(1)}
 .kicker{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:10px;margin-bottom:22px}
 .kicker i{width:24px;height:1px;background:var(--ink)}
 .kicker .sub{text-transform:none;letter-spacing:.02em;color:var(--muted-2);margin-left:auto}
-/* — hl rating + comments — Lab Notebook No.01 — hugeicons star */
-.hgi{display:inline-block;font-style:normal;line-height:1;vertical-align:middle}
-.hgi-star::before{content:"★";display:block}
-.hgi-stroke{color:transparent;-webkit-text-stroke:1.4px var(--line-2);text-stroke:1.4px var(--line-2)}
-.hgi-rounded{border-radius:50%}
+/* — hl rating + comments — Lab Notebook No.01 — svg star smooth */
 .hl-card{background:var(--sheet);border:1px solid var(--line);padding:18px}
 .hl-stars{display:flex;gap:10px;justify-content:center;align-items:center;padding:12px 0}
-.hl-star{width:44px;height:44px;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;background:var(--paper-2);font-size:22px;cursor:pointer;transition:transform .2s var(--ease),background .2s,border-color .2s,color .2s;color:var(--muted)}
-.hl-star:hover{transform:translateY(-2px) scale(1.06);border-color:var(--accent);background:var(--sheet)}
-.hl-star.on{background:var(--accent);border-color:var(--accent);color:var(--paper);transform:scale(1.08);animation:hlStarPop .45s var(--ease)}
-.hl-star.on .hgi-stroke{color:var(--paper);-webkit-text-stroke:0}
-.hl-star i{transition:transform .2s var(--ease),color .2s}
+.hl-star{width:44px;height:44px;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;background:var(--paper-2);cursor:pointer;transition:transform .22s var(--ease),background .22s,border-color .22s; color:var(--muted)}
+.hl-star svg{width:24px;height:24px;display:block;transition:transform .28s var(--ease), fill .28s var(--ease), stroke .28s var(--ease), filter .28s var(--ease); fill:none; stroke:currentColor}
+.hl-star:hover{transform:translateY(-2px) scale(1.06);border-color:var(--accent);background:var(--sheet);color:var(--accent)}
+.hl-star:hover svg{transform:scale(1.04)}
+.hl-star.on{background:var(--accent);border-color:var(--accent);color:var(--paper);transform:scale(1.08);animation:hlStarPop .5s var(--ease)}
+.hl-star.on svg{fill:var(--paper);stroke:var(--paper);filter:drop-shadow(0 1px 6px rgba(0,0,0,.12))}
 .hl-star:active{transform:scale(.96)}
-@keyframes hlStarPop{0%{transform:scale(.9)}40%{transform:scale(1.16)}70%{transform:scale(.97)}100%{transform:scale(1.08)}}
+@keyframes hlStarPop{0%{transform:scale(.9)}35%{transform:scale(1.18) rotate(-2deg)}65%{transform:scale(.98) rotate(1deg)}100%{transform:scale(1.08) rotate(0)}}
 .hl-range{display:none}
 .hl-rating-head,.hl-avg,.hl-meta,.hl-dist{display:none !important}
 .hl-actions{display:flex;gap:10px;align-items:center;justify-content:center;margin-top:14px;flex-wrap:wrap}
@@ -657,11 +654,11 @@ ${post.html}
       <div class="kicker"><i></i> Rate this log <span class="sub">tap a star · smooth</span></div>
       <div class="hl-card" id="hlRatingCard" style="text-align:center">
         <div class="hl-stars" id="hlStars" role="radiogroup" aria-label="Rate 1 to 5">
-          <button type="button" class="hl-star" data-v="1" aria-label="1 star"><i class="hgi hgi-stroke hgi-rounded hgi-star"></i></button>
-          <button type="button" class="hl-star" data-v="2" aria-label="2 stars"><i class="hgi hgi-stroke hgi-rounded hgi-star"></i></button>
-          <button type="button" class="hl-star" data-v="3" aria-label="3 stars"><i class="hgi hgi-stroke hgi-rounded hgi-star"></i></button>
-          <button type="button" class="hl-star" data-v="4" aria-label="4 stars"><i class="hgi hgi-stroke hgi-rounded hgi-star"></i></button>
-          <button type="button" class="hl-star" data-v="5" aria-label="5 stars"><i class="hgi hgi-stroke hgi-rounded hgi-star"></i></button>
+          <button type="button" class="hl-star" data-v="1" aria-label="1 star"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13.7276 3.44418L15.4874 6.99288C15.7274 7.48687 16.3673 7.9607 16.9073 8.05143L20.0969 8.58575C22.1367 8.92853 22.6167 10.4206 21.1468 11.8925L18.6671 14.3927C18.2471 14.8161 18.0172 15.6327 18.1471 16.2175L18.8571 19.3125C19.417 21.7623 18.1271 22.71 15.9774 21.4296L12.9877 19.6452C12.4478 19.3226 11.5579 19.3226 11.0079 19.6452L8.01827 21.4296C5.8785 22.71 4.57865 21.7522 5.13859 19.3125L5.84851 16.2175C5.97849 15.6327 5.74852 14.8161 5.32856 14.3927L2.84884 11.8925C1.389 10.4206 1.85895 8.92853 3.89872 8.58575L7.08837 8.05143C7.61831 7.9607 8.25824 7.48687 8.49821 6.99288L10.258 3.44418C11.2179 1.51861 12.7777 1.51861 13.7276 3.44418Z"></path></svg></button>
+          <button type="button" class="hl-star" data-v="2" aria-label="2 stars"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13.7276 3.44418L15.4874 6.99288C15.7274 7.48687 16.3673 7.9607 16.9073 8.05143L20.0969 8.58575C22.1367 8.92853 22.6167 10.4206 21.1468 11.8925L18.6671 14.3927C18.2471 14.8161 18.0172 15.6327 18.1471 16.2175L18.8571 19.3125C19.417 21.7623 18.1271 22.71 15.9774 21.4296L12.9877 19.6452C12.4478 19.3226 11.5579 19.3226 11.0079 19.6452L8.01827 21.4296C5.8785 22.71 4.57865 21.7522 5.13859 19.3125L5.84851 16.2175C5.97849 15.6327 5.74852 14.8161 5.32856 14.3927L2.84884 11.8925C1.389 10.4206 1.85895 8.92853 3.89872 8.58575L7.08837 8.05143C7.61831 7.9607 8.25824 7.48687 8.49821 6.99288L10.258 3.44418C11.2179 1.51861 12.7777 1.51861 13.7276 3.44418Z"></path></svg></button>
+          <button type="button" class="hl-star" data-v="3" aria-label="3 stars"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13.7276 3.44418L15.4874 6.99288C15.7274 7.48687 16.3673 7.9607 16.9073 8.05143L20.0969 8.58575C22.1367 8.92853 22.6167 10.4206 21.1468 11.8925L18.6671 14.3927C18.2471 14.8161 18.0172 15.6327 18.1471 16.2175L18.8571 19.3125C19.417 21.7623 18.1271 22.71 15.9774 21.4296L12.9877 19.6452C12.4478 19.3226 11.5579 19.3226 11.0079 19.6452L8.01827 21.4296C5.8785 22.71 4.57865 21.7522 5.13859 19.3125L5.84851 16.2175C5.97849 15.6327 5.74852 14.8161 5.32856 14.3927L2.84884 11.8925C1.389 10.4206 1.85895 8.92853 3.89872 8.58575L7.08837 8.05143C7.61831 7.9607 8.25824 7.48687 8.49821 6.99288L10.258 3.44418C11.2179 1.51861 12.7777 1.51861 13.7276 3.44418Z"></path></svg></button>
+          <button type="button" class="hl-star" data-v="4" aria-label="4 stars"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13.7276 3.44418L15.4874 6.99288C15.7274 7.48687 16.3673 7.9607 16.9073 8.05143L20.0969 8.58575C22.1367 8.92853 22.6167 10.4206 21.1468 11.8925L18.6671 14.3927C18.2471 14.8161 18.0172 15.6327 18.1471 16.2175L18.8571 19.3125C19.417 21.7623 18.1271 22.71 15.9774 21.4296L12.9877 19.6452C12.4478 19.3226 11.5579 19.3226 11.0079 19.6452L8.01827 21.4296C5.8785 22.71 4.57865 21.7522 5.13859 19.3125L5.84851 16.2175C5.97849 15.6327 5.74852 14.8161 5.32856 14.3927L2.84884 11.8925C1.389 10.4206 1.85895 8.92853 3.89872 8.58575L7.08837 8.05143C7.61831 7.9607 8.25824 7.48687 8.49821 6.99288L10.258 3.44418C11.2179 1.51861 12.7777 1.51861 13.7276 3.44418Z"></path></svg></button>
+          <button type="button" class="hl-star" data-v="5" aria-label="5 stars"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13.7276 3.44418L15.4874 6.99288C15.7274 7.48687 16.3673 7.9607 16.9073 8.05143L20.0969 8.58575C22.1367 8.92853 22.6167 10.4206 21.1468 11.8925L18.6671 14.3927C18.2471 14.8161 18.0172 15.6327 18.1471 16.2175L18.8571 19.3125C19.417 21.7623 18.1271 22.71 15.9774 21.4296L12.9877 19.6452C12.4478 19.3226 11.5579 19.3226 11.0079 19.6452L8.01827 21.4296C5.8785 22.71 4.57865 21.7522 5.13859 19.3125L5.84851 16.2175C5.97849 15.6327 5.74852 14.8161 5.32856 14.3927L2.84884 11.8925C1.389 10.4206 1.85895 8.92853 3.89872 8.58575L7.08837 8.05143C7.61831 7.9607 8.25824 7.48687 8.49821 6.99288L10.258 3.44418C11.2179 1.51861 12.7777 1.51861 13.7276 3.44418Z"></path></svg></button>
         </div>
         <input class="hl-range" id="hlRange" type="range" min="1" max="5" step="1" value="3" aria-hidden="true" tabindex="-1" />
         <div class="hl-actions">
