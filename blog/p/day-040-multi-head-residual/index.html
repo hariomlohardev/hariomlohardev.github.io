@@ -188,6 +188,10 @@ nav.desk a.active::after{transform:scaleX(1)}
 .hl-btn.ghost{background:transparent;color:var(--ink)}
 .hl-btn.ghost:hover{background:var(--sheet)}
 .hl-note{font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.6;text-align:center;width:100%}
+.hl-modal{position:fixed;inset:0;z-index:200;background:rgba(24,22,17,.48);backdrop-filter:blur(4px);display:none;place-items:center;padding:20px}
+.hl-modal.open{display:grid}
+.hl-modal-card{background:var(--sheet);border:1px solid var(--ink);padding:22px;max-width:420px;width:100%;box-shadow:0 18px 40px rgba(24,22,17,.18);animation:hlIn .35s var(--ease)}
+.hl-modal-title{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
 .hl-comments-list{display:grid;gap:14px;margin-top:14px}
 .hl-c{border:1px solid var(--line);background:var(--paper-2);padding:14px;animation:hlIn .4s var(--ease)}
 @keyframes hlIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
@@ -357,11 +361,10 @@ html:not(.js) .rv{opacity:1;transform:none}
     <section class="flat-sec rv" id="hl-comments" aria-label="Comments" data-slug="day-040-multi-head-residual">
       <div class="kicker"><i></i> Discuss — replies · rating <span class="sub" id="hlCSub">0 comments</span></div>
       <div class="hl-card hl-composer" id="hlComposer">
-        <div class="hl-row"><input class="hl-input" id="hlName" type="text" maxlength="32" placeholder="Name (optional) — stored in cookie" autocomplete="nickname" /></div>
         <textarea class="hl-textarea" id="hlText" maxlength="2000" placeholder="Share a thought — reply threads, plain text, 2000 max…"></textarea>
         <div class="hl-row" style="align-items:center;justify-content:space-between">
           <span class="hl-hint" id="hlReplyHint" style="display:none">↳ Replying to <b id="hlReplyWho"></b> · <button type="button" class="hl-reply" id="hlCancelReply" style="border:none;background:none;padding:0;color:var(--accent)">cancel</button></span>
-          <span class="hl-hint" id="hlHint">cookie hl_cid identifies you · name optional</span>
+          <span class="hl-hint" id="hlHint">cookie hl_cid · name saved after first comment</span>
         </div>
         <div class="hl-actions" style="margin-top:2px">
           <button type="button" class="hl-btn" id="hlPost">Post comment →</button>
@@ -371,6 +374,17 @@ html:not(.js) .rv{opacity:1;transform:none}
       <div class="hl-comments-list" id="hlList" style="margin-top:16px"></div>
       <noscript><p class="hl-hint" style="margin-top:12px">Enable JavaScript to load comments — served from Supabase, no GitHub login.</p></noscript>
     </section>
+    <div class="hl-modal" id="hlNameModal" aria-hidden="true" style="display:none">
+      <div class="hl-modal-card">
+        <div class="hl-modal-title">What's your name?</div>
+        <input class="hl-input" id="hlName" type="text" maxlength="32" placeholder="Your name — saved in cookie" autocomplete="nickname" />
+        <div style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:8px">Stored as hl_name cookie · skip to post as Anonymous</div>
+        <div style="display:flex;gap:10px;margin-top:14px;justify-content:flex-end">
+          <button type="button" class="hl-btn ghost" id="hlNameSkip">Skip → Anonymous</button>
+          <button type="button" class="hl-btn" id="hlNameContinue">Continue →</button>
+        </div>
+      </div>
+    </div>
     <section class="flat-sec rv" aria-label="Share this post">
       <div class="kicker"><i></i> Share — Lab Notebook №01</div>
       <div class="share-row">
@@ -532,9 +546,11 @@ document.getElementById('copyBtn').addEventListener('click',function(){
       setTimeout(function(){rateBtn.disabled=false; rateBtn.textContent='Rate →';},1800);
     }).catch(function(e){ rateBtn.disabled=false; rateBtn.textContent='Rate →'; if(rateNote){ rateNote.textContent=e.message||'failed'; rateNote.style.display=''; setTimeout(function(){rateNote.textContent='thanks for rating'},2500); } });
   }); }
-  // — comments —
+  // — comments — with name modal (no inline name, popup if no hl_name)
   var listEl=el('hlList'), cSub=el('hlCSub'), postBtn=el('hlPost'), postNote=el('hlPostNote'), replyHint=el('hlReplyHint'), replyWho=el('hlReplyWho'), cancelReply=el('hlCancelReply');
+  var nameModal=el('hlNameModal'), nameContinue=el('hlNameContinue'), nameSkip=el('hlNameSkip');
   var replyTo=null;
+  var pendingContent=null, pendingReplyTo=null;
   function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
   function timeAgo(iso){try{var d=new Date(iso),s=Math.floor((Date.now()-d)/1000); if(s<60) return 'just now'; if(s<3600) return Math.floor(s/60)+'m ago'; if(s<86400) return Math.floor(s/3600)+'h ago'; if(s<2592000) return Math.floor(s/86400)+'d ago'; return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}catch(e){return ''}}
   function setReply(id,name){ replyTo=id; replyWho.textContent=name||'Anonymous'; replyHint.style.display=''; if(textInput){textInput.focus(); textInput.placeholder='Reply to '+(name||'Anonymous')+'…'} }
@@ -567,21 +583,46 @@ document.getElementById('copyBtn').addEventListener('click',function(){
     fetch('/api/blog/social?type=comments&slug='+encodeURIComponent(slug)).then(function(r){return r.json()}).then(function(j){ if(j&&j.ok) renderComments(j.comments||[]); }).catch(function(){});
   }
   fetchComments();
-  if(postBtn){ postBtn.addEventListener('click',function(){
-    var content=(textInput&&textInput.value||'').trim();
+  function showNameModal(){
+    if(nameModal){ nameModal.style.display='grid'; nameModal.classList.add('open'); nameModal.setAttribute('aria-hidden','false'); if(nameInput){ nameInput.value=getName()||''; setTimeout(function(){nameInput.focus()},50); } document.body.style.overflow='hidden'; }
+  }
+  function hideNameModal(){ if(nameModal){ nameModal.style.display='none'; nameModal.classList.remove('open'); nameModal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; } }
+  if(nameModal){
+    nameModal.addEventListener('click',function(e){ if(e.target===nameModal) hideNameModal(); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape' && nameModal.classList.contains('open')) hideNameModal(); });
+  }
+  if(nameContinue) nameContinue.addEventListener('click',function(){
     var nm=(nameInput&&nameInput.value||'').trim().slice(0,32);
-    if(!content){ postNote.textContent='write something first'; textInput.focus(); return; }
-    if(content.length>2000){ postNote.textContent='max 2000 chars'; return; }
     if(nm) setName(nm);
+    hideNameModal();
+    if(pendingContent!==null){ var c=pendingContent; var r=pendingReplyTo; pendingContent=null; pendingReplyTo=null; doPost(c, r, nm||getName()||'Anonymous'); }
+  });
+  if(nameSkip) nameSkip.addEventListener('click',function(){
+    hideNameModal();
+    if(pendingContent!==null){ var c=pendingContent; var r=pendingReplyTo; pendingContent=null; pendingReplyTo=null; doPost(c, r, 'Anonymous'); }
+  });
+  if(nameInput) nameInput.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); if(nameContinue) nameContinue.click(); } });
+  function doPost(content, replyId, authorName){
     postBtn.disabled=true; postBtn.textContent='Posting…'; postNote.textContent='';
-    fetch('/api/blog/social?type=comments',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug:slug,content:content,author_name:nm||getName()||'Anonymous',parent_id:replyTo,client_id:CID})}).then(function(r){return r.json().then(function(j){ return {status:r.status, body:j};})}).then(function(x){
+    fetch('/api/blog/social?type=comments',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug:slug,content:content,author_name:authorName,parent_id:replyId,client_id:CID})}).then(function(r){return r.json().then(function(j){ return {status:r.status, body:j};})}).then(function(x){
       if(!x.body||!x.body.ok) throw new Error(x.body&&x.body.error||'failed ('+x.status+')');
       if(textInput) textInput.value=''; clearReply(); postNote.textContent='posted ✓';
       fetchComments();
       setTimeout(function(){postNote.textContent=''},2000);
     }).catch(function(e){ postNote.textContent=e.message||'failed'; }).finally(function(){ postBtn.disabled=false; postBtn.textContent='Post comment →'; });
+  }
+  if(postBtn){ postBtn.addEventListener('click',function(){
+    var content=(textInput&&textInput.value||'').trim();
+    if(!content){ postNote.textContent='write something first'; textInput.focus(); return; }
+    if(content.length>2000){ postNote.textContent='max 2000 chars'; return; }
+    var stored=getName();
+    if(!stored){
+      pendingContent=content; pendingReplyTo=replyTo;
+      showNameModal();
+      return;
+    }
+    doPost(content, replyTo, stored);
   }); }
-  if(nameInput){ nameInput.addEventListener('change',function(){ var v=nameInput.value.trim().slice(0,32); if(v) setName(v); }); }
   if(textInput){ textInput.addEventListener('keydown',function(e){ if((e.metaKey||e.ctrlKey)&&e.key==='Enter'){ postBtn.click(); } }); }
 })();
 })();
