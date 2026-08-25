@@ -65,10 +65,11 @@ async function sendCommentMail({slug,title,url,author,content}){
     fd.append('Author', author);
     fd.append('Comment', content);
     fd.append('View', `${url}#comments`);
-    const r=await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(to)}`,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded','Accept':'application/json','Origin':'https://hariomlohardev.github.io','Referer': url},body: fd.toString()});
-    const j=await r.json().catch(()=>({}));
-    if(r.ok) { console.log('comment mail via formsubmit to',to, j.message||'ok'); return; }
-    console.error('formsubmit failed', r.status, JSON.stringify(j).slice(0,300));
+    const r=await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(to)}`,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded','Accept':'application/json','Origin':'https://hariomlohardev.github.io','Referer': url,'User-Agent':'Mozilla/5.0 (compatible; Vercel; +https://hariomlohardev.github.io)','X-Requested-With':'XMLHttpRequest'},body: fd.toString()});
+    const txt=await r.text().catch(()=> '');
+    let j={}; try{ j=JSON.parse(txt); }catch{}
+    if(r.ok) { console.log('comment mail via formsubmit to',to, j.message||txt.slice(0,80)||'ok'); return; }
+    console.error('formsubmit failed', r.status, txt.slice(0,400));
   }catch(e){ console.error('formsubmit error',e.message); }
   console.log('comment mail (no provider) to',to,subject);
 }
