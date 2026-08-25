@@ -33,6 +33,29 @@ function stats(rows){
   rows.forEach(r=>{ sum+=Number(r.score)||0; const k=String(r.score); if(dist[k]!=null) dist[k]++; });
   return {avg: Math.round((sum/count)*10)/10, count, dist};
 }
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+async function sendCommentMail({slug,title,url,author,content}){
+  const to = process.env.NOTIFY_EMAIL || process.env.ADMIN_EMAIL || 'hariomlohar.new@gmail.com';
+  const from = process.env.NOTIFY_FROM || 'onboarding@resend.dev';
+  const subject = `New comment on "${title}" — ${slug}`;
+  const text = `New comment on "${title}"\n\nPost: ${url}\nAuthor: ${author}\n\nComment:\n${content}\n\n---\nView: ${url}#comments`;
+  const html = `<p>New comment on <b>${escHtml(title)}</b></p><p><a href="${escHtml(url)}">${escHtml(url)}</a></p><p><b>Author:</b> ${escHtml(author)}</p><blockquote style="border-left:3px solid #B93A13;padding:8px 12px;background:#F6F4EE">${escHtml(content).replace(/\n/g,'<br>')}</blockquote><p><a href="${escHtml(url)}#comments">View comment →</a></p>`;
+  if(process.env.RESEND_API_KEY){
+    try{
+      const r=await fetch('https://api.resend.com/emails',{method:'POST',headers:{'Authorization':'Bearer '+process.env.RESEND_API_KEY,'Content-Type':'application/json'},body:JSON.stringify({from, to, subject, text, html})});
+      if(!r.ok) console.error('resend failed', await r.text().catch(()=>'')); else console.log('comment mail sent via resend to',to);
+      return;
+    }catch(e){ console.error('resend error',e.message); }
+  }
+  if(process.env.SENDGRID_API_KEY){
+    try{
+      const r=await fetch('https://api.sendgrid.com/v3/mail/send',{method:'POST',headers:{'Authorization':'Bearer '+process.env.SENDGRID_API_KEY,'Content-Type':'application/json'},body:JSON.stringify({personalizations:[{to:[{email:to}]}],from:{email:from},subject,content:[{type:'text/plain',value:text},{type:'text/html',value:html}]})});
+      if(!r.ok) console.error('sendgrid failed', await r.text().catch(()=>'')); else console.log('comment mail sent via sendgrid');
+      return;
+    }catch(e){ console.error('sendgrid error',e.message); }
+  }
+  console.log('comment mail (no provider) to',to,subject);
+}
 
 async function handleComments(req,res,sbRead,sbWrite){
   if(req.method==='GET'){
@@ -59,7 +82,7 @@ async function handleComments(req,res,sbRead,sbWrite){
     if(parentId && !isUuid(parentId)) return res.status(400).json({ok:false, error:'invalid parent_id'});
     if(content.length<2) return res.status(400).json({ok:false, error:'too short'});
     try{
-      const {data:post,error:postErr}=await sbRead.from('posts').select('slug,published').eq('slug',slug).eq('published',true).maybeSingle();
+      const {data:post,error:postErr}=await sbRead.from('posts').select('slug,title,published').eq('slug',slug).eq('published',true).maybeSingle();
       if(postErr) return res.status(500).json({ok:false, error:postErr.message});
       if(!post) return res.status(404).json({ok:false, error:'post not found'});
       const since=new Date(Date.now()-60*1000).toISOString();
@@ -80,6 +103,10 @@ async function handleComments(req,res,sbRead,sbWrite){
       const {data,error}=await sbWrite.from('comments').insert(row).select('id,post_slug,parent_id,client_id,author_name,content,created_at').single();
       if(error) return res.status(500).json({ok:false, error:error.message});
       res.setHeader('Set-Cookie', cookie.serialize('hl_cid', clientId, {path:'/', maxAge:60*60*24*365, sameSite:'Lax'}));
+      // notify email (fire-and-forget)
+      const postTitle = post.title || slug;
+      const postUrl = `https://hariomlohardev.github.io/blog/p/${slug}/`;
+      sendCommentMail({slug, title: postTitle, url: postUrl, author: authorName, content}).catch(()=>{});
       return res.status(200).json({ok:true, comment:data});
     }catch(e){ return res.status(500).json({ok:false, error:e.message||'server error'}); }
   }
