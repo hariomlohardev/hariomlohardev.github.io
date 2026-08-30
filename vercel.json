@@ -125,11 +125,11 @@
     },
     {
       "source": "/tricks/p/:id",
-      "destination": "/trick.html?id=:id"
+      "destination": "/trick?id=:id"
     },
     {
       "source": "/tricks/p/:id/",
-      "destination": "/trick.html?id=:id"
+      "destination": "/trick?id=:id"
     },
     {
       "source": "/projects/p/:slug",
