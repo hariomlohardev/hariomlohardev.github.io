@@ -1,0 +1,21 @@
+{
+  "generated": "2026-08-30T09:07:44.002Z",
+  "count": 1,
+  "tricks": [
+    {
+      "id": 1,
+      "title": "Test title for an trick",
+      "raw": "## This is an test trick created for testing tricks \n\n```bash\necho \"test Tricks\"\n```\n\nimage testing thigns \n\n![avatar-circle (1)](https://rgmvhptebkslkjleoilc.supabase.co/storage/v1/object/public/blog-images/2026-08-30/1788079380323-avatar-circle-1.png)\n",
+      "html": "<h2>This is an test trick created for testing tricks </h2>\n\n<pre><code class=\"lang-bash\">echo \"test Tricks\"</code></pre>\n\n<p>image testing thigns</p>\n\n<img src=\"https://rgmvhptebkslkjleoilc.supabase.co/storage/v1/object/public/blog-images/2026-08-30/1788079380323-avatar-circle-1.png\" alt=\"avatar-circle (1)\" loading=\"lazy\" decoding=\"async\" />",
+      "tags": [
+        "test",
+        "tricks"
+      ],
+      "published": true,
+      "word_count": 20,
+      "reading_minutes": 1,
+      "created_at": "2026-08-30T08:43:37.814084+00:00",
+      "updated_at": "2026-08-30T08:43:37.814084+00:00"
+    }
+  ]
+}
