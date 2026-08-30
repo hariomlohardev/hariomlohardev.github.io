@@ -83,6 +83,11 @@ function tailP(b){
   if(!m || !m[2].trim()) return b;
   return m[1] + "\n<p>" + m[2].trim().replace(/\n/g, "<br />\n") + "</p>";
 }
+// a link to an uploaded file (…?download=name) reads as a download chip, not a bare link
+function linkTag(text, href){
+  if(/[?&]download=/.test(href)) return '<a class="dl-file" href="' + href + '" download rel="noopener">' + text + '</a>';
+  return '<a href="' + href + '" rel="noopener">' + text + '</a>';
+}
 function mdToHtml(md){
   let s = md.replace(/\r\n/g,"\n");
   // code fences ```lang\ncode```
@@ -107,7 +112,7 @@ function mdToHtml(md){
   // images ![alt](url) — before links
   s = s.replace(/!\[([^\]]*?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g,'<img src="$2" alt="$1" loading="lazy" decoding="async" style="max-width:100%;height:auto;display:block;margin:12px 0;border:1px solid var(--line)" />');
   // links [text](url) — before bold to avoid conflict
-  s = s.replace(/\[([^\]]+?)\]\((https?:\/\/[^\s)]+|\/[^\s)]*)\)/g,'<a href="$2" rel="noopener">$1</a>');
+  s = s.replace(/\[([^\]]+?)\]\((https?:\/\/[^\s)]+|\/[^\s)]*)\)/g, function(m,t,h){ return linkTag(t,h); });
   // bold **text**
   s = s.replace(/\*\*([^*]+?)\*\*/g,"<strong>$1</strong>");
   // italic *text* (avoid **)
@@ -467,6 +472,10 @@ nav.desk a.active::after{transform:scaleX(1)}
 .prose p{margin:24px 0}
 .prose a{color:var(--accent);font-weight:500;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
 .prose a:hover{background:var(--accent-soft)}
+/* an uploaded file — a link that downloads, so it reads as a slip of paper, not prose */
+.prose a.dl-file{display:inline-flex;align-items:baseline;gap:9px;max-width:100%;margin:6px 0;padding:9px 13px;background:var(--sheet);border:1px solid var(--line-2);box-shadow:2px 2px 0 var(--paper-2);font-family:var(--mono);font-size:.8em;letter-spacing:.02em;font-weight:400;color:var(--ink);text-decoration:none;overflow-wrap:anywhere}
+.prose a.dl-file::before{content:"↓";color:var(--accent);font-weight:700}
+.prose a.dl-file:hover{background:var(--accent-soft);border-color:var(--accent);box-shadow:2px 2px 0 var(--accent)}
 .prose strong{color:var(--ink);font-weight:600}
 .prose blockquote{border-left:3px solid var(--accent);padding:6px 0 6px 26px;margin:36px 0;color:var(--ink-2);font-family:var(--serif);font-style:italic;font-size:1.2rem;line-height:1.6}
 .prose ul,.prose ol{margin:22px 0 22px 24px}
