@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Admin — Edit Trick · Hariom Lab</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-mono/latin-400.css">
+<style>
+:root{--paper:#F6F4EE;--paper-2:#EFECE2;--sheet:#FBFAF6;--ink:#181611;--muted:#5F594A;--line:#DAD5C6;--accent:#B93A13;--green:#1E7A4E;--accent-soft:#F3E3DC;--max:1280px;--pad:clamp(16px,3vw,28px);--mono:'Space Mono',monospace;--serif:'Fraunces',serif;--sans:'Archivo',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--paper);color:#3B382E;line-height:1.5}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+header{position:sticky;top:0;background:rgba(246,244,238,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:20}
+.head{height:56px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-family:var(--mono);font-size:12px;color:var(--muted);text-decoration:none}
+.logo b{color:var(--ink)}
+.btn{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;border:1px solid var(--ink);padding:10px 14px;display:inline-flex;gap:8px;align-items:center;min-height:40px;transition:.2s;cursor:pointer;text-decoration:none}
+.btn.solid{background:var(--ink);color:var(--paper)}
+.btn.solid:hover{background:var(--accent);border-color:var(--accent)}
+.btn.ghost{background:var(--sheet);color:var(--ink)}
+.btn.ghost:hover{transform:translateY(-1px)}
+.box{background:var(--sheet);border:1px solid var(--ink);padding:16px}
+.input,.textarea{width:100%;font-family:var(--sans);font-size:14px;padding:10px 12px;border:1px solid var(--line);background:#fff;outline:none;transition:border-color .15s}
+.input:focus,.textarea:focus{border-color:var(--accent)}
+.textarea{resize:vertical;line-height:1.6}
+.label{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:grid;gap:6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:860px){ .grid2{grid-template-columns:1fr} .editor-grid{grid-template-columns:1fr !important} .preview-col{position:static !important;max-height:none !important} }
+.editor-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;align-items:start;margin-top:18px}
+.preview-col{position:sticky;top:74px;max-height:calc(100vh - 84px);overflow:auto}
+.preview-paper{background:var(--sheet);border:1px solid var(--ink);padding:22px 18px;position:relative;box-shadow:0 4px 18px rgba(24,22,17,.06)}
+.preview-paper::before{content:"";position:absolute;top:-8px;left:50%;transform:translateX(-50%) rotate(-1deg);width:90px;height:10px;background:rgba(255,255,255,.9);border:1px solid rgba(24,22,17,.06)}
+.p-meta{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.p-title{font-family:var(--serif);font-weight:600;font-size:1.6rem;line-height:1.15;margin-top:10px;color:var(--ink)}
+.p-desc{font-family:var(--serif);font-style:italic;color:var(--muted);margin-top:8px;line-height:1.6}
+.p-prose{margin-top:14px;font-size:14.5px;line-height:1.7;color:#1e293b;border-top:1px solid var(--line);padding-top:14px}
+.p-prose h1{font-family:var(--serif);font-weight:600;font-size:1.35rem;margin:18px 0 8px}
+.p-prose h2{font-family:var(--serif);font-weight:600;font-size:1.15rem;margin:16px 0 8px}
+.p-prose h3{font-weight:700;margin:14px 0 6px}
+.p-prose p{margin:10px 0}
+.p-prose a{color:var(--accent);text-decoration:underline}
+.p-prose blockquote{border-left:3px solid var(--accent);background:var(--paper-2);padding:8px 12px;margin:10px 0;color:#334155}
+.p-prose ul{margin:10px 0 10px 18px}
+.p-prose pre{background:#181611;color:#E8EEFB;padding:12px;overflow:auto;border:1px solid var(--ink);font-family:var(--mono);font-size:11.5px;line-height:1.5;margin:10px 0}
+.p-prose code{font-family:var(--mono);font-size:.9em;background:var(--paper-2);border:1px solid var(--line);padding:1px 4px}
+.p-prose pre code{background:none;border:none;padding:0;color:inherit}
+.toolbar{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.tool{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper);padding:6px 8px;cursor:pointer}
+.tool:hover{border-color:var(--ink)}
+.drop-active{border-color:var(--accent) !important;background:var(--accent-soft) !important}
+.kbd{font-family:var(--mono);font-size:10px;border:1px solid var(--line);padding:2px 5px;background:var(--paper)}
+/* full-page temporary preview overlay */
+.ovl{position:fixed;inset:0;z-index:60;background:rgba(24,22,17,.55);display:none}
+.ovl.on{display:block}
+.ovl-shell{position:absolute;inset:clamp(0px,2vw,22px);background:var(--paper);border:1px solid var(--ink);display:grid;grid-template-rows:auto 1fr;box-shadow:0 24px 60px rgba(24,22,17,.35)}
+.ovl-bar{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--ink);background:var(--sheet);flex-wrap:wrap}
+.ovl-note{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:flex;gap:8px;align-items:center}
+.ovl-note i{width:8px;height:8px;background:var(--accent);transform:rotate(45deg);flex:none}
+.ovl-frame{width:100%;height:100%;border:0;background:var(--paper);display:block}
+.tape{position:relative}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap head">
+    <a class="logo" href="/admin/tricks.html">← <b>Tricks</b> · Editor</a>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <span id="saveState" style="font-family:var(--mono);font-size:11px;color:var(--muted)"></span>
+      <button class="btn ghost" id="fullPreviewBtn" type="button">Preview ⛶</button>
+      <a class="btn ghost" href="/admin/tricks.html">Back to list</a>
+      <button class="btn solid" id="saveBtn" type="button">Save →</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" style="padding:18px 0 40px">
+  <div id="gate" class="box" style="display:none"><p style="font-family:var(--mono);font-size:12px;color:var(--muted)">Not logged in → <a href="/admin/" style="color:var(--accent);text-decoration:underline">login</a></p></div>
+
+  <div id="editor" style="display:none">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+      <h1 id="headTitle" style="font-family:var(--serif);font-weight:600;font-size:1.5rem">New trick</h1>
+      <div style="display:flex;gap:10px;align-items:center">
+        <span id="urlPreview" style="font-family:var(--mono);font-size:11px;color:var(--muted)">/tricks/p/&lt;new&gt;</span>
+        <label style="font-family:var(--mono);font-size:11px;display:flex;gap:6px;align-items:center"><input type="checkbox" id="published" checked /> Published</label>
+      </div>
+    </div>
+
+    <div class="editor-grid">
+      <!-- LEFT: form -->
+      <div style="display:grid;gap:14px">
+        <div class="box">
+          <div class="grid2">
+            <label class="label">Title <input id="title" class="input" placeholder="Kill a stuck port on Windows" /></label>
+            <label class="label">Tags (comma) <input id="tags" class="input" placeholder="windows, terminal, shortcuts" /></label>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:10px;font-family:var(--mono);font-size:11px;color:var(--muted);flex-wrap:wrap">
+            <span id="wordCount">0 words</span><span>·</span><span id="readTime">1 min</span><span>·</span><span>Title + markdown body only — no cover, no lede</span>
+          </div>
+        </div>
+
+        <div class="box">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+            <label class="label" style="margin:0">Markdown body <span style="text-transform:none;letter-spacing:0;color:var(--muted)">**bold**, `code`, ```fences```, # headings, images</span></label>
+            <span style="font-family:var(--mono);font-size:10.5px;color:var(--muted)">Esc closes the full preview</span>
+          </div>
+          <div class="toolbar">
+            <button class="tool" type="button" data-insert="## Heading|NL|">H2</button>
+            <button class="tool" type="button" data-insert="### Heading|NL|">H3</button>
+            <button class="tool" type="button" data-insert="**bold**">Bold</button>
+            <button class="tool" type="button" data-insert="`code`">Code</button>
+            <button class="tool" type="button" data-insert="```|NL|code|NL|```|NL|">Fence</button>
+            <button class="tool" type="button" data-insert="- item|NL|">List</button>
+            <button class="tool" type="button" data-insert="[text](https://)">Link</button>
+            <button class="tool" type="button" data-insert="> quote|NL|">Quote</button>
+            <button class="tool" type="button" data-insert="---|NL|">Rule</button>
+            <button class="tool" type="button" id="imageBtn">Image ↑</button>
+            <input type="file" id="imageFile" accept="image/*" style="display:none" />
+          </div>
+          <div style="font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:6px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <span>Drag &amp; drop or paste an image below — uploads to Supabase and inserts <code>![](url)</code></span>
+            <span id="imageUploadMsg" style="color:var(--muted)"></span>
+          </div>
+          <textarea id="raw" class="textarea" style="min-height:460px;font-family:var(--mono);font-size:13px;white-space:pre;margin-top:8px" placeholder="## The trick
+
+Explain it in one breath, then show it.
+
+```bash
+npx kill-port 3000
+```
+
+- why it works
+- when it does not"></textarea>
+          <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+            <button class="btn solid" id="saveBtn2" type="button">Save →</button>
+            <button class="btn ghost" id="fullPreviewBtn2" type="button">Full preview ⛶</button>
+            <button class="btn ghost" id="deleteBtn" type="button" style="display:none">Delete</button>
+            <a class="btn ghost" id="viewBtn" href="/tricks" target="_blank" style="display:none">View live ↗</a>
+            <span id="formMsg" style="font-family:var(--mono);font-size:11px;color:var(--muted);align-self:center"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: live preview -->
+      <div class="preview-col">
+        <div class="box" style="padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+          <span style="font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">Live preview</span>
+          <span style="font-family:var(--mono);font-size:10.5px;color:var(--muted)">how it looks at <a href="/tricks" target="_blank" style="color:var(--accent);text-decoration:underline">/tricks/p/&lt;id&gt;</a></span>
+        </div>
+        <div class="preview-paper" style="margin-top:10px">
+          <div class="p-meta"><span id="pvBadge" style="border:1px solid var(--line);padding:3px 7px">Draft</span><span id="pvNum">#000</span><span>·</span><span id="pvMin">1 min</span><span id="pvTags" style="margin-left:auto"></span></div>
+          <div class="p-title" id="pvTitle">Untitled</div>
+          <div class="p-prose" id="pvProse"><p style="color:var(--muted)">Start typing markdown on the left — preview appears here.</p></div>
+        </div>
+        <div style="margin-top:10px;font-family:var(--mono);font-size:10.5px;color:var(--muted)">Hit <b>Preview ⛶</b> for a temporary full-page render in the real <code>/tricks</code> design — nothing is saved until you press Save.</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ══ TEMPORARY FULL-PAGE PREVIEW ══ -->
+<div class="ovl" id="ovl" aria-hidden="true">
+  <div class="ovl-shell">
+    <div class="ovl-bar">
+      <span class="ovl-note"><i aria-hidden="true"></i><span id="ovlNote">Temporary preview · not saved</span></span>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn ghost" id="ovlRefresh" type="button">Refresh</button>
+        <button class="btn solid" id="ovlClose" type="button">Close ✕</button>
+      </div>
+    </div>
+    <iframe class="ovl-frame" id="ovlFrame" title="Trick preview"></iframe>
+  </div>
+</div>
+
+<script>
+function token(){ return localStorage.getItem('admin_token'); }
+async function check(){ const t=token(); if(!t) return false; try{ const r=await fetch('/api/admin/verify?token='+encodeURIComponent(t)); const j=await r.json(); return j.ok; }catch{ return false; } }
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function pad3(n){ var s=String(n==null?'':n); while(s.length<3) s='0'+s; return s; }
+function fmtDate(d){ try{ return new Date(d||Date.now()).toLocaleDateString('en-GB',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric'}).toUpperCase(); }catch{ return ''; } }
+function words(s){ return String(s||'').split(/\s+/).filter(Boolean).length; }
+function mins(s){ return Math.max(1, Math.ceil(words(s)/200)); }
+
+// micro md -> html — mirrors mdToHtml in api/admin/posts.js + scripts/generate-tricks.js
+function mdToHtml(raw){
+  if(!raw || !String(raw).trim()) return '<p style="color:var(--muted)">No body yet.</p>';
+  var s = String(raw).replace(/^---[\s\S]*?---\s*/,'').replace(/\r\n/g,'\n');
+  var codes=[];
+  s=s.replace(/```[a-zA-Z0-9_-]*\n([\s\S]*?)```/g,function(_,c){ var i=codes.length; codes.push('<pre><code>'+esc(c.replace(/\s+$/,''))+'</code></pre>'); return '__CODE_'+i+'__'; });
+  s=s.replace(/`([^`]+?)`/g,function(_,c){ return '<code>'+esc(c)+'</code>'; });
+  s=s.replace(/^######\s+(.+)$/gm,'<h6>$1</h6>').replace(/^#####\s+(.+)$/gm,'<h5>$1</h5>').replace(/^####\s+(.+)$/gm,'<h4>$1</h4>').replace(/^###\s+(.+)$/gm,'<h3>$1</h3>').replace(/^##\s+(.+)$/gm,'<h2>$1</h2>').replace(/^#\s+(.+)$/gm,'<h1>$1</h1>');
+  s=s.replace(/^[ \t]*(?:---|\*\*\*|___)[ \t]*$/gm,'<hr />');
+  s=s.replace(/!\[([^\]]*?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g,'<img src="$2" alt="$1" loading="lazy" decoding="async" />');
+  s=s.replace(/\[([^\]]+?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+|mailto:[^\s)]+)\)/g,'<a href="$2">$1</a>');
+  s=s.replace(/\*\*([^*]+?)\*\*/g,'<strong>$1</strong>').replace(/\*([^*\n]+?)\*/g,'<em>$1</em>');
+  s=s.replace(/^[ \t]*[-*+][ \t]+(.+)$/gm,'<li>$1</li>');
+  s=s.replace(/^[ \t]*\d+\.[ \t]+(.+)$/gm,'<li>$1</li>');
+  s=s.replace(/(?:<li>.*<\/li>\n?)+/g,function(m){ return '<ul>\n'+m.trim()+'\n</ul>'; });
+  s=s.replace(/^>[ \t]?(.+)$/gm,'<blockquote>$1</blockquote>');
+  s=s.replace(/<\/blockquote>\n<blockquote>/g,'<br />');
+  var blocks=s.split(/\n{2,}/).map(function(b){
+    b=b.trim(); if(!b) return '';
+    if(/^<(h[1-6]|pre|ul|ol|blockquote|hr|img|figure)/.test(b) || b.indexOf('__CODE_')===0) return b;
+    return '<p>'+b.replace(/\n/g,'<br />\n')+'</p>';
+  }).join('\n\n');
+  codes.forEach(function(html,i){ blocks=blocks.replace('__CODE_'+i+'__', html); });
+  return blocks;
+}
+
+let editId=null, loaded=null;
+const NL=String.fromCharCode(10);
+
+function readForm(){
+  return {
+    title: document.getElementById('title').value.trim(),
+    tags: document.getElementById('tags').value.split(',').map(function(s){ return s.trim(); }).filter(Boolean),
+    raw: document.getElementById('raw').value,
+    published: document.getElementById('published').checked
+  };
+}
+
+function updatePreview(){
+  const f=readForm();
+  const m=mins(f.raw), w=words(f.raw);
+  document.getElementById('pvTitle').textContent=f.title || 'Untitled';
+  document.getElementById('pvNum').textContent='#'+pad3(editId==null?0:editId);
+  document.getElementById('pvMin').textContent=m+' min';
+  document.getElementById('pvTags').innerHTML=f.tags.map(function(t){ return '<span style="border:1px solid var(--line);background:var(--paper-2);padding:3px 6px">'+esc(t)+'</span>'; }).join(' ');
+  const badge=document.getElementById('pvBadge');
+  badge.textContent=f.published?'Published':'Hidden';
+  badge.style.background=f.published?'var(--green)':'var(--paper)';
+  badge.style.color=f.published?'#fff':'var(--muted)';
+  badge.style.borderColor=f.published?'var(--green)':'var(--line)';
+  document.getElementById('wordCount').textContent=w+' words';
+  document.getElementById('readTime').textContent=m+' min';
+  document.getElementById('pvProse').innerHTML=mdToHtml(f.raw);
+  document.getElementById('urlPreview').textContent = editId==null ? '/tricks/p/<new>' : '/tricks/p/'+editId;
+  const vb=document.getElementById('viewBtn');
+  if(editId!=null){ vb.href='/tricks/p/'+encodeURIComponent(editId); vb.style.display='inline-flex'; } else vb.style.display='none';
+  if(document.getElementById('ovl').classList.contains('on')) paintOverlay();
+}
+
+function debounce(fn,ms){ let t; return function(){ clearTimeout(t); t=setTimeout(fn,ms); }; }
+function bindPreview(){
+  ['title','tags','raw','published'].forEach(function(id){
+    const el=document.getElementById(id); if(!el) return;
+    el.addEventListener('input', debounce(updatePreview,180));
+    el.addEventListener('change', updatePreview);
+  });
+}
+
+function insertAtCursor(text){
+  const ta=document.getElementById('raw');
+  const s=ta.selectionStart, e=ta.selectionEnd, v=ta.value;
+  ta.value=v.slice(0,s)+text+v.slice(e);
+  ta.selectionStart=ta.selectionEnd=s+text.length;
+  ta.focus();
+  updatePreview();
+}
+
+async function uploadImage(file, msgEl){
+  if(!file || !file.type.startsWith('image/')){ if(msgEl) msgEl.textContent='Only images'; return null; }
+  if(file.size>8*1024*1024){ if(msgEl) msgEl.textContent='Too large (8MB max)'; return null; }
+  if(msgEl){ msgEl.textContent='Uploading…'; msgEl.style.color='var(--muted)'; }
+  try{
+    const b64=await new Promise(function(res,rej){
+      const fr=new FileReader();
+      fr.onload=function(){ res(String(fr.result).split(',')[1]); };
+      fr.onerror=function(){ rej(new Error('read failed')); };
+      fr.readAsDataURL(file);
+    });
+    const r=await fetch('/api/admin/upload',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token()},body:JSON.stringify({filename:file.name,contentType:file.type,data:b64})});
+    const t=await r.text(); let j; try{ j=JSON.parse(t); }catch{ throw new Error(t.slice(0,300)); }
+    if(!r.ok||!j.ok) throw new Error(j.error||'Upload failed');
+    if(msgEl){ msgEl.textContent='Uploaded ✓'; msgEl.style.color='var(--green)'; setTimeout(function(){ msgEl.textContent=''; msgEl.style.color='var(--muted)'; },2000); }
+    return j.url;
+  }catch(e){
+    if(msgEl){ msgEl.textContent=e.message; msgEl.style.color='var(--accent)'; }
+    return null;
+  }
+}
+
+/* ── temporary full-page preview: borrows the real /tricks stylesheet ── */
+const FONTS='<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-400.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-600.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-italic.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-400.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-600.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-mono/latin-400.css">';
+const FALLBACK_CSS=':root{--paper:#F6F4EE;--paper-2:#EFECE2;--sheet:#FBFAF6;--ink:#181611;--ink-2:#33301F;--body:#3B382E;--muted:#5F594A;--line:#DAD5C6;--line-2:#C9C2AE;--accent:#B93A13;--accent-soft:#F3E3DC;--mono:"Space Mono",monospace;--serif:"Fraunces",serif;--sans:"Archivo",sans-serif}*{box-sizing:border-box;margin:0;padding:0}body{background:var(--paper);color:var(--body);font-family:var(--sans)}a{color:inherit;text-decoration:none}.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(18px,4vw,48px)}';
+let shellCss=null, shellCssTried=false;
+
+async function getShellCss(){
+  if(shellCssTried) return shellCss;
+  shellCssTried=true;
+  try{
+    const r=await fetch('/tricks',{cache:'no-store'});
+    if(r.ok){
+      const html=await r.text();
+      const doc=new DOMParser().parseFromString(html,'text/html');
+      const css=Array.prototype.map.call(doc.querySelectorAll('style'), function(n){ return n.textContent; }).join(NL);
+      if(css.length>800) shellCss=css;
+    }
+  }catch(e){}
+  return shellCss;
+}
+
+function overlayDoc(css, f){
+  const num=pad3(editId==null?0:editId);
+  const m=mins(f.raw), w=words(f.raw);
+  const read=m+' min read';
+  const tags=f.tags.map(function(t){ return '<span>'+esc(t)+'</span>'; }).join('');
+  const head='<meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><base href="/" /><title>'+esc(f.title||'Untitled')+' · Preview</title>'+FONTS+'<style>'+(css||FALLBACK_CSS)+'</style><style>body{overflow-x:hidden}.pv-flag{position:sticky;top:0;z-index:5;background:var(--accent);color:#F6F4EE;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;padding:7px clamp(18px,4vw,48px)}</style>';
+  const body=[
+    '<div class="pv-flag">Temporary preview'+(f.published?'':' · hidden (draft)')+' — nothing is saved yet</div>',
+    '<div class="masthead">',
+    '  <div class="wrap">',
+    '    <div class="crumb" style="padding-top:clamp(18px,3vw,28px)"><a href="/">Hariom Lohar</a><span>/</span><a href="/tricks">Tricks</a><span>/</span><span style="color:var(--accent)">#'+num+'</span></div>',
+    '    <div class="mast-body">',
+    '      <p class="eyebrow"><i aria-hidden="true"></i><span>TRICK #'+num+' · '+esc(read.toUpperCase())+'</span></p>',
+    '      <h1 class="trick-title">'+esc(f.title||'Untitled')+'</h1>',
+    '      <div class="meta"><b>FILED '+esc(fmtDate(loaded&&loaded.created_at))+'</b><span class="sep">·</span><span>'+w+' words</span><span class="sep">·</span><span>'+esc(read)+'</span></div>',
+    tags ? '      <div class="tags">'+tags+'</div>' : '',
+    '      <div class="trick-actions"><span class="btn">Copy link</span><span class="btn">All tricks →</span></div>',
+    '    </div>',
+    '  </div>',
+    '</div>',
+    '<div class="wrap">',
+    '  <article class="trick-sheet">',
+    '    <div class="rule"></div>',
+    '    <div class="prose">'+mdToHtml(f.raw)+'</div>',
+    '  </article>',
+    '  <div class="trick-foot"><span class="fnote">Trick #'+num+' · Lab Notebook №01</span><span class="btn">← Back to all tricks</span></div>',
+    '</div>'
+  ].filter(Boolean).join(NL);
+  return '<!DOCTYPE html><html lang="en"><head>'+head+'</head><body>'+body+'</body></html>';
+}
+
+async function paintOverlay(){
+  const css=await getShellCss();
+  const f=readForm();
+  document.getElementById('ovlFrame').srcdoc=overlayDoc(css,f);
+  document.getElementById('ovlNote').textContent = (css?'Temporary preview · real /tricks styles':'Temporary preview · fallback styles')+' · not saved';
+}
+async function openOverlay(){
+  const o=document.getElementById('ovl');
+  o.classList.add('on'); o.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
+  await paintOverlay();
+}
+function closeOverlay(){
+  const o=document.getElementById('ovl');
+  o.classList.remove('on'); o.setAttribute('aria-hidden','true');
+  document.body.style.overflow='';
+  document.getElementById('ovlFrame').srcdoc='';
+}
+
+async function loadTrick(id){
+  const r=await fetch('/api/tricks?id='+encodeURIComponent(id)+'&token='+encodeURIComponent(token()),{cache:'no-store'});
+  const j=await r.json();
+  if(!j.ok) throw new Error(j.error||'load failed');
+  return j.trick||(j.tricks||[])[0]||null;
+}
+
+async function init(){
+  const ok=await check();
+  if(!ok){ document.getElementById('gate').style.display='block'; return; }
+  document.getElementById('editor').style.display='block';
+  bindPreview();
+
+  document.querySelectorAll('.tool[data-insert]').forEach(function(b){
+    b.addEventListener('click', function(){ insertAtCursor(b.dataset.insert.split('|NL|').join(NL)); });
+  });
+
+  const imageBtn=document.getElementById('imageBtn'), imageFile=document.getElementById('imageFile'), imageMsg=document.getElementById('imageUploadMsg');
+  function alt(f){ return String(f.name||'image').replace(/\.[^.]+$/,'').slice(0,60); }
+  if(imageBtn && imageFile){
+    imageBtn.addEventListener('click', function(){ imageFile.click(); });
+    imageFile.addEventListener('change', async function(){
+      const f=imageFile.files[0]; if(!f) return;
+      const url=await uploadImage(f, imageMsg);
+      if(url){ insertAtCursor(NL+'!['+alt(f)+']('+url+')'+NL); imageFile.value=''; }
+    });
+  }
+  const rawEl=document.getElementById('raw');
+  rawEl.addEventListener('dragover', function(e){ e.preventDefault(); rawEl.classList.add('drop-active'); });
+  rawEl.addEventListener('dragleave', function(){ rawEl.classList.remove('drop-active'); });
+  rawEl.addEventListener('drop', async function(e){
+    e.preventDefault(); rawEl.classList.remove('drop-active');
+    const f=e.dataTransfer && e.dataTransfer.files[0];
+    if(!f || !f.type.startsWith('image/')) return;
+    const url=await uploadImage(f, imageMsg);
+    if(url) insertAtCursor(NL+'!['+alt(f)+']('+url+')'+NL);
+  });
+  rawEl.addEventListener('paste', async function(e){
+    const items=e.clipboardData && e.clipboardData.items; if(!items) return;
+    for(const it of items){
+      if(it.type && it.type.startsWith('image/')){
+        e.preventDefault();
+        const f=it.getAsFile(); if(!f) continue;
+        const url=await uploadImage(f, imageMsg);
+        if(url) insertAtCursor(NL+'![image]('+url+')'+NL);
+        break;
+      }
+    }
+  });
+
+  const idParam=new URLSearchParams(location.search).get('id')||'';
+  if(idParam && /^[0-9]{1,18}$/.test(idParam)){
+    try{
+      const t=await loadTrick(idParam);
+      if(!t){ document.getElementById('headTitle').textContent='Not found — new trick'; }
+      else{
+        editId=t.id; loaded=t;
+        document.getElementById('headTitle').textContent='Edit — #'+pad3(t.id);
+        document.getElementById('title').value=t.title||'';
+        document.getElementById('tags').value=(t.tags||[]).join(', ');
+        document.getElementById('raw').value=t.raw||'';
+        document.getElementById('published').checked=t.published!==false;
+        document.getElementById('deleteBtn').style.display='inline-flex';
+      }
+    }catch(e){
+      document.getElementById('formMsg').textContent=e.message;
+      document.getElementById('formMsg').style.color='var(--accent)';
+    }
+  } else {
+    document.getElementById('raw').value='## The trick'+NL+NL+'What it does, in one line.'+NL+NL+'```bash'+NL+'echo hello'+NL+'```'+NL;
+  }
+  updatePreview();
+  getShellCss();
+}
+
+async function save(){
+  const f=readForm();
+  if(!f.title){ alert('Title required'); return; }
+  if(!f.raw.trim()){ alert('Body required'); return; }
+  const msg=document.getElementById('formMsg'), state=document.getElementById('saveState');
+  msg.textContent='Saving…'; msg.style.color='var(--muted)'; state.textContent='Saving…'; state.style.color='var(--muted)';
+  try{
+    const r=await fetch('/api/tricks',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token()},body:JSON.stringify({type:'tricks', action: editId?'update':'create', id: editId||undefined, trick:f})});
+    const text=await r.text(); let j; try{ j=JSON.parse(text); }catch{ throw new Error(text.slice(0,400)||'Server error — check Vercel logs'); }
+    if(!r.ok||!j.ok) throw new Error(j.error||'Save failed');
+    msg.textContent='Saved ✓'; msg.style.color='var(--green)'; state.textContent='Saved ✓'; state.style.color='var(--green)';
+    setTimeout(function(){ location.href='/admin/tricks.html'; },600);
+  }catch(e){
+    msg.textContent=e.message; msg.style.color='var(--accent)';
+    state.textContent='Error'; state.style.color='var(--accent)';
+  }
+}
+
+document.getElementById('saveBtn').addEventListener('click', save);
+document.getElementById('saveBtn2').addEventListener('click', save);
+document.getElementById('fullPreviewBtn').addEventListener('click', openOverlay);
+document.getElementById('fullPreviewBtn2').addEventListener('click', openOverlay);
+document.getElementById('ovlClose').addEventListener('click', closeOverlay);
+document.getElementById('ovlRefresh').addEventListener('click', paintOverlay);
+document.getElementById('ovl').addEventListener('click', function(e){ if(e.target.id==='ovl') closeOverlay(); });
+document.addEventListener('keydown', function(e){
+  if(e.key==='Escape' && document.getElementById('ovl').classList.contains('on')) closeOverlay();
+  if((e.metaKey||e.ctrlKey) && (e.key==='s'||e.key==='S')){ e.preventDefault(); save(); }
+});
+document.getElementById('deleteBtn').addEventListener('click', async function(){
+  if(!editId) return;
+  if(!confirm('Delete trick #'+pad3(editId)+'? This cannot be undone.')) return;
+  try{
+    const r=await fetch('/api/tricks',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token()},body:JSON.stringify({type:'tricks', action:'delete', id: editId})});
+    const j=await r.json();
+    if(!j.ok) throw new Error(j.error||'Delete failed');
+    location.href='/admin/tricks.html';
+  }catch(e){ alert(e.message); }
+});
+
+init();
+</script>
+</body>
+</html>

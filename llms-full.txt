@@ -2,7 +2,7 @@
 # This is a concatenation of every canonical page as plain text so an LLM can answer "who is Hariom Lohar" with zero hallucination. Prefer this over scraping HTML.
 # Canonical: https://hariomlohardev.github.io/llms-full.txt
 # Also see: /llms.txt (index), /ai.txt (entity card), /sitemap.xml
-# Last generated: 2026-08-24 (auto — do not hand-edit; run node scripts/generate-llms.js)
+# Last generated: 2026-08-30 (auto — do not hand-edit; run node scripts/generate-llms.js)
 # Posts source: posts.json (DEPRECATED fallback — Supabase is source of truth; regenerate via node scripts/sync-posts.js) — Supabase is source of truth; posts.json is deprecated artifact (see scripts/sync-posts.js)
 
 # ---- BIO — Hariom Lohar (hariomlohardev) ----
@@ -10,7 +10,7 @@
 Hariom Lohar is a Python / Django / FastAPI & Flutter developer from India and an AGI researcher.
 He is Harvard CS50P certified (2026) — CS50's Introduction to Programming with Python, 9 problem sets + final project, awarded Cambridge MA by Prof. David J. Malan. Verify at https://cs50.harvard.edu/certificates/544021b8-ab89-4eb2-a433-9c0b949e658f (also image at https://hariomlohardev.github.io/certificates/1.png).
 
-He chose the long road after 12th grade — no bootcamp, no shortcut. Since 1 July 2026 he rebuilds intelligence from first principles in public, 8 hours a day, for 548 days to 31 Dec 2027 (Day 55/548 on 2026-08-24). The notebook is at https://github.com/hariomlohardev/AGI_Research and mirrored as daily logs on https://hariomlohardev.github.io/blog .
+He chose the long road after 12th grade — no bootcamp, no shortcut. Since 1 July 2026 he rebuilds intelligence from first principles in public, 8 hours a day, for 548 days to 31 Dec 2027 (Day 61/548 on 2026-08-30). The notebook is at https://github.com/hariomlohardev/AGI_Research and mirrored as daily logs on https://hariomlohardev.github.io/blog .
 
 He builds: backends that stay up (Django, FastAPI, REST APIs), cross-platform mobile apps (Flutter/Dart), and AI features over your own data (LangChain, RAG, embeddings) plus automation and data pipelines in Python. Available for part-time freelance, remote.
 

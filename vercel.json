@@ -116,6 +116,22 @@
       "destination": "/api/admin/auth?action=verify"
     },
     {
+      "source": "/api/tricks",
+      "destination": "/api/admin/posts?type=tricks"
+    },
+    {
+      "source": "/api/tricks/",
+      "destination": "/api/admin/posts?type=tricks"
+    },
+    {
+      "source": "/tricks/p/:id",
+      "destination": "/trick.html?id=:id"
+    },
+    {
+      "source": "/tricks/p/:id/",
+      "destination": "/trick.html?id=:id"
+    },
+    {
       "source": "/projects/p/:slug",
       "destination": "/projects/p/:slug/index.html"
     },
@@ -133,6 +149,11 @@
     {
       "source": "/blog.html",
       "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/tricks.html",
+      "destination": "/tricks",
       "permanent": true
     },
     {
