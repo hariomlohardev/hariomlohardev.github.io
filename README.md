@@ -94,7 +94,7 @@ Live on site: [`#stack`](https://hariomlohardev.github.io/#stack) · [`#services
 ├── sitemap.xml / robots.txt / site.webmanifest / humans.txt / 404.html / .nojekyll
 ├── google36e315fd4176dd3d.html # Search Console verification
 ├── SEO_CHECKLIST.md            # Entity closure checklist
-├── thanks.html                 # FormSubmit _next target (noindex)
+├── thanks.html                 # FormSubmit _next target — no-JS fallback only (noindex)
 └── .github/workflows/
     └── pages.yml               # Pages deploy — push / cron 6h / content-changed dispatch; drops admin+api (Vercel only)
 ```
@@ -137,7 +137,7 @@ Hariom Lohar — **CS50's Introduction to Programming with Python (CS50P)**, Har
 
 ### 📬 Contact & Growth — $0, free tiers only
 
-- **Contact form** `#contact` → `https://formsubmit.co/hariomlohar.new@gmail.com` (honeypot `_honey`, `_captcha=false`, `_next=thanks.html`) — first send triggers confirm email, then open. Alt: Formspree `https://formspree.io/f/XXXX`.
+- **Contact form** `#contact` → `POST /api/contact` (→ `api/blog/social.js?type=contact`), which mails through Resend and answers on the page — `assets/contact.js` does that. The form keeps its `https://formsubmit.co/hariomlohar.new@gmail.com` action (honeypot `_honey`, `_captcha=false`, `_next=/thanks`) as the no-JS / provider-down fallback.
 - **Newsletter** `#newsletter` + `blog.html` → `https://buttondown.email/api/emails/embed-subscribe/hariomlohar` ([buttondown.com/hariomlohar](https://buttondown.com/hariomlohar)) + RSS fallback [`/feed.xml`](https://hariomlohardev.github.io/feed.xml) → email free.
 - **Analytics placeholder** (commented in `index.html`/`blog.html`/`post.html`/`generate-blog.js`): `<!-- <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "REPLACE_WITH_YOUR_CLOUDFLARE_TOKEN"}'></script> -->` — paste Cloudflare Web Analytics token, uncomment. Fallback: GoatCounter `gc.zgo.at/count.js`.
 - **Comments** — Giscus via Discussions (free) `R_kgDOTkm3vQ` / `DIC_kwDOTkm3vc4DDAjC` + Utterances fallback via Issues — per `blog/p/*` (`giscus.app` → `preferred_color_scheme`, `pathname`).
