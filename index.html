@@ -820,7 +820,8 @@ function init(data){
   document.getElementById('yr').textContent=new Date().getFullYear();
   phrases=data.taglines&&data.taglines.length?data.taglines:phrases;
 
-  // Latest logs — GH Pages safe chain: /api/admin/posts -> Supabase REST (meta supabase-anon) -> empty UI
+  // Latest logs — /api/admin/posts (Vercel) -> Supabase REST (GitHub Pages) -> empty UI.
+  // Supabase is the only source; an empty answer renders the empty card.
   (function(){
     var box=document.getElementById('latestList');
     function renderLatest(posts){
@@ -846,7 +847,6 @@ function init(data){
     fetch('/api/admin/posts',{cache:'no-store'}).then(function(r){ if(!r.ok) throw new Error('api '+r.status); return r.json(); }).then(function(j){
       var posts=j.posts||j||[];
       posts=posts.filter(function(p){ return p.published!==false; }).sort(function(a,b){ return String(b.date).localeCompare(String(a.date)); }).slice(0,3);
-      if(!posts.length) throw new Error('no posts');
       renderLatest(posts);
     }).catch(function(){
       var anonEl=document.querySelector('meta[name="supabase-anon"]');
@@ -855,7 +855,6 @@ function init(data){
       var url='https://rgmvhptebkslkjleoilc.supabase.co/rest/v1/posts?select=*&order=date.desc&limit=3&published=eq.true';
       return fetch(url,{headers:{apikey:anon,Authorization:'Bearer '+anon}}).then(function(r){ if(!r.ok) throw new Error('rest '+r.status); return r.json(); }).then(function(arr){
         var posts=(arr||[]).filter(function(p){ return p.published!==false; }).sort(function(a,b){ return String(b.date).localeCompare(String(a.date)); }).slice(0,3);
-        if(!posts.length) throw new Error('no posts from rest');
         renderLatest(posts);
       });
     }).catch(function(){

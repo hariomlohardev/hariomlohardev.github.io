@@ -4,30 +4,16 @@
  * generate-llms.js — builds llms.txt + llms-full.txt from canonical source
  *
  * SOURCE OF TRUTH: Supabase `posts` table (published=true, order date desc).
- * `posts.json` is DEPRECATED as a hand-edited source — it is retained only as
- * a build artifact / fallback, generated from Supabase via `node scripts/sync-posts.js`
- * (and by `generate-blog.js` when run in Supabase mode). Do NOT edit posts.json
- * by hand; edit via Supabase /admin/blog (table `public.posts`) instead.
- *
- * This script is Supabase-primary: it tries to fetch posts from Supabase when
- * SUPABASE_URL + SUPABASE_ANON_KEY (or SUPABASE_SERVICE_ROLE_KEY) are present,
- * and falls back to reading posts.json for local/offline builds with a warning.
- * For sitemap/llms generation at build time the file fallback is kept, but the
- * checked-in posts.json should be treated as a build artifact from Supabase, not
- * the source of truth. See scripts/sync-posts.js.
- *
- * Reads posts (Supabase → fallback posts.json) + projects-data.json → writes
- * llms.txt (index) + llms-full.txt (full dump). Deterministic. Called by
- * pages.yml after blog+projects build.
+ * SOURCE OF TRUTH: Supabase `public.posts` (published=true). No file fallback —
+ * a post deleted in Supabase leaves llms.txt and llms-full.txt on the
+ * next build. Reads Supabase posts + projects-data.json → llms.txt, llms-full.txt.
  */
 const fs = require("fs");
 const path = require("path");
 require("./load-env")();
 const ROOT = path.resolve(__dirname, "..");
-// DEPRECATED — posts.json is a build artifact from Supabase (see sync-posts.js).
 // Supabase `posts` is the source of truth; this file is only a fallback for
 // local builds without env and must not be hand-edited.
-const POSTS_JSON = path.join(ROOT, "posts.json");
 const PROJECTS_JSON = path.join(ROOT, "projects-data.json");
 const SITE = "https://hariomlohardev.github.io";
 
@@ -36,7 +22,7 @@ function fmt(d){ try{ return new Date(d+"T00:00:00+05:30").toISOString().slice(0
 async function loadPostsFromSupabase(){
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY;
-  if(!url || !key) return null;
+  if(!url || !key) throw new Error("SUPABASE_URL + SUPABASE_ANON_KEY (or SERVICE_ROLE_KEY) required — Supabase is the only source of posts");
   // Prefer @supabase/supabase-js if installed, otherwise use fetch REST
   try{
     // Try REST via fetch (Node 18+ has global fetch, no extra deps)
@@ -44,15 +30,12 @@ async function loadPostsFromSupabase(){
     const res = await fetch(endpoint, { headers: { apikey: key, Authorization: `Bearer ${key}` } });
     if(!res.ok){
       const txt = await res.text().catch(()=> '');
-      console.warn(`Supabase posts fetch ${res.status} ${txt.slice(0,200)} — falling back to posts.json (deprecated artifact)`);
-      return null;
+      throw new Error(`Supabase posts fetch ${res.status} ${txt.slice(0,200)}`);
     }
     const rows = await res.json();
-    if(!Array.isArray(rows) || rows.length===0){
-      console.warn("Supabase returned 0 published posts — falling back to posts.json if present");
-      return null;
-    }
-    // Map Supabase snake_case → posts.json camelCase shape expected downstream
+    if(!Array.isArray(rows)) throw new Error("Supabase posts: unexpected response shape");
+    if(rows.length===0){ console.log("→ posts: Supabase has 0 published posts"); return []; }
+    // Map Supabase snake_case → the camelCase shape the writers below expect
     return rows.map(r=> ({
       slug: r.slug,
       title: r.title,
@@ -66,25 +49,15 @@ async function loadPostsFromSupabase(){
       cover: r.cover || null,
     }));
   }catch(e){
-    console.warn("Supabase fetch failed:", e.message, "— falling back to posts.json (deprecated artifact)");
-    return null;
+    if(e instanceof TypeError) throw new Error("Supabase fetch failed: " + e.message);
+    throw e;
   }
-}
-
-function loadPostsFromFile(){
-  try{ return JSON.parse(fs.readFileSync(POSTS_JSON,"utf8")); }catch(e){ console.warn("posts.json missing (deprecated build artifact — run node scripts/sync-posts.js to regenerate from Supabase)", e.message); return []; }
 }
 
 async function main(){
-  let posts = await loadPostsFromSupabase();
-  let postsSource = 'supabase';
-  if(!posts){
-    posts = loadPostsFromFile();
-    postsSource = 'posts.json (DEPRECATED fallback — Supabase is source of truth; regenerate via node scripts/sync-posts.js)';
-  } else {
-    console.log(`→ posts: Supabase (${posts.length} published) — source of truth`);
-  }
-  if(postsSource.startsWith('posts.json')) console.warn(`→ posts: ${posts.length} from ${postsSource}`);
+  const posts = await loadPostsFromSupabase();
+  const postsSource = 'supabase';
+  console.log(`→ posts: Supabase (${posts.length} published) — source of truth`);
   let projects = [];
   try{ const raw = JSON.parse(fs.readFileSync(PROJECTS_JSON,"utf8")); projects = raw.projects || raw; }catch(e){ console.warn("projects-data.json missing", e.message); }
 
@@ -147,7 +120,7 @@ ${projectLinks}
 
 - [Blog list + search](https://hariomlohardev.github.io/blog): CollectionPage, searchable. RSS at /feed.xml
 - [RSS feed](https://hariomlohardev.github.io/feed.xml)
-${postLinks ? postLinks : "- No posts yet — run node scripts/generate-blog.js"}
+${postLinks ? postLinks : "- No posts published yet — check /feed.xml for new entries"}
 
 All posts are static HTML at /blog/p/<slug>/ with BlogPosting JSON-LD (author Hariom Lohar → #person), og/*.svg 1200×630, and canonical URL. Use feed.xml for latest.
 
@@ -187,7 +160,7 @@ ${p.longDescription?`  Long: ${p.longDescription.slice(0,240).replace(/\n/g," ")
 # Canonical: https://hariomlohardev.github.io/llms-full.txt
 # Also see: /llms.txt (index), /ai.txt (entity card), /sitemap.xml
 # Last generated: ${today} (auto — do not hand-edit; run node scripts/generate-llms.js)
-# Posts source: ${postsSource} — Supabase is source of truth; posts.json is deprecated artifact (see scripts/sync-posts.js)
+# Posts source: Supabase public.posts (published=true) — the only source; no file fallback
 
 # ---- BIO — Hariom Lohar (hariomlohardev) ----
 

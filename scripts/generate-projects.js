@@ -4,18 +4,9 @@
  * generate-projects.js — zero-deps static project-detail builder
  *
  * SOURCE OF TRUTH for blog posts: Supabase `public.posts` (published=true).
- * `posts.json` is DEPRECATED build artifact from Supabase (see scripts/sync-posts.js).
- * Do NOT edit posts.json by hand.
- *
- * This script is Supabase-primary: it tries Supabase REST for related-post lookups
- * and falls back to posts.json (deprecated artifact) for local/offline builds.
- * See scripts/sync-posts.js header. For sitemap generation at build time the file
- * fallback is kept, but canonical data lives in Supabase.
- *
- * Reads projects-data.json → projects/p/<slug>/index.html + og/<slug>.svg + patches sitemap.xml
- * Mirrors scripts/generate-blog.js pattern — Lab Notebook No.01, $0, Node only.
- * Run: SUPABASE_URL=... SUPABASE_ANON_KEY=... node scripts/generate-projects.js
- * Also invoked by .github/workflows/pages.yml before deploy.
+ * Related-post links come from Supabase `public.posts` (published=true) when
+ * SUPABASE_URL + a key are set; there is no posts.json fallback, so without env
+ * the projects still build and simply carry no related links.
  */
 const fs = require("fs");
 const path = require("path");
@@ -23,9 +14,7 @@ require("./load-env")();
 
 const ROOT = path.resolve(__dirname, "..");
 const DATA_JSON = path.join(ROOT, "projects-data.json");
-// DEPRECATED — posts.json is a build artifact from Supabase (see sync-posts.js).
 // Supabase `posts` is the source of truth; this fallback is for local/offline.
-const POSTS_JSON = path.join(ROOT, "posts.json");
 const SITEMAP_XML = path.join(ROOT, "sitemap.xml");
 const PROJECTS_P_DIR = path.join(ROOT, "projects", "p");
 const OG_DIR = path.join(ROOT, "og");
@@ -86,10 +75,9 @@ const rawData = JSON.parse(fs.readFileSync(DATA_JSON,"utf8"));
 const projects = rawData.projects || rawData;
 if(!Array.isArray(projects)){ console.error("projects-data.json: expected array"); process.exit(1); }
 
-// ── Supabase-primary posts loader (for relatedSlugs) ─────────────────
-// posts.json is DEPRECATED; Supabase `posts` is source of truth. This loader
-// tries Supabase REST (fetch) when env is set, else falls back to posts.json
-// file artifact (generated via `node scripts/sync-posts.js`).
+// ── posts loader (for relatedSlugs) ──────────────────────────────────
+// Supabase `posts` is the only source. Without env, or on a failed read, the
+// related-post links are simply left out — projects still build.
 async function loadPostsBySlug(){
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY;
@@ -119,26 +107,16 @@ async function loadPostsBySlug(){
           console.log(`→ posts: Supabase (${rows.length} published) — source of truth for relatedSlugs`);
           return map;
         }
-        console.warn("Supabase returned 0 published posts — falling back to posts.json (deprecated artifact)");
+        console.log("→ posts: Supabase has 0 published posts — relatedSlugs left empty");
+        return {};
       } else {
         const txt = await res.text().catch(()=> '');
-        console.warn(`Supabase posts fetch ${res.status} ${txt.slice(0,200)} — falling back to posts.json (deprecated artifact)`);
+        console.warn(`Supabase posts fetch ${res.status} ${txt.slice(0,200)} — relatedSlugs left empty`);
       }
-    }catch(e){ console.warn("Supabase fetch failed for postsBySlug:", e.message, "— falling back to posts.json (deprecated artifact)"); }
+    }catch(e){ console.warn("Supabase fetch failed for postsBySlug:", e.message, "— relatedSlugs left empty"); }
   } else {
-    if(url || key) console.warn("Supabase env partially set — need both SUPABASE_URL and ANON/SERVICE key; falling back to posts.json (deprecated artifact)");
+    console.warn("Supabase env not set — relatedSlugs left empty");
   }
-  // Fallback: posts.json file artifact
-  try{
-    if(fs.existsSync(POSTS_JSON)){
-      const posts = JSON.parse(fs.readFileSync(POSTS_JSON,"utf8"));
-      const map = {};
-      posts.forEach(p=>{ map[p.slug]=p; });
-      console.warn(`→ posts: posts.json fallback (${posts.length}) — DEPRECATED path; regenerate via node scripts/sync-posts.js (Supabase is source of truth)`);
-      return map;
-    }
-  }catch(e){ console.warn("posts.json read fail (deprecated artifact)", e.message); }
-  console.warn("No posts source available — relatedSlugs will be empty");
   return {};
 }
 
@@ -188,7 +166,7 @@ function projectPage(p, postsBySlug){
   const related = (p.relatedSlugs||[]).map(s=>postsBySlug[s]).filter(Boolean).slice(0,3);
   const relatedHtml = related.length ? `<section id="related-logs" data-slugs="${escHtml((p.relatedSlugs||[]).join(','))}" style="margin-top:18px"><div style="font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:10px"><i style="width:28px;height:1px;background:var(--ink)"></i> Related logs</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px">${related.map(r=>`<a href="${r.url}" style="display:block;border:1px solid var(--ink);background:var(--sheet);padding:14px;text-decoration:none"><div style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">${escHtml(r.date)} · ${r.readingMinutes} min</div><div style="font-family:var(--display);font-weight:800;text-transform:uppercase;margin-top:6px;line-height:1">${escHtml(r.title)}</div><div style="font-size:13px;color:#475569;margin-top:8px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${escHtml(r.description)}</div><div style="margin-top:10px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--blue)">Read →</div></a>`).join("")}</div></section>` : ((p.relatedSlugs&&p.relatedSlugs.length)?`<section id="related-logs" data-slugs="${escHtml((p.relatedSlugs||[]).join(','))}" style="margin-top:18px"><div style="font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:10px"><i style="width:28px;height:1px;background:var(--ink)"></i> Related logs</div><div style="font-family:var(--mono);font-size:12px;color:var(--muted)">Loading related logs from Supabase…</div></section>`:"");
   // Supabase-only client hydration for related logs — fetches fresh data via REST, replaces SSR if needed
-  const relatedHydration = (p.relatedSlugs&&p.relatedSlugs.length) ? `<script>(function(){var slugs=${JSON.stringify(p.relatedSlugs||[])};var box=document.getElementById('related-logs');if(!box||!slugs.length)return;var anon=(document.querySelector('meta[name="supabase-anon"]')?.content)||'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJnbXZocHRlYmtzbGtqbGVvaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0NDQwMTAsImV4cCI6MjEwMzAyMDAxMH0.nnaZiyKNOx-eT_5JTQNDwk5b3PCDKZv4f9Yc6wQtk_k';var url='https://rgmvhptebkslkjleoilc.supabase.co';function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}function fmt(d){try{return new Date(d+'T00:00:00+05:30').toLocaleDateString('en-GB',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric'}).toUpperCase();}catch(e){return d;}}var filter=slugs.map(function(s){return 'slug.eq.'+encodeURIComponent(s);}).join(',');var endpoint=url.replace(/\\/$/,'')+'/rest/v1/posts?select=slug,title,description,date,tags,reading_minutes&or=('+filter+')&published=eq.true';fetch(endpoint,{headers:{apikey:anon,Authorization:'Bearer '+anon}}).then(function(r){if(!r.ok)throw new Error('rest '+r.status);return r.json();}).then(function(rows){if(!Array.isArray(rows)||!rows.length)return;var by={};rows.forEach(function(r){by[r.slug]=r;});var ordered=slugs.map(function(s){return by[s];}).filter(Boolean);if(!ordered.length)return;var grid=ordered.map(function(r){var href='https://hariomlohardev.github.io/blog/p/'+r.slug+'/';var mins=r.reading_minutes||3;return '<a href="'+href+'" style="display:block;border:1px solid var(--ink);background:var(--sheet);padding:14px;text-decoration:none"><div style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">'+esc(fmt(r.date))+' · '+mins+' min</div><div style="font-family:var(--display);font-weight:800;text-transform:uppercase;margin-top:6px;line-height:1">'+esc(r.title)+'</div><div style="font-size:13px;color:#475569;margin-top:8px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">'+esc(r.description||'')+'</div><div style="margin-top:10px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--blue)">Read →</div></a>';}).join('');var container=box.querySelector('div[style*="grid"]');if(container)container.innerHTML=grid;});})();<\/script>` : "";
+  const relatedHydration = (p.relatedSlugs&&p.relatedSlugs.length) ? `<script>(function(){var slugs=${JSON.stringify(p.relatedSlugs||[])};var box=document.getElementById('related-logs');if(!box||!slugs.length)return;var anon=(document.querySelector('meta[name="supabase-anon"]')?.content)||'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJnbXZocHRlYmtzbGtqbGVvaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0NDQwMTAsImV4cCI6MjEwMzAyMDAxMH0.nnaZiyKNOx-eT_5JTQNDwk5b3PCDKZv4f9Yc6wQtk_k';var url='https://rgmvhptebkslkjleoilc.supabase.co';function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}function fmt(d){try{return new Date(d+'T00:00:00+05:30').toLocaleDateString('en-GB',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric'}).toUpperCase();}catch(e){return d;}}var filter=slugs.map(function(s){return 'slug.eq.'+encodeURIComponent(s);}).join(',');var endpoint=url.replace(/\\/$/,'')+'/rest/v1/posts?select=slug,title,description,date,tags,reading_minutes&or=('+filter+')&published=eq.true';fetch(endpoint,{headers:{apikey:anon,Authorization:'Bearer '+anon}}).then(function(r){if(!r.ok)throw new Error('rest '+r.status);return r.json();}).then(function(rows){if(!Array.isArray(rows)||!rows.length){box.remove();return;}var by={};rows.forEach(function(r){by[r.slug]=r;});var ordered=slugs.map(function(s){return by[s];}).filter(Boolean);if(!ordered.length){box.remove();return;}var grid=ordered.map(function(r){var href='https://hariomlohardev.github.io/blog/p/'+r.slug+'/';var mins=r.reading_minutes||3;return '<a href="'+href+'" style="display:block;border:1px solid var(--ink);background:var(--sheet);padding:14px;text-decoration:none"><div style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">'+esc(fmt(r.date))+' · '+mins+' min</div><div style="font-family:var(--display);font-weight:800;text-transform:uppercase;margin-top:6px;line-height:1">'+esc(r.title)+'</div><div style="font-size:13px;color:#475569;margin-top:8px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">'+esc(r.description||'')+'</div><div style="margin-top:10px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--blue)">Read →</div></a>';}).join('');var container=box.querySelector('div[style*="grid"]');if(container)container.innerHTML=grid;}).catch(function(){box.remove();});})();<\/script>` : "";
   const ctaLive = p.demoUrl ? `<a href="/${p.demoUrl}" style="font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;padding:12px 18px;display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:var(--paper);border:1px solid var(--ink);text-decoration:none">Open live bench →</a>` : "";
   const ctaRepo = p.repoUrl ? `<a href="${p.repoUrl}" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;padding:12px 18px;display:inline-flex;align-items:center;gap:8px;background:var(--sheet);color:var(--ink);border:1px solid var(--ink);text-decoration:none">View code on GitHub ↗</a>` : "";
   // Full graph: Person#person, WebSite#website, WebPage#webpage, BreadcrumbList#breadcrumb, CreativeWork#work (+FAQ) — all reference #person, no duplicate @ids
@@ -357,7 +335,7 @@ footer{border-top:2px solid var(--ink);margin-top:24px;background:var(--paper-2)
 }
 
 async function main(){
-  // Supabase-primary: load related-post map from Supabase, fallback to posts.json artifact
+  // related-post map — Supabase only, empty when unavailable
   const postsBySlug = await loadPostsBySlug();
 
   // generate
@@ -400,7 +378,7 @@ async function main(){
     else console.log(`sitemap already has project detail entries, skipping patch`);
   }
 
-  console.log(`done — ${projects.length} project detail pages (posts for related: ${Object.keys(postsBySlug).length} via ${process.env.SUPABASE_URL ? 'Supabase or fallback' : 'posts.json deprecated artifact'})`);
+  console.log(`done — ${projects.length} project detail pages (${Object.keys(postsBySlug).length} posts available for related links)`);
 }
 
 main().catch(e=>{ console.error(e); process.exit(1); });

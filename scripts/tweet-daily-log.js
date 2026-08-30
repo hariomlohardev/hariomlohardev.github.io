@@ -2,22 +2,21 @@
 "use strict";
 /**
  * tweet-daily-log.js — $0 auto-tweet for hariomlohardev.github.io
- * Reads posts.json (sorted desc) → composes tweet for latest post → POSTs to X API v2 /2/tweets via OAuth 1.0a
+ * Reads Supabase `public.posts` (published, date desc) → composes tweet for the latest post → POSTs to X API v2 /2/tweets via OAuth 1.0a
  * Zero extra hosting, runs in GitHub Actions. Dry-run if secrets missing.
  * Env: X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, X_ACCESS_SECRET (primary @HariomloharAGI)
  *      X_API_KEY_ALT, X_API_SECRET_ALT, X_ACCESS_TOKEN_ALT, X_ACCESS_SECRET_ALT (optional @hariomlohardev)
  *      DRY_RUN=1 to force log-only, TWEET_TEXT override for testing
- * Trigger: .github/workflows/tweet-daily-log.yml on push paths posts/*.md or manual dispatch
+ * Trigger: .github/workflows/tweet-daily-log.yml — manual dispatch, or a push that touches the tweet script
  */
 const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
 
 const ROOT = path.resolve(__dirname, "..");
-const POSTS_JSON = path.join(ROOT, "posts.json");
 const SITE = "https://hariomlohardev.github.io";
 
-// Supabase-primary for tweet (fallback to posts.json artifact)
+// Supabase is the only source for the tweet
 const SUPA_URL = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || "https://rgmvhptebkslkjleoilc.supabase.co";
 const SUPA_ANON = process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJnbXZocHRlYmtzbGtqbGVvaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0NDQwMTAsImV4cCI6MjEwMzAyMDAxMH0.nnaZiyKNOx-eT_5JTQNDwk5b3PCDKZv4f9Yc6wQtk_k";
 async function loadPostsSupabase(){
@@ -124,15 +123,10 @@ async function postTweet(text, creds, label){
 
 // --- main ---
 (async () => {
-  let posts = await loadPostsSupabase();
-  if(!posts){
-    if(!fs.existsSync(POSTS_JSON)){ console.error("posts.json missing and Supabase failed — run node scripts/generate-blog.js or set SUPABASE_URL+ANON"); process.exit(1); }
-    posts = JSON.parse(fs.readFileSync(POSTS_JSON,"utf8"));
-    console.log(`→ posts: posts.json fallback (${posts.length} posts)`);
-  } else {
-    console.log(`→ posts: Supabase (${posts.length} posts)`);
-  }
-  if(!Array.isArray(posts) || !posts.length){ console.error("posts.json empty"); process.exit(1); }
+  const posts = await loadPostsSupabase();
+  if(!posts){ console.error("Supabase read failed — nothing to tweet"); process.exit(1); }
+  console.log(`→ posts: Supabase (${posts.length} posts)`);
+  if(!posts.length){ console.log("no published posts — nothing to tweet"); return; }
 
   // Detect changed post vs latest: if env CHANGED_SLUG provided (from workflow git diff), use that; else latest
   let target = posts[0];
@@ -140,26 +134,7 @@ async function postTweet(text, creds, label){
   if(changedSlug){
     const found = posts.find(p=>p.slug===changedSlug);
     if(found) target = found;
-    else console.warn(`CHANGED_SLUG ${changedSlug} not in posts.json, using latest ${target.slug}`);
-  } else if(process.env.GITHUB_ACTIONS){
-    // try to detect changed files via CHANGED_FILES env (space-separated) set by workflow
-    const changedFiles = (process.env.CHANGED_FILES||"").split(/\s+/).filter(Boolean);
-    const mdFile = changedFiles.find(f=>f.startsWith("posts/") && f.endsWith(".md") && !f.includes("README"));
-    if(mdFile){
-      try{
-        const raw = fs.readFileSync(path.join(ROOT, mdFile),"utf8");
-        const m = raw.match(/slug:\s*["']?([^"'\n]+)["']?/);
-        const slugFromMd = m ? m[1].trim().replace(/^["']|["']$/g,"") : null;
-        const byFile = slugFromMd ? posts.find(p=>p.slug===slugFromMd) : null;
-        if(byFile) target = byFile;
-        else {
-          // fallback by filename
-          const base = path.basename(mdFile).replace(/\.md$/,"").replace(/^\d{4}-\d{2}-\d{2}-/,"");
-          const byBase = posts.find(p=>p.slug===base);
-          if(byBase) target = byBase;
-        }
-      }catch(e){ console.warn("changed file detect fail", e.message); }
-    }
+    else console.warn(`CHANGED_SLUG ${changedSlug} not in Supabase, using latest ${target.slug}`);
   }
 
   const override = process.env.TWEET_TEXT;

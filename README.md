@@ -25,7 +25,7 @@
 Official source for **Hariom Lohar** (`hariomlohardev` on GitHub) — Harvard **CS50P certified 2026**, Python/Django/FastAPI & Flutter builder by day, AGI researcher rebuilding intelligence from first principles since **1 July 2026**, daily in public (India, IST).
 
 - **Lab Notebook No.01** design — `FFFEFB` paper, `F3F0E8` paper-2, `FFFFFF` sheet, `0B1220` ink, `FFD400` signal, graph `24px/120px`, washi tape, sticky header. No template.
-- **Static, $0, no CMS** — GitHub Pages (`main` branch, `.nojekyll`), vanilla HTML/CSS/JS, zero deps. Blog is `posts/*.md` → `scripts/generate-blog.js` → `posts.json` + `feed.xml` + `blog/p/<slug>/` + `og/<slug>.svg` + `sitemap.xml`.
+- **Static, $0, own CMS** — GitHub Pages (`main` branch, `.nojekyll`), vanilla HTML/CSS/JS, zero deps. Posts live in Supabase (`public.posts`), written at `/admin/blog`; `scripts/generate-blog.js` mirrors them into `feed.xml` + `blog/p/<slug>/` + `og/<slug>.svg` + `sitemap.xml`.
 - **SEO max for `Hariom Lohar`** — query-fronted titles, `@graph` JSON-LD (Person + WebSite + CollectionPage + BlogPosting), FAQ matching `Hariom Lohar GitHub`, `rel=me` sameAs, `og:image` per post, RSS + sitemap + `google36e315fd4176dd3d.html`.
 
 ---
@@ -45,37 +45,27 @@ Live ruler + countdown on site: [`#mission`](https://hariomlohardev.github.io/#m
 
 ---
 
-### 📝 Blog & Daily Logs — `$0` file-based
+### 📝 Blog & Daily Logs — Supabase is the source of truth
 
-New post = new `.md` in `posts/` → bake → push. No DB, no paid CMS.
+Write a post at [`/admin/blog`](https://hariomlohardev.vercel.app/admin/blog) — title, body
+(Markdown), tags, cover, published. It lands in Supabase `public.posts` and shows up on
+`/blog` immediately, because the page reads Supabase live.
+
+The build only ever *mirrors* Supabase:
 
 ```bash
-# 1) create
-cp posts/2026-08-10-day-040-multi-head-residual.md posts/2026-08-11-day-041-ffn-block.md
-# edit frontmatter:
-# title, date: 2026-08-11, description (≤155 chars), tags: ["daily-log","Transformers"], slug, draft, cover
-# body is Markdown (##, lists, ```python fences, [links](...), ![alt](assets/...))
-
-# 2) bake — zero deps, Node only
+# needs SUPABASE_URL + SUPABASE_ANON_KEY (or SERVICE_ROLE_KEY) in .env
 node scripts/generate-blog.js
-# → posts.json · feed.xml · blog/p/<slug>/index.html · og/<slug>.svg (if no cover) · sitemap.xml patch
-
-# 3) preview
-npx serve .  # http://localhost:3000/blog.html  http://localhost:3000/blog/p/day-041-ffn-block/
-
-# 4) ship — you push
-git add posts/2026-08-11-day-041-ffn-block.md posts.json feed.xml sitemap.xml blog/p og
-git commit -m "log: day 041 ffn block"
-git push
+# → feed.xml · blog/p/<slug>/index.html · og/<slug>.svg (if no cover) · sitemap.xml patch
 ```
 
-- `draft: true` + future `date` → auto-publishes daily **05:47 IST** via `.github/workflows/schedule-posts.yml` (free, flips `draft:true` → `false`, rebuilds, pushes).
-- `cover: /og/day-041-ffn-block.svg` or `/certificates/1.png` or `https://...` → wins as `og:image` + JSON-LD `image`; else `og/<slug>.svg` Lab Notebook chrome is auto-made (1200×630).
-- Scheduled + RSS + OG verified in [`posts/README.md`](posts/README.md) (60-sec guide + Giscus + Buttondown + FormSubmit notes).
+There is no file fallback — no `posts.json`, no `posts/*.md`. Delete a post in Supabase and
+the next build deletes its page, its og image and its sitemap entry. A build that cannot
+reach Supabase fails loudly rather than quietly rewriting pages from stale data.
 
-Latest on site: [Day 040 — Multi-Head, Residual & Layernorm](https://hariomlohardev.github.io/blog/p/day-040-multi-head-residual/) · [Day 039 — Attention by Hand](https://hariomlohardev.github.io/blog/p/day-039-attention-by-hand/) · [Spam Classifier — 5,572 msgs, live bench](https://hariomlohardev.github.io/projects/spam_classifier.html)
-
----
+- `published: false` keeps a post out of every public surface (list, feed, sitemap, static page).
+- `cover` (`/og/<slug>.svg`, `/certificates/1.png`, or an `https://…` url) wins as `og:image` + JSON-LD `image`; otherwise a Lab Notebook `og/<slug>.svg` is generated (1200×630).
+- Uploads (images and any other file) go to the Supabase `blog-images` bucket straight from the editor.
 
 ### 🛠️ Stack — ship vs mastered
 
@@ -95,9 +85,8 @@ Live on site: [`#stack`](https://hariomlohardev.github.io/#stack) · [`#services
 ├── post.html                   # Fallback reader ?slug= (also loads Giscus)
 ├── projects.html               # Project archive
 ├── projects/spam_classifier.html # Live Naive Bayes bench (Pyodide, in-browser)
-├── posts/*.md                  # Source of truth — daily logs & articles
-├── posts/README.md             # 60-sec authoring + live features (Giscus, Buttondown, FormSubmit, OG)
-├── scripts/generate-blog.js    # Zero-dep builder — posts.json + feed.xml + og/*.svg + blog/p/* + sitemap
+├── admin/blog/edit.html        # Post editor — writes Supabase public.posts
+├── scripts/generate-blog.js    # Zero-dep builder — Supabase → feed.xml + og/*.svg + blog/p/* + sitemap
 ├── blog/p/<slug>/index.html    # SEO-crawlable static pages (BlogPosting JSON-LD, canonical)
 ├── og/<slug>.svg               # Per-post OG 1200×630 Lab Notebook (no cover → auto)
 ├── certificates/1.png          # Harvard CS50P cert 2246×1588 (verify via QR / link)
@@ -107,8 +96,7 @@ Live on site: [`#stack`](https://hariomlohardev.github.io/#stack) · [`#services
 ├── SEO_CHECKLIST.md            # Entity closure checklist
 ├── thanks.html                 # FormSubmit _next target (noindex)
 └── .github/workflows/
-    ├── pages.yml               # Pages deploy — Setup Node → node scripts/generate-blog.js → deploy-pages
-    └── schedule-posts.yml      # Draft scheduler — cron 17 0 * * * (05:47 IST), flips draft, rebuilds, pushes
+    └── pages.yml               # Pages deploy — Setup Node → npm run build (Supabase) → deploy-pages
 ```
 
 Two clones, no mix:
@@ -123,7 +111,7 @@ Two clones, no mix:
 git clone https://github.com/hariomlohardev/hariomlohardev.github.io.git
 cd hariomlohardev.github.io
 npx serve .                    # or python -m http.server 3000
-node scripts/generate-blog.js  # after any posts/*.md change
+node scripts/generate-blog.js  # mirrors Supabase posts into static pages
 ```
 
 Workflow is `actions/deploy-pages` (permissions `pages:write` + `id-token:write`, concurrency `pages`). `.nojekyll` keeps Pages from Jekyll.
@@ -134,7 +122,7 @@ Workflow is `actions/deploy-pages` (permissions `pages:write` + `id-token:write`
 
 - Titles front-load `Hariom Lohar` · `@graph` Person (sameAs GitHub/X/LinkedIn) + WebSite + FAQPage · visible FAQ `Who is Hariom Lohar?` etc.
 - Per-post `og:image` is `cover` or `og/<slug>.svg` (1200×630) + `og:image:alt` + `twitter:image` · `BlogPosting` JSON-LD `image`.
-- Check: `curl -s https://hariomlohardev.github.io/feed.xml | head` · `curl -s https://hariomlohardev.github.io/blog/p/day-040-multi-head-residual/ | grep -i og:image` · `curl -s https://hariomlohardev.github.io/og/day-040-multi-head-residual.svg | head`
+- Check: `curl -s https://hariomlohardev.github.io/feed.xml | head` · then any `<slug>` from that feed: `curl -s https://hariomlohardev.github.io/blog/p/<slug>/ | grep -i og:image`
 - Search Console (`google36e315fd4176dd3d.html` + `sitemap.xml` submitted) → URL Inspection → **Request Indexing** for `/`, `/blog.html`, each new `blog/p/<slug>/`, `/feed.xml` after push. Bios on GitHub/LinkedIn/X already point to `hariomlohardev.github.io` — closes entity for `Hariom Lohar` / `Hariom Lohar GitHub`.
 
 ---

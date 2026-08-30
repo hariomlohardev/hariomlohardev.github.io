@@ -6,7 +6,7 @@
  * Why it exists: the generators read process.env only, so a stale token sitting in
  * the machine's environment (e.g. an expired GITHUB_TOKEN in the Windows user env)
  * silently shadows the live value in .env — the build then falls back to anonymous
- * GitHub calls and to the deprecated posts.json instead of Supabase.
+ * GitHub calls, and the blog build fails outright because Supabase is unreachable.
  *
  * So .env WINS over pre-existing process.env: on this machine .env is the source of
  * truth for secrets. No-op when .env is absent, which is the case in GitHub Actions
