@@ -4,9 +4,11 @@
  * POST ?type=comments  body{slug,content,author_name,parent_id,client_id}
  * GET  ?type=ratings&slug=xxx&client_id=xxx → ratings stats
  * POST ?type=ratings  body{slug,score,client_id,author_name}
+ * POST ?type=contact  body{name,email,message,page} → mails the note (Resend first)
  * Rewrites in vercel.json keep old /api/blog/comments and /api/blog/ratings working:
  *   /api/blog/comments → /api/blog/social?type=comments
  *   /api/blog/ratings  → /api/blog/social?type=ratings
+ *   /api/contact       → /api/blog/social?type=contact
  */
 const cookie=require('cookie');
 
@@ -34,44 +36,100 @@ function stats(rows){
   return {avg: Math.round((sum/count)*10)/10, count, dist};
 }
 function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-async function sendCommentMail({slug,title,url,author,content}){
+// One mail path for the whole site. Resend first: it is a plain API call, so the
+// sender gets a real yes/no on the page instead of a bounce through a third party.
+// SendGrid then FormSubmit sit behind it so a note is never silently dropped.
+async function sendMail({subject, text, html, replyTo, refUrl, fields}){
   const to = process.env.NOTIFY_EMAIL || process.env.ADMIN_EMAIL || 'hariomlohar.new@gmail.com';
   const from = process.env.NOTIFY_FROM || 'onboarding@resend.dev';
-  const subject = `New comment on "${title}" — ${slug}`;
-  const text = `New comment on "${title}"\n\nPost: ${url}\nAuthor: ${author}\n\nComment:\n${content}\n\n---\nView: ${url}#comments`;
-  const html = `<p>New comment on <b>${escHtml(title)}</b></p><p><a href="${escHtml(url)}">${escHtml(url)}</a></p><p><b>Author:</b> ${escHtml(author)}</p><blockquote style="border-left:3px solid #B93A13;padding:8px 12px;background:#F6F4EE">${escHtml(content).replace(/\n/g,'<br>')}</blockquote><p><a href="${escHtml(url)}#comments">View comment →</a></p>`;
   if(process.env.RESEND_API_KEY){
     try{
-      const r=await fetch('https://api.resend.com/emails',{method:'POST',headers:{'Authorization':'Bearer '+process.env.RESEND_API_KEY,'Content-Type':'application/json'},body:JSON.stringify({from, to, subject, text, html})});
-      if(!r.ok) console.error('resend failed', await r.text().catch(()=>'')); else console.log('comment mail sent via resend to',to);
-      return;
+      const payload={from, to, subject, text, html};
+      if(replyTo) payload.reply_to=replyTo;
+      const r=await fetch('https://api.resend.com/emails',{method:'POST',headers:{'Authorization':'Bearer '+process.env.RESEND_API_KEY,'Content-Type':'application/json'},body:JSON.stringify(payload)});
+      if(r.ok){ console.log('mail sent via resend to',to); return {ok:true, via:'resend'}; }
+      console.error('resend failed', r.status, await r.text().catch(()=>''));
     }catch(e){ console.error('resend error',e.message); }
   }
   if(process.env.SENDGRID_API_KEY){
     try{
-      const r=await fetch('https://api.sendgrid.com/v3/mail/send',{method:'POST',headers:{'Authorization':'Bearer '+process.env.SENDGRID_API_KEY,'Content-Type':'application/json'},body:JSON.stringify({personalizations:[{to:[{email:to}]}],from:{email:from},subject,content:[{type:'text/plain',value:text},{type:'text/html',value:html}]})});
-      if(!r.ok) console.error('sendgrid failed', await r.text().catch(()=>'')); else console.log('comment mail sent via sendgrid');
-      return;
+      const body={personalizations:[{to:[{email:to}]}],from:{email:from},subject,content:[{type:'text/plain',value:text},{type:'text/html',value:html}]};
+      if(replyTo) body.reply_to={email:replyTo};
+      const r=await fetch('https://api.sendgrid.com/v3/mail/send',{method:'POST',headers:{'Authorization':'Bearer '+process.env.SENDGRID_API_KEY,'Content-Type':'application/json'},body:JSON.stringify(body)});
+      if(r.ok){ console.log('mail sent via sendgrid'); return {ok:true, via:'sendgrid'}; }
+      console.error('sendgrid failed', r.status, await r.text().catch(()=>''));
     }catch(e){ console.error('sendgrid error',e.message); }
   }
-  // FormSubmit — same as #contact Send a note — free, no tracking
+  // FormSubmit — free and keyless, but it only delivers after its one-time
+  // confirmation link is clicked, which is why it is last and not first.
   try{
     const fd=new URLSearchParams();
     fd.append('_subject', subject);
     fd.append('_template','table');
     fd.append('_captcha','false');
-    fd.append('Post', `${title} — ${slug}`);
-    fd.append('URL', url);
-    fd.append('Author', author);
-    fd.append('Comment', content);
-    fd.append('View', `${url}#comments`);
-    const r=await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(to)}`,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded','Accept':'application/json','Origin':'https://hariomlohardev.github.io','Referer': url,'User-Agent':'Mozilla/5.0 (compatible; Vercel; +https://hariomlohardev.github.io)','X-Requested-With':'XMLHttpRequest'},body: fd.toString()});
+    if(replyTo) fd.append('_replyto', replyTo);
+    Object.keys(fields||{}).forEach(k=>{ if(fields[k]) fd.append(k, String(fields[k])); });
+    const r=await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(to)}`,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded','Accept':'application/json','Origin':'https://hariomlohardev.github.io','Referer': refUrl||'https://hariomlohardev.github.io/contact','User-Agent':'Mozilla/5.0 (compatible; Vercel; +https://hariomlohardev.github.io)','X-Requested-With':'XMLHttpRequest'},body: fd.toString()});
     const txt=await r.text().catch(()=> '');
-    let j={}; try{ j=JSON.parse(txt); }catch{}
-    if(r.ok) { console.log('comment mail via formsubmit to',to, j.message||txt.slice(0,80)||'ok'); return; }
+    if(r.ok) return {ok:true, via:'formsubmit'};
     console.error('formsubmit failed', r.status, txt.slice(0,400));
   }catch(e){ console.error('formsubmit error',e.message); }
-  console.log('comment mail (no provider) to',to,subject);
+  return {ok:false, via:'none'};
+}
+
+async function sendCommentMail({slug,title,url,author,content}){
+  return sendMail({
+    subject: `New comment on "${title}" — ${slug}`,
+    text: `New comment on "${title}"\n\nPost: ${url}\nAuthor: ${author}\n\nComment:\n${content}\n\n---\nView: ${url}#comments`,
+    html: `<p>New comment on <b>${escHtml(title)}</b></p><p><a href="${escHtml(url)}">${escHtml(url)}</a></p><p><b>Author:</b> ${escHtml(author)}</p><blockquote style="border-left:3px solid #B93A13;padding:8px 12px;background:#F6F4EE">${escHtml(content).replace(/\n/g,'<br>')}</blockquote><p><a href="${escHtml(url)}#comments">View comment →</a></p>`,
+    refUrl: url,
+    fields: {Post:`${title} — ${slug}`, URL:url, Author:author, Comment:content, View:`${url}#comments`}
+  });
+}
+
+// ---- contact: the "Send a note" form posts here so the visitor stays on the
+// page and gets a real answer. Mail only — no table, no Supabase. Honeypot plus
+// a per-instance throttle is the whole spam story; one inbox needs no more.
+const noteHits=new Map();
+function throttled(ip){
+  const now=Date.now(), win=10*60*1000;
+  const list=(noteHits.get(ip)||[]).filter(t=> now-t<win);
+  list.push(now);
+  if(noteHits.size>500) noteHits.clear();
+  noteHits.set(ip, list);
+  return list.length>3;
+}
+async function handleContact(req,res){
+  if(req.method!=='POST') return res.status(405).json({ok:false, error:'method not allowed'});
+  let body=req.body;
+  if(typeof body==='string'){
+    try{ body=JSON.parse(body); }catch{ body=Object.fromEntries(new URLSearchParams(body)); }
+  }
+  body=body||{};
+  // honeypot — a bot fills the hidden field, a person never sees it. Answer ok
+  // so it learns nothing, and send nothing.
+  if(String(body._honey||'').trim()) return res.status(200).json({ok:true});
+  const name=String(body.name||'').trim().replace(/[<>]/g,'').slice(0,80);
+  const email=String(body.email||'').trim().slice(0,120);
+  const message=String(body.message||'').trim().slice(0,4000);
+  if(!name) return res.status(400).json({ok:false, error:'name required'});
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return res.status(400).json({ok:false, error:'valid email required'});
+  if(message.length<2) return res.status(400).json({ok:false, error:'message required'});
+  const ip=String(req.headers['x-forwarded-for']||'').split(',')[0].trim()||'unknown';
+  if(throttled(ip)) return res.status(429).json({ok:false, error:'too many notes — try again in a few minutes'});
+  const page=String(body.page||'').slice(0,200);
+  const out=await sendMail({
+    subject: `New note — ${name}`,
+    text: `New note from ${name} <${email}>\n\n${message}\n\n---\nSent from: ${page||'—'}`,
+    html: `<p><b>${escHtml(name)}</b> &lt;<a href="mailto:${escHtml(email)}">${escHtml(email)}</a>&gt;</p><blockquote style="border-left:3px solid #B93A13;padding:8px 12px;background:#F6F4EE">${escHtml(message).replace(/\n/g,'<br>')}</blockquote><p style="color:#6E7D9A;font-size:12px">Sent from ${escHtml(page||'—')} · reply straight to this mail</p>`,
+    replyTo: email,
+    refUrl: page||'https://hariomlohardev.github.io/contact',
+    fields: {Name:name, Email:email, Message:message, Page:page}
+  });
+  // 502 tells the page to fall back to the plain FormSubmit POST, so a note
+  // survives even a total provider outage.
+  if(!out.ok) return res.status(502).json({ok:false, error:'mail provider unavailable'});
+  return res.status(200).json({ok:true, via:out.via});
 }
 
 async function handleComments(req,res,sbRead,sbWrite){
@@ -185,12 +243,14 @@ module.exports=async(req,res)=>{
   res.setHeader('Access-Control-Allow-Methods','GET,POST,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers','Content-Type, Authorization');
   if(req.method==='OPTIONS') return res.status(204).end();
-  const sbRead=getSb('anon');
-  const sbWrite=getSb('service');
-  if(!sbRead||!sbWrite) return res.status(500).json({ok:false,error:'Supabase not configured'});
   // detect type via ?type= or URL path
   const urlStr=String(req.url||'');
   const qType=String(req.query.type||req.query.t||'').toLowerCase();
+  // contact is mail-only — answered before Supabase, which it does not need
+  if(qType==='contact' || urlStr.includes('/contact')) return handleContact(req,res);
+  const sbRead=getSb('anon');
+  const sbWrite=getSb('service');
+  if(!sbRead||!sbWrite) return res.status(500).json({ok:false,error:'Supabase not configured'});
   let type=qType;
   if(!type){
     if(urlStr.includes('ratings') || urlStr.includes('rating')) type='ratings';
@@ -208,5 +268,5 @@ module.exports=async(req,res)=>{
   if(type==='rating') type='ratings';
   if(type==='comments') return handleComments(req,res,sbRead,sbWrite);
   if(type==='ratings') return handleRatings(req,res,sbRead,sbWrite);
-  return res.status(400).json({ok:false, error:'type must be comments or ratings'});
+  return res.status(400).json({ok:false, error:'type must be comments, ratings or contact'});
 };

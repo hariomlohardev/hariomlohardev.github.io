@@ -116,6 +116,14 @@
       "destination": "/api/admin/auth?action=verify"
     },
     {
+      "source": "/api/contact",
+      "destination": "/api/blog/social?type=contact"
+    },
+    {
+      "source": "/api/contact/",
+      "destination": "/api/blog/social?type=contact"
+    },
+    {
       "source": "/api/tricks",
       "destination": "/api/admin/posts?type=tricks"
     },
