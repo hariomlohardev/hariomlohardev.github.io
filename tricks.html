@@ -38,7 +38,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-500.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-600.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-mono/latin-400.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-mono/latin-400-italic.css">
 <style>
 /* ─────────────────────────────────────────────
    HL · LAB NOTEBOOK №01 — minimal monogram edit
@@ -174,37 +173,8 @@ h1 .amp{color:var(--accent);font-style:italic;font-weight:400}
 .stat b sup{font-size:.5em;color:var(--accent);font-style:italic}
 .stat span{display:block;margin-top:9px;font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
 
-/* ── layout ── */
-.layout{display:grid;grid-template-columns:300px 1fr;gap:clamp(28px,4.5vw,64px);padding:clamp(30px,4vw,52px) 0 10px;align-items:start}
-.content-col{min-width:0}
-.sidebar{position:sticky;top:96px;display:flex;flex-direction:column;gap:36px}
-.sbox h3{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);display:flex;gap:10px;align-items:center;margin-bottom:14px}
-.sbox h3::after{content:"";flex:1;height:1px;background:var(--line)}
-.sbox h3 b{color:var(--accent);font-weight:400}
-.about p{font-size:14.5px;color:var(--body);line-height:1.7}
-.about p+p{margin-top:10px}
-.rules{margin-top:14px;border-top:1px dashed var(--line-2);padding-top:12px;font-family:var(--mono);font-size:11.5px;color:var(--muted);display:grid;gap:8px}
-.rules li{list-style:none;display:flex;gap:10px}
-.rules li::before{content:"—";color:var(--accent)}
-.tag-list{display:flex;flex-wrap:wrap;gap:8px}
-.tag-pill{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line);background:var(--sheet);padding:8px 11px;color:var(--ink-2);transition:border-color .15s,background .15s,color .15s}
-.tag-pill small{opacity:.6;margin-left:6px}
-.tag-pill:hover{border-color:var(--ink)}
-.tag-pill.active{background:var(--ink);border-color:var(--ink);color:var(--paper)}
-.tag-pill.active small{opacity:.75}
-/* writing frequency */
-.freq-grid{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,11px);gap:3px;width:max-content}
-.freq-grid i{width:11px;height:11px;background:var(--paper-2);border:1px solid var(--line);transition:transform .15s}
-.freq-grid i.on{background:var(--ink);border-color:var(--ink)}
-.freq-grid i.on:hover{background:var(--accent);border-color:var(--accent);transform:scale(1.25)}
-.freq-grid i.off{opacity:0;border:none;background:transparent}
-.freq-legend{margin-top:10px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:7px}
-.freq-legend i{width:9px;height:9px;display:inline-block}
-.sub-mini{font-size:14px;color:var(--body);line-height:1.7}
-.sub-mini a{color:var(--accent);font-weight:500;text-decoration:underline;text-underline-offset:3px}
-.sub-links{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
-.sub-links a{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);padding:9px 12px;color:var(--ink-2);transition:border-color .15s,background .15s}
-.sub-links a:hover{border-color:var(--ink);background:var(--sheet)}
+/* ── layout: one column, the list only ── */
+.content-col{min-width:0;max-width:900px;padding:clamp(30px,4vw,52px) 0 10px}
 
 /* ── toolbar ── */
 .toolbar{border-top:1px solid var(--ink);border-bottom:1px solid var(--line);padding:18px 0;display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end}
@@ -286,7 +256,7 @@ html:not(.js) .rv{opacity:1;transform:none}
 .news-form input::placeholder{color:var(--muted-2)}
 .news-form button{font-family:var(--mono);font-size:11.5px;letter-spacing:.15em;text-transform:uppercase;background:var(--ink);color:var(--paper);border:1px solid var(--ink);padding:14px 22px;transition:background .2s,border-color .2s;min-height:48px}
 .news-form button:hover{background:var(--accent);border-color:var(--accent)}
-.news-note{grid-column:1/-1;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;gap:16px;flex-wrap:wrap;line-height:2}
+.news-note{margin-top:16px;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;gap:16px;flex-wrap:wrap;line-height:2}
 .news-note a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
 
 /* ── footer ── */
@@ -305,12 +275,6 @@ footer{margin-top:clamp(48px,6vw,84px);border-top:1px solid var(--ink);backgroun
 .foot-base .top-btn:hover{border-color:var(--ink);background:var(--ink);color:var(--paper)}
 
 /* ═════════ responsive ═════════ */
-@media(max-width:1020px){
-  .layout{grid-template-columns:1fr}
-  .content-col{order:1}
-  .sidebar{order:2;position:static;flex-direction:row;flex-wrap:wrap;gap:38px;border-top:1px solid var(--line);padding-top:34px;margin-top:20px}
-  .sbox{min-width:270px;flex:1}
-}
 @media(max-width:860px){
   .stats{grid-template-columns:1fr 1fr}
   .stat:nth-child(2){border-right:none}
@@ -358,7 +322,6 @@ footer{margin-top:clamp(48px,6vw,84px);border-top:1px solid var(--ink);backgroun
   .foot-grid{grid-template-columns:1fr;gap:30px}
   .foot-base{flex-direction:column;align-items:flex-start}
   .foot-base .top-btn{width:100%;text-align:center}
-  .sbox{min-width:100%}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -366,18 +329,10 @@ footer{margin-top:clamp(48px,6vw,84px);border-top:1px solid var(--ink);backgroun
   .line{transform:none}
 }
 @media print{
-  header,.toolbar,.sidebar,.pagination,.newsband,body::after,#prog{display:none!important}
+  header,.toolbar,.pagination,.newsband,body::after,#prog{display:none!important}
   body{background:#fff}
 }
 
-/* ══ TRICKS ══ */
-.row-body .t-num{font-family:var(--mono)}
-.recent-list{display:flex;flex-direction:column;gap:0;margin-top:4px}
-.recent-list a{display:block;padding:11px 0;border-bottom:1px solid var(--line);font-size:14px;line-height:1.45;color:var(--ink-2);transition:color .18s,padding-left .18s}
-.recent-list a:last-child{border-bottom:none}
-.recent-list a:hover{color:var(--accent);padding-left:5px}
-.recent-list i{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;color:var(--muted-2);font-style:normal;margin-top:4px}
-.recent-list .none{font-size:13.5px;color:var(--muted)}
 /* trick sheet — detail page */
 .trick-sheet{max-width:760px;margin:clamp(34px,6vw,60px) auto 0;background:var(--sheet);border:1px solid var(--line);padding:clamp(26px,5vw,58px)}
 .trick-sheet .rule{width:56px;height:2px;background:var(--accent);margin:0 0 clamp(26px,4vw,38px)}
@@ -532,75 +487,49 @@ h1.trick-title{font-size:clamp(2.05rem,5.2vw,3.5rem);line-height:1.04;letter-spa
 
   <!-- ══ BODY ══ -->
   <div class="wrap">
-    <div class="layout">
+    <!-- the list — tricks, nothing else -->
+    <section class="content-col" aria-label="Tricks">
+      <div class="toolbar" id="entries">
+        <label class="search">
+          <span class="lens">Search</span>
+          <span class="q-tools">
+            <button id="qClear" class="clear-btn" type="button" aria-label="Clear search">✕</button>
+            <span id="qCount">—</span>
+          </span>
+          <input id="q" type="search" placeholder="title, body, tags… ( / )" autocomplete="off" spellcheck="false" aria-label="Search tricks" />
+        </label>
+        <div class="filters" role="group" aria-label="Sort order">
+          <button class="pill" data-sort="new" aria-pressed="true">Newest <span class="n" id="nAll"></span></button>
+          <button class="pill" data-sort="old" aria-pressed="false">Oldest</button>
+          <button class="pill" data-sort="az" aria-pressed="false">A–Z</button>
+        </div>
+      </div>
+      <div class="result-note" id="metaRow" aria-live="polite"></div>
 
-      <!-- sidebar -->
-      <aside class="sidebar" aria-label="Tricks panel">
-        <div class="sbox about rv">
-          <h3><b>01</b> About the tricks</h3>
-          <p>Every time a fix costs me an hour, it gets filed here so it never costs me an hour again. Short, tested, no theory.</p>
-          <p>Title plus a markdown body — that is the whole format. Copy freely, no attribution needed.</p>
-          <ul class="rules">
-            <li>tested before filed</li>
-            <li>short beats complete</li>
-            <li>paste-ready, always</li>
-            <li>one trick per file</li>
-          </ul>
-        </div>
-        <div class="sbox rv">
-          <h3><b>02</b> Tags</h3>
-          <div class="tag-list" id="tagList" aria-label="Filter by tag"></div>
-        </div>
-        <div class="sbox rv">
-          <h3><b>03</b> Latest filed</h3>
-          <div class="recent-list" id="recentList"><span class="none">Loading…</span></div>
-        </div>
-      </aside>
+      <div id="list" class="entries" aria-live="polite" aria-busy="true">
+        <div class="skeleton" aria-hidden="true"></div>
+        <div class="skeleton" aria-hidden="true"></div>
+        <div class="skeleton" aria-hidden="true"></div>
+        <div class="skeleton" aria-hidden="true"></div>
+      </div>
 
-      <!-- content -->
-      <section class="content-col" aria-label="Tricks">
-        <div class="toolbar" id="entries">
-          <label class="search">
-            <span class="lens">Search</span>
-            <span class="q-tools">
-              <button id="qClear" class="clear-btn" type="button" aria-label="Clear search">✕</button>
-              <span id="qCount">—</span>
-            </span>
-            <input id="q" type="search" placeholder="title, body, tags… ( / )" autocomplete="off" spellcheck="false" aria-label="Search tricks" />
-          </label>
-          <div class="filters" role="group" aria-label="Sort order">
-            <button class="pill" data-sort="new" aria-pressed="true">Newest <span class="n" id="nAll"></span></button>
-            <button class="pill" data-sort="old" aria-pressed="false">Oldest</button>
-            <button class="pill" data-sort="az" aria-pressed="false">A–Z</button>
-          </div>
+      <div class="pagination" id="pagination">
+        <span id="pageInfo">—</span>
+        <div class="page-nav">
+          <button class="page-btn" id="prevBtn">← Prev</button>
+          <span id="pageNums" style="display:flex;gap:7px;flex-wrap:wrap"></span>
+          <button class="page-btn" id="nextBtn">Next →</button>
         </div>
-        <div class="result-note" id="metaRow" aria-live="polite"></div>
+      </div>
 
-        <div id="list" class="entries" aria-live="polite" aria-busy="true">
-          <div class="skeleton" aria-hidden="true"></div>
-          <div class="skeleton" aria-hidden="true"></div>
-          <div class="skeleton" aria-hidden="true"></div>
-          <div class="skeleton" aria-hidden="true"></div>
+      <noscript>
+        <div class="empty" style="margin-top:20px">
+          JavaScript is off — the tricks list is rendered in the browser.<br><br>
+          Every trick also lives at its own address: <b>/tricks/p/&lt;id&gt;</b>.<br>
+          Enable JS for search, tags and sorting, or read the <a href="/blog">daily logs</a> instead.
         </div>
-
-        <div class="pagination" id="pagination">
-          <span id="pageInfo">—</span>
-          <div class="page-nav">
-            <button class="page-btn" id="prevBtn">← Prev</button>
-            <span id="pageNums" style="display:flex;gap:7px;flex-wrap:wrap"></span>
-            <button class="page-btn" id="nextBtn">Next →</button>
-          </div>
-        </div>
-
-        <noscript>
-          <div class="empty" style="margin-top:20px">
-            JavaScript is off — the tricks list is rendered in the browser.<br><br>
-            Every trick also lives at its own address: <b>/tricks/p/&lt;id&gt;</b>.<br>
-            Enable JS for search, tags and sorting, or read the <a href="/blog">daily logs</a> instead.
-          </div>
-        </noscript>
-      </section>
-    </div>
+      </noscript>
+    </section>
 
     <!-- ══ NEWSLETTER ══ -->
     <section class="newsband" id="newsletter" aria-labelledby="nlTitle">
@@ -613,13 +542,15 @@ h1.trick-title{font-size:clamp(2.05rem,5.2vw,3.5rem);line-height:1.04;letter-spa
       <div class="wrap news-in">
         <div class="rv">
           <h2 id="nlTitle">Stay <em>posted</em>,<br>one file a day.</h2>
-          <p class="np">New daily logs and articles delivered by email — free via <a href="https://buttondown.com" target="_blank" rel="noopener">Buttondown</a>. Or keep it classic with the <a href="/feed.xml">RSS feed</a>.</p>
+          <p class="np">New tricks and daily logs delivered by email — free via <a href="https://buttondown.com" target="_blank" rel="noopener">Buttondown</a>. Or keep it classic with the <a href="/feed.xml">RSS feed</a>.</p>
         </div>
         <form class="rv" action="https://buttondown.email/api/emails/embed-subscribe/hariomlohar" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.email/hariomlohar','popupwindow')">
-          <label>Email address
-            <input type="email" name="email" required placeholder="you@somewhere.com" autocomplete="email" inputmode="email" />
-          </label>
-          <button type="submit">Subscribe →</button>
+          <div class="news-form">
+            <label>Email address
+              <input type="email" name="email" required placeholder="you@somewhere.com" autocomplete="email" inputmode="email" />
+            </label>
+            <button type="submit">Subscribe →</button>
+          </div>
           <p class="news-note">
             <span>Live on <a href="https://buttondown.com/hariomlohar" target="_blank" rel="noopener">buttondown.com/hariomlohar</a></span>
             <span>RSS: <a href="/feed.xml">/feed.xml</a></span>
@@ -752,7 +683,7 @@ h1.trick-title{font-size:clamp(2.05rem,5.2vw,3.5rem);line-height:1.04;letter-spa
   /* ── tricks: Supabase is the source of truth ─────────────────────── */
   var TRICKS=[], VIEW=[], PER=10, PAGE=1, Q='', SORT='new', TAG='';
   var qEl=document.getElementById('q'), qClear=document.getElementById('qClear'), qCount=document.getElementById('qCount'),
-      tagList=document.getElementById('tagList'), listEl=document.getElementById('list'), recentEl=document.getElementById('recentList'),
+      listEl=document.getElementById('list'),
       metaRow=document.getElementById('metaRow'), pageInfo=document.getElementById('pageInfo'), pageNums=document.getElementById('pageNums'),
       prevBtn=document.getElementById('prevBtn'), nextBtn=document.getElementById('nextBtn'), searchTimer=null;
   var TICK=String.fromCharCode(96);
@@ -805,23 +736,6 @@ h1.trick-title{font-size:clamp(2.05rem,5.2vw,3.5rem);line-height:1.04;letter-spa
     try{ history.replaceState(null,'',location.pathname+location.search+h); }catch(e){}
   }
 
-  function buildTags(){
-    var counts={};
-    TRICKS.forEach(function(t){ (t.tags||[]).forEach(function(x){ var k=String(x).trim(); if(!k) return; counts[k]=(counts[k]||0)+1; }); });
-    var tags=Object.keys(counts).sort(function(a,b){ return counts[b]-counts[a] || a.localeCompare(b); }).slice(0,16);
-    tagList.innerHTML=tags.map(function(t){
-      var active=TAG && TAG.toLowerCase()===t.toLowerCase();
-      return '<button class="tag-pill'+(active?' active':'')+'" data-tag="'+esc(t)+'" aria-pressed="'+active+'">'+esc(t)+'<small>'+counts[t]+'</small></button>';
-    }).join('') || '<span style="font-family:var(--mono);font-size:12px;color:var(--muted)">no tags yet</span>';
-    tagList.querySelectorAll('.tag-pill').forEach(function(btn){
-      btn.addEventListener('click',function(){
-        var t=btn.getAttribute('data-tag');
-        TAG=(TAG && TAG.toLowerCase()===t.toLowerCase()) ? '' : t;
-        PAGE=1; writeHash(); render(); buildTags();
-      });
-    });
-  }
-
   function compute(){
     var q=(Q||'').toLowerCase().trim();
     VIEW=TRICKS.filter(function(t){
@@ -849,12 +763,12 @@ h1.trick-title{font-size:clamp(2.05rem,5.2vw,3.5rem);line-height:1.04;letter-spa
     if(TAG||Q) note+=' · <a href="#" id="clearTag">clear</a>';
     metaRow.innerHTML=note;
     var ct=document.getElementById('clearTag');
-    if(ct) ct.addEventListener('click',function(e){ e.preventDefault(); TAG=''; Q=''; if(qEl) qEl.value=''; PAGE=1; writeHash(); render(); buildTags(); });
+    if(ct) ct.addEventListener('click',function(e){ e.preventDefault(); TAG=''; Q=''; if(qEl) qEl.value=''; PAGE=1; writeHash(); render(); });
 
     if(!slice.length){
       listEl.innerHTML='<div class="empty">'+(TRICKS.length?'No trick matches — try another search,<br>or <a href="#" id="clearAll">clear the filters</a>.':'No tricks filed yet — the first one lands soon.')+'</div>';
       var ca=document.getElementById('clearAll');
-      if(ca) ca.addEventListener('click',function(e){ e.preventDefault(); Q=''; TAG=''; if(qEl) qEl.value=''; PAGE=1; writeHash(); render(); buildTags(); });
+      if(ca) ca.addEventListener('click',function(e){ e.preventDefault(); Q=''; TAG=''; if(qEl) qEl.value=''; PAGE=1; writeHash(); render(); });
     } else {
       var qLower=(Q||'').toLowerCase().trim();
       listEl.innerHTML=slice.map(function(t,i){
@@ -900,11 +814,6 @@ h1.trick-title{font-size:clamp(2.05rem,5.2vw,3.5rem);line-height:1.04;letter-spa
     var w=0; TRICKS.forEach(function(t){ w+=(t.word_count||0); });
     document.getElementById('stWords').innerHTML = w ? (w>=1000 ? (Math.round(w/100)/10)+'<sup>k</sup>' : String(w)) : '—';
     var nAll=document.getElementById('nAll'); if(nAll) nAll.textContent=TRICKS.length;
-    if(recentEl){
-      recentEl.innerHTML = sorted.length ? sorted.slice(0,5).map(function(t){
-        return '<a href="'+esc(hrefOf(t))+'">'+esc(t.title)+'<i>#'+pad3(t.id)+' · '+fmt(t.created_at)+'</i></a>';
-      }).join('') : '<span class="none">Nothing filed yet.</span>';
-    }
   }
 
   /* events */
@@ -924,7 +833,7 @@ h1.trick-title{font-size:clamp(2.05rem,5.2vw,3.5rem);line-height:1.04;letter-spa
   });
   prevBtn.addEventListener('click',function(){ if(PAGE>1){ PAGE--; render(); } });
   nextBtn.addEventListener('click',function(){ var pages=Math.max(1,Math.ceil(VIEW.length/PER)); if(PAGE<pages){ PAGE++; render(); } });
-  window.addEventListener('hashchange',function(){ applyHash(); PAGE=1; buildTags(); render(); });
+  window.addEventListener('hashchange',function(){ applyHash(); PAGE=1; render(); });
   listEl.addEventListener('click',function(e){
     var row=e.target.closest('.row'); if(!row) return;
     if(e.target.closest('a,button')) return;
@@ -933,7 +842,7 @@ h1.trick-title{font-size:clamp(2.05rem,5.2vw,3.5rem);line-height:1.04;letter-spa
 
   function init(arr){
     TRICKS=(Array.isArray(arr)?arr:[]).filter(function(t){ return t && t.id && t.title && t.published!==false; });
-    applyHash(); buildStats(); buildTags(); render();
+    applyHash(); buildStats(); render();
   }
 
   /* fallback chain: /api/tricks -> Supabase REST -> /tricks-data.json -> empty */
