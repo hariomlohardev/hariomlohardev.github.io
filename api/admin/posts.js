@@ -11,9 +11,13 @@
  * GET  ?type=tricks&id=12   -> single trick
  * POST ?type=tricks {action:'create'|'update'|'delete', id, trick:{title,raw,tags,published}}
  * vercel.json rewrites /api/tricks -> /api/admin/posts?type=tricks
+ *
+ * GET  ?type=inbox          -> last 100 blog comments (authed) — the /admin inbox
  */
 const jwt=require('jsonwebtoken');
 const cookie=require('cookie');
+// one renderer for the whole site — see assets/md.js
+const {mdToHtml}=require('../../assets/md.js');
 
 function getToken(req){
   let t=null;
@@ -36,49 +40,43 @@ async function getSb(){
   const {createClient}=require('@supabase/supabase-js');
   return createClient(url,key,{ auth:{ persistSession:false, autoRefreshToken:false }, realtime:{ transport: undefined }});
 }
-// a block that opens with a block-level tag can still end with plain text
-// (a list followed by a sign-off line) — wrap that tail so it gets .prose p spacing.
-function tailP(b){
-  var m = b.match(/^([\s\S]*<\/(?:ul|ol|blockquote|pre|h[1-6])>)([\s\S]*)$/);
-  if(!m || !m[2].trim()) return b;
-  return m[1] + "\n<p>" + m[2].trim().replace(/\n/g, "<br />\n") + "</p>";
+
+// Publishing from /admin only writes Supabase; the static copy (feed.xml, /blog/p/*,
+// sitemap, llms.txt) is built by GitHub Actions. Nudge it so a new post is live in a
+// minute instead of waiting for the 6-hourly cron. Best effort by design — a failed
+// ping must never fail the save.
+async function pingRebuild(){
+  const tok=process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
+  const repo=process.env.GITHUB_REPO || 'hariomlohardev/hariomlohardev.github.io';
+  if(!tok) return {ok:false, skipped:'no GITHUB_TOKEN'};
+  try{
+    const r=await fetch('https://api.github.com/repos/'+repo+'/dispatches',{
+      method:'POST',
+      headers:{
+        Authorization:'Bearer '+tok,
+        Accept:'application/vnd.github+json',
+        'Content-Type':'application/json',
+        'User-Agent':'hariomlohardev-admin'
+      },
+      body: JSON.stringify({event_type:'content-changed'})
+    });
+    return {ok:r.status===204, status:r.status};
+  }catch(e){ return {ok:false, error:String(e && e.message || e)}; }
 }
-// a link to an uploaded file (…?download=name) reads as a download chip, not a bare link
-function linkTag(text, href){
-  if(/[?&]download=/.test(href)) return '<a class="dl-file" href="' + href + '" download rel="noopener">' + text + '</a>';
-  return '<a href="' + href + '" rel="noopener">' + text + '</a>';
+
+// ---- comments inbox: /admin reads them here, because notification mail needs a
+// verified sender and this needs nothing. Read-only, authed, newest first.
+async function handleInbox(req,res,sb){
+  if(req.method!=='GET') return res.status(405).json({ok:false, error:'method not allowed'});
+  try{ verify(req); }catch(e){ return res.status(401).json({ok:false, error:e.message}); }
+  const {data,error}=await sb.from('comments')
+    .select('id,post_slug,parent_id,author_name,content,created_at')
+    .order('created_at',{ascending:false}).limit(100);
+  if(error) return res.status(500).json({ok:false, error:error.message});
+  res.setHeader('Cache-Control','no-store');
+  return res.status(200).json({ok:true, comments:data||[], count:(data||[]).length});
 }
-function mdToHtml(md){
-  let s=String(md||'').replace(/\r\n/g,'\n');
-  const codes=[];
-  s=s.replace(/```([a-zA-Z0-9_-]*)\n([\s\S]*?)```/g,(m,lang,code)=>{
-    const i=codes.length;
-    codes.push(`<pre><code class="lang-${lang||''}">${code.trimEnd().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</code></pre>`);
-    return `__CODE_${i}__`;
-  });
-  s=s.replace(/`([^`]+?)`/g,(m,c)=>`<code>${c.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</code>`);
-  s=s.replace(/^######\s+(.+)$/gm,"<h6>$1</h6>");
-  s=s.replace(/^#####\s+(.+)$/gm,"<h5>$1</h5>");
-  s=s.replace(/^####\s+(.+)$/gm,"<h4>$1</h4>");
-  s=s.replace(/^###\s+(.+)$/gm,"<h3>$1</h3>");
-  s=s.replace(/^##\s+(.+)$/gm,"<h2>$1</h2>");
-  s=s.replace(/^#\s+(.+)$/gm,"<h1>$1</h1>");
-  s=s.replace(/!\[([^\]]*?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g,'<img src="$2" alt="$1" loading="lazy" decoding="async" />');
-  s=s.replace(/^>[ \t]?(.*)$/gm,'<blockquote>$1</blockquote>');
-  s=s.replace(/<\/blockquote>\n<blockquote>/g,'<br />\n');
-  s=s.replace(/\[([^\]]+?)\]\((https?:\/\/[^\s)]+|\/[^\s)]*)\)/g,function(m,t,h){ return linkTag(t,h); });
-  s=s.replace(/\*\*([^*]+?)\*\*/g,"<strong>$1</strong>");
-  s=s.replace(/^[ \t]*(\*\*\*|---)[ \t]*$/gm,'<hr />');
-  s=s.split("\n").map(l=> l.match(/^[ \t]*[-*][ \t]+/) ? l.replace(/^[ \t]*[-*][ \t]+(.+)/,"<li>$1</li>") : l.match(/^[ \t]*\d+\.[ \t]+/) ? l.replace(/^[ \t]*\d+\.[ \t]+(.+)/,"<li>$1</li>") : l).join("\n");
-  s=s.replace(/(?:<li>.*<\/li>\n?)+/g, m=> `<ul>\n${m.trim().split("\n").join("\n")}\n</ul>`);
-  const blocks=s.split(/\n{2,}/).map(b=>{
-    b=b.trim(); if(!b) return "";
-    if(b.startsWith("<h")||b.startsWith("<pre")||b.startsWith("<ul")||b.startsWith("<hr")||b.startsWith("<blockquote")||b.startsWith("<img")||b.startsWith("__CODE_")) return tailP(b);
-    return `<p>${b.replace(/\n/g,"<br />\n")}</p>`;
-  }).join("\n\n");
-  let out=blocks; codes.forEach((h,i)=> out=out.replace(`__CODE_${i}__`, h));
-  return out;
-}
+
 
 // ---- tricks: Title + full markdown body, no cover ----------------------
 async function handleTricks(req,res,sb){
@@ -110,7 +108,7 @@ async function handleTricks(req,res,sb){
     if(!id) return res.status(400).json({ok:false, error:'id required'});
     const {error}=await sb.from('tricks').delete().eq('id',id);
     if(error) return res.status(500).json({ok:false, error:error.message});
-    return res.status(200).json({ok:true, deleted:id});
+    return res.status(200).json({ok:true, deleted:id, rebuild:await pingRebuild()});
   }
   if(action==='create'||action==='update'){
     const title=String(t.title||'').trim().replace(/\s+/g,' ').slice(0,200);
@@ -131,11 +129,11 @@ async function handleTricks(req,res,sb){
       if(!id) return res.status(400).json({ok:false, error:'id required'});
       const {data,error}=await sb.from('tricks').update(row).eq('id',id).select('*').single();
       if(error) return res.status(500).json({ok:false, error:error.message});
-      return res.status(200).json({ok:true, trick:data});
+      return res.status(200).json({ok:true, trick:data, rebuild:await pingRebuild()});
     }
     const {data,error}=await sb.from('tricks').insert(row).select('*').single();
     if(error) return res.status(500).json({ok:false, error:error.message});
-    return res.status(200).json({ok:true, trick:data});
+    return res.status(200).json({ok:true, trick:data, rebuild:await pingRebuild()});
   }
   return res.status(400).json({ok:false, error:'unknown action'});
 }
@@ -152,6 +150,7 @@ module.exports=async(req,res)=>{
     if(b && b.type) type=String(b.type).toLowerCase();
   }
   if(type==='trick'||type==='tricks') return handleTricks(req,res,sb);
+  if(type==='inbox'||type==='comments') return handleInbox(req,res,sb);
 
   if(req.method==='GET'){
     // Public read — return published posts for admin list (all if authed)
@@ -177,7 +176,7 @@ module.exports=async(req,res)=>{
   if(action==='delete' && id){
     const {error}=await sb.from('posts').delete().eq('id',id);
     if(error) return res.status(500).json({ok:false, error:error.message});
-    return res.status(200).json({ok:true});
+    return res.status(200).json({ok:true, rebuild:await pingRebuild()});
   }
 
   if((action==='create' || action==='update') && post){
@@ -193,12 +192,12 @@ module.exports=async(req,res)=>{
     if(action==='create'){
       const {data,error}=await sb.from('posts').insert(row).select().single();
       if(error) return res.status(500).json({ok:false, error:error.message});
-      return res.status(200).json({ok:true, post:data});
+      return res.status(200).json({ok:true, post:data, rebuild:await pingRebuild()});
     }else{
       if(!id) return res.status(400).json({ok:false, error:'id required for update'});
       const {data,error}=await sb.from('posts').update(row).eq('id',id).select().single();
       if(error) return res.status(500).json({ok:false, error:error.message});
-      return res.status(200).json({ok:true, post:data});
+      return res.status(200).json({ok:true, post:data, rebuild:await pingRebuild()});
     }
   }
 

@@ -28,46 +28,8 @@ function toSlug(s){ return String(s).toLowerCase().replace(/[^a-z0-9]+/g,"-").re
 function fmtDate(d){
   try{ return new Date(d+"T00:00:00+05:30").toLocaleDateString("en-GB",{timeZone:"Asia/Kolkata",day:"2-digit",month:"short",year:"numeric"}).toUpperCase(); }catch{ return d; }
 }
-function mdToHtml(md){
-  let s = md.replace(/\r\n/g,"\n");
-  const codes=[];
-  s = s.replace(/```([a-zA-Z0-9_-]*)\n([\s\S]*?)```/g,(m,lang,code)=>{
-    const idx=codes.length;
-    codes.push(`<pre><code class="lang-${escHtml(lang||"")}">${escHtml(code.trimEnd())}</code></pre>`);
-    return `__CODE_${idx}__`;
-  });
-  s = s.replace(/`([^`]+?)`/g, (m,c)=>`<code>${escHtml(c)}</code>`);
-  s = s.replace(/^######\s+(.+)$/gm,"<h6>$1</h6>");
-  s = s.replace(/^#####\s+(.+)$/gm,"<h5>$1</h5>");
-  s = s.replace(/^####\s+(.+)$/gm,"<h4>$1</h4>");
-  s = s.replace(/^###\s+(.+)$/gm,"<h3>$1</h3>");
-  s = s.replace(/^##\s+(.+)$/gm,"<h2>$1</h2>");
-  s = s.replace(/^#\s+(.+)$/gm,"<h1>$1</h1>");
-  s = s.replace(/^>\s?(.+)$/gm,"<blockquote>$1</blockquote>");
-  s = s.replace(/(<\/blockquote>\n<blockquote>)/g,"\n");
-  s = s.replace(/\[([^\]]+?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g,'<a href="$2" rel="noopener">$1</a>');
-  s = s.replace(/\*\*([^*]+?)\*\*/g,"<strong>$1</strong>");
-  s = s.replace(/(^|[^*])\*([^*\n]+?)\*([^*]|$)/g,"$1<em>$2</em>$3");
-  s = s.replace(/^\s*(\*\*\*|---)\s*$/gm,'<hr />');
-  s = s.split("\n").map(line=>{
-    if(line.match(/^\s*[-*]\s+/)) return line.replace(/^\s*[-*]\s+(.+)/,"<li>$1</li>");
-    if(line.match(/^\s*\d+\.\s+/)) return line.replace(/^\s*\d+\.\s+(.+)/,"<li>$1</li>");
-    return line;
-  }).join("\n");
-  s = s.replace(/(?:<li>.*<\/li>\n?)+/g, m=>{
-    const inner=m.trim().split("\n").join("\n");
-    return `<ul>\n${inner}\n</ul>`;
-  });
-  const blocks = s.split(/\n{2,}/).map(b=>{
-    b=b.trim();
-    if(!b) return "";
-    if(b.startsWith("<h")||b.startsWith("<pre")||b.startsWith("<ul")||b.startsWith("<ol")||b.startsWith("<blockquote")||b.startsWith("<hr")||b.startsWith("__CODE_")) return b;
-    return `<p>${b.replace(/\n/g,"<br />\n")}</p>`;
-  }).join("\n\n");
-  let out = blocks;
-  codes.forEach((html,i)=>{ out = out.replace(`__CODE_${i}__`, html); });
-  return out;
-}
+// one renderer for the whole site — see assets/md.js
+const {mdToHtml} = require("../assets/md.js");
 
 // load projects data (sync — projects-data.json remains file-based; Supabase site_content key=projects is separate concern)
 if(!fs.existsSync(DATA_JSON)){ console.error("projects-data.json missing"); process.exit(1); }

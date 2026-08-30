@@ -71,73 +71,8 @@ function parseFrontmatter(raw){
   }
   return {data, body};
 }
-// a block that opens with a block-level tag can still end with plain text
-// (a list followed by a sign-off line) — wrap that tail so it gets .prose p spacing.
-function tailP(b){
-  var m = b.match(/^([\s\S]*<\/(?:ul|ol|blockquote|pre|h[1-6])>)([\s\S]*)$/);
-  if(!m || !m[2].trim()) return b;
-  return m[1] + "\n<p>" + m[2].trim().replace(/\n/g, "<br />\n") + "</p>";
-}
-// a link to an uploaded file (…?download=name) reads as a download chip, not a bare link
-function linkTag(text, href){
-  if(/[?&]download=/.test(href)) return '<a class="dl-file" href="' + href + '" download rel="noopener">' + text + '</a>';
-  return '<a href="' + href + '" rel="noopener">' + text + '</a>';
-}
-function mdToHtml(md){
-  let s = md.replace(/\r\n/g,"\n");
-  // code fences ```lang\ncode```
-  const codes=[];
-  s = s.replace(/```([a-zA-Z0-9_-]*)\n([\s\S]*?)```/g,(m,lang,code)=>{
-    const idx=codes.length;
-    codes.push(`<pre><code class="lang-${escHtml(lang||"")}">${escHtml(code.trimEnd())}</code></pre>`);
-    return `__CODE_${idx}__`;
-  });
-  // inline code `code`
-  s = s.replace(/`([^`]+?)`/g, (m,c)=>`<code>${escHtml(c)}</code>`);
-  // headings # to ###...
-  s = s.replace(/^######\s+(.+)$/gm,"<h6>$1</h6>");
-  s = s.replace(/^#####\s+(.+)$/gm,"<h5>$1</h5>");
-  s = s.replace(/^####\s+(.+)$/gm,"<h4>$1</h4>");
-  s = s.replace(/^###\s+(.+)$/gm,"<h3>$1</h3>");
-  s = s.replace(/^##\s+(.+)$/gm,"<h2>$1</h2>");
-  s = s.replace(/^#\s+(.+)$/gm,"<h1>$1</h1>");
-  // blockquote > line
-  s = s.replace(/^>\s?(.+)$/gm,"<blockquote>$1</blockquote>");
-  s = s.replace(/(<\/blockquote>\n<blockquote>)/g,"\n");
-  // images ![alt](url) — before links
-  s = s.replace(/!\[([^\]]*?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g,'<img src="$2" alt="$1" loading="lazy" decoding="async" style="max-width:100%;height:auto;display:block;margin:12px 0;border:1px solid var(--line)" />');
-  // links [text](url) — before bold to avoid conflict
-  s = s.replace(/\[([^\]]+?)\]\((https?:\/\/[^\s)]+|\/[^\s)]*)\)/g, function(m,t,h){ return linkTag(t,h); });
-  // bold **text**
-  s = s.replace(/\*\*([^*]+?)\*\*/g,"<strong>$1</strong>");
-  // italic *text* (avoid **)
-  s = s.replace(/(^|[^*])\*([^*\n]+?)\*([^*]|$)/g,"$1<em>$2</em>$3");
-  // horizontal rule --- or ***
-  s = s.replace(/^\s*(\*\*\*|---)\s*$/gm,'<hr />');
-  // unordered lists
-  s = s.split("\n").map(line=>{
-    if(line.match(/^\s*[-*]\s+/)) return line.replace(/^\s*[-*]\s+(.+)/,"<li>$1</li>");
-    if(line.match(/^\s*\d+\.\s+/)) return line.replace(/^\s*\d+\.\s+(.+)/,"<li>$1</li>");
-    return line;
-  }).join("\n");
-  // wrap consecutive <li> in <ul>
-  s = s.replace(/(?:<li>.*<\/li>\n?)+/g, m=>{
-    const inner=m.trim().split("\n").join("\n");
-    // detect ordered vs unordered: if first item had digit, use ol? For now ul handles both; keep ul for simplicity except detect
-    return `<ul>\n${inner}\n</ul>`;
-  });
-  // paragraphs: split by double newline, wrap lines not already block elements
-  const blocks = s.split(/\n{2,}/).map(b=>{
-    b=b.trim();
-    if(!b) return "";
-    if(b.startsWith("<h")||b.startsWith("<pre")||b.startsWith("<ul")||b.startsWith("<ol")||b.startsWith("<blockquote")||b.startsWith("<hr")||b.startsWith("__CODE_")) return tailP(b);
-    // restore code placeholders inside
-    return `<p>${b.replace(/\n/g,"<br />\n")}</p>`;
-  }).join("\n\n");
-  let out = blocks;
-  codes.forEach((html,i)=>{ out = out.replace(`__CODE_${i}__`, html); });
-  return out;
-}
+// one renderer for the whole site — see assets/md.js
+const {mdToHtml} = require("../assets/md.js");
 function wordCount(s){ return String(s).trim().split(/\s+/).filter(Boolean).length; }
 
 // ── the only posts loader ───────────────────────────────────────────

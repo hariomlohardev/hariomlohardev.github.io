@@ -96,7 +96,7 @@ Live on site: [`#stack`](https://hariomlohardev.github.io/#stack) · [`#services
 ├── SEO_CHECKLIST.md            # Entity closure checklist
 ├── thanks.html                 # FormSubmit _next target (noindex)
 └── .github/workflows/
-    └── pages.yml               # Pages deploy — Setup Node → npm run build (Supabase) → deploy-pages
+    └── pages.yml               # Pages deploy — push / cron 6h / content-changed dispatch; drops admin+api (Vercel only)
 ```
 
 Two clones, no mix:

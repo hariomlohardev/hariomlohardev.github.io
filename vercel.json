@@ -132,6 +132,14 @@
       "destination": "/trick?id=:id"
     },
     {
+      "source": "/blog/p/:slug",
+      "destination": "/post?slug=:slug"
+    },
+    {
+      "source": "/blog/p/:slug/",
+      "destination": "/post?slug=:slug"
+    },
+    {
       "source": "/projects/p/:slug",
       "destination": "/projects/p/:slug/index.html"
     },
