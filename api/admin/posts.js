@@ -43,6 +43,11 @@ function tailP(b){
   if(!m || !m[2].trim()) return b;
   return m[1] + "\n<p>" + m[2].trim().replace(/\n/g, "<br />\n") + "</p>";
 }
+// a link to an uploaded file (…?download=name) reads as a download chip, not a bare link
+function linkTag(text, href){
+  if(/[?&]download=/.test(href)) return '<a class="dl-file" href="' + href + '" download rel="noopener">' + text + '</a>';
+  return '<a href="' + href + '" rel="noopener">' + text + '</a>';
+}
 function mdToHtml(md){
   let s=String(md||'').replace(/\r\n/g,'\n');
   const codes=[];
@@ -61,7 +66,7 @@ function mdToHtml(md){
   s=s.replace(/!\[([^\]]*?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g,'<img src="$2" alt="$1" loading="lazy" decoding="async" />');
   s=s.replace(/^>[ \t]?(.*)$/gm,'<blockquote>$1</blockquote>');
   s=s.replace(/<\/blockquote>\n<blockquote>/g,'<br />\n');
-  s=s.replace(/\[([^\]]+?)\]\((https?:\/\/[^\s)]+|\/[^\s)]*)\)/g,'<a href="$2" rel="noopener">$1</a>');
+  s=s.replace(/\[([^\]]+?)\]\((https?:\/\/[^\s)]+|\/[^\s)]*)\)/g,function(m,t,h){ return linkTag(t,h); });
   s=s.replace(/\*\*([^*]+?)\*\*/g,"<strong>$1</strong>");
   s=s.replace(/^[ \t]*(\*\*\*|---)[ \t]*$/gm,'<hr />');
   s=s.split("\n").map(l=> l.match(/^[ \t]*[-*][ \t]+/) ? l.replace(/^[ \t]*[-*][ \t]+(.+)/,"<li>$1</li>") : l.match(/^[ \t]*\d+\.[ \t]+/) ? l.replace(/^[ \t]*\d+\.[ \t]+(.+)/,"<li>$1</li>") : l).join("\n");

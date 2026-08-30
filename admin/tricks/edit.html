@@ -121,9 +121,11 @@ header{position:sticky;top:0;background:rgba(246,244,238,.96);backdrop-filter:bl
             <button class="tool" type="button" data-insert="---|NL|">Rule</button>
             <button class="tool" type="button" id="imageBtn">Image ↑</button>
             <input type="file" id="imageFile" accept="image/*" style="display:none" />
+            <button class="tool" type="button" id="fileBtn">File ↑</button>
+            <input type="file" id="attachFile" style="display:none" />
           </div>
           <div style="font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:6px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-            <span>Drag &amp; drop or paste an image below — uploads to Supabase and inserts <code>![](url)</code></span>
+            <span>Drag &amp; drop or paste anything below — an image inserts <code>![](url)</code>, any other file inserts a link that downloads it</span>
             <span id="imageUploadMsg" style="color:var(--muted)"></span>
           </div>
           <textarea id="raw" class="textarea" style="min-height:460px;font-family:var(--mono);font-size:13px;white-space:pre;margin-top:8px" placeholder="## The trick
@@ -194,6 +196,11 @@ function tailP(b){
   if(!m || !m[2].trim()) return b;
   return m[1] + "\n<p>" + m[2].trim().replace(/\n/g, "<br />\n") + "</p>";
 }
+// a link to an uploaded file (…?download=name) reads as a download chip, not a bare link
+function linkTag(text, href){
+  if(/[?&]download=/.test(href)) return '<a class="dl-file" href="' + href + '" download rel="noopener">' + text + '</a>';
+  return '<a href="' + href + '" rel="noopener">' + text + '</a>';
+}
 function mdToHtml(raw){
   if(!raw || !String(raw).trim()) return '<p style="color:var(--muted)">No body yet.</p>';
   var s = String(raw).replace(/^---[\s\S]*?---\s*/,'').replace(/\r\n/g,'\n');
@@ -203,7 +210,7 @@ function mdToHtml(raw){
   s=s.replace(/^######\s+(.+)$/gm,'<h6>$1</h6>').replace(/^#####\s+(.+)$/gm,'<h5>$1</h5>').replace(/^####\s+(.+)$/gm,'<h4>$1</h4>').replace(/^###\s+(.+)$/gm,'<h3>$1</h3>').replace(/^##\s+(.+)$/gm,'<h2>$1</h2>').replace(/^#\s+(.+)$/gm,'<h1>$1</h1>');
   s=s.replace(/^[ \t]*(?:---|\*\*\*|___)[ \t]*$/gm,'<hr />');
   s=s.replace(/!\[([^\]]*?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g,'<img src="$2" alt="$1" loading="lazy" decoding="async" />');
-  s=s.replace(/\[([^\]]+?)\]\((https?:\/\/[^\s)]+|\/[^\s)]*|mailto:[^\s)]+)\)/g,'<a href="$2">$1</a>');
+  s=s.replace(/\[([^\]]+?)\]\((https?:\/\/[^\s)]+|\/[^\s)]*|mailto:[^\s)]+)\)/g,function(m,t,h){ return linkTag(t,h); });
   s=s.replace(/\*\*([^*]+?)\*\*/g,'<strong>$1</strong>').replace(/\*([^*\n]+?)\*/g,'<em>$1</em>');
   s=s.replace(/^[ \t]*[-*+][ \t]+(.+)$/gm,'<li>$1</li>');
   s=s.replace(/^[ \t]*\d+\.[ \t]+(.+)$/gm,'<li>$1</li>');
@@ -290,6 +297,43 @@ async function uploadImage(file, msgEl){
     if(msgEl){ msgEl.textContent=e.message; msgEl.style.color='var(--accent)'; }
     return null;
   }
+}
+
+function sizeLabel(n){ n=Number(n)||0; return n<1024 ? n+' B' : n<1048576 ? Math.round(n/1024)+' KB' : (n/1048576).toFixed(1)+' MB'; }
+
+/* any file, not just images — sent as raw bytes (no base64 bloat), comes back as a ?download= url */
+async function uploadAttachment(file, msgEl){
+  if(!file) return null;
+  if(file.size>25*1024*1024){ if(msgEl){ msgEl.textContent='Too large (25MB max)'; msgEl.style.color='var(--accent)'; } return null; }
+  if(msgEl){ msgEl.textContent='Uploading '+file.name+' ('+sizeLabel(file.size)+')…'; msgEl.style.color='var(--muted)'; }
+  try{
+    const r=await fetch('/api/admin/upload?kind=file',{method:'POST',headers:{'Content-Type':'application/octet-stream','X-Filename':encodeURIComponent(file.name||'file'),'X-File-Type':file.type||'','Authorization':'Bearer '+token()},body:file});
+    const t=await r.text(); let j; try{ j=JSON.parse(t); }catch{ throw new Error(t.slice(0,300)); }
+    if(!r.ok||!j.ok) throw new Error(j.error||'Upload failed');
+    if(msgEl){ msgEl.textContent='Uploaded ✓ '+j.name; msgEl.style.color='var(--green)'; setTimeout(function(){ msgEl.textContent=''; msgEl.style.color='var(--muted)'; },2500); }
+    return j;
+  }catch(e){
+    if(msgEl){ msgEl.textContent=e.message; msgEl.style.color='var(--accent)'; }
+    return null;
+  }
+}
+
+/* [name — size](url) — every renderer turns a ?download= link into a download chip */
+function fileMd(file, j){
+  const label=String(file.name||j.name||'file').replace(/[\[\]]/g,'').slice(0,80);
+  return '['+label+' — '+sizeLabel(j.size||file.size)+']('+j.url+')';
+}
+
+/* one path for the button, the drop and the paste: image inline, anything else as a download */
+async function attachAny(f, msgEl){
+  if(!f) return;
+  if(f.type && f.type.indexOf('image/')===0){
+    const url=await uploadImage(f, msgEl);
+    if(url) insertAtCursor(NL+'!['+String(f.name||'image').replace(/\.[^.]+$/,'').slice(0,60)+']('+url+')'+NL);
+    return;
+  }
+  const j=await uploadAttachment(f, msgEl);
+  if(j) insertAtCursor(NL+fileMd(f,j)+NL);
 }
 
 /* ── temporary full-page preview: borrows the real /tricks stylesheet ── */
@@ -389,24 +433,30 @@ async function init(){
       if(url){ insertAtCursor(NL+'!['+alt(f)+']('+url+')'+NL); imageFile.value=''; }
     });
   }
+  const fileBtn=document.getElementById('fileBtn'), attachFile=document.getElementById('attachFile');
+  if(fileBtn && attachFile){
+    fileBtn.addEventListener('click', function(){ attachFile.click(); });
+    attachFile.addEventListener('change', async function(){
+      const f=attachFile.files[0]; if(!f) return;
+      await attachAny(f, imageMsg);
+      attachFile.value='';
+    });
+  }
   const rawEl=document.getElementById('raw');
   rawEl.addEventListener('dragover', function(e){ e.preventDefault(); rawEl.classList.add('drop-active'); });
   rawEl.addEventListener('dragleave', function(){ rawEl.classList.remove('drop-active'); });
   rawEl.addEventListener('drop', async function(e){
     e.preventDefault(); rawEl.classList.remove('drop-active');
     const f=e.dataTransfer && e.dataTransfer.files[0];
-    if(!f || !f.type.startsWith('image/')) return;
-    const url=await uploadImage(f, imageMsg);
-    if(url) insertAtCursor(NL+'!['+alt(f)+']('+url+')'+NL);
+    if(f) await attachAny(f, imageMsg);
   });
   rawEl.addEventListener('paste', async function(e){
     const items=e.clipboardData && e.clipboardData.items; if(!items) return;
     for(const it of items){
-      if(it.type && it.type.startsWith('image/')){
-        e.preventDefault();
+      if(it.kind==='file'){
         const f=it.getAsFile(); if(!f) continue;
-        const url=await uploadImage(f, imageMsg);
-        if(url) insertAtCursor(NL+'![image]('+url+')'+NL);
+        e.preventDefault();
+        await attachAny(f, imageMsg);
         break;
       }
     }
