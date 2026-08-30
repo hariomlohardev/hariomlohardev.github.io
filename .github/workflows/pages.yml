@@ -4,6 +4,12 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # /admin writes Supabase only — this is how a publish reaches the static build
+  repository_dispatch:
+    types: [content-changed]
+  # backstop for when the ping cannot be sent (no GITHUB_TOKEN on Vercel, API down)
+  schedule:
+    - cron: '17 */6 * * *'
 
 permissions:
   contents: read
@@ -53,6 +59,8 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: node scripts/generate-tricks.js
+      - name: Keep /admin and /api off Pages (both need Vercel's functions)
+        run: rm -rf admin api
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

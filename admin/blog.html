@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="robots" content="noindex, nofollow" />
+<script>/* /admin needs /api, which exists only on Vercel — bounce the Pages host */(function(){if(location.hostname==="hariomlohardev.github.io"){location.replace("https://hariomlohardev.vercel.app"+location.pathname+location.search+location.hash);}})();</script>
 <title>Admin — Blog · Hariom Lab</title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <script>document.documentElement.classList.add('js')</script>
@@ -86,6 +87,14 @@ header{position:sticky;top:0;background:rgba(246,244,238,.94);backdrop-filter:bl
 
     <div id="list" style="margin-top:16px;display:grid;gap:12px"></div>
     <div id="empty" class="box" style="display:none;text-align:center;color:var(--muted);font-family:var(--mono);font-size:12px;margin-top:16px">No posts match — try another search or <a href="/admin/blog/edit.html" style="color:var(--accent);text-decoration:underline">create one</a>.</div>
+
+    <div class="box" style="margin-top:22px">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+        <h2 style="font-family:var(--serif);font-weight:600;font-size:1.15rem;color:var(--ink)">Comments <span class="badge" id="cmUnread" style="display:none"></span></h2>
+        <button class="btn ghost" id="cmSeen" style="padding:8px 12px;font-size:11px">Mark all read</button>
+      </div>
+      <div id="cmList" style="margin-top:12px;display:grid;gap:10px"></div>
+    </div>
   </div>
 </main>
 
@@ -94,8 +103,13 @@ function token(){ return localStorage.getItem('admin_token'); }
 async function check(){ const t=token(); if(!t) return false; try{ const r=await fetch('/api/admin/verify?token='+encodeURIComponent(t)); const j=await r.json(); return j.ok; }catch{ return false; } }
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 let posts=[];
+let comments=[];
 let filter='all';
 let q='';
+// notification mail needs a verified sender to be reliable; this inbox needs nothing,
+// so it is the one place a new comment always turns up.
+const SEEN_KEY='hl_admin_comments_seen';
+function fmtWhen(t){ try{ return new Date(t).toLocaleString('en-GB',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}); }catch{ return String(t||''); } }
 
 function renderStats(){
   const total=posts.length;
@@ -131,18 +145,41 @@ function render(){
   list.innerHTML=filtered.map(p=>`
     <div class="post-card ${p.published?'':'draft'}">
       <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between">
-        <span class="badge ${p.published?'pub':'draft'}">${p.published?'Published':'Draft'} · ${p.date||''} · ${p.reading_minutes||p.readingMinutes||3} min · ${p.word_count||p.wordCount||'—'} w</span>
-        <span class="kicker">${(p.tags||[]).join(' · ')}</span>
+        <span class="badge ${p.published?'pub':'draft'}">${p.published?'Published':'Draft'} · ${esc(p.date||'')} · ${esc(p.reading_minutes||p.readingMinutes||3)} min · ${esc(p.word_count||p.wordCount||'—')} w</span>
+        <span class="kicker">${esc((p.tags||[]).join(' · '))}</span>
       </div>
       <div style="font-family:var(--serif);font-weight:600;font-size:1.2rem;line-height:1.15;color:var(--ink)">${esc(p.title||'Untitled')}</div>
       <div style="font-family:var(--mono);font-size:11px;color:var(--muted)">/${esc(p.slug||'')}/ · ${esc(p.description||'')}</div>
       <div class="post-actions" style="display:flex;gap:8px;margin-top:4px">
         <a class="btn ghost" href="/admin/blog/edit.html?id=${encodeURIComponent(p.id)}" style="padding:8px 12px;font-size:11px">Edit →</a>
         <a class="btn ghost" href="/blog/p/${encodeURIComponent(p.slug)}/" target="_blank" style="padding:8px 12px;font-size:11px">View ↗</a>
-        <button class="btn ghost" onclick="delPost('${p.id}')" style="padding:8px 12px;font-size:11px">Delete</button>
-        <span style="margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--muted);align-self:center">/${p.slug}/</span>
+        <button class="btn ghost" data-del="${esc(p.id)}" style="padding:8px 12px;font-size:11px">Delete</button>
+        <span style="margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--muted);align-self:center">/${esc(p.slug||'')}/</span>
       </div>
     </div>`).join('');
+}
+
+function renderComments(){
+  const wrap=document.getElementById('cmList');
+  const badge=document.getElementById('cmUnread');
+  if(!comments.length){
+    wrap.innerHTML='<p style="font-family:var(--mono);font-size:11.5px;color:var(--muted)">No comments yet.</p>';
+    badge.style.display='none';
+    return;
+  }
+  const seen=localStorage.getItem(SEEN_KEY)||'';
+  const unread=comments.filter(c=>String(c.created_at)>seen).length;
+  badge.textContent=unread+' new';
+  badge.style.display=unread?'inline-block':'none';
+  wrap.innerHTML=comments.map(c=>{
+    const fresh=String(c.created_at)>seen;
+    const slug=String(c.post_slug||'');
+    return `<div class="post-card"${fresh?' style="border-left:3px solid var(--accent)"':''}>
+      <div class="kicker">${esc(c.author_name||'anon')} · ${esc(fmtWhen(c.created_at))}${c.parent_id?' · reply':''}</div>
+      <div style="font-size:13px;line-height:1.5;color:var(--ink);white-space:pre-wrap">${esc(c.content||'')}</div>
+      <div style="font-family:var(--mono);font-size:10.5px"><a href="/blog/p/${encodeURIComponent(slug)}/" target="_blank" style="color:var(--accent)">/${esc(slug)}/ ↗</a></div>
+    </div>`;
+  }).join('');
 }
 
 async function load(){
@@ -155,6 +192,12 @@ async function load(){
   posts=j.posts||[];
   renderStats();
   render();
+  try{
+    const rc=await fetch('/api/admin/posts?type=inbox&token='+encodeURIComponent(t));
+    const jc=await rc.json();
+    comments=jc.comments||[];
+  }catch{ comments=[]; }
+  renderComments();
 }
 
 window.delPost=async function(id){
@@ -166,6 +209,15 @@ window.delPost=async function(id){
 };
 
 document.getElementById('q').addEventListener('input', e=>{ q=e.target.value.trim(); render(); });
+// one delegated handler instead of an onclick per card — the id never touches markup
+document.getElementById('list').addEventListener('click', e=>{
+  const b=e.target.closest('[data-del]');
+  if(b) delPost(b.getAttribute('data-del'));
+});
+document.getElementById('cmSeen').addEventListener('click', ()=>{
+  if(comments.length) localStorage.setItem(SEEN_KEY, String(comments[0].created_at||''));
+  renderComments();
+});
 document.querySelectorAll('.pill').forEach(b=> b.addEventListener('click', ()=>{
   document.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));
   b.classList.add('active');

@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-30T09:27:03+05:30",
-  "generated_at_iso": "2026-08-30T09:27:03.720Z",
+  "generated_at": "2026-08-30T11:38:46+05:30",
+  "generated_at_iso": "2026-08-30T11:38:46.548Z",
   "user": "hariomlohardev",
   "site": "https://hariomlohardev.github.io",
   "stats": {
@@ -19,8 +19,8 @@
       "language": "Python",
       "stars": 1,
       "forks": 12,
-      "updated_at": "2026-08-23",
-      "pushed_at": "2026-08-23",
+      "updated_at": "2026-08-30",
+      "pushed_at": "2026-08-30",
       "fork": false,
       "topics": [],
       "is_fork": false
@@ -638,6 +638,22 @@
     {
       "type": "PushEvent",
       "kind": "push",
+      "repo": "hariomlohardev/peek",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/peek/commits",
+      "at": "2026-08-30"
+    },
+    {
+      "type": "IssuesEvent",
+      "kind": "issue",
+      "repo": "hariomlohardev/peek",
+      "title": "closed #82 — Enhancement: Add `peek --json` to `peek scan` for CI",
+      "url": "https://github.com/hariomlohardev/peek/issues/82",
+      "at": "2026-08-30"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
       "repo": "hariomlohardev/hariomlohardev.github.io",
       "title": "Pushed 1 commit(s)",
       "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
@@ -858,22 +874,6 @@
       "title": "Pushed 1 commit(s)",
       "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
       "at": "2026-08-24"
-    },
-    {
-      "type": "PushEvent",
-      "kind": "push",
-      "repo": "hariomlohardev/hariomlohardev.github.io",
-      "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
-      "at": "2026-08-24"
-    },
-    {
-      "type": "PushEvent",
-      "kind": "push",
-      "repo": "hariomlohardev/hariomlohardev.github.io",
-      "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
-      "at": "2026-08-23"
     }
   ]
 }

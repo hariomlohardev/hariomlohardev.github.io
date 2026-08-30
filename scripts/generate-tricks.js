@@ -34,48 +34,8 @@ const escAttr = s => escHtml(s).replace(/'/g, "&#39;");
 const escXml  = s => String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
 const TICK = String.fromCharCode(96);
 
-/* markdown -> html (mirrors mdToHtml in api/admin/posts.js; used only when a
-   row has no stored html, e.g. inserted straight through SQL) */
-// a block that opens with a block-level tag can still end with plain text
-// (a list followed by a sign-off line) — wrap that tail so it gets .prose p spacing.
-function tailP(b){
-  var m = b.match(/^([\s\S]*<\/(?:ul|ol|blockquote|pre|h[1-6])>)([\s\S]*)$/);
-  if(!m || !m[2].trim()) return b;
-  return m[1] + "\n<p>" + m[2].trim().replace(/\n/g, "<br />\n") + "</p>";
-}
-// a link to an uploaded file (…?download=name) reads as a download chip, not a bare link
-function linkTag(text, href){
-  if(/[?&]download=/.test(href)) return '<a class="dl-file" href="' + href + '" download rel="noopener">' + text + '</a>';
-  return '<a href="' + href + '" rel="noopener">' + text + '</a>';
-}
-function mdToHtml(md){
-  let s = String(md || "").replace(/\r\n/g, "\n");
-  const codes = [];
-  s = s.replace(/`{3}([a-zA-Z0-9_-]*)\n([\s\S]*?)`{3}/g, (m, lang, code) => {
-    const i = codes.length;
-    codes.push(`<pre><code class="lang-${lang || ""}">${escHtml(code.trimEnd())}</code></pre>`);
-    return `__CODE_${i}__`;
-  });
-  s = s.replace(/`([^`]+?)`/g, (m, c) => "<code>" + escHtml(c) + "</code>");
-  s = s.replace(/^######\s+(.+)$/gm, "<h6>$1</h6>").replace(/^#####\s+(.+)$/gm, "<h5>$1</h5>").replace(/^####\s+(.+)$/gm, "<h4>$1</h4>");
-  s = s.replace(/^###\s+(.+)$/gm, "<h3>$1</h3>").replace(/^##\s+(.+)$/gm, "<h2>$1</h2>").replace(/^#\s+(.+)$/gm, "<h1>$1</h1>");
-  s = s.replace(/!\[([^\]]*?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g, '<img src="$2" alt="$1" loading="lazy" decoding="async" />');
-  s = s.replace(/\[([^\]]+?)\]\((https?:\/\/[^\s)]+|\/[^\s)]*)\)/g, function(m,t,h){ return linkTag(t,h); });
-  s = s.replace(/^>[ \t]?(.*)$/gm, "<blockquote>$1</blockquote>");
-  s = s.replace(/<\/blockquote>\n<blockquote>/g, "<br />\n");
-  s = s.replace(/\*\*([^*]+?)\*\*/g, "<strong>$1</strong>");
-  s = s.replace(/^[ \t]*(\*\*\*|---)[ \t]*$/gm, "<hr />");
-  s = s.split("\n").map(l => l.match(/^[ \t]*[-*][ \t]+/) ? l.replace(/^[ \t]*[-*][ \t]+(.+)/, "<li>$1</li>")
-    : l.match(/^[ \t]*\d+\.[ \t]+/) ? l.replace(/^[ \t]*\d+\.[ \t]+(.+)/, "<li>$1</li>") : l).join("\n");
-  s = s.replace(/(?:<li>.*<\/li>\n?)+/g, m => `<ul>\n${m.trim()}\n</ul>`);
-  s = s.split(/\n{2,}/).map(b => {
-    b = b.trim(); if (!b) return "";
-    if (/^<(h\d|pre|ul|hr|blockquote|img)/.test(b) || b.startsWith("__CODE_")) return tailP(b);
-    return `<p>${b.replace(/\n/g, "<br />\n")}</p>`;
-  }).join("\n\n");
-  codes.forEach((h, i) => { s = s.replace(`__CODE_${i}__`, h); });
-  return s;
-}
+// one renderer for the whole site — see assets/md.js
+const {mdToHtml} = require("../assets/md.js");
 
 /* markdown -> plain text, for meta descriptions */
 function plainText(md){

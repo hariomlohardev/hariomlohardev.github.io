@@ -54,11 +54,11 @@ Two paths, same `npm run build`:
 
 2. **Vercel (new, underneath)**
    Vercel on `push: main` runs `vercel.json → buildCommand: npm run build` → `outputDirectory: .` → serves at `https://hariomlohardev.vercel.app`
-   *and* (optional) the workflow `.github/workflows/vercel.yml` can, after a successful Vercel deploy, re-trigger Pages so both URLs serve the identical `og/*.svg` + `feed.xml`.
+   Vercel's own GitHub integration does this on every push, so no Actions workflow is involved.
 
 Pick one:
 - **Keep them independent** (simplest): both build from the same commit, they will match 99% of the time — no extra wiring.
-- **Vercel → Pages mirror** (strict sync): let Vercel be the *only* builder, and have Pages just serve Vercel's output. Enable by giving Vercel a `GITHUB_TOKEN` + `VERCEL_TOKEN` and uncommenting the `vercel deploy --prebuilt` step in `vercel.yml`.
+- **Publish-triggered refresh** (what is wired now): saving in `/admin` writes Supabase and then POSTs a `content-changed` repository_dispatch, which re-runs `pages.yml`. Needs `GITHUB_TOKEN` in the Vercel project env; without it the 6-hourly cron in `pages.yml` is the only refresh.
 
 ## Local Vercel build mimic
 

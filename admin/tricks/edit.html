@@ -4,6 +4,8 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="robots" content="noindex, nofollow" />
+<script>/* /admin needs /api, which exists only on Vercel — bounce the Pages host */(function(){if(location.hostname==="hariomlohardev.github.io"){location.replace("https://hariomlohardev.vercel.app"+location.pathname+location.search+location.hash);}})();</script>
+<script src="/assets/md.js?v=1"></script>
 <title>Admin — Edit Trick · Hariom Lab</title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <script>document.documentElement.classList.add('js')</script>
@@ -44,6 +46,7 @@ header{position:sticky;top:0;background:rgba(246,244,238,.96);backdrop-filter:bl
 .p-prose h2{font-family:var(--serif);font-weight:600;font-size:1.15rem;margin:16px 0 8px}
 .p-prose h3{font-weight:700;margin:14px 0 6px}
 .p-prose p{margin:10px 0}
+.p-prose img{max-width:100%;height:auto;display:block;margin:12px 0;border:1px solid var(--line);background:var(--paper-2)}
 .p-prose a{color:var(--accent);text-decoration:underline}
 .p-prose blockquote{border-left:3px solid var(--accent);background:var(--paper-2);padding:8px 12px;margin:10px 0;color:#334155}
 .p-prose ul{margin:10px 0 10px 18px}
@@ -188,42 +191,10 @@ function fmtDate(d){ try{ return new Date(d||Date.now()).toLocaleDateString('en-
 function words(s){ return String(s||'').split(/\s+/).filter(Boolean).length; }
 function mins(s){ return Math.max(1, Math.ceil(words(s)/200)); }
 
-// micro md -> html — mirrors mdToHtml in api/admin/posts.js + scripts/generate-tricks.js
-// a block that opens with a block-level tag can still end with plain text
-// (a list followed by a sign-off line) — wrap that tail so it gets .prose p spacing.
-function tailP(b){
-  var m = b.match(/^([\s\S]*<\/(?:ul|ol|blockquote|pre|h[1-6])>)([\s\S]*)$/);
-  if(!m || !m[2].trim()) return b;
-  return m[1] + "\n<p>" + m[2].trim().replace(/\n/g, "<br />\n") + "</p>";
-}
-// a link to an uploaded file (…?download=name) reads as a download chip, not a bare link
-function linkTag(text, href){
-  if(/[?&]download=/.test(href)) return '<a class="dl-file" href="' + href + '" download rel="noopener">' + text + '</a>';
-  return '<a href="' + href + '" rel="noopener">' + text + '</a>';
-}
+// one renderer for the whole site — see assets/md.js
 function mdToHtml(raw){
   if(!raw || !String(raw).trim()) return '<p style="color:var(--muted)">No body yet.</p>';
-  var s = String(raw).replace(/^---[\s\S]*?---\s*/,'').replace(/\r\n/g,'\n');
-  var codes=[];
-  s=s.replace(/```[a-zA-Z0-9_-]*\n([\s\S]*?)```/g,function(_,c){ var i=codes.length; codes.push('<pre><code>'+esc(c.replace(/\s+$/,''))+'</code></pre>'); return '__CODE_'+i+'__'; });
-  s=s.replace(/`([^`]+?)`/g,function(_,c){ return '<code>'+esc(c)+'</code>'; });
-  s=s.replace(/^######\s+(.+)$/gm,'<h6>$1</h6>').replace(/^#####\s+(.+)$/gm,'<h5>$1</h5>').replace(/^####\s+(.+)$/gm,'<h4>$1</h4>').replace(/^###\s+(.+)$/gm,'<h3>$1</h3>').replace(/^##\s+(.+)$/gm,'<h2>$1</h2>').replace(/^#\s+(.+)$/gm,'<h1>$1</h1>');
-  s=s.replace(/^[ \t]*(?:---|\*\*\*|___)[ \t]*$/gm,'<hr />');
-  s=s.replace(/!\[([^\]]*?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g,'<img src="$2" alt="$1" loading="lazy" decoding="async" />');
-  s=s.replace(/\[([^\]]+?)\]\((https?:\/\/[^\s)]+|\/[^\s)]*|mailto:[^\s)]+)\)/g,function(m,t,h){ return linkTag(t,h); });
-  s=s.replace(/\*\*([^*]+?)\*\*/g,'<strong>$1</strong>').replace(/\*([^*\n]+?)\*/g,'<em>$1</em>');
-  s=s.replace(/^[ \t]*[-*+][ \t]+(.+)$/gm,'<li>$1</li>');
-  s=s.replace(/^[ \t]*\d+\.[ \t]+(.+)$/gm,'<li>$1</li>');
-  s=s.replace(/(?:<li>.*<\/li>\n?)+/g,function(m){ return '<ul>\n'+m.trim()+'\n</ul>'; });
-  s=s.replace(/^>[ \t]?(.+)$/gm,'<blockquote>$1</blockquote>');
-  s=s.replace(/<\/blockquote>\n<blockquote>/g,'<br />');
-  var blocks=s.split(/\n{2,}/).map(function(b){
-    b=b.trim(); if(!b) return '';
-    if(/^<(h[1-6]|pre|ul|ol|blockquote|hr|img|figure)/.test(b) || b.indexOf('__CODE_')===0) return tailP(b);
-    return '<p>'+b.replace(/\n/g,'<br />\n')+'</p>';
-  }).join('\n\n');
-  codes.forEach(function(html,i){ blocks=blocks.replace('__CODE_'+i+'__', html); });
-  return blocks;
+  return MD.mdToHtml(String(raw).replace(/^---[\s\S]*?---\s*/,''));
 }
 
 let editId=null, loaded=null;
