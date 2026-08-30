@@ -39,6 +39,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: node scripts/generate-opensource.js
+      - name: Build tricks (Supabase/tricks-data → tricks/p/*/index.html + sitemap)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: node scripts/generate-tricks.js
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

@@ -5,6 +5,12 @@
  * POST {action:'update', id, post:{...}} → update
  * POST {action:'delete', id} → delete
  * Auth via ADMIN_JWT_SECRET (Bearer token)
+ *
+ * Tricks share this function (Vercel Hobby 12-function cap):
+ * GET  ?type=tricks         -> published tricks (all when authed)
+ * GET  ?type=tricks&id=12   -> single trick
+ * POST ?type=tricks {action:'create'|'update'|'delete', id, trick:{title,raw,tags,published}}
+ * vercel.json rewrites /api/tricks -> /api/admin/posts?type=tricks
  */
 const jwt=require('jsonwebtoken');
 const cookie=require('cookie');
@@ -45,24 +51,95 @@ function mdToHtml(md){
   s=s.replace(/^###\s+(.+)$/gm,"<h3>$1</h3>");
   s=s.replace(/^##\s+(.+)$/gm,"<h2>$1</h2>");
   s=s.replace(/^#\s+(.+)$/gm,"<h1>$1</h1>");
+  s=s.replace(/!\[([^\]]*?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g,'<img src="$2" alt="$1" loading="lazy" decoding="async" />');
+  s=s.replace(/^>[ \t]?(.*)$/gm,'<blockquote>$1</blockquote>');
+  s=s.replace(/<\/blockquote>\n<blockquote>/g,'<br />\n');
   s=s.replace(/\[([^\]]+?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g,'<a href="$2" rel="noopener">$1</a>');
   s=s.replace(/\*\*([^*]+?)\*\*/g,"<strong>$1</strong>");
-  s=s.replace(/^\s*(\*\*\*|---)\s*$/gm,'<hr />');
-  s=s.split("\n").map(l=> l.match(/^\s*[-*]\s+/) ? l.replace(/^\s*[-*]\s+(.+)/,"<li>$1</li>") : l.match(/^\s*\d+\.\s+/) ? l.replace(/^\s*\d+\.\s+(.+)/,"<li>$1</li>") : l).join("\n");
+  s=s.replace(/^[ \t]*(\*\*\*|---)[ \t]*$/gm,'<hr />');
+  s=s.split("\n").map(l=> l.match(/^[ \t]*[-*][ \t]+/) ? l.replace(/^[ \t]*[-*][ \t]+(.+)/,"<li>$1</li>") : l.match(/^[ \t]*\d+\.[ \t]+/) ? l.replace(/^[ \t]*\d+\.[ \t]+(.+)/,"<li>$1</li>") : l).join("\n");
   s=s.replace(/(?:<li>.*<\/li>\n?)+/g, m=> `<ul>\n${m.trim().split("\n").join("\n")}\n</ul>`);
   const blocks=s.split(/\n{2,}/).map(b=>{
     b=b.trim(); if(!b) return "";
-    if(b.startsWith("<h")||b.startsWith("<pre")||b.startsWith("<ul")||b.startsWith("<hr")||b.startsWith("__CODE_")) return b;
+    if(b.startsWith("<h")||b.startsWith("<pre")||b.startsWith("<ul")||b.startsWith("<hr")||b.startsWith("<blockquote")||b.startsWith("<img")||b.startsWith("__CODE_")) return b;
     return `<p>${b.replace(/\n/g,"<br />\n")}</p>`;
   }).join("\n\n");
   let out=blocks; codes.forEach((h,i)=> out=out.replace(`__CODE_${i}__`, h));
   return out;
 }
 
+// ---- tricks: Title + full markdown body, no cover ----------------------
+async function handleTricks(req,res,sb){
+  if(req.method==='GET'){
+    let authed=false;
+    try{ verify(req); authed=true; }catch{}
+    const idRaw=String((req.query&&(req.query.id||req.query.trick))||'').trim();
+    if(idRaw && !/^[0-9]{1,18}$/.test(idRaw)) return res.status(400).json({ok:false, error:'invalid id'});
+    const cols=authed ? '*' : 'id,title,raw,html,tags,published,word_count,reading_minutes,created_at,updated_at';
+    let q=sb.from('tricks').select(cols);
+    if(!authed) q=q.eq('published',true);
+    if(idRaw) q=q.eq('id',Number(idRaw));
+    const {data,error}=await q.order('created_at',{ascending:false}).limit(idRaw?1:200);
+    if(error) return res.status(500).json({ok:false, error:error.message});
+    const list=data||[];
+    res.setHeader('Cache-Control','no-store');
+    return res.status(200).json({ok:true, tricks:list, trick:list[0]||null, count:list.length});
+  }
+  if(req.method!=='POST') return res.status(405).json({ok:false, error:'method not allowed'});
+  try{ verify(req); }catch(e){ return res.status(401).json({ok:false, error:e.message}); }
+  let body=req.body;
+  if(typeof body==='string'){ try{ body=JSON.parse(body); }catch{ body={}; } }
+  body=body||{};
+  const action=String(body.action||'').toLowerCase();
+  const id=body.id;
+  const t=body.trick||body.post||{};
+
+  if(action==='delete'){
+    if(!id) return res.status(400).json({ok:false, error:'id required'});
+    const {error}=await sb.from('tricks').delete().eq('id',id);
+    if(error) return res.status(500).json({ok:false, error:error.message});
+    return res.status(200).json({ok:true, deleted:id});
+  }
+  if(action==='create'||action==='update'){
+    const title=String(t.title||'').trim().replace(/\s+/g,' ').slice(0,200);
+    if(!title) return res.status(400).json({ok:false, error:'title required'});
+    const raw=String(t.raw||'');
+    if(raw.length>200000) return res.status(400).json({ok:false, error:'body too long (200k max)'});
+    const wc=raw.split(/\s+/).filter(Boolean).length;
+    const row={
+      title,
+      raw,
+      html: mdToHtml(raw),
+      tags: Array.isArray(t.tags) ? t.tags.map(x=>String(x).trim().slice(0,32)).filter(Boolean).slice(0,8) : [],
+      published: t.published!==false,
+      word_count: wc,
+      reading_minutes: Math.max(1, Math.ceil(wc/200))
+    };
+    if(action==='update'){
+      if(!id) return res.status(400).json({ok:false, error:'id required'});
+      const {data,error}=await sb.from('tricks').update(row).eq('id',id).select('*').single();
+      if(error) return res.status(500).json({ok:false, error:error.message});
+      return res.status(200).json({ok:true, trick:data});
+    }
+    const {data,error}=await sb.from('tricks').insert(row).select('*').single();
+    if(error) return res.status(500).json({ok:false, error:error.message});
+    return res.status(200).json({ok:true, trick:data});
+  }
+  return res.status(400).json({ok:false, error:'unknown action'});
+}
+
 module.exports=async(req,res)=>{
   try{
   const sb=await getSb();
   if(!sb) return res.status(500).json({ok:false, error:'SUPABASE not configured — add SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in Vercel'});
+
+  let type=String((req.query&&(req.query.type||req.query.t))||'').toLowerCase();
+  if(!type && req.method==='POST'){
+    let b=req.body;
+    if(typeof b==='string'){ try{ b=JSON.parse(b); }catch{ b=null; } }
+    if(b && b.type) type=String(b.type).toLowerCase();
+  }
+  if(type==='trick'||type==='tricks') return handleTricks(req,res,sb);
 
   if(req.method==='GET'){
     // Public read — return published posts for admin list (all if authed)

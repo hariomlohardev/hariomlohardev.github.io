@@ -544,6 +544,13 @@ footer{border-top:1px solid var(--ink);margin-top:clamp(56px,8vw,84px);backgroun
 html.js .rv{opacity:0;transform:translateY(16px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
 html.js .rv.in{opacity:1;transform:none}
 html:not(.js) .rv{opacity:1;transform:none}
+@media(max-width:1120px){
+  nav.desk{gap:18px}
+}
+@media(max-width:980px){
+  nav.desk{gap:12px}
+  nav.desk a{font-size:11px;letter-spacing:.09em}
+}
 @media(max-width:760px){
   nav.desk{display:none}
   .menu-btn{display:inline-flex}
@@ -595,6 +602,7 @@ html:not(.js) .rv{opacity:1;transform:none}
         <a href="/projects">Projects</a>
         <a href="/opensource">Open Source</a>
         <a href="/blog" class="active" aria-current="page">Blog</a>
+        <a href="/tricks">Tricks</a>
         <a href="/about">About</a>
         <a href="/contact">Contact</a>
         <a href="/community">Community</a>
@@ -613,9 +621,10 @@ html:not(.js) .rv{opacity:1;transform:none}
       <a href="/projects"><span>Projects</span><span class="no">02</span></a>
       <a href="/opensource"><span>Open Source</span><span class="no">03</span></a>
       <a href="/blog" class="active"><span>Blog &amp; Logs</span><span class="no">04</span></a>
-      <a href="/about"><span>About</span><span class="no">05</span></a>
-      <a href="/contact"><span>Contact</span><span class="no">06</span></a>
-      <a href="/community"><span>Community</span><span class="no">07</span></a>
+      <a href="/tricks"><span>Tricks</span><span class="no">05</span></a>
+      <a href="/about"><span>About</span><span class="no">06</span></a>
+      <a href="/contact"><span>Contact</span><span class="no">07</span></a>
+      <a href="/community"><span>Community</span><span class="no">08</span></a>
     </nav>
     <div class="mp-actions">
       <a href="/feed.xml">RSS Feed</a>

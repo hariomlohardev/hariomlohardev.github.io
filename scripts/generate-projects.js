@@ -302,7 +302,7 @@ footer{border-top:2px solid var(--ink);margin-top:24px;background:var(--paper-2)
     <div class="head-top"><span>LAB NOTEBOOK <b>No. 01</b> · PROJECT · INDIA — UTC+5:30</span><span style="display:flex;gap:12px;flex-wrap:wrap"><span>${escHtml(kindLabel)}</span><span style="color:var(--muted)">${escHtml(p.statusLabel)}</span></span></div>
     <div class="head-main">
       <a class="logo" href="/"><span class="logo-mark">HL</span> hariomlohardev <i>— build log</i></a>
-      <nav aria-label="Primary"><a href="/">Home</a><a href="/projects" class="active" aria-current="page">Projects</a><a href="/opensource">Open Source</a><a href="/blog">Blog</a><a href="/contact">Contact</a>
+      <nav aria-label="Primary"><a href="/">Home</a><a href="/projects" class="active" aria-current="page">Projects</a><a href="/opensource">Open Source</a><a href="/blog">Blog</a><a href="/tricks">Tricks</a><a href="/contact">Contact</a>
         <a href="/community">Community</a></nav>
       <a class="avail" href="/contact"><i></i> Available for freelance</a>
     </div>

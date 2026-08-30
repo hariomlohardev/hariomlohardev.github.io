@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Admin — Tricks · Hariom Lab</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-mono/latin-400.css">
+<style>
+:root{--paper:#F6F4EE;--paper-2:#EFECE2;--sheet:#FBFAF6;--ink:#181611;--muted:#5F594A;--line:#DAD5C6;--accent:#B93A13;--green:#1E7A4E;--max:1100px;--pad:clamp(18px,4vw,48px);--mono:'Space Mono',monospace;--serif:'Fraunces',serif;--sans:'Archivo',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--paper);color:#3B382E}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+header{position:sticky;top:0;background:rgba(246,244,238,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:10}
+.head-main{height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{font-family:var(--mono);font-size:13px;color:var(--muted);text-decoration:none}
+.logo b{color:var(--ink)}
+.box{background:var(--sheet);border:1px solid var(--ink);padding:18px}
+.btn{font-family:var(--mono);font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;border:1px solid var(--ink);padding:12px 18px;display:inline-flex;gap:8px;align-items:center;min-height:44px;transition:.2s;cursor:pointer;text-decoration:none}
+.btn.solid{background:var(--ink);color:#F6F4EE}
+.btn.solid:hover{background:var(--accent);border-color:var(--accent)}
+.btn.ghost{background:var(--sheet);color:var(--ink)}
+.btn.ghost:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(24,22,17,.06)}
+.input{width:100%;font-family:var(--sans);font-size:14px;padding:11px 13px;border:1px solid var(--line);background:#fff;outline:none}
+.input:focus{border-color:var(--accent)}
+.pill{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);padding:7px 12px;background:var(--paper);cursor:pointer;transition:.15s}
+.pill.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.pill:hover{border-color:var(--ink)}
+.post-card{border:1px solid var(--ink);background:var(--sheet);padding:16px;display:grid;gap:10px;position:relative;transition:transform .15s, box-shadow .15s}
+.post-card:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(24,22,17,.07)}
+.post-card.draft{border-style:dashed;opacity:.9}
+.badge{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);padding:4px 8px;display:inline-block}
+.badge.pub{background:var(--green);color:#fff;border-color:var(--green)}
+.badge.draft{background:var(--paper);color:var(--muted)}
+.kicker{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}
+.stat{background:var(--sheet);border:1px solid var(--ink);padding:14px 14px;display:grid;gap:6px}
+.stat b{font-family:var(--serif);font-weight:600;font-size:1.4rem;line-height:1}
+.stat span{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+@media(max-width:860px){ .stats{grid-template-columns:1fr 1fr} .toolbar{grid-template-columns:1fr !important} .post-actions{flex-wrap:wrap} }
+.toolbar{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;margin-top:16px}
+@media(max-width:640px){ .toolbar{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap head-main">
+    <a class="logo" href="/admin/">← <b>Admin</b> · Tricks</a>
+    <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">Supabase <code>tricks</code> · live</span>
+  </div>
+</header>
+
+<main class="wrap" style="padding:28px 0 40px">
+  <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:end;justify-content:space-between">
+    <div>
+      <h1 style="font-family:var(--serif);font-weight:600;font-size:clamp(1.7rem,4vw,2.3rem);color:var(--ink)">Tricks</h1>
+      <p style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px">Small, sharp, reusable — Title + markdown body only. Each one lives at <code>/tricks/p/&lt;id&gt;</code>.</p>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <a class="btn ghost" href="/tricks" target="_blank">View Tricks ↗</a>
+      <a class="btn solid" href="/admin/tricks/edit.html">+ New trick →</a>
+    </div>
+  </div>
+
+  <div id="gate" class="box" style="display:none;margin-top:16px">
+    <p style="font-family:var(--mono);font-size:12px;color:var(--muted)">Not logged in → <a href="/admin/" style="color:var(--accent);text-decoration:underline">login</a></p>
+  </div>
+
+  <div id="app" style="display:none">
+    <div class="stats" id="stats"></div>
+
+    <div class="toolbar">
+      <input id="q" class="input" placeholder="Search title, body, tags…" />
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+        <button class="pill active" data-filter="all">All</button>
+        <button class="pill" data-filter="published">Published</button>
+        <button class="pill" data-filter="draft">Hidden</button>
+      </div>
+    </div>
+
+    <div id="list" style="margin-top:16px;display:grid;gap:12px"></div>
+    <div id="empty" class="box" style="display:none;text-align:center;color:var(--muted);font-family:var(--mono);font-size:12px;margin-top:16px">No tricks match — try another search or <a href="/admin/tricks/edit.html" style="color:var(--accent);text-decoration:underline">create one</a>.</div>
+  </div>
+</main>
+
+<script>
+function token(){ return localStorage.getItem('admin_token'); }
+async function check(){ const t=token(); if(!t) return false; try{ const r=await fetch('/api/admin/verify?token='+encodeURIComponent(t)); const j=await r.json(); return j.ok; }catch{ return false; } }
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function pad3(n){ n=String(n==null?'':n); while(n.length<3) n='0'+n; return n; }
+function fmt(d){ if(!d) return ''; try{ return new Date(d).toLocaleDateString('en-GB',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric'}).toUpperCase(); }catch{ return String(d).slice(0,10); } }
+function plain(md){
+  var TICK=String.fromCharCode(96);
+  var s=String(md||'').split(TICK+TICK+TICK).filter(function(x,i){ return i%2===0; }).join(' ').split(TICK).join('');
+  s=s.replace(/!\[[^\]]*\]\([^)]*\)/g,' ').replace(/\[([^\]]*)\]\([^)]*\)/g,'$1');
+  s=s.replace(/^#{1,6}\s+/gm,'').replace(/^\s*[-*+]\s+/gm,'').replace(/^\s*>\s?/gm,'').replace(/[*_]/g,'');
+  return s.replace(/\s+/g,' ').trim();
+}
+let tricks=[], filter='all', q='';
+
+function renderStats(){
+  const total=tricks.length;
+  const pub=tricks.filter(t=>t.published!==false).length;
+  const hidden=total-pub;
+  const words=tricks.reduce((a,t)=> a + (Number(t.word_count)||0), 0);
+  const tags=new Set(); tricks.forEach(t=>(t.tags||[]).forEach(x=>tags.add(String(x))));
+  document.getElementById('stats').innerHTML=
+    '<div class="stat"><b>'+total+'</b><span>Total tricks</span></div>'+
+    '<div class="stat"><b>'+pub+(hidden?' / '+hidden:'')+'</b><span>Published'+(hidden?' / hidden':'')+'</span></div>'+
+    '<div class="stat"><b>'+tags.size+'</b><span>Tags</span></div>'+
+    '<div class="stat"><b>'+words+'</b><span>Words filed</span></div>';
+}
+
+function matches(t){
+  const pub=t.published!==false;
+  if(filter==='published' && !pub) return false;
+  if(filter==='draft' && pub) return false;
+  if(!q) return true;
+  const hay=[t.title,t.raw,(t.tags||[]).join(' '),t.id].join(' ').toLowerCase();
+  return hay.includes(q.toLowerCase());
+}
+
+function render(){
+  const list=document.getElementById('list'), empty=document.getElementById('empty');
+  const rows=tricks.filter(matches).sort((a,b)=> String(b.created_at||'').localeCompare(String(a.created_at||'')));
+  if(!rows.length){ list.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+  list.innerHTML=rows.map(function(t){
+    const pub=t.published!==false;
+    const mins=Math.max(1, Number(t.reading_minutes)||Math.ceil((Number(t.word_count)||0)/200)||1);
+    const excerpt=plain(t.raw||'').slice(0,150);
+    return '<div class="post-card '+(pub?'':'draft')+'">'+
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between">'+
+        '<span class="badge '+(pub?'pub':'draft')+'">'+(pub?'Published':'Hidden')+' · #'+pad3(t.id)+' · '+esc(fmt(t.created_at))+' · '+mins+' min · '+(Number(t.word_count)||0)+' w</span>'+
+        '<span class="kicker">'+esc((t.tags||[]).join(' · '))+'</span>'+
+      '</div>'+
+      '<div style="font-family:var(--serif);font-weight:600;font-size:1.2rem;line-height:1.15;color:var(--ink)">'+esc(t.title||'Untitled')+'</div>'+
+      '<div style="font-family:var(--mono);font-size:11px;color:var(--muted)">'+esc(excerpt)+(excerpt.length>=150?'…':'')+'</div>'+
+      '<div class="post-actions" style="display:flex;gap:8px;margin-top:4px">'+
+        '<a class="btn ghost" href="/admin/tricks/edit.html?id='+encodeURIComponent(t.id)+'" style="padding:8px 12px;font-size:11px">Edit →</a>'+
+        '<a class="btn ghost" href="/tricks/p/'+encodeURIComponent(t.id)+'" target="_blank" style="padding:8px 12px;font-size:11px">View ↗</a>'+
+        '<button class="btn ghost" data-del="'+encodeURIComponent(t.id)+'" style="padding:8px 12px;font-size:11px">Delete</button>'+
+        '<span style="margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--muted);align-self:center">/tricks/p/'+esc(t.id)+'</span>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+  list.querySelectorAll('[data-del]').forEach(function(b){
+    b.addEventListener('click', function(){ delTrick(decodeURIComponent(b.getAttribute('data-del'))); });
+  });
+}
+
+async function load(){
+  const ok=await check();
+  if(!ok){ document.getElementById('gate').style.display='block'; return; }
+  document.getElementById('app').style.display='block';
+  try{
+    const r=await fetch('/api/tricks?token='+encodeURIComponent(token()),{cache:'no-store'});
+    const j=await r.json();
+    if(!j.ok) throw new Error(j.error||'load failed');
+    tricks=j.tricks||[];
+  }catch(e){
+    document.getElementById('empty').textContent='Could not load tricks — '+e.message;
+    document.getElementById('empty').style.display='block';
+    tricks=[];
+  }
+  renderStats(); render();
+}
+
+async function delTrick(id){
+  if(!confirm('Delete trick #'+pad3(id)+'? This cannot be undone.')) return;
+  try{
+    const r=await fetch('/api/tricks', {method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token()}, body: JSON.stringify({type:'tricks', action:'delete', id})});
+    const j=await r.json();
+    if(!j.ok) throw new Error(j.error||'Delete failed');
+    load();
+  }catch(e){ alert(e.message); }
+}
+
+document.getElementById('q').addEventListener('input', function(e){ q=e.target.value.trim(); render(); });
+document.querySelectorAll('.pill').forEach(function(b){ b.addEventListener('click', function(){
+  document.querySelectorAll('.pill').forEach(function(x){ x.classList.remove('active'); });
+  b.classList.add('active'); filter=b.dataset.filter; render();
+}); });
+
+load();
+</script>
+</body>
+</html>

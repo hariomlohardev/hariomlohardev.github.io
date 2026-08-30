@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-24T09:29:53+05:30",
-  "generated_at_iso": "2026-08-24T09:29:53.196Z",
+  "generated_at": "2026-08-30T07:24:56+05:30",
+  "generated_at_iso": "2026-08-30T07:24:56.010Z",
   "user": "hariomlohardev",
   "site": "https://hariomlohardev.github.io",
   "stats": {
@@ -48,7 +48,7 @@
       "description": "",
       "language": "HTML",
       "stars": 1,
-      "forks": 2,
+      "forks": 3,
       "updated_at": "2026-08-22",
       "pushed_at": "2026-08-22",
       "fork": false,
@@ -100,8 +100,8 @@
       "language": "HTML",
       "stars": 0,
       "forks": 0,
-      "updated_at": "2026-08-24",
-      "pushed_at": "2026-08-24",
+      "updated_at": "2026-08-30",
+      "pushed_at": "2026-08-30",
       "fork": false,
       "topics": [],
       "is_fork": false
@@ -214,6 +214,20 @@
   ],
   "prs": [
     {
+      "id": 5157083539,
+      "number": 1866,
+      "title": "Add peek — htop for codebases to Python",
+      "html_url": "https://github.com/analysis-tools-dev/static-analysis/pull/1866",
+      "repo": "analysis-tools-dev/static-analysis",
+      "repository_url": "https://api.github.com/repos/analysis-tools-dev/static-analysis",
+      "state": "closed",
+      "merged": false,
+      "created_at": "2026-08-15",
+      "updated_at": "2026-08-28",
+      "body": "### What\n\nAdds [peek](https://github.com/hariomlohardev/peek) — *the htop for codebases* — to **Python**.\n\n- **One-liner:** `pip install peek-code && peek .` → 5 seconds to see lan",
+      "user": "hariomlohardev"
+    },
+    {
       "id": 5099039781,
       "number": 6861,
       "title": "fix(upload): handle unknown event handlers",
@@ -223,7 +237,7 @@
       "state": "open",
       "merged": false,
       "created_at": "2026-08-08",
-      "updated_at": "2026-08-23",
+      "updated_at": "2026-08-24",
       "body": "### All Submissions:\r\n\r\n* [x] Have you followed the guidelines stated in https://github.com/reflex-dev/reflex/blob/main/CONTRIBUTING.md file?\r\n* [x] Have you checked to ensure ther",
       "user": "hariomlohardev"
     },
@@ -618,158 +632,40 @@
       "updated_at": "2026-08-17",
       "body": "## What\n\nP1-1 — **Palette `#` heading jump** from `internal/plan/02-roadmap.md`:\n\n- `palette.js`: when `Ctrl+P` input starts with `#`, parses `state.md` headings (`#` → `######`), ",
       "user": "hariomlohardev"
-    },
-    {
-      "id": 5163299123,
-      "number": 26,
-      "title": "feat: faster boot and guard unsaved changes (P0)",
-      "html_url": "https://github.com/hariomlohardev/inkdown/pull/26",
-      "repo": "hariomlohardev/inkdown",
-      "repository_url": "https://api.github.com/repos/hariomlohardev/inkdown",
-      "state": "merged",
-      "merged": true,
-      "created_at": "2026-08-16",
-      "updated_at": "2026-08-16",
-      "body": "## What\n\nP0 — Don't lose words (from `internal/plan/02-roadmap.md`):\n\n- `main.js`: `hideSplash` 4000→1200ms + `performance.mark/measure` for `boot` (goal < 1.5s)\n- `ui.js`: `before",
-      "user": "hariomlohardev"
     }
   ],
   "activity": [
     {
-      "type": "PushEvent",
-      "kind": "push",
-      "repo": "hariomlohardev/hariomlohardev.github.io",
-      "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
-      "at": "2026-08-24"
-    },
-    {
-      "type": "PushEvent",
-      "kind": "push",
-      "repo": "hariomlohardev/hariomlohardev.github.io",
-      "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
-      "at": "2026-08-24"
-    },
-    {
-      "type": "PushEvent",
-      "kind": "push",
-      "repo": "hariomlohardev/hariomlohardev.github.io",
-      "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
-      "at": "2026-08-24"
-    },
-    {
-      "type": "PushEvent",
-      "kind": "push",
-      "repo": "hariomlohardev/hariomlohardev.github.io",
-      "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
-      "at": "2026-08-24"
-    },
-    {
-      "type": "PushEvent",
-      "kind": "push",
-      "repo": "hariomlohardev/hariomlohardev.github.io",
-      "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
-      "at": "2026-08-24"
-    },
-    {
-      "type": "PushEvent",
-      "kind": "push",
-      "repo": "hariomlohardev/hariomlohardev.github.io",
-      "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
-      "at": "2026-08-24"
-    },
-    {
-      "type": "PushEvent",
-      "kind": "push",
-      "repo": "hariomlohardev/hariomlohardev.github.io",
-      "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
-      "at": "2026-08-23"
-    },
-    {
-      "type": "PushEvent",
-      "kind": "push",
-      "repo": "hariomlohardev/hariomlohardev.github.io",
-      "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
-      "at": "2026-08-23"
-    },
-    {
-      "type": "PushEvent",
-      "kind": "push",
-      "repo": "hariomlohardev/hariomlohardev.github.io",
-      "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
-      "at": "2026-08-23"
-    },
-    {
-      "type": "PushEvent",
-      "kind": "push",
-      "repo": "hariomlohardev/hariomlohardev.github.io",
-      "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
-      "at": "2026-08-23"
-    },
-    {
-      "type": "PushEvent",
-      "kind": "push",
-      "repo": "hariomlohardev/hariomlohardev.github.io",
-      "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
-      "at": "2026-08-23"
-    },
-    {
-      "type": "PushEvent",
-      "kind": "push",
-      "repo": "hariomlohardev/hariomlohardev.github.io",
-      "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
-      "at": "2026-08-23"
-    },
-    {
-      "type": "PushEvent",
-      "kind": "push",
-      "repo": "hariomlohardev/hariomlohardev.github.io",
-      "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
-      "at": "2026-08-23"
+      "type": "IssueCommentEvent",
+      "kind": "activity",
+      "repo": "anthropics/claude-code",
+      "title": "IssueComment",
+      "url": "https://github.com/anthropics/claude-code",
+      "at": "2026-08-26"
     },
     {
       "type": "IssueCommentEvent",
       "kind": "activity",
-      "repo": "reflex-dev/reflex",
+      "repo": "anthropics/claude-code",
       "title": "IssueComment",
-      "url": "https://github.com/reflex-dev/reflex",
-      "at": "2026-08-23"
+      "url": "https://github.com/anthropics/claude-code",
+      "at": "2026-08-25"
     },
     {
-      "type": "IssueCommentEvent",
-      "kind": "activity",
-      "repo": "reflex-dev/reflex",
-      "title": "IssueComment",
-      "url": "https://github.com/reflex-dev/reflex",
-      "at": "2026-08-23"
+      "type": "IssuesEvent",
+      "kind": "issue",
+      "repo": "anthropics/claude-code",
+      "title": "labeled #89459 — [BUG] API Error: 400 reasoning `encrypted_content` was not issued to this caller",
+      "url": "https://github.com/anthropics/claude-code/issues/89459",
+      "at": "2026-08-25"
     },
     {
-      "type": "PushEvent",
-      "kind": "push",
-      "repo": "hariomlohardev/hariomlohardev.github.io",
-      "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
-      "at": "2026-08-23"
-    },
-    {
-      "type": "PushEvent",
-      "kind": "push",
-      "repo": "hariomlohardev/hariomlohardev.github.io",
-      "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
-      "at": "2026-08-23"
+      "type": "IssuesEvent",
+      "kind": "issue",
+      "repo": "anthropics/claude-code",
+      "title": "opened #89459 — [BUG] API Error: 400 reasoning `encrypted_content` was not issued to this caller",
+      "url": "https://github.com/anthropics/claude-code/issues/89459",
+      "at": "2026-08-25"
     },
     {
       "type": "PushEvent",
@@ -777,7 +673,7 @@
       "repo": "hariomlohardev/hariomlohardev.github.io",
       "title": "Pushed 1 commit(s)",
       "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
-      "at": "2026-08-23"
+      "at": "2026-08-25"
     },
     {
       "type": "PushEvent",
@@ -785,15 +681,7 @@
       "repo": "hariomlohardev/hariomlohardev.github.io",
       "title": "Pushed 1 commit(s)",
       "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
-      "at": "2026-08-23"
-    },
-    {
-      "type": "ForkEvent",
-      "kind": "fork",
-      "repo": "django/django",
-      "title": "Forked django/django",
-      "url": "https://github.com/django/django",
-      "at": "2026-08-23"
+      "at": "2026-08-25"
     },
     {
       "type": "PushEvent",
@@ -801,7 +689,7 @@
       "repo": "hariomlohardev/hariomlohardev.github.io",
       "title": "Pushed 1 commit(s)",
       "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
-      "at": "2026-08-23"
+      "at": "2026-08-25"
     },
     {
       "type": "PushEvent",
@@ -809,7 +697,7 @@
       "repo": "hariomlohardev/hariomlohardev.github.io",
       "title": "Pushed 1 commit(s)",
       "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
-      "at": "2026-08-23"
+      "at": "2026-08-25"
     },
     {
       "type": "PushEvent",
@@ -817,7 +705,7 @@
       "repo": "hariomlohardev/hariomlohardev.github.io",
       "title": "Pushed 1 commit(s)",
       "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
-      "at": "2026-08-23"
+      "at": "2026-08-25"
     },
     {
       "type": "PushEvent",
@@ -825,7 +713,7 @@
       "repo": "hariomlohardev/hariomlohardev.github.io",
       "title": "Pushed 1 commit(s)",
       "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
-      "at": "2026-08-23"
+      "at": "2026-08-25"
     },
     {
       "type": "PushEvent",
@@ -833,7 +721,7 @@
       "repo": "hariomlohardev/hariomlohardev.github.io",
       "title": "Pushed 1 commit(s)",
       "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
-      "at": "2026-08-23"
+      "at": "2026-08-25"
     },
     {
       "type": "PushEvent",
@@ -841,7 +729,119 @@
       "repo": "hariomlohardev/hariomlohardev.github.io",
       "title": "Pushed 1 commit(s)",
       "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
-      "at": "2026-08-23"
+      "at": "2026-08-24"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-24"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-24"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-24"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-24"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-24"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-24"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-24"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-24"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-24"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-24"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-24"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-24"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-24"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-08-24"
     },
     {
       "type": "PushEvent",
