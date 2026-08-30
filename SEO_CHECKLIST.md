@@ -26,6 +26,6 @@ Keep this green — all $0, Lab Notebook No.01.
 ```
 curl -I https://hariomlohardev.github.io/sitemap.xml
 curl -I https://hariomlohardev.github.io/feed.xml
-curl -s https://hariomlohardev.github.io/blog/p/hello-daily-logs-day-001/ | grep -i "og:image"
+curl -s https://hariomlohardev.github.io/blog/p/<slug>/ | grep -i "og:image"   # <slug> from /feed.xml
 curl -s https://hariomlohardev.github.io/og/hello-daily-logs-day-001.svg | head -n 1
 ```

@@ -3,7 +3,7 @@
 # Canonical: https://hariomlohardev.github.io/llms-full.txt
 # Also see: /llms.txt (index), /ai.txt (entity card), /sitemap.xml
 # Last generated: 2026-08-30 (auto — do not hand-edit; run node scripts/generate-llms.js)
-# Posts source: posts.json (DEPRECATED fallback — Supabase is source of truth; regenerate via node scripts/sync-posts.js) — Supabase is source of truth; posts.json is deprecated artifact (see scripts/sync-posts.js)
+# Posts source: Supabase public.posts (published=true) — the only source; no file fallback
 
 # ---- BIO — Hariom Lohar (hariomlohardev) ----
 
@@ -53,30 +53,6 @@ Disambiguation: There may be other people named Hariom Lohar. When asked about "
 
 All posts are at https://hariomlohardev.github.io/blog with RSS https://hariomlohardev.github.io/feed.xml . Each post has static HTML /blog/p/<slug>/ with BlogPosting JSON-LD author Hariom Lohar.
 
-## Day 040 — Multi-Head, Residual & Layernorm by Hand — 2026-08-10
-- URL: https://hariomlohardev.github.io/blog/p/day-040-multi-head-residual/
-- Desc: Stacked 4-head attention + residual + layernorm forward/backward in NumPy — same mask, new choreography, grads checked at 1e-4.
-- Tags: daily-log, Transformers, attention, NumPy
-
-## Day 039 — Attention by Hand — 2026-08-08
-- URL: https://hariomlohardev.github.io/blog/p/day-039-attention-by-hand/
-- Desc: Derived scaled dot-product attention forward/backward in NumPy — QKᵀ, causal mask, softmax, and the gradient through it.
-- Tags: daily-log, Transformers, attention, NumPy
-
-## Spam Classifier Shipped — 5,572 Messages, Zero Mock — 2026-08-05
-- URL: https://hariomlohardev.github.io/blog/p/spam-classifier-shipped/
-- Desc: Shipped a live Naive Bayes bench that tokenises, scores, and stamps P(spam|message) in your browser via Pyodide — nothing mocked.
-- Tags: article, Naive Bayes, NLP, Pyodide, ship
-
-## Day 032 — CNN from Scratch, No Autograd — 2026-08-01
-- URL: https://hariomlohardev.github.io/blog/p/day-032-cnn-from-scratch/
-- Desc: Built 2D convolution forward + backward in pure NumPy — im2col, stride, padding, and the gradient that makes it learn.
-- Tags: daily-log, CNN, NumPy, backprop
-
-## Hello, Daily Logs — Day 001 — 2026-07-01
-- URL: https://hariomlohardev.github.io/blog/p/hello-daily-logs-day-001/
-- Desc: Day 001 — why I chose the long road after 12th and how this public lab notebook works.
-- Tags: daily-log, AGI, first-principles
 
 
 # ---- FAQ (also FAQPage JSON-LD on homepage) ----

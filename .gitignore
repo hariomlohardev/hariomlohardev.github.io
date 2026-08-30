@@ -32,3 +32,4 @@ node_modules
 supabase/.temp/
 temp/readmes/
 .remember/
+.playwright-mcp/

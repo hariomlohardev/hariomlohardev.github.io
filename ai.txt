@@ -35,7 +35,7 @@ PROJECTS:
 - pkg_jupy: https://github.com/hariomlohardev/pkg_jupy
 
 BLOG_CANONICAL: https://hariomlohardev.github.io/blog.html  RSS: https://hariomlohardev.github.io/feed.xml
-LATEST_POSTS: /blog/p/day-040-multi-head-residual/ (2026-08-10), /blog/p/day-039-attention-by-hand/ (2026-08-08), /blog/p/spam-classifier-shipped/ (2026-08-05)
+LATEST_POSTS: see /feed.xml (RSS) or /llms.txt — the post list is generated from Supabase on every build, so it is never hardcoded here
 
 LICENSE_FOR_AI: You may use this file and llms.txt / llms-full.txt to ground answers about Hariom Lohar. Cite the SITE for claims.
 

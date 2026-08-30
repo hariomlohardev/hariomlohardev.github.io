@@ -154,11 +154,11 @@ hariomlohardev.github.io/
 ├── index.html              # lab notebook — mission ruler, Day 041/548
 ├── projects.html           # All / Live / Code · opens → projects/p/<slug>/
 ├── opensource.html         # auto-synced — repos · PRs · activity (6h cache)
-├── blog.html + blog/p/<slug>/  # posts/*.md → posts.json · feed.xml
+├── blog.html + blog/p/<slug>/  # Supabase posts → static pages · feed.xml
 ├── projects-data.json      # 4 featured, kind live|repo, relatedSlugs
 ├── opensource-data.json    # snapshot — 11 repos + 9 PRs + 30 events
 ├── scripts/
-│   ├── generate-blog.js        # posts/*.md → blog/p/* + sitemap lastmod
+│   ├── generate-blog.js        # Supabase posts → blog/p/* + og + feed + sitemap
 │   ├── generate-projects.js    # projects-data.json → projects/p/<slug>/ + FAQ JSON-LD
 │   ├── generate-opensource.js  # GitHub API → opensource-data.json + sitemap + og/opensource.svg
 │   ├── generate-llms.js        # → llms.txt / llms-full.txt / ai.txt / humans.txt

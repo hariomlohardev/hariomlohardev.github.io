@@ -551,12 +551,10 @@ footer{margin-top:clamp(48px,6vw,84px);border-top:1px solid var(--ink);backgroun
 
         <noscript>
           <div class="empty" style="margin-top:20px">
-            JavaScript is off — latest logs:<br><br>
-            <a href="/blog/p/day-039-attention-by-hand/">Day 039 — Attention by Hand</a> · 2026-08-08<br>
-            <a href="/blog/p/spam-classifier-shipped/">Spam Classifier Shipped — 5,572 Messages</a> · 2026-08-05<br>
-            <a href="/blog/p/day-032-cnn-from-scratch/">Day 032 — CNN from Scratch, No Autograd</a> · 2026-08-01<br>
-            <a href="/blog/p/hello-daily-logs-day-001/">Hello, Daily Logs — Day 001</a> · 2026-07-01<br><br>
-            RSS at <a href="/feed.xml">/feed.xml</a> · enable JS for search &amp; filters.
+            JavaScript is off — this list is loaded live from Supabase.<br><br>
+            Every published entry is in the <a href="/feed.xml">RSS feed</a>,<br>
+            and each one has its own page at /blog/p/&lt;slug&gt;/.<br><br>
+            Enable JS for search &amp; filters.
           </div>
         </noscript>
       </section>
@@ -711,9 +709,7 @@ footer{margin-top:clamp(48px,6vw,84px);border-top:1px solid var(--ink);backgroun
     if(e.key==='/' && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){ e.preventDefault(); document.getElementById('q').focus(); }
   });
 
-  // ── data: Supabase is source of truth ────────────────────────────
-  // DEPRECATED 2026-08-24 — inline FALLBACK removed. blog.html is Supabase-only (fetch '/api/admin/posts' -> REST -> posts.json). Keep empty stub for old cached bundles.
-  var FALLBACK = []; // deprecated — do not populate; Supabase-primary
+  // ── data: Supabase is the only source ────────────────────────────
 
   var POSTS=[], VIEW=[], PER=8, PAGE=1, Q='', FILTER='all', TAG='';
   var qEl=document.getElementById('q'), qClear=document.getElementById('qClear'), qCount=document.getElementById('qCount'),
@@ -804,7 +800,9 @@ footer{margin-top:clamp(48px,6vw,84px);border-top:1px solid var(--ink);backgroun
     if(ct) ct.addEventListener('click',function(e){ e.preventDefault(); TAG=''; PAGE=1; writeHash(); render(); buildTags(); });
 
     if(slice.length===0){
-      listEl.innerHTML='<div class="empty">No entries match — try another search,<br>or <a href="#" id="clearAll">clear all filters</a>.</div>';
+      listEl.innerHTML = POSTS.length===0
+        ? '<div class="empty">Nothing published yet.<br>New logs and articles land here as they are written · <a href="/feed.xml">RSS</a></div>'
+        : '<div class="empty">No entries match — try another search,<br>or <a href="#" id="clearAll">clear all filters</a>.</div>';
       var ca=document.getElementById('clearAll');
       if(ca) ca.addEventListener('click',function(e){ e.preventDefault(); Q='';TAG='';FILTER='all';qEl.value='';location.hash='';
         document.querySelectorAll('.pill').forEach(function(b){ b.setAttribute('aria-pressed',String(b.getAttribute('data-filter')==='all')); });
@@ -910,30 +908,24 @@ footer{margin-top:clamp(48px,6vw,84px);border-top:1px solid var(--ink);backgroun
     applyHash(); buildStats(); buildTags(); render();
   }
 
-  // fallback chain: /api/admin/posts -> Supabase REST (meta supabase-anon) -> posts.json -> init([])
+  // /api/admin/posts (Vercel) -> Supabase REST (GitHub Pages) -> unreachable note.
+  // An empty list is an answer, not a failure: no posts means an empty page.
+  // Nothing static is ever shown, so deleting a post really removes it.
   fetch('/api/admin/posts',{cache:'no-store'})
     .then(function(r){ if(!r.ok) throw new Error('api '+r.status); return r.json(); })
-    .then(function(j){ var arr=j.posts||j||[]; if(!Array.isArray(arr)||!arr.length) throw new Error('no posts from api'); init(arr); })
+    .then(function(j){ var arr=j.posts||j||[]; init(Array.isArray(arr)?arr:[]); })
     .catch(function(){
       var anonEl=document.querySelector('meta[name="supabase-anon"]');
       var anon=anonEl ? anonEl.content : '';
       if(!anon) throw new Error('missing anon');
       var url='https://rgmvhptebkslkjleoilc.supabase.co/rest/v1/posts?select=*&order=date.desc&published=eq.true';
       return fetch(url,{headers:{apikey:anon,Authorization:'Bearer '+anon}}).then(function(r){ if(!r.ok) throw new Error('rest '+r.status); return r.json(); }).then(function(arr){
-        if(!Array.isArray(arr)||!arr.length) throw new Error('no posts from rest');
-        init(arr);
-      });
-    })
-    .catch(function(){
-      return fetch('posts.json',{cache:'no-store'}).then(function(r){ if(!r.ok) throw new Error('posts.json '+r.status); return r.json(); }).then(function(j){
-        var arr=j.posts||j||[]; if(!Array.isArray(arr)) arr=[];
-        if(!arr.length) throw new Error('no posts from json');
-        init(arr);
+        init(Array.isArray(arr)?arr:[]);
       });
     })
     .catch(function(e){
       var m=document.getElementById('metaRow');
-      if(m) m.innerHTML='<span style="color:var(--accent)">No posts loaded — check Supabase or posts.json · <a href="/feed.xml" style="text-decoration:underline">RSS</a></span>';
+      if(m) m.innerHTML='<span style="color:var(--accent)">Could not reach Supabase — try again, or read the <a href="/feed.xml" style="text-decoration:underline">RSS feed</a></span>';
       var qC=document.getElementById('qCount'); if(qC) qC.textContent='0/0';
       init([]);
     });
