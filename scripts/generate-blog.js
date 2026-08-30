@@ -193,6 +193,9 @@ function loadPostsFromJson(){
     if(!fs.existsSync(POSTS_JSON)){ console.warn("posts.json missing (deprecated artifact — run SUPABASE_URL=... SUPABASE_ANON_KEY=... node scripts/sync-posts.js)"); return null; }
     const raw = JSON.parse(fs.readFileSync(POSTS_JSON,"utf8"));
     if(!Array.isArray(raw) || !raw.length){ console.warn("posts.json empty (deprecated artifact)"); return null; }
+    // posts.json is metadata only — no raw, no html. Rendering from it would replace
+    // every article body with its lede, so let posts/*.md answer instead.
+    if(!raw.some(p=> p && (p.raw || p.html))){ console.warn("posts.json carries metadata only (no raw/html) — falling back to posts/*.md so article bodies survive"); return null; }
     // Enrich minimal posts.json with html/raw via mdToHtml if needed
     const posts = raw.map(p=>{
       const slug = toSlug(p.slug);
