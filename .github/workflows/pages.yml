@@ -30,10 +30,19 @@ jobs:
         with:
           node-version: '20'
       - name: Build blog (posts → posts.json / feed.xml / static pages)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: node scripts/generate-blog.js
       - name: Build project detail pages (projects-data → projects/p/*/index.html)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: node scripts/generate-projects.js
       - name: Build LLM index (llms.txt / llms-full.txt)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: node scripts/generate-llms.js
       - name: Build open-source snapshot (GitHub API → opensource-data.json + sitemap)
         env:

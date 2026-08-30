@@ -58,6 +58,9 @@ jobs:
           fs.writeFileSync("/tmp/changed", changed?"1":"0");
           '
       - name: Rebuild blog (posts.json + feed + og + sitemap)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: node scripts/generate-blog.js
       - name: Commit & push if changed
         run: |

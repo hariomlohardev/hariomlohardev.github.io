@@ -43,6 +43,9 @@ jobs:
         with:
           node-version: "20"
       - name: Build posts.json (ensure fresh)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: node scripts/generate-blog.js
       - name: Detect changed post
         id: changed
