@@ -10,6 +10,7 @@
 const fs = require("fs");
 const path = require("path");
 const https = require("https");
+require("./load-env")();
 
 const ROOT = path.resolve(__dirname, "..");
 const OUT_JSON = path.join(ROOT, "opensource-data.json");

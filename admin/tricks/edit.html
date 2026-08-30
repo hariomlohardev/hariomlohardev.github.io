@@ -187,6 +187,13 @@ function words(s){ return String(s||'').split(/\s+/).filter(Boolean).length; }
 function mins(s){ return Math.max(1, Math.ceil(words(s)/200)); }
 
 // micro md -> html — mirrors mdToHtml in api/admin/posts.js + scripts/generate-tricks.js
+// a block that opens with a block-level tag can still end with plain text
+// (a list followed by a sign-off line) — wrap that tail so it gets .prose p spacing.
+function tailP(b){
+  var m = b.match(/^([\s\S]*<\/(?:ul|ol|blockquote|pre|h[1-6])>)([\s\S]*)$/);
+  if(!m || !m[2].trim()) return b;
+  return m[1] + "\n<p>" + m[2].trim().replace(/\n/g, "<br />\n") + "</p>";
+}
 function mdToHtml(raw){
   if(!raw || !String(raw).trim()) return '<p style="color:var(--muted)">No body yet.</p>';
   var s = String(raw).replace(/^---[\s\S]*?---\s*/,'').replace(/\r\n/g,'\n');
@@ -196,7 +203,7 @@ function mdToHtml(raw){
   s=s.replace(/^######\s+(.+)$/gm,'<h6>$1</h6>').replace(/^#####\s+(.+)$/gm,'<h5>$1</h5>').replace(/^####\s+(.+)$/gm,'<h4>$1</h4>').replace(/^###\s+(.+)$/gm,'<h3>$1</h3>').replace(/^##\s+(.+)$/gm,'<h2>$1</h2>').replace(/^#\s+(.+)$/gm,'<h1>$1</h1>');
   s=s.replace(/^[ \t]*(?:---|\*\*\*|___)[ \t]*$/gm,'<hr />');
   s=s.replace(/!\[([^\]]*?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g,'<img src="$2" alt="$1" loading="lazy" decoding="async" />');
-  s=s.replace(/\[([^\]]+?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+|mailto:[^\s)]+)\)/g,'<a href="$2">$1</a>');
+  s=s.replace(/\[([^\]]+?)\]\((https?:\/\/[^\s)]+|\/[^\s)]*|mailto:[^\s)]+)\)/g,'<a href="$2">$1</a>');
   s=s.replace(/\*\*([^*]+?)\*\*/g,'<strong>$1</strong>').replace(/\*([^*\n]+?)\*/g,'<em>$1</em>');
   s=s.replace(/^[ \t]*[-*+][ \t]+(.+)$/gm,'<li>$1</li>');
   s=s.replace(/^[ \t]*\d+\.[ \t]+(.+)$/gm,'<li>$1</li>');
@@ -205,7 +212,7 @@ function mdToHtml(raw){
   s=s.replace(/<\/blockquote>\n<blockquote>/g,'<br />');
   var blocks=s.split(/\n{2,}/).map(function(b){
     b=b.trim(); if(!b) return '';
-    if(/^<(h[1-6]|pre|ul|ol|blockquote|hr|img|figure)/.test(b) || b.indexOf('__CODE_')===0) return b;
+    if(/^<(h[1-6]|pre|ul|ol|blockquote|hr|img|figure)/.test(b) || b.indexOf('__CODE_')===0) return tailP(b);
     return '<p>'+b.replace(/\n/g,'<br />\n')+'</p>';
   }).join('\n\n');
   codes.forEach(function(html,i){ blocks=blocks.replace('__CODE_'+i+'__', html); });

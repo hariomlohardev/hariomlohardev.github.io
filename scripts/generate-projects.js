@@ -19,6 +19,7 @@
  */
 const fs = require("fs");
 const path = require("path");
+require("./load-env")();
 
 const ROOT = path.resolve(__dirname, "..");
 const DATA_JSON = path.join(ROOT, "projects-data.json");

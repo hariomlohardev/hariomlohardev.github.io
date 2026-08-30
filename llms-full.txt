@@ -3,7 +3,7 @@
 # Canonical: https://hariomlohardev.github.io/llms-full.txt
 # Also see: /llms.txt (index), /ai.txt (entity card), /sitemap.xml
 # Last generated: 2026-08-30 (auto — do not hand-edit; run node scripts/generate-llms.js)
-# Posts source: posts.json (DEPRECATED fallback — Supabase is source of truth; regenerate via node scripts/sync-posts.js) — Supabase is source of truth; posts.json is deprecated artifact (see scripts/sync-posts.js)
+# Posts source: supabase — Supabase is source of truth; posts.json is deprecated artifact (see scripts/sync-posts.js)
 
 # ---- BIO — Hariom Lohar (hariomlohardev) ----
 

@@ -22,6 +22,7 @@
  */
 const fs = require("fs");
 const path = require("path");
+require("./load-env")();
 const ROOT = path.resolve(__dirname, "..");
 // DEPRECATED — posts.json is a build artifact from Supabase (see sync-posts.js).
 // Supabase `posts` is the source of truth; this file is only a fallback for

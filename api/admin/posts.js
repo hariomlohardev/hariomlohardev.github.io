@@ -36,6 +36,13 @@ async function getSb(){
   const {createClient}=require('@supabase/supabase-js');
   return createClient(url,key,{ auth:{ persistSession:false, autoRefreshToken:false }, realtime:{ transport: undefined }});
 }
+// a block that opens with a block-level tag can still end with plain text
+// (a list followed by a sign-off line) — wrap that tail so it gets .prose p spacing.
+function tailP(b){
+  var m = b.match(/^([\s\S]*<\/(?:ul|ol|blockquote|pre|h[1-6])>)([\s\S]*)$/);
+  if(!m || !m[2].trim()) return b;
+  return m[1] + "\n<p>" + m[2].trim().replace(/\n/g, "<br />\n") + "</p>";
+}
 function mdToHtml(md){
   let s=String(md||'').replace(/\r\n/g,'\n');
   const codes=[];
@@ -54,14 +61,14 @@ function mdToHtml(md){
   s=s.replace(/!\[([^\]]*?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g,'<img src="$2" alt="$1" loading="lazy" decoding="async" />');
   s=s.replace(/^>[ \t]?(.*)$/gm,'<blockquote>$1</blockquote>');
   s=s.replace(/<\/blockquote>\n<blockquote>/g,'<br />\n');
-  s=s.replace(/\[([^\]]+?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g,'<a href="$2" rel="noopener">$1</a>');
+  s=s.replace(/\[([^\]]+?)\]\((https?:\/\/[^\s)]+|\/[^\s)]*)\)/g,'<a href="$2" rel="noopener">$1</a>');
   s=s.replace(/\*\*([^*]+?)\*\*/g,"<strong>$1</strong>");
   s=s.replace(/^[ \t]*(\*\*\*|---)[ \t]*$/gm,'<hr />');
   s=s.split("\n").map(l=> l.match(/^[ \t]*[-*][ \t]+/) ? l.replace(/^[ \t]*[-*][ \t]+(.+)/,"<li>$1</li>") : l.match(/^[ \t]*\d+\.[ \t]+/) ? l.replace(/^[ \t]*\d+\.[ \t]+(.+)/,"<li>$1</li>") : l).join("\n");
   s=s.replace(/(?:<li>.*<\/li>\n?)+/g, m=> `<ul>\n${m.trim().split("\n").join("\n")}\n</ul>`);
   const blocks=s.split(/\n{2,}/).map(b=>{
     b=b.trim(); if(!b) return "";
-    if(b.startsWith("<h")||b.startsWith("<pre")||b.startsWith("<ul")||b.startsWith("<hr")||b.startsWith("<blockquote")||b.startsWith("<img")||b.startsWith("__CODE_")) return b;
+    if(b.startsWith("<h")||b.startsWith("<pre")||b.startsWith("<ul")||b.startsWith("<hr")||b.startsWith("<blockquote")||b.startsWith("<img")||b.startsWith("__CODE_")) return tailP(b);
     return `<p>${b.replace(/\n/g,"<br />\n")}</p>`;
   }).join("\n\n");
   let out=blocks; codes.forEach((h,i)=> out=out.replace(`__CODE_${i}__`, h));
