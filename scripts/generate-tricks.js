@@ -19,6 +19,7 @@
  */
 const fs = require("fs");
 const path = require("path");
+require("./load-env")();
 
 const ROOT = path.resolve(__dirname, "..");
 const SITE = "https://hariomlohardev.github.io";
@@ -35,6 +36,13 @@ const TICK = String.fromCharCode(96);
 
 /* markdown -> html (mirrors mdToHtml in api/admin/posts.js; used only when a
    row has no stored html, e.g. inserted straight through SQL) */
+// a block that opens with a block-level tag can still end with plain text
+// (a list followed by a sign-off line) — wrap that tail so it gets .prose p spacing.
+function tailP(b){
+  var m = b.match(/^([\s\S]*<\/(?:ul|ol|blockquote|pre|h[1-6])>)([\s\S]*)$/);
+  if(!m || !m[2].trim()) return b;
+  return m[1] + "\n<p>" + m[2].trim().replace(/\n/g, "<br />\n") + "</p>";
+}
 function mdToHtml(md){
   let s = String(md || "").replace(/\r\n/g, "\n");
   const codes = [];
@@ -47,7 +55,7 @@ function mdToHtml(md){
   s = s.replace(/^######\s+(.+)$/gm, "<h6>$1</h6>").replace(/^#####\s+(.+)$/gm, "<h5>$1</h5>").replace(/^####\s+(.+)$/gm, "<h4>$1</h4>");
   s = s.replace(/^###\s+(.+)$/gm, "<h3>$1</h3>").replace(/^##\s+(.+)$/gm, "<h2>$1</h2>").replace(/^#\s+(.+)$/gm, "<h1>$1</h1>");
   s = s.replace(/!\[([^\]]*?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g, '<img src="$2" alt="$1" loading="lazy" decoding="async" />');
-  s = s.replace(/\[([^\]]+?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g, '<a href="$2" rel="noopener">$1</a>');
+  s = s.replace(/\[([^\]]+?)\]\((https?:\/\/[^\s)]+|\/[^\s)]*)\)/g, '<a href="$2" rel="noopener">$1</a>');
   s = s.replace(/^>[ \t]?(.*)$/gm, "<blockquote>$1</blockquote>");
   s = s.replace(/<\/blockquote>\n<blockquote>/g, "<br />\n");
   s = s.replace(/\*\*([^*]+?)\*\*/g, "<strong>$1</strong>");
@@ -57,7 +65,7 @@ function mdToHtml(md){
   s = s.replace(/(?:<li>.*<\/li>\n?)+/g, m => `<ul>\n${m.trim()}\n</ul>`);
   s = s.split(/\n{2,}/).map(b => {
     b = b.trim(); if (!b) return "";
-    if (/^<(h\d|pre|ul|hr|blockquote|img)/.test(b) || b.startsWith("__CODE_")) return b;
+    if (/^<(h\d|pre|ul|hr|blockquote|img)/.test(b) || b.startsWith("__CODE_")) return tailP(b);
     return `<p>${b.replace(/\n/g, "<br />\n")}</p>`;
   }).join("\n\n");
   codes.forEach((h, i) => { s = s.replace(`__CODE_${i}__`, h); });
@@ -486,7 +494,8 @@ async function main(){
   writeIfChanged(DYN_HTML, dynPage(shell, newsband));
   console.log("→ trick.html (dynamic shell for /tricks/p/<id>)");
   if(source === "none"){
-    console.warn("tricks: no source available (no SUPABASE_URL/key and no tricks-data.json) — kept existing pages, wrote the dynamic shell only");
+    const why = process.env.SUPABASE_URL ? "Supabase unreachable/table missing and no tricks-data.json" : "no SUPABASE_URL/key and no tricks-data.json";
+    console.warn("tricks: no source available (" + why + ") — kept existing pages, wrote the dynamic shell only");
     patchSitemap([]);
     return;
   }

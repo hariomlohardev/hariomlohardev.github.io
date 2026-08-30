@@ -346,7 +346,36 @@ html:not(.js) .rv{opacity:1;transform:none}
     <div class="rule" aria-hidden="true"></div>
     <article class="rv">
       <div class="prose">
-<p>Built 2D convolution forward + backward in pure NumPy — im2col, stride, padding, and the gradient that makes it learn.</p>
+<h2>What I built</h2>
+
+<p>2D <code>conv2d</code> forward + backward in NumPy. No <code>torch.nn</code>, no autograd — paper, then code.</p>
+
+<ul>
+<li><code>im2col</code> + <code>col2im</code> for the forward pass</li>
+<li>Stride & padding handled as index math, not magic</li>
+<li>Backward: <code>dW</code>, <code>db</code>, <code>dX</code> derived by hand</li>
+</ul>
+<p><pre><code class="lang-python"># forward — stride 1, padding 1
+cols = im2col(x_padded, KH, KW, stride=1)   # (KH*KW*C, H*W)
+w_col = W.reshape(-1, 1)                    # (KH*KW*C, 1)
+out = (w_col.T @ cols).reshape(N, H, W)</code></pre></p>
+
+<h2>Why it hurt (and why it mattered)</h2>
+
+<p>Getting <code>dX</code> right means flipping the kernel and handling the padded border — the same bug that hides for 30 lines then explodes on a <code>4×4</code> toy. Fixed by brute-forcing a numeric gradient check on a <code>2×2</code> input:</p>
+
+<pre><code class="lang-python">assert np.allclose(grad_analytic, grad_numeric, atol=1e-5)</code></pre>
+
+<p>It passed at <code>1:47 AM</code>. The log did too.</p>
+
+<h2>Next</h2>
+
+<ul>
+<li>Depthwise + pointwise conv</li>
+<li><code>max_pool</code> backward (the mask trick)</li>
+<li>Then attention — same discipline, new shape.</li>
+</ul>
+<p>Commit: <code>AGI_Research</code> — Day 032. Open notebook.</p>
       </div>
       <div class="endmark" aria-hidden="true">◆</div>
     </article>

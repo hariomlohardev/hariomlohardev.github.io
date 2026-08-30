@@ -346,7 +346,39 @@ html:not(.js) .rv{opacity:1;transform:none}
     <div class="rule" aria-hidden="true"></div>
     <article class="rv">
       <div class="prose">
-<p>Derived scaled dot-product attention forward/backward in NumPy — QKᵀ, causal mask, softmax, and the gradient through it.</p>
+<h2>The shape</h2>
+
+<p>Scaled dot-product attention, no framework:</p>
+
+<pre><code class="lang-">Attention(Q,K,V) = softmax(QKᵀ / √dₖ) V</code></pre>
+
+<p>With a causal mask: <code>scores = QKᵀ / √dₖ + mask</code> where <code>mask = 0</code> allowed, <code>-inf</code> blocked.</p>
+
+<h2>Forward</h2>
+
+<pre><code class="lang-python">scores = (Q @ K.T) / np.sqrt(d_k) + mask  # (T, T)
+weights = softmax(scores, axis=-1)           # (T, T)
+out = weights @ V                            # (T, d_k)</code></pre>
+
+<h2>Backward — where it burned</h2>
+
+<p><code>softmax</code> Jacobian is the trap:</p>
+
+<pre><code class="lang-">dL/dscores = weights * (dL/dweights - sum(dL/dweights * weights))</code></pre>
+
+<p>Then:</p>
+
+<pre><code class="lang-">dQ = dScores @ K / √dₖ
+dK = dScores.T @ Q / √dₖ
+dV = weights.T @ dScores_V</code></pre>
+
+<p>Numeric check on <code>T=3, d=4</code> at <code>1e-4</code> — passed after fixing a missing <code>/ √dₖ</code> on <code>dK</code>.</p>
+
+<h2>Reflection</h2>
+
+<p>CNNs taught me to trust the grid. Attention taught me to trust the mask. Tomorrow: multi-head + residual + layernorm — same paper, new choreography.</p>
+
+<p>Day 039. Committed.</p>
       </div>
       <div class="endmark" aria-hidden="true">◆</div>
     </article>

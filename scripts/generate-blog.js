@@ -22,6 +22,7 @@
  */
 const fs = require("fs");
 const path = require("path");
+require("./load-env")();
 
 const ROOT = path.resolve(__dirname, "..");
 const POSTS_DIR = path.join(ROOT, "posts");
@@ -75,6 +76,13 @@ function parseFrontmatter(raw){
   }
   return {data, body};
 }
+// a block that opens with a block-level tag can still end with plain text
+// (a list followed by a sign-off line) — wrap that tail so it gets .prose p spacing.
+function tailP(b){
+  var m = b.match(/^([\s\S]*<\/(?:ul|ol|blockquote|pre|h[1-6])>)([\s\S]*)$/);
+  if(!m || !m[2].trim()) return b;
+  return m[1] + "\n<p>" + m[2].trim().replace(/\n/g, "<br />\n") + "</p>";
+}
 function mdToHtml(md){
   let s = md.replace(/\r\n/g,"\n");
   // code fences ```lang\ncode```
@@ -99,7 +107,7 @@ function mdToHtml(md){
   // images ![alt](url) — before links
   s = s.replace(/!\[([^\]]*?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g,'<img src="$2" alt="$1" loading="lazy" decoding="async" style="max-width:100%;height:auto;display:block;margin:12px 0;border:1px solid var(--line)" />');
   // links [text](url) — before bold to avoid conflict
-  s = s.replace(/\[([^\]]+?)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g,'<a href="$2" rel="noopener">$1</a>');
+  s = s.replace(/\[([^\]]+?)\]\((https?:\/\/[^\s)]+|\/[^\s)]*)\)/g,'<a href="$2" rel="noopener">$1</a>');
   // bold **text**
   s = s.replace(/\*\*([^*]+?)\*\*/g,"<strong>$1</strong>");
   // italic *text* (avoid **)
@@ -122,7 +130,7 @@ function mdToHtml(md){
   const blocks = s.split(/\n{2,}/).map(b=>{
     b=b.trim();
     if(!b) return "";
-    if(b.startsWith("<h")||b.startsWith("<pre")||b.startsWith("<ul")||b.startsWith("<ol")||b.startsWith("<blockquote")||b.startsWith("<hr")||b.startsWith("__CODE_")) return b;
+    if(b.startsWith("<h")||b.startsWith("<pre")||b.startsWith("<ul")||b.startsWith("<ol")||b.startsWith("<blockquote")||b.startsWith("<hr")||b.startsWith("__CODE_")) return tailP(b);
     // restore code placeholders inside
     return `<p>${b.replace(/\n/g,"<br />\n")}</p>`;
   }).join("\n\n");
@@ -158,7 +166,9 @@ async function loadPostsFromSupabase(){
       const description = String(r.description||'');
       const tags = Array.isArray(r.tags) ? r.tags : [];
       const cover = r.cover ? String(r.cover) : null;
-      const raw = r.raw != null ? String(r.raw) : '';
+      // `raw` in Supabase still carries the YAML frontmatter (title/date/tags/slug).
+      // Strip it, or it renders as literal text plus two <hr /> inside .prose.
+      const raw = r.raw != null ? parseFrontmatter(String(r.raw)).body : '';
       // Prefer stored html, else render from raw
       const html = r.html ? String(r.html) : mdToHtml((raw || description).trim());
       const wc = r.word_count ?? r.wordCount ?? (raw ? wordCount(raw) : wordCount(description));
@@ -192,7 +202,7 @@ function loadPostsFromJson(){
       const tags = Array.isArray(p.tags)?p.tags:[];
       const cover = p.cover||null;
       // posts.json from sync-posts lacks html/raw; synthesize minimally
-      const rawBody = p.raw || description;
+      const rawBody = p.raw ? parseFrontmatter(String(p.raw)).body : description;
       const html = p.html || mdToHtml(String(rawBody).trim());
       const wc = p.wordCount ?? p.word_count ?? wordCount(String(rawBody));
       const reading = p.readingMinutes ?? p.reading_minutes ?? Math.max(1, Math.ceil(wc/200));
