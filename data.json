@@ -109,72 +109,91 @@
       ]
     },
     {
-      "name": "spam_classifier",
-      "url": "/projects/spam_classifier",
+      "name": "micrograd_hk",
+      "url": "https://github.com/hariomlohardev/micrograd-hk",
       "featured": true,
       "status": "shipped",
-      "statusLabel": "Shipped · live demo",
-      "description": "Type a message, watch it split into tokens, score red (spam) or green (ham), filter the weak signals, then stamp a verdict with P(spam|message). 5,572 messages, Naive Bayes trained in your browser — nothing mocked.",
+      "statusLabel": "On PyPI · shipped",
+      "description": "A tiny autograd engine on NumPy — a Value graph with vectorised backprop and gradient descent, written before touching a framework. Inspired by micrograd, but matrix-driven: pip install micrograd_hk, Colab demo included.",
       "chips": [
+        "autograd",
+        "NumPy",
+        "backprop",
+        "PyPI",
+        "MIT"
+      ],
+      "languages": [
+        {
+          "name": "Jupyter Notebook",
+          "pct": 80.3,
+          "color": "#DA5B0B"
+        },
+        {
+          "name": "Python",
+          "pct": 19.7,
+          "color": "#3572A5"
+        }
+      ]
+    },
+    {
+      "name": "peek",
+      "url": "https://github.com/hariomlohardev/peek",
+      "featured": true,
+      "status": "shipped",
+      "statusLabel": "On PyPI · shipped",
+      "description": "htop for codebases — understand any repo in five seconds. Languages, size and structure in one screen: pip install peek-code && peek .",
+      "chips": [
+        "CLI",
         "Python",
-        "Naive Bayes",
-        "NLP",
-        "Pyodide",
-        "Pandas",
-        "live"
+        "PyPI",
+        "developer tools"
       ],
       "languages": [
         {
           "name": "Python",
-          "pct": 72,
+          "pct": 89.2,
           "color": "#3572A5"
         },
         {
           "name": "HTML",
-          "pct": 28,
+          "pct": 10.8,
           "color": "#E34C26"
         }
       ]
     },
     {
-      "name": "practice_code",
-      "url": "https://github.com/hariomlohardev/practice_code",
+      "name": "inkdown",
+      "url": "https://github.com/hariomlohardev/inkdown",
       "featured": false,
-      "status": "open-source",
-      "statusLabel": "Open source",
-      "description": "60+ Python solutions for algorithms and data structures, grouped by topic. Each notes time and space. Fork it, add your approach, open a PR.",
+      "status": "shipped",
+      "statusLabel": "v1.1.0 · shipped",
+      "description": "Notion for Markdown — write in a clean editor, ship plain .md files. Local-first desktop app: no account, no lock-in.",
       "chips": [
-        "algorithms",
-        "data structures",
-        "Python",
-        "DSA"
+        "Markdown",
+        "editor",
+        "desktop",
+        "local-first"
       ],
       "languages": [
+        {
+          "name": "JavaScript",
+          "pct": 56.0,
+          "color": "#F1E05A"
+        },
+        {
+          "name": "CSS",
+          "pct": 22.3,
+          "color": "#663399"
+        },
+        {
+          "name": "HTML",
+          "pct": 12.2,
+          "color": "#E34C26"
+        },
         {
           "name": "Python",
-          "pct": 100,
+          "pct": 9.5,
           "color": "#3572A5"
-        }
-      ]
-    },
-    {
-      "name": "pkg_jupy",
-      "url": "https://github.com/hariomlohardev/pkg_jupy",
-      "featured": false,
-      "status": "open-source",
-      "statusLabel": "Open source",
-      "description": "Jupyter experiments that grew up — small Python packages, utility notebooks and visualisation scratches. Open for issues and PRs.",
-      "chips": [
-        "Jupyter",
-        "packages",
-        "utilities",
-        "experiments"
-      ],
-      "languages": [
-        {
-          "name": "Jupyter Notebook",
-          "pct": 100,
-          "color": "#DA5B0B"
         }
       ]
     }
