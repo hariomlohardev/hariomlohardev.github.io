@@ -22,10 +22,12 @@ const SUPA_ANON = process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPAB
 async function loadPostsSupabase(){
   try{
     const r=await fetch(`${SUPA_URL}/rest/v1/posts?select=*&published=eq.true&order=date.desc`, {headers:{apikey:SUPA_ANON, Authorization:'Bearer '+SUPA_ANON}});
-    if(!r.ok) throw 0;
+    if(!r.ok) throw new Error('rest ' + r.status);
     const arr=await r.json();
-    if(arr && arr.length) return arr.map(p=>({slug:p.slug,title:p.title,date:p.date,description:p.description,tags:p.tags,url:p.url||`${SITE}/blog/p/${p.slug}/`,readingMinutes:p.reading_minutes||p.readingMinutes||3,wordCount:p.word_count||p.wordCount}));
-  }catch(e){}
+    if(!Array.isArray(arr)) throw new Error('unexpected response shape');
+    // an empty list is a real answer: nothing published means nothing to tweet
+    return arr.map(p=>({slug:p.slug,title:p.title,date:p.date,description:p.description,tags:p.tags,url:p.url||`${SITE}/blog/p/${p.slug}/`,readingMinutes:p.reading_minutes||p.readingMinutes||3,wordCount:p.word_count||p.wordCount}));
+  }catch(e){ console.error('Supabase posts read failed:', e.message || e); }
   return null;
 }
 
