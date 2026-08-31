@@ -911,7 +911,7 @@ footer{margin-top:clamp(48px,6vw,84px);border-top:1px solid var(--ink);backgroun
   // /api/admin/posts (Vercel) -> Supabase REST (GitHub Pages) -> unreachable note.
   // An empty list is an answer, not a failure: no posts means an empty page.
   // Nothing static is ever shown, so deleting a post really removes it.
-  fetch('/api/admin/posts',{cache:'no-store'})
+  (location.hostname==='hariomlohardev.github.io'?Promise.reject(new Error('no /api on pages')):fetch('/api/admin/posts',{cache:'no-store'}))
     .then(function(r){ if(!r.ok) throw new Error('api '+r.status); return r.json(); })
     .then(function(j){ var arr=j.posts||j||[]; init(Array.isArray(arr)?arr:[]); })
     .catch(function(){

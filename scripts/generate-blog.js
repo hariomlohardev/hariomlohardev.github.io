@@ -908,16 +908,18 @@ ${feedItems}
   // sitemap.xml is Supabase-primary via getPosts() so new Supabase posts appear without manual generate
   if(fs.existsSync(SITEMAP_XML)){
     let sitemap = fs.readFileSync(SITEMAP_XML,"utf8");
-    // a post that is gone must lose its sitemap url too
-    const smLines = sitemap.split(String.fromCharCode(10));
-    const kept = smLines.filter(line=>{
-      const i = line.indexOf("/blog/p/");
-      if(i === -1) return true;
-      const slug = line.slice(i + 8).split("/")[0].split("<")[0];
-      return live.has(slug);
+    // A post that is gone must lose its sitemap url too. Prune whole <url> blocks:
+    // they span several lines because of <image:image>, so dropping just the <loc>
+    // line leaves a <url> with no <loc> — invalid, and Google can reject the file.
+    let droppedUrls = 0;
+    sitemap = sitemap.replace(/[ \t]*<url>[\s\S]*?<\/url>\s*/g, block=>{
+      if(!block.includes("<loc>")){ droppedUrls++; return ""; }
+      const m = block.match(/\/blog\/p\/([^/<"]+)/);
+      if(!m || live.has(m[1])) return block;
+      droppedUrls++;
+      return "";
     });
-    if(kept.length !== smLines.length) console.log(`✕ sitemap.xml — dropped ${smLines.length - kept.length} url(s) for deleted posts`);
-    sitemap = kept.join(String.fromCharCode(10));
+    if(droppedUrls) console.log(`✕ sitemap.xml — dropped ${droppedUrls} url block(s) for deleted posts`);
     const hasBlog = sitemap.includes("/blog");
     const today = new Date().toISOString().slice(0,10);
     if(!hasBlog){
