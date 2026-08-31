@@ -96,19 +96,20 @@ Use ONLY these. Do not invent new hues.
 
 ## 3. Typography
 
-Load via **Fontsource CDN** (not Google Fonts):
+Self-hosted from `assets/fonts/` (@fontsource woff2 files, latin subsets) — one
+same-origin stylesheet instead of nine render-blocking jsdelivr round trips, with
+the two faces the first screen needs preloaded:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-400.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-600.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-400-italic.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces/latin-600-italic.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-400.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-500.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/archivo/latin-600.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-mono/latin-400.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-mono/latin-400-italic.css">
+<link rel="preload" href="/assets/fonts/archivo-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/fraunces-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/fonts.css?v=1">
 ```
+
+`assets/fonts.css` declares the nine faces (Fraunces 400/600 roman + italic,
+Archivo 400/500/600, Space Mono 400 roman + italic), all `font-display:swap`.
+Refresh a file from `https://cdn.jsdelivr.net/npm/@fontsource/<family>/files/`
+and bump the `?v=` on every page — `/assets/*` is served immutable for a year.
 
 ```css
 --serif:'Fraunces',Georgia,serif;      /* display + italics */
@@ -339,7 +340,7 @@ Touch targets ≥44–46px always. No horizontal scroll at any width.
 
 ## 13. New-page checklist
 
-- [ ] Loads the three Fontsource families + sets `:root` tokens (§2/§3).
+- [ ] Links `/assets/fonts.css` + the two preloads, and sets `:root` tokens (§2/§3).
 - [ ] Has grain overlay, progress bar, skip link, sticky blurred header + monogram.
 - [ ] Uses `.wrap`, section borders, and the kicker/h2/sec-tag header pattern.
 - [ ] Buttons/cards/tags match §7; motion matches §8 with reduced-motion fallback.

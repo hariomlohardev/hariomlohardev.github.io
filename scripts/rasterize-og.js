@@ -17,14 +17,33 @@ const { execFileSync } = require("child_process");
 
 const ROOT = path.resolve(__dirname, "..");
 const OG_DIR = path.join(ROOT, "og");
-const FONT = "https://cdn.jsdelivr.net/npm/@fontsource";
-const FONT_CSS = [
-  `${FONT}/fraunces/latin-400.css`,
-  `${FONT}/fraunces/latin-600.css`,
-  `${FONT}/archivo/latin-400.css`,
-  `${FONT}/archivo/latin-600.css`,
-  `${FONT}/space-mono/latin-400.css`,
+// The banners used to pull five @fontsource stylesheets off jsdelivr while
+// Chrome rendered them, so any build without network produced fallback-font
+// PNGs. The same faces are self-hosted in assets/fonts now; inline them as
+// data URIs so rasterizing is offline and deterministic.
+const FONT_DIR = path.join(ROOT, "assets", "fonts");
+const FACES = [
+  ["Fraunces", 400, "fraunces-latin-400-normal.woff2"],
+  ["Fraunces", 600, "fraunces-latin-600-normal.woff2"],
+  ["Archivo", 400, "archivo-latin-400-normal.woff2"],
+  ["Archivo", 600, "archivo-latin-600-normal.woff2"],
+  ["Space Mono", 400, "space-mono-latin-400-normal.woff2"],
 ];
+
+let fontCssCache = null;
+function fontCss() {
+  if (fontCssCache !== null) return fontCssCache;
+  const rules = [];
+  for (const [family, weight, file] of FACES) {
+    const f = path.join(FONT_DIR, file);
+    if (!fs.existsSync(f)) { console.warn(`  · rasterize-og — missing assets/fonts/${file}`); continue; }
+    const b64 = fs.readFileSync(f).toString("base64");
+    rules.push(`@font-face{font-family:'${family}';font-style:normal;font-weight:${weight};`
+      + `font-display:block;src:url(data:font/woff2;base64,${b64}) format('woff2')}`);
+  }
+  fontCssCache = rules.join("");
+  return fontCssCache;
+}
 
 function findChrome() {
   const env = process.env.CHROME_PATH || process.env.PUPPETEER_EXECUTABLE_PATH;
@@ -47,8 +66,7 @@ function wrapper(svg) {
   // Inline the svg so it shares the document's font faces; the xml prolog is
   // only valid at the top of a standalone file, so drop it.
   const inline = svg.replace(/<\?xml[\s\S]*?\?>\s*/, "");
-  const links = FONT_CSS.map(h => `<link rel="stylesheet" href="${h}">`).join("");
-  return `<!doctype html><meta charset="utf-8">${links}
+  return `<!doctype html><meta charset="utf-8"><style>${fontCss()}</style>
 <style>html,body{margin:0;padding:0;background:#F6F4EE}svg{display:block}</style>
 ${inline}`;
 }
