@@ -15,10 +15,25 @@
       "statusLabel": "Daily log · in progress",
       "description": "Public lab notebook — committed daily since July 2026. Linear algebra, calculus and probability from axioms → neural nets and backprop in pure NumPy (SGD through Adam) → now CNNs, Transformers and PyTorch. No shortcuts.",
       "longDescription": "A public lab notebook committed daily since 1 July 2026 — 548 days to 31 Dec 2027. I derive everything by hand: linear algebra, calculus and probability from axioms, then neural nets, backprop, optimisers from SGD to Adam in pure NumPy, now CNNs and Transformers.\n\nEach day is a notebook with math, code and reflection — no autograd, no shortcuts. The repo is the research log; the portfolio shows the distilled logs. Follow along as the bench grows.",
-      "chips": ["backprop ✓", "NumPy", "CNNs", "Transformers", "PyTorch", "daily commits"],
+      "chips": [
+        "backprop ✓",
+        "NumPy",
+        "CNNs",
+        "Transformers",
+        "PyTorch",
+        "daily commits"
+      ],
       "languages": [
-        { "name": "Jupyter Notebook", "pct": 86.4, "color": "#DA5B0B" },
-        { "name": "Python", "pct": 13.6, "color": "#3572A5" }
+        {
+          "name": "Jupyter Notebook",
+          "pct": 86.4,
+          "color": "#DA5B0B"
+        },
+        {
+          "name": "Python",
+          "pct": 13.6,
+          "color": "#3572A5"
+        }
       ],
       "highlights": [
         "Linear algebra, calculus and probability from axioms",
@@ -28,55 +43,270 @@
         "Now: CNNs, attention, Transformers"
       ],
       "stats": [
-        { "label": "Days", "value": "40+" },
-        { "label": "Notebooks", "value": "40+" },
-        { "label": "Commits", "value": "150+" }
+        {
+          "label": "Days",
+          "value": "40+"
+        },
+        {
+          "label": "Notebooks",
+          "value": "40+"
+        },
+        {
+          "label": "Commits",
+          "value": "150+"
+        }
       ],
       "faq": [
-        { "q": "How often do you commit?", "a": "Daily since 1 July 2026 — the mission is 548 days to 31 Dec 2027. Each day is a notebook." },
-        { "q": "Do you use PyTorch or pure NumPy?", "a": "Both — I first build everything in pure NumPy by hand (backprop, Adam, CNN), then show the PyTorch version for comparison." },
-        { "q": "Can I follow along locally?", "a": "Yes — clone hariomlohardev/AGI_Research, open any notebook in Jupyter, and run top to bottom. No API keys needed." }
+        {
+          "q": "How often do you commit?",
+          "a": "Daily since 1 July 2026 — the mission is 548 days to 31 Dec 2027. Each day is a notebook."
+        },
+        {
+          "q": "Do you use PyTorch or pure NumPy?",
+          "a": "Both — I first build everything in pure NumPy by hand (backprop, Adam, CNN), then show the PyTorch version for comparison."
+        },
+        {
+          "q": "Can I follow along locally?",
+          "a": "Yes — clone hariomlohardev/AGI_Research, open any notebook in Jupyter, and run top to bottom. No API keys needed."
+        }
       ],
-      "relatedSlugs": ["day-040-multi-head-residual", "day-039-attention-by-hand", "day-032-cnn-from-scratch"],
+      "relatedSlugs": [
+        "day-040-multi-head-residual",
+        "day-039-attention-by-hand",
+        "day-032-cnn-from-scratch"
+      ],
       "cover": null
     },
     {
-      "id": "spam-classifier",
-      "slug": "spam-classifier",
-      "name": "spam_classifier",
-      "kind": "live",
-      "page": "spam_classifier",
-      "url": "projects/spam_classifier",
-      "detailUrl": "https://hariomlohardev.github.io/projects/p/spam-classifier/",
-      "demoUrl": "projects/spam_classifier",
-      "repoUrl": "https://github.com/hariomlohardev/spam_classifier",
+      "id": "micrograd-hk",
+      "slug": "micrograd-hk",
+      "name": "micrograd_hk",
+      "kind": "repo",
+      "page": "project-micrograd-hk.html",
+      "url": "https://github.com/hariomlohardev/micrograd-hk",
+      "detailUrl": "https://hariomlohardev.github.io/projects/p/micrograd-hk/",
+      "demoUrl": null,
+      "repoUrl": "https://github.com/hariomlohardev/micrograd-hk",
       "featured": true,
       "status": "shipped",
-      "statusLabel": "Shipped · live demo",
-      "description": "Type a message, watch it split into tokens, score red (spam) or green (ham), filter the weak signals, then stamp a verdict with P(spam|message). 5,572 messages, Naive Bayes trained in your browser — nothing mocked.",
-      "longDescription": "A Naive Bayes spam filter you can see working. Type any message and it tokenises, scores each token P(spam|token) with Laplace smoothing, filters weak signals, then stamps SPAM or HAM with P(spam|message).\n\nTrained live in your browser on 5,572 SMS messages (data.csv) via Pyodide + pandas — no mock, no server. The same Python that trained it scores you, token by token, in real time. Open the live bench and try WINNER!! free money now.",
-      "chips": ["Naive Bayes", "NLP", "Pyodide", "Pandas", "live"],
+      "statusLabel": "On PyPI · shipped",
+      "description": "A tiny autograd engine on NumPy — a Value graph with vectorised backprop and gradient descent, written before touching a framework. Inspired by micrograd, but matrix-driven: pip install micrograd_hk, Colab demo included.",
+      "longDescription": "A tiny autograd engine built on NumPy for fast, matrix-driven backpropagation — the from-scratch work of the AGI notebook, packaged so anyone can install it.\n\nIt implements a minimal `Value` computation graph, inspired by [karpathy/micrograd](https://github.com/karpathy/micrograd), but where micrograd differentiates scalar by scalar, this one vectorises every operation over full NumPy matrices — so training is significantly faster. `@`, `+`, `-`, `**`, `sum` and `tanh` all carry a backward pass.\n\nOn top of the engine sit a small `DenseLayer` / `MLP` API and a `Trainer` with automatic checkpointing and five optimisers: SGD, Momentum, RMSProp, Adam, and **Adam-M** — a modified Adam derived and tuned as part of this project.\n\n```bash\npip install micrograd_hk\n```\n\n```python\nfrom micrograd_hk import Value, DenseLayer, MLP, Trainer\n\nm = MLP(shape=[1, 3], nouts=[8, 8, 1])\ntrainer = Trainer(m, xs_matrix, ys_matrix)\nfinal_loss, y_pred = trainer.train(lr=0.01, iterations=3000, optimizer=\"adam_m\")\n```\n\nThere is a runnable [Colab demo](https://colab.research.google.com/github/hariomlohardev/micrograd-hk/blob/main/demo.ipynb) if you would rather read it than install it. MIT licensed, Python 3.8+.",
+      "chips": [
+        "autograd",
+        "NumPy",
+        "backprop",
+        "Adam-M",
+        "PyPI",
+        "MIT"
+      ],
       "languages": [
-        { "name": "Python", "pct": 72, "color": "#3572A5" },
-        { "name": "HTML", "pct": 28, "color": "#E34C26" }
+        {
+          "name": "Jupyter Notebook",
+          "pct": 80.3,
+          "color": "#DA5B0B"
+        },
+        {
+          "name": "Python",
+          "pct": 19.7,
+          "color": "#3572A5"
+        }
       ],
       "highlights": [
-        "Tokenisation and scoring you can see",
-        "Weak signals filtered, strong signals kept",
-        "Shows P(spam|message) with real math",
-        "Runs entirely in the browser (Pyodide)"
+        "Matrix-first `Value` autograd engine with a full backward pass",
+        "Vectorised over NumPy matrices, not scalar by scalar",
+        "`DenseLayer` and `MLP` building blocks",
+        "Five optimisers: SGD, Momentum, RMSProp, Adam and a custom Adam-M",
+        "`Trainer` with automatic checkpoint save and load",
+        "Written before touching PyTorch — the maths first, the framework after"
       ],
       "stats": [
-        { "label": "Dataset", "value": "data.csv" },
-        { "label": "Model", "value": "Naive Bayes" },
-        { "label": "Runtime", "value": "browser" }
+        {
+          "label": "Optimisers",
+          "value": "5"
+        },
+        {
+          "label": "Python",
+          "value": "3.8+"
+        },
+        {
+          "label": "License",
+          "value": "MIT"
+        }
       ],
       "faq": [
-        { "q": "Does my message leave my device?", "a": "No — the bench runs entirely in your browser via Pyodide. Nothing is sent to a server." },
-        { "q": "How is the model trained?", "a": "Naive Bayes with Laplace smoothing (k=1) over the 5,572-row SMS dataset — the same data.csv from the repo, loaded live." },
-        { "q": "What does Weak filtered mean?", "a": "Tokens with P(spam|token) near 0.5 (weak signal, within 0.12 of 0.5) are filtered before the verdict — only strong red/green tokens count." }
+        {
+          "q": "How is this different from micrograd?",
+          "a": "micrograd differentiates one scalar at a time. micrograd_hk keeps the same minimal Value graph but vectorises every operation over NumPy matrices, so a network trains in a fraction of the time while the code stays readable."
+        },
+        {
+          "q": "What is Adam-M?",
+          "a": "A modified Adam developed and tuned inside this project, selected with optimizer=\"adam_m\". SGD, Momentum, RMSProp and standard Adam ship alongside it."
+        },
+        {
+          "q": "Can I try it without installing anything?",
+          "a": "Yes — open demo.ipynb in Colab from the repo badge and run it top to bottom."
+        }
       ],
-      "relatedSlugs": ["spam-classifier-shipped"],
+      "relatedSlugs": [],
+      "cover": null
+    },
+    {
+      "id": "peek",
+      "slug": "peek",
+      "name": "peek",
+      "kind": "repo",
+      "page": "project-peek.html",
+      "url": "https://github.com/hariomlohardev/peek",
+      "detailUrl": "https://hariomlohardev.github.io/projects/p/peek/",
+      "demoUrl": null,
+      "repoUrl": "https://github.com/hariomlohardev/peek",
+      "featured": true,
+      "status": "shipped",
+      "statusLabel": "On PyPI · shipped",
+      "description": "htop for codebases — understand any repo in five seconds. Languages, size and structure in one screen: pip install peek-code && peek .",
+      "longDescription": "A zero-config codebase cartographer. Point it at any repository and it draws the map: languages, size, structure and the files that actually matter — in about five seconds, entirely offline.\n\n```bash\npip install peek-code\npeek .\n```\n\nThe default is an interactive TUI built on Rich and Textual — `j/k` to move, `/` to filter, `o` to open a file in `$EDITOR`, `enter` for details. `peek --no-tui` prints a static Rich report for screenshots, pipes and CI, and `peek --html -o map.html` writes a shareable page.\n\nTwo commands go further than a summary. `peek --pack` selects the highest-signal files within a token budget and prints them as one LLM-ready bundle — `peek --pack --ask \"auth\"` narrows it to a topic. `peek trace` walks a function tree across files: what calls it, what it calls, and how deep, with `--html` for a browsable version.\n\n```bash\npeek find \"token validation\" . --limit 10\npeek trace scan --depth 3 --html\n```\n\nPython 3.11+, ten themes, 146 tests, MIT. Issues tagged **good first issue** are open if you want to build on it.",
+      "chips": [
+        "CLI",
+        "TUI",
+        "Rich + Textual",
+        "Python",
+        "PyPI",
+        "developer tools"
+      ],
+      "languages": [
+        {
+          "name": "Python",
+          "pct": 89.2,
+          "color": "#3572A5"
+        },
+        {
+          "name": "HTML",
+          "pct": 10.8,
+          "color": "#E34C26"
+        }
+      ],
+      "highlights": [
+        "Read any codebase in about five seconds, fully offline",
+        "Interactive TUI, static Rich output, or a shareable HTML map",
+        "`--pack` builds an LLM-ready bundle inside a token budget",
+        "`peek find` ranks matches across filenames and content",
+        "`peek trace` walks the function tree across files, with an HTML view",
+        "Ten themes, 146 passing tests, zero configuration"
+      ],
+      "stats": [
+        {
+          "label": "Tests",
+          "value": "146"
+        },
+        {
+          "label": "Themes",
+          "value": "10"
+        },
+        {
+          "label": "Python",
+          "value": "3.11+"
+        }
+      ],
+      "faq": [
+        {
+          "q": "What does peek do that `ls` or `cloc` does not?",
+          "a": "It answers the question you actually have about an unfamiliar repo: what is this, which language dominates, where does the code live, and which files should I read first — in one screen instead of five commands."
+        },
+        {
+          "q": "Does it send my code anywhere?",
+          "a": "No. Everything runs locally and works offline. The optional `--llm` summary is the only feature that talks to an API, and it stays off unless you set a key yourself."
+        },
+        {
+          "q": "Can I contribute?",
+          "a": "Yes — the repo keeps a set of issues labelled good first issue. Install with pip install -e \"./peek[dev]\" and the test suite runs locally."
+        }
+      ],
+      "relatedSlugs": [],
+      "cover": null
+    },
+    {
+      "id": "inkdown",
+      "slug": "inkdown",
+      "name": "inkdown",
+      "kind": "repo",
+      "page": "project-inkdown.html",
+      "url": "https://github.com/hariomlohardev/inkdown",
+      "detailUrl": "https://hariomlohardev.github.io/projects/p/inkdown/",
+      "demoUrl": null,
+      "repoUrl": "https://github.com/hariomlohardev/inkdown",
+      "featured": true,
+      "status": "shipped",
+      "statusLabel": "v1.1.0 · shipped",
+      "description": "Notion for Markdown — write in a clean editor, ship plain .md files. Local-first desktop app: no account, no lock-in.",
+      "longDescription": "A Markdown studio that feels like a modern notes app and leaves behind nothing but plain `.md` files. Local-first, offline, no account, no telemetry — your notes stay on your disk.\n\nThe library side handles multiple files and folders, search, archive and import from a file, a URL or the clipboard. The editor gives live preview, split and focus modes, a table of contents, a minimap and a word goal, with syntax highlighting for 180+ languages, KaTeX maths, mermaid diagrams, callouts and footnotes.\n\nPast writing, it adds day-based todos with a desktop widget and a streak, slide decks built straight from `##` headings with speaker notes, five-colour highlights, version history, a `Ctrl+P` command palette, and export to Markdown, HTML, PDF, PNG or a zip.\n\n```bash\ngit clone https://github.com/hariomlohardev/inkdown && cd inkdown\npip install -r requirements.txt\npython main.py\n```\n\nBuilt with PyWebView and vanilla JavaScript — Python 3.11+. Windows gets a one-click installer from Releases; any OS can run the web preview. MIT licensed.",
+      "chips": [
+        "Markdown",
+        "editor",
+        "desktop",
+        "PyWebView",
+        "local-first",
+        "MIT"
+      ],
+      "languages": [
+        {
+          "name": "JavaScript",
+          "pct": 56.0,
+          "color": "#F1E05A"
+        },
+        {
+          "name": "CSS",
+          "pct": 22.3,
+          "color": "#663399"
+        },
+        {
+          "name": "HTML",
+          "pct": 12.2,
+          "color": "#E34C26"
+        },
+        {
+          "name": "Python",
+          "pct": 9.5,
+          "color": "#3572A5"
+        }
+      ],
+      "highlights": [
+        "Plain `.md` files in, plain `.md` files out — no proprietary format",
+        "Live preview with split, focus, TOC, minimap and a word goal",
+        "180+ languages highlighted, plus KaTeX, mermaid, callouts and footnotes",
+        "Day-based todos with a desktop widget, streak and quick capture",
+        "Slides generated from `##` headings, with speaker notes",
+        "100% local and offline — no account, no telemetry"
+      ],
+      "stats": [
+        {
+          "label": "Version",
+          "value": "1.1.0"
+        },
+        {
+          "label": "Languages",
+          "value": "180+"
+        },
+        {
+          "label": "Python",
+          "value": "3.11+"
+        }
+      ],
+      "faq": [
+        {
+          "q": "Where are my notes stored?",
+          "a": "On your machine, as ordinary Markdown files alongside a local inkdown-data.json. Nothing is uploaded and there is no account to create."
+        },
+        {
+          "q": "Do I need Windows?",
+          "a": "Windows gets a one-click installer from Releases. On any other OS you can run it from source with Python 3.11+, or open the web preview with npx serve app."
+        },
+        {
+          "q": "What happens if I stop using it?",
+          "a": "You keep your files. Everything is standard Markdown, so any other editor opens it — that is the point of shipping .md instead of a database."
+        }
+      ],
+      "relatedSlugs": [],
       "cover": null
     },
     {
@@ -94,9 +324,18 @@
       "statusLabel": "Open source",
       "description": "60+ Python solutions for algorithms and data structures, grouped by topic. Each notes time and space. Fork it, add your approach, open a PR.",
       "longDescription": "60+ Python solutions for algorithms and data structures, grouped by topic — arrays, strings, trees, graphs, DP, and more. Each solution notes time and space complexity.\n\nFork-friendly: add your approach in any language, keep the same folder structure, and open a PR. Built to stay readable and interview-ready.",
-      "chips": ["algorithms", "data structures", "Python", "DSA"],
+      "chips": [
+        "algorithms",
+        "data structures",
+        "Python",
+        "DSA"
+      ],
       "languages": [
-        { "name": "Python", "pct": 100, "color": "#3572A5" }
+        {
+          "name": "Python",
+          "pct": 100,
+          "color": "#3572A5"
+        }
       ],
       "highlights": [
         "60+ problems with complexity notes",
@@ -104,14 +343,32 @@
         "Fork-friendly — add your solution"
       ],
       "stats": [
-        { "label": "Solutions", "value": "60+" },
-        { "label": "Topics", "value": "12" },
-        { "label": "Language", "value": "Python" }
+        {
+          "label": "Solutions",
+          "value": "60+"
+        },
+        {
+          "label": "Topics",
+          "value": "12"
+        },
+        {
+          "label": "Language",
+          "value": "Python"
+        }
       ],
       "faq": [
-        { "q": "What language are the solutions in?", "a": "Python — clean, commented, with complexity noted at the top of each file." },
-        { "q": "Can I add solutions in other languages?", "a": "Yes — fork, add a parallel folder for your language, keep the problem naming, and open a PR." },
-        { "q": "Are these interview questions?", "a": "Yes — classic DSA patterns grouped by topic so you can drill arrays, trees, graphs or DP in order." }
+        {
+          "q": "What language are the solutions in?",
+          "a": "Python — clean, commented, with complexity noted at the top of each file."
+        },
+        {
+          "q": "Can I add solutions in other languages?",
+          "a": "Yes — fork, add a parallel folder for your language, keep the problem naming, and open a PR."
+        },
+        {
+          "q": "Are these interview questions?",
+          "a": "Yes — classic DSA patterns grouped by topic so you can drill arrays, trees, graphs or DP in order."
+        }
       ],
       "relatedSlugs": [],
       "cover": null
@@ -131,9 +388,18 @@
       "statusLabel": "Open source",
       "description": "Jupyter experiments that grew up — small Python packages, utility notebooks and visualisation scratches. Open for issues and PRs.",
       "longDescription": "Jupyter experiments that grew into small Python packages — utilities, visualisation scratches and notebook helpers that I actually reuse.\n\nNot a framework — just focused tools. Open for issues and PRs if you find a rough edge.",
-      "chips": ["Jupyter", "packages", "utilities", "experiments"],
+      "chips": [
+        "Jupyter",
+        "packages",
+        "utilities",
+        "experiments"
+      ],
       "languages": [
-        { "name": "Jupyter Notebook", "pct": 100, "color": "#DA5B0B" }
+        {
+          "name": "Jupyter Notebook",
+          "pct": 100,
+          "color": "#DA5B0B"
+        }
       ],
       "highlights": [
         "Small, reusable Python packages",
@@ -141,14 +407,32 @@
         "Visualisation scratches and helpers"
       ],
       "stats": [
-        { "label": "Notebooks", "value": "15+" },
-        { "label": "Packages", "value": "3" },
-        { "label": "Status", "value": "Active" }
+        {
+          "label": "Notebooks",
+          "value": "15+"
+        },
+        {
+          "label": "Packages",
+          "value": "3"
+        },
+        {
+          "label": "Status",
+          "value": "Active"
+        }
       ],
       "faq": [
-        { "q": "What kind of packages are these?", "a": "Small, single-purpose Python helpers extracted from notebooks — no heavy dependencies." },
-        { "q": "Can I use them in my own notebooks?", "a": "Yes — clone pkg_jupy, pip install -e ., and import. Issues and PRs welcome." },
-        { "q": "Are they published to PyPI?", "a": "Not yet — they live as importable packages in the repo while they stabilise." }
+        {
+          "q": "What kind of packages are these?",
+          "a": "Small, single-purpose Python helpers extracted from notebooks — no heavy dependencies."
+        },
+        {
+          "q": "Can I use them in my own notebooks?",
+          "a": "Yes — clone pkg_jupy, pip install -e ., and import. Issues and PRs welcome."
+        },
+        {
+          "q": "Are they published to PyPI?",
+          "a": "Not yet — they live as importable packages in the repo while they stabilise."
+        }
       ],
       "relatedSlugs": [],
       "cover": null
