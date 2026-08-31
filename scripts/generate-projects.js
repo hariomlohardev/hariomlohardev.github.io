@@ -25,6 +25,22 @@ function escHtml(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
 function escXml(s){ return escHtml(s); }
 function escSvg(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function toSlug(s){ return String(s).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,64) || "project"; }
+// Google truncates a <title> past ~65 chars and a description past ~165, so
+// build both to fit: the title sheds its least useful parts, and a project can
+// carry a hand-written `metaDescription` when its full one runs long.
+function pageTitle(p){
+  const full = `Hariom Lohar — ${p.name} · ${p.statusLabel} | hariomlohardev`;
+  if(full.length <= 65) return full;
+  const noHandle = `Hariom Lohar — ${p.name} · ${p.statusLabel}`;
+  if(noHandle.length <= 65) return noHandle;
+  return `Hariom Lohar — ${p.name} | hariomlohardev`.slice(0,65);
+}
+function metaDesc(p){
+  const d = p.metaDescription || p.description || "";
+  if(d.length <= 165) return d;
+  const cut = d.slice(0,162);
+  return cut.slice(0, Math.max(cut.lastIndexOf(" "), 120)).replace(/[,;:—-]$/,"") + "…";
+}
 function fmtDate(d){
   try{ return new Date(d+"T00:00:00+05:30").toLocaleDateString("en-GB",{timeZone:"Asia/Kolkata",day:"2-digit",month:"short",year:"numeric"}).toUpperCase(); }catch{ return d; }
 }
@@ -148,8 +164,8 @@ function projectPage(p, postsBySlug){
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#F6F4EE" />
 <meta name="color-scheme" content="light" />
-<title>Hariom Lohar — ${escHtml(p.name)} · ${escHtml(p.statusLabel)} | hariomlohardev</title>
-<meta name="description" content="${escHtml(p.description)}" />
+<title>${escHtml(pageTitle(p))}</title>
+<meta name="description" content="${escHtml(metaDesc(p))}" />
 <meta name="author" content="Hariom Lohar" />
 <meta name="robots" content="index, follow, max-image-preview:large" />
 <link rel="canonical" href="${url}" />
@@ -158,7 +174,7 @@ function projectPage(p, postsBySlug){
 <meta property="og:locale" content="en_IN" />
 <meta property="og:url" content="${url}" />
 <meta property="og:title" content="Hariom Lohar — ${escHtml(p.name)} · ${escHtml(p.statusLabel)}" />
-<meta property="og:description" content="${escHtml(p.description)}" />
+<meta property="og:description" content="${escHtml(metaDesc(p))}" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="${ogImage}" />
 <meta property="og:image:width" content="1200" />
@@ -167,7 +183,7 @@ function projectPage(p, postsBySlug){
 <meta property="og:image:alt" content="${escHtml(p.name)} — Hariom Lohar · Lab Notebook No.01" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Hariom Lohar — ${escHtml(p.name)}" />
-<meta name="twitter:description" content="${escHtml(p.description)}" />
+<meta name="twitter:description" content="${escHtml(metaDesc(p))}" />
 <meta name="twitter:image" content="${ogImage}" />
 <meta name="twitter:creator" content="@HariomloharAGI" />
 <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>

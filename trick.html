@@ -250,7 +250,7 @@ footer{margin-top:clamp(48px,6vw,84px);border-top:1px solid var(--ink);backgroun
 .foot-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:clamp(26px,4vw,48px);padding:clamp(36px,5vw,60px) 0 34px}
 .foot-brand p{font-family:var(--serif);font-style:italic;font-size:20px;color:var(--ink-2);max-width:26ch;line-height:1.5}
 .foot-brand .fsub{margin-top:16px;font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
-.fcol h4{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+.fcol h3{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
 .fcol ul{list-style:none;display:grid;gap:10px}
 .fcol a{font-size:14.5px;color:var(--body);transition:color .15s}
 .fcol a:hover{color:var(--accent)}
@@ -516,7 +516,7 @@ h1.trick-title{font-size:clamp(2.05rem,5.2vw,3.5rem);line-height:1.04;letter-spa
         <div class="fsub">Hariom Lohar · Lab Notebook №01</div>
       </div>
       <div class="fcol">
-        <h4>Sitemap</h4>
+        <h3>Sitemap</h3>
         <ul>
           <li><a href="/">Home</a></li>
           <li><a href="/projects">Projects</a></li>
@@ -528,7 +528,7 @@ h1.trick-title{font-size:clamp(2.05rem,5.2vw,3.5rem);line-height:1.04;letter-spa
         </ul>
       </div>
       <div class="fcol">
-        <h4>Elsewhere</h4>
+        <h3>Elsewhere</h3>
         <ul>
           <li><a href="https://github.com/hariomlohardev" target="_blank" rel="noopener">GitHub<span class="arr">↗</span></a></li>
           <li><a href="https://x.com/HariomloharAGI" target="_blank" rel="noopener">X / Twitter<span class="arr">↗</span></a></li>
@@ -539,7 +539,7 @@ h1.trick-title{font-size:clamp(2.05rem,5.2vw,3.5rem);line-height:1.04;letter-spa
         </ul>
       </div>
       <div class="fcol">
-        <h4>The lab</h4>
+        <h3>The lab</h3>
         <ul>
           <li><a href="/feed.xml">RSS — /feed.xml</a></li>
           <li><a href="https://buttondown.com/hariomlohar" target="_blank" rel="noopener">Newsletter<span class="arr">↗</span></a></li>
@@ -652,7 +652,9 @@ h1.trick-title{font-size:clamp(2.05rem,5.2vw,3.5rem);line-height:1.04;letter-spa
     if(elTitle) elTitle.textContent=t.title||('Trick #'+num);
     if(elMeta) elMeta.innerHTML='<b>FILED '+esc(fmt(t.created_at))+'</b><span class="sep">·</span><span>'+wc+' words</span><span class="sep">·</span><span>'+rd+' min read</span>';
     if(elTags) elTags.innerHTML=(t.tags||[]).map(function(x){ return '<span>'+esc(x)+'</span>'; }).join('');
-    if(elProse) elProse.innerHTML=t.html||('<p>'+esc(t.raw||'')+'</p>');
+    var body=t.html?String(t.html):('<p>'+esc(t.raw||'')+'</p>');
+    if(body.indexOf('<h1>')>=0) for(var hn=5;hn>=1;hn--) body=body.split('<h'+hn+'>').join('<h'+(hn+1)+'>').split('</h'+hn+'>').join('</h'+(hn+1)+'>');
+    if(elProse) elProse.innerHTML=body;
     if(elFoot) elFoot.textContent='Trick #'+num+' · Lab Notebook №01';
     document.title=(t.title||('Trick #'+num))+' — Trick — Hariom Lohar';
     var canon='https://hariomlohardev.github.io/tricks/p/'+t.id+'/';

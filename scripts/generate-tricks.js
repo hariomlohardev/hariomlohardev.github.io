@@ -48,6 +48,21 @@ function plainText(md){
 }
 const clip = (s, n) => { s = String(s || ""); return s.length > n ? s.slice(0, n).replace(/\s+\S*$/, "") + "…" : s; };
 const pad3 = n => String(n == null ? "" : n).padStart(3, "0");
+// Google cuts a <title> past ~65 chars, and a trick headline can use all of
+// that on its own — shed the brand suffix before shedding the headline.
+function pageTitle(t){
+  const full = t.title + " — Trick — Hariom Lohar";
+  if(full.length <= 65) return full;
+  const short = t.title + " — Hariom Lohar";
+  if(short.length <= 65) return short;
+  return t.title.length <= 65 ? t.title : clip(t.title, 64);
+}
+// The page already gives the trick an <h1>; markdown that opens with its own
+// title would make two, so a body that opens at h1 drops every level by one. A body that already starts at h2 is left alone.
+function demoteHeadings(html){
+  let out = String(html || ""); if(out.indexOf("<h1>") < 0) return out; for(let n = 5; n >= 1; n--) out = out.split("<h" + n + ">").join("<h" + (n + 1) + ">").split("</h" + n + ">").join("</h" + (n + 1) + ">");
+  return out;
+}
 const fmtDate = iso => { try { return new Date(iso).toLocaleDateString("en-GB", { timeZone: "Asia/Kolkata", day: "2-digit", month: "short", year: "numeric" }).toUpperCase(); } catch { return String(iso || "").slice(0, 10); } };
 
 /* ── data: Supabase `tricks` is the source of truth ─────────────────── */
@@ -152,7 +167,13 @@ function websiteNode(){
 
 function headFor(t){
   const canonical = t.url;
-  const desc = clip(t.text || t.title, 155) || ("Trick — " + t.title + " — by Hariom Lohar.");
+  let desc = clip(t.text || t.title, 155) || ("Trick — " + t.title + " — by Hariom Lohar.");
+  // a two-line trick leaves a stub of a snippet in search results; say what it
+  // is with what the trick already carries rather than shipping 69 characters.
+  if(desc.length < 70){
+    const kind = (t.tags && t.tags.length ? t.tags.join(", ") + " trick" : "a trick");
+    desc = clip(desc + " — " + kind + " from the lab notebook of Hariom Lohar (hariomlohardev).", 165);
+  }
   const ogImg = SITE + "/og/tricks.png";
   const iso = new Date(t.created_at).toISOString();
   const mod = new Date(t.updated_at || t.created_at).toISOString();
@@ -161,7 +182,7 @@ function headFor(t){
   const article = {"@type":"TechArticle","@id":canonical+"#article","headline":t.title,"name":t.title,"description":desc,"datePublished":iso,"dateModified":mod,"author":{"@id":PERSON},"publisher":{"@id":PERSON},"mainEntityOfPage":{"@id":canonical+"#webpage"},"url":canonical,"image":ogImg,"keywords":(t.tags||[]).join(", "),"wordCount":t.wordCount,"inLanguage":"en-IN","isPartOf":{"@id":WEBSITE},"about":{"@id":PERSON},"proficiencyLevel":"Beginner"};
   const jsonLd = {"@context":"https://schema.org","@graph":[personNode(), websiteNode(), webpage, crumbs, article]};
   return [
-    "<title>" + escHtml(t.title) + " — Trick — Hariom Lohar</title>",
+    "<title>" + escHtml(pageTitle(t)) + "</title>",
     '<meta name="description" content="' + escAttr(desc) + '" />',
     '<meta name="author" content="Hariom Lohar" />',
     '<meta name="robots" content="index, follow, max-image-preview:large" />',
@@ -172,7 +193,7 @@ function headFor(t){
     '<meta property="og:site_name" content="Hariom Lohar — Lab Notebook №01" />',
     '<meta property="og:locale" content="en_IN" />',
     '<meta property="og:url" content="' + canonical + '" />',
-    '<meta property="og:title" content="' + escAttr(t.title) + ' — Trick — Hariom Lohar" />',
+    '<meta property="og:title" content="' + escAttr(pageTitle(t)) + '" />',
     '<meta property="og:description" content="' + escAttr(desc) + '" />',
     '<meta property="og:type" content="article" />',
     '<meta property="article:published_time" content="' + iso + '" />',
@@ -225,7 +246,7 @@ function mainFor(t, newsband){
     '    <article class="trick-sheet rv">',
     '      <div class="rule"></div>',
     '      <div class="prose">',
-    t.html,
+    demoteHeadings(t.html),
     "      </div>",
     "    </article>",
     '    <div class="trick-foot">',
@@ -344,7 +365,9 @@ const DYN_JS = [
   "    if(elTitle) elTitle.textContent=t.title||('Trick #'+num);",
   "    if(elMeta) elMeta.innerHTML='<b>FILED '+esc(fmt(t.created_at))+'</b><span class=\"sep\">·</span><span>'+wc+' words</span><span class=\"sep\">·</span><span>'+rd+' min read</span>';",
   "    if(elTags) elTags.innerHTML=(t.tags||[]).map(function(x){ return '<span>'+esc(x)+'</span>'; }).join('');",
-  "    if(elProse) elProse.innerHTML=t.html||('<p>'+esc(t.raw||'')+'</p>');",
+  "    var body=t.html?String(t.html):('<p>'+esc(t.raw||'')+'</p>');",
+  "    if(body.indexOf('<h1>')>=0) for(var hn=5;hn>=1;hn--) body=body.split('<h'+hn+'>').join('<h'+(hn+1)+'>').split('</h'+hn+'>').join('</h'+(hn+1)+'>');",
+  "    if(elProse) elProse.innerHTML=body;",
   "    if(elFoot) elFoot.textContent='Trick #'+num+' · Lab Notebook №01';",
   "    document.title=(t.title||('Trick #'+num))+' — Trick — Hariom Lohar';",
   "    var canon='https://hariomlohardev.github.io/tricks/p/'+t.id+'/';",
