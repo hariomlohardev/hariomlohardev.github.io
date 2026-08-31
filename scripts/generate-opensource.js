@@ -2,7 +2,7 @@
 "use strict";
 /**
  * generate-opensource.js — auto open-source contributions snapshot
- * Fetches GitHub public API → opensource-data.json + patches sitemap.xml + optionally og/opensource.svg
+ * Fetches GitHub public API → opensource-data.json + patches sitemap.xml + optionally og/opensource.png
  * Zero deps, uses built-in https. Works anonymous (60/hr) or with GITHUB_TOKEN (5k/hr via env).
  * Run locally: node scripts/generate-opensource.js
  * In CI: GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} node scripts/generate-opensource.js

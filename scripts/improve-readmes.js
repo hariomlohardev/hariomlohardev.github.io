@@ -160,10 +160,10 @@ hariomlohardev.github.io/
 ├── scripts/
 │   ├── generate-blog.js        # Supabase posts → blog/p/* + og + feed + sitemap
 │   ├── generate-projects.js    # projects-data.json → projects/p/<slug>/ + FAQ JSON-LD
-│   ├── generate-opensource.js  # GitHub API → opensource-data.json + sitemap + og/opensource.svg
+│   ├── generate-opensource.js  # GitHub API → opensource-data.json + sitemap + og/opensource.png
 │   ├── generate-llms.js        # → llms.txt / llms-full.txt / ai.txt / humans.txt
 │   └── improve-readmes.js      # ← you are here — local README sweep (temp/readmes/)
-├── og/og.svg + og/opensource.svg  # 1200×630
+├── og/*.svg → og/*.png  # 1200×630
 ├── sitemap.xml (14 URLs) · robots.txt · llms.txt · site.webmanifest · .nojekyll
 └── certificates/1.png (Harvard CS50P 2246×1588)
 \`\`\`

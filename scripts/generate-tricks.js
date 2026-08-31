@@ -153,7 +153,7 @@ function websiteNode(){
 function headFor(t){
   const canonical = t.url;
   const desc = clip(t.text || t.title, 155) || ("Trick — " + t.title + " — by Hariom Lohar.");
-  const ogImg = SITE + "/og/tricks.svg";
+  const ogImg = SITE + "/og/tricks.png";
   const iso = new Date(t.created_at).toISOString();
   const mod = new Date(t.updated_at || t.created_at).toISOString();
   const webpage = {"@type":"WebPage","@id":canonical+"#webpage","url":canonical,"name":t.title+" — Trick — Hariom Lohar","isPartOf":{"@id":WEBSITE},"about":{"@id":PERSON},"author":{"@id":PERSON},"description":desc,"breadcrumb":{"@id":canonical+"#breadcrumb"},"inLanguage":"en-IN","primaryImageOfPage":{"@type":"ImageObject","contentUrl":ogImg},"datePublished":iso,"dateModified":mod};
@@ -272,7 +272,7 @@ const DYN_HEAD = [
   '<meta property="og:site_name" content="Hariom Lohar — Lab Notebook №01" />',
   '<meta property="og:locale" content="en_IN" />',
   '<meta property="og:type" content="article" />',
-  '<meta property="og:image" content="' + SITE + '/og/tricks.svg" />',
+  '<meta property="og:image" content="' + SITE + '/og/tricks.png" />',
   '<meta name="twitter:card" content="summary_large_image" />',
   '<meta name="twitter:creator" content="@HariomloharAGI" />',
   "<script>/* dynamic trick shell — the built page at /tricks/p/<id>/ wins on the filesystem */</script>"
