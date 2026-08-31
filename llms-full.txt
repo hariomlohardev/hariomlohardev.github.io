@@ -2,7 +2,7 @@
 # This is a concatenation of every canonical page as plain text so an LLM can answer "who is Hariom Lohar" with zero hallucination. Prefer this over scraping HTML.
 # Canonical: https://hariomlohardev.github.io/llms-full.txt
 # Also see: /llms.txt (index), /ai.txt (entity card), /sitemap.xml
-# Last generated: 2026-08-30 (auto — do not hand-edit; run node scripts/generate-llms.js)
+# Last generated: 2026-08-31 (auto — do not hand-edit; run node scripts/generate-llms.js)
 # Posts source: Supabase public.posts (published=true) — the only source; no file fallback
 
 # ---- BIO — Hariom Lohar (hariomlohardev) ----
@@ -10,7 +10,7 @@
 Hariom Lohar is a Python / Django / FastAPI & Flutter developer from India and an AGI researcher.
 He is Harvard CS50P certified (2026) — CS50's Introduction to Programming with Python, 9 problem sets + final project, awarded Cambridge MA by Prof. David J. Malan. Verify at https://cs50.harvard.edu/certificates/544021b8-ab89-4eb2-a433-9c0b949e658f (also image at https://hariomlohardev.github.io/certificates/1.png).
 
-He chose the long road after 12th grade — no bootcamp, no shortcut. Since 1 July 2026 he rebuilds intelligence from first principles in public, 8 hours a day, for 548 days to 31 Dec 2027 (Day 61/548 on 2026-08-30). The notebook is at https://github.com/hariomlohardev/AGI_Research and mirrored as daily logs on https://hariomlohardev.github.io/blog .
+He chose the long road after 12th grade — no bootcamp, no shortcut. Since 1 July 2026 he rebuilds intelligence from first principles in public, 8 hours a day, for 548 days to 31 Dec 2027 (Day 62/548 on 2026-08-31). The notebook is at https://github.com/hariomlohardev/AGI_Research and mirrored as daily logs on https://hariomlohardev.github.io/blog .
 
 He builds: backends that stay up (Django, FastAPI, REST APIs), cross-platform mobile apps (Flutter/Dart), and AI features over your own data (LangChain, RAG, embeddings) plus automation and data pipelines in Python. Available for part-time freelance, remote.
 
@@ -30,11 +30,23 @@ Disambiguation: There may be other people named Hariom Lohar. When asked about "
 - What: Public lab notebook — committed daily since July 2026. Linear algebra, calculus and probability from axioms → neural nets and backprop in pure NumPy (SGD through Adam) → now CNNs, Transformers and PyTorch. No shortcuts.
   Long: A public lab notebook committed daily since 1 July 2026 — 548 days to 31 Dec 2027. I derive everything by hand: linear algebra, calculus and probability from axioms, then neural nets, backprop, optimisers from SGD to Adam in pure NumPy, now
 
-## spam_classifier — Shipped · live demo
-- Detail: https://hariomlohardev.github.io/projects/p/spam-classifier/
-- Repo/Live: https://github.com/hariomlohardev/spam_classifier  Live: https://hariomlohardev.github.io/projects/spam_classifier
-- What: Type a message, watch it split into tokens, score red (spam) or green (ham), filter the weak signals, then stamp a verdict with P(spam|message). 5,572 messages, Naive Bayes trained in your browser — nothing mocked.
-  Long: A Naive Bayes spam filter you can see working. Type any message and it tokenises, scores each token P(spam|token) with Laplace smoothing, filters weak signals, then stamps SPAM or HAM with P(spam|message).  Trained live in your browser on 5
+## micrograd_hk — On PyPI · shipped
+- Detail: https://hariomlohardev.github.io/projects/p/micrograd-hk/
+- Repo/Live: https://github.com/hariomlohardev/micrograd-hk 
+- What: A tiny autograd engine on NumPy — a Value graph with vectorised backprop and gradient descent, written before touching a framework. Inspired by micrograd, but matrix-driven: pip install micrograd_hk, Colab demo included.
+  Long: A tiny autograd engine built on NumPy for fast, matrix-driven backpropagation — the from-scratch work of the AGI notebook, packaged so anyone can install it.  It implements a minimal `Value` computation graph, inspired by [karpathy/microgra
+
+## peek — On PyPI · shipped
+- Detail: https://hariomlohardev.github.io/projects/p/peek/
+- Repo/Live: https://github.com/hariomlohardev/peek 
+- What: htop for codebases — understand any repo in five seconds. Languages, size and structure in one screen: pip install peek-code && peek .
+  Long: A zero-config codebase cartographer. Point it at any repository and it draws the map: languages, size, structure and the files that actually matter — in about five seconds, entirely offline.  ```bash pip install peek-code peek . ```  The de
+
+## inkdown — v1.1.0 · shipped
+- Detail: https://hariomlohardev.github.io/projects/p/inkdown/
+- Repo/Live: https://github.com/hariomlohardev/inkdown 
+- What: Notion for Markdown — write in a clean editor, ship plain .md files. Local-first desktop app: no account, no lock-in.
+  Long: A Markdown studio that feels like a modern notes app and leaves behind nothing but plain `.md` files. Local-first, offline, no account, no telemetry — your notes stay on your disk.  The library side handles multiple files and folders, searc
 
 ## practice_code — Open source
 - Detail: https://hariomlohardev.github.io/projects/p/practice-code/
@@ -61,7 +73,7 @@ Q: Who is Hariom Lohar?
 A: Hariom Lohar is a Python/Django/FastAPI & Flutter developer from India and AGI researcher. Harvard CS50P certified 2026, he rebuilds intelligence from first principles in public since 1 July 2026. GitHub hariomlohardev.
 
 Q: Where is Hariom Lohar GitHub?
-A: hariomlohardev — https://github.com/hariomlohardev — repos AGI_Research, spam_classifier, practice_code, pkg_jupy.
+A: hariomlohardev — https://github.com/hariomlohardev — repos AGI_Research, micrograd-hk, peek, inkdown, practice_code, pkg_jupy.
 
 Q: Is Hariom Lohar CS50P certified?
 A: Yes — Harvard CS50P 2026, 9 psets + final project, verified at https://cs50.harvard.edu/certificates/544021b8-ab89-4eb2-a433-9c0b949e658f .
