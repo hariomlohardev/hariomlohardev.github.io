@@ -116,7 +116,7 @@ nav.desk a.active::after{transform:scaleX(1)}
 @keyframes rise{to{transform:translateY(0)}}
 .hero h1 em{font-style:italic;font-weight:400}
 .hero-sub{margin-top:22px;color:var(--body);font-size:clamp(16px,2vw,18px);line-height:1.7;max-width:48ch;font-family:var(--serif);font-style:italic}
-.hero-typed{margin-top:14px;font-family:var(--mono);font-size:13px;color:var(--muted);display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-height:22px}
+.hero-typed{margin-top:14px;font-family:var(--mono);font-size:13px;line-height:1.55;color:var(--muted);display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-height:22px}
 .hero-typed .prompt{color:var(--ink)}
 #typed{color:var(--ink);border-bottom:1.5px solid var(--accent);padding-bottom:1px}
 .caret{color:var(--accent);animation:blink 1s steps(1) infinite}
@@ -389,6 +389,11 @@ html:not(.js) .rv{opacity:1;transform:none}
   .sec-tag{margin-left:0}
 }
 @media(max-width:640px){
+  /* On a phone the prompt, the phrase and the caret each wrap onto their own flex
+     line as the typewriter grows, swinging this row between 20px and 82px and
+     dragging the mission card up and down every 1.7s. Keep the three on one
+     line, let the phrase wrap inside itself, and reserve both of its lines. */
+  .hero-typed{flex-wrap:nowrap;align-items:flex-start;min-height:44px}
   :root{--pad:18px}
   .head-main{height:62px}
   .logo-mark{width:31px;height:31px}
@@ -483,7 +488,7 @@ html:not(.js) .rv{opacity:1;transform:none}
 <section class="hero">
   <div class="wrap">
     <div class="hero-grid">
-      <div class="rv">
+      <div>
         <p class="eyebrow"><i aria-hidden="true"></i><span id="eyebrow" data-text="OPEN NOTEBOOK · COMMITTED IN PUBLIC">OPEN NOTEBOOK · COMMITTED IN PUBLIC</span></p>
         <h1>
           <span class="mask"><span class="line">Hariom</span></span>
@@ -496,18 +501,18 @@ html:not(.js) .rv{opacity:1;transform:none}
           <a class="btn" href="https://github.com/hariomlohardev/AGI_Research" target="_blank" rel="noopener">AGI_Research ↗</a>
         </div>
       </div>
-      <aside class="mission-card rv">
+      <aside class="mission-card">
         <div class="mc-head"><span><i class="mc-dot"></i>Learning Progress</span><b id="specDate">—</b></div>
         <div class="mc-day">DAY <em id="dayNum">—</em> <small id="mOf">/ 548</small></div>
         <div class="mc-ruler"><i id="dayBar"></i></div>
         <div class="mc-ruler-meta"><span><b id="dayPct">—%</b> complete</span><span>18-month journey</span></div>
         <div class="mc-countdown"><span style="display:flex;align-items:center;gap:8px"><i></i> next deep-work reset</span><b id="istCount">--:--:--</b></div>
-        <p class="mc-note" id="mNote"></p>
+        <p class="mc-note" id="mNote">CS50P certified (Harvard, 2026). Math from axioms → neural nets &amp; backprop in pure NumPy — SGD → Adam — now CNNs, Transformers &amp; PyTorch. Started 1 July 2026, committed daily.</p>
         <a class="mc-link" href="https://github.com/hariomlohardev/AGI_Research" target="_blank" rel="noopener">Follow the research ↗</a>
         <div class="mc-tags"><span><span style="color:var(--accent)">●</span> daily commits</span><span>open notebook</span></div>
       </aside>
     </div>
-    <div class="stats rv" id="heroStats"></div>
+    <div class="stats rv" id="heroStats"><div class="stat"><b><span data-count="172">0</span></b><span>commits<br>last 12 months</span></div><div class="stat"><b><span data-count="8">0</span><sup>h</sup></b><span>deep work<br>every day</span></div><div class="stat"><b><span data-count="4">0</span></b><span>public<br>projects</span></div><div class="stat"><b><span data-count="548">0</span></b><span>day<br>journey</span></div></div>
   </div>
 </section>
 
@@ -699,8 +704,8 @@ var reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 var DEFAULT_DATA={
   meta:{name:"Hariom Lohar",handle:"hariomlohardev"},
-  mission:{startDate:"2026-07-01",totalDays:548,note:"Rebuilding intelligence from scratch — one day at a time.",repoUrl:"https://github.com/hariomlohardev/AGI_Research"},
-  stats:[{value:172,suffix:"",label:"commits · last 12 months"},{value:8,suffix:"h",label:"deep work · every day"},{value:4,suffix:"",label:"public projects"},{value:548,suffix:"",label:"day journey"}],
+  mission:{startDate:"2026-07-01",totalDays:548,note:"CS50P certified (Harvard, 2026). Math from axioms → neural nets & backprop in pure NumPy — SGD → Adam — now CNNs, Transformers & PyTorch. Started 1 July 2026, committed daily.",repoUrl:"https://github.com/hariomlohardev/AGI_Research"},
+  stats:[{value:172,suffix:"",label:"commits<br>last 12 months"},{value:8,suffix:"h",label:"deep work<br>every day"},{value:4,suffix:"",label:"public<br>projects"},{value:548,suffix:"",label:"day<br>journey"}],
   taglines:["Rebuilding AGI from first principles.","Harvard CS50P — certified 2026.","CNNs and Transformers — right now.","Backends that stay up. Apps that feel native.","8 hours a day, committed in public.","Open notebook, open source."],
   projects:[
     {name:"AGI_Research",url:"https://github.com/hariomlohardev/AGI_Research",status:"in-progress",description:"Public lab notebook — committed daily since July 2026. Math from axioms → neural nets in NumPy → CNNs, Transformers and PyTorch."},
@@ -870,7 +875,11 @@ function init(data){
   armObservers();fireDay();startTyping();
 }
 
-window.armObservers = armObservers; function armObservers(){
+window.armObservers = armObservers;
+/* reveal what is already on screen straight away — init() calls this again for
+   anything it injects, and .rv:not(.in) makes the second pass a no-op */
+armObservers();
+function armObservers(){
   var els=document.querySelectorAll('.rv:not(.in)');
   if('IntersectionObserver' in window&&!reduced){
     var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.08});
