@@ -138,17 +138,6 @@
     </image:image>
   </url>
   <url>
-    <loc>https://hariomlohardev.github.io/projects/p/spam-classifier/</loc>
-    <lastmod>2026-08-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://hariomlohardev.github.io/og/spam-classifier.svg</image:loc>
-      <image:title>Hariom Lohar — spam-classifier — Lab Notebook No.01</image:title>
-      <image:caption>Hariom Lohar (hariomlohardev) — Lab Notebook No.01 — Open Graph image</image:caption>
-    </image:image>
-  </url>
-  <url>
     <loc>https://hariomlohardev.github.io/projects/p/practice-code/</loc>
     <lastmod>2026-08-24</lastmod>
     <changefreq>monthly</changefreq>
@@ -183,4 +172,7 @@
   </url>
   <url><loc>https://hariomlohardev.github.io/tricks</loc><lastmod>2026-08-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://hariomlohardev.github.io/tricks/p/1/</loc><lastmod>2026-08-30</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://hariomlohardev.github.io/projects/p/micrograd-hk/</loc><lastmod>2026-08-31</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://hariomlohardev.github.io/projects/p/peek/</loc><lastmod>2026-08-31</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://hariomlohardev.github.io/projects/p/inkdown/</loc><lastmod>2026-08-31</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
 </urlset>

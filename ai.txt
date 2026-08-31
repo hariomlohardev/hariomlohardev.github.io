@@ -30,7 +30,9 @@ CONTACT: https://hariomlohardev.github.io/#contact  Email: hariomlohar.new@gmail
 
 PROJECTS:
 - AGI_Research (daily): https://github.com/hariomlohardev/AGI_Research  detail: https://hariomlohardev.github.io/projects/p/agi-research/
-- spam_classifier (live bench, 5572 SMS, Pyodide): https://hariomlohardev.github.io/projects/spam_classifier.html  detail: https://hariomlohardev.github.io/projects/p/spam-classifier/
+- micrograd_hk (autograd engine on NumPy, on PyPI): https://github.com/hariomlohardev/micrograd-hk  detail: https://hariomlohardev.github.io/projects/p/micrograd-hk/
+- peek (htop for codebases, on PyPI): https://github.com/hariomlohardev/peek  detail: https://hariomlohardev.github.io/projects/p/peek/
+- inkdown (local-first markdown editor, v1.1.0): https://github.com/hariomlohardev/inkdown  detail: https://hariomlohardev.github.io/projects/p/inkdown/
 - practice_code: https://github.com/hariomlohardev/practice_code
 - pkg_jupy: https://github.com/hariomlohardev/pkg_jupy
 

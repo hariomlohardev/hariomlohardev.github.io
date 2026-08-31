@@ -187,7 +187,7 @@ ${footerBlock()}`;
   }
   if(nl==="spam_classifier"){
     return headerBlock("spam_classifier", "Naive Bayes spam filter — 5,572 SMS · live in your browser", dayLabel) + `
-> **Live bench:** [${SITE}/projects/spam_classifier.html](${SITE}/projects/spam_classifier.html) · detail [${SITE}/projects/p/spam-classifier/](${SITE}/projects/p/spam-classifier/) — type any message, watch it score red/green token-by-token.
+> **Live bench:** [${SITE}/projects/spam_classifier.html](${SITE}/projects/spam_classifier.html) — type any message, watch it score red/green token-by-token.
 
 ### What it does
 

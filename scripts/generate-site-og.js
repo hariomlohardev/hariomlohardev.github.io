@@ -27,7 +27,7 @@ function siteOg({slug, title1, title2, kicker, description, urlPath, alt}){
 <rect x="0" y="8" width="2246" height="1" fill="#181611" opacity="0.12"/>
 <rect x="0" y="0" width="2246" height="40" fill="#181611"/>
 <text x="32" y="26" fill="#EFECE2" font-family="'Space Mono',ui-monospace,monospace" font-size="11" letter-spacing="1.6">LAB NOTEBOOK №01 — HARIOM LOHAR</text>
-<text x="1168" y="26" fill="#C4BEAC" font-family="'Space Mono',ui-monospace,monospace" font-size="10" text-anchor="end">${escSvg(u)}</text>
+<text x="2214" y="26" fill="#C4BEAC" font-family="'Space Mono',ui-monospace,monospace" font-size="10" text-anchor="end">${escSvg(u)}</text>
 <rect x="42" y="58" width="1116" height="528" rx="0" fill="#FBFAF6" stroke="#181611" stroke-width="2"/>
 <!-- top tape -->
 <rect x="514" y="52" width="172" height="15" rx="2" fill="#FFFFFF" stroke="rgba(24,22,17,0.08)" transform="rotate(-1 600 59)"/>
@@ -51,7 +51,7 @@ const pages = [
   {slug:"home", title1:"HARIOM", title2:"LOHAR", kicker:"01 — HOME · hariomlohardev.github.io/", description:"Python, Django, Flutter & AGI Research — rebuilding intelligence from first principles.", urlPath:"/", alt:"Hariom Lohar — Python, Django, Flutter & AGI Research — Lab Notebook No.01"},
   {slug:"about", title1:"ABOUT", title2:"HARIOM", kicker:"05 — ABOUT · FIELD NOTES · hariomlohardev.github.io/about", description:"Self-taught from India, Harvard CS50P 2026 — 8 hours a day, committed in public.", urlPath:"/about", alt:"About Hariom Lohar — CS50P, Python & AGI Lab Notebook — portrait and field notes"},
   {slug:"blog", title1:"BLOG &", title2:"LOGS", kicker:"05b — BLOG · DAILY LOGS · hariomlohardev.github.io/blog", description:"Blog & daily logs — AGI from first principles, CNNs, Transformers and PyTorch.", urlPath:"/blog", alt:"Blog & Daily Logs — Hariom Lohar — AGI from first principles, CNNs, Transformers"},
-  {slug:"projects", title1:"SELECTED", title2:"BUILDS", kicker:"02 — PROJECTS · hariomlohardev.github.io/projects", description:"Live spam classifier bench & AGI Research archive — backends that stay up.", urlPath:"/projects", alt:"Projects by Hariom Lohar — live spam classifier bench & AGI Research archive"},
+  {slug:"projects", title1:"SELECTED", title2:"BUILDS", kicker:"02 — PROJECTS · hariomlohardev.github.io/projects", description:"micrograd_hk, peek, inkdown & the AGI Research log — built from first principles.", urlPath:"/projects", alt:"Projects by Hariom Lohar — micrograd_hk, peek, inkdown & the AGI Research archive"},
   {slug:"opensource", title1:"OPEN", title2:"SOURCE", kicker:"03 — OPEN SOURCE · hariomlohardev.github.io/opensource", description:"Open source PRs & contributions — Python, LangChain, and the commons.", urlPath:"/opensource", alt:"Open Source — Hariom Lohar | PRs & Contributions — Lab Notebook No.01"},
   {slug:"community", title1:"SIGMOID", title2:"COMMUNITY", kicker:"07 — COMMUNITY · hariomlohardev.github.io/community", description:"SIGMOID — open lab group and Telegram — build in public, one log at a time.", urlPath:"/community", alt:"SIGMOID Community — Hariom Lohar Lab — open lab group and Telegram"},
   {slug:"contact", title1:"CONTACT", title2:"FILE", kicker:"06 — CONTACT · hariomlohardev.github.io/contact", description:"Contact Hariom Lohar — Python, Django, Flutter & AGI — freelance and collabs.", urlPath:"/contact", alt:"Contact — Hariom Lohar — Python, Django, Flutter & AGI — freelance and collabs"},
