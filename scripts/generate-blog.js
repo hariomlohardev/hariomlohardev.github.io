@@ -831,6 +831,7 @@ document.getElementById('copyBtn').addEventListener('click',function(){
 })();
 </script>
 <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7c8c6879055d45ba894f6ac0ce1cc51a"}'></script>
+<script type="module" src="/assets/speed-insights.js"></script>
 </body>
 </html>`;
 }
