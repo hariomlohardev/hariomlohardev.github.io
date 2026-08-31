@@ -131,13 +131,13 @@ function ogSvg(post){
   const title = post.title.length > 64 ? post.title.slice(0,61)+'…' : post.title;
   const desc = (post.description||'').slice(0,110);
   const tag = (post.tags||[]).includes('daily-log') ? '◎ DAILY LOG' : '✎ ARTICLE';
-  // 2246×1588
+  // 1200×630
   return `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="2246" height="1588" viewBox="0 0 2246 1588" role="img" aria-label="${escSvg(title)}">
-<rect width="2246" height="1588" fill="#F6F4EE"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="${escSvg(title)}">
+<rect width="1200" height="630" fill="#F6F4EE"/>
 <!-- grid 24px subtle -->
 <defs><pattern id="g" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0 H0 V24" fill="none" stroke="#E3ECFB" stroke-width="1"/></pattern><pattern id="g2" width="120" height="120" patternUnits="userSpaceOnUse"><path d="M120 0 H0 V120" fill="none" stroke="#C9D8F0" stroke-width="1"/></pattern></defs>
-<rect width="2246" height="1588" fill="url(#g)"/><rect width="2246" height="1588" fill="url(#g2)"/>
+<rect width="1200" height="630" fill="url(#g)"/><rect width="1200" height="630" fill="url(#g2)"/>
 <!-- top bar -->
 <rect x="0" y="0" width="1200" height="8" fill="#FFD400"/>
 <rect x="0" y="8" width="1200" height="1" fill="#0B1220" opacity="0.12"/>
@@ -170,8 +170,8 @@ function postPage(post){
   const isLog = (post.tags||[]).map(x=>String(x).toLowerCase()).includes('daily-log');
   const typeLabel = isLog ? 'Daily Log' : 'Article';
   const coverUrl = post.cover ? (post.cover.startsWith('http') ? post.cover : (post.cover.startsWith('/') ? SITE + post.cover : SITE + '/' + post.cover)) : null;
-  const ogSvgUrl = `${SITE}/og/${post.slug}.svg`;
-  const ogImage = coverUrl || ogSvgUrl;
+  const ogPngUrl = `${SITE}/og/${post.slug}.png`; // rasterized from og/<slug>.svg — crawlers refuse svg
+  const ogImage = coverUrl || ogPngUrl;
   const ogImageAlt = post.title + ' — Hariom Lohar · Lab Notebook No.01';
   const canonical = post.url;
   const wordCount = post.wordCount;
@@ -215,8 +215,9 @@ function postPage(post){
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="${post.date}" />
 <meta property="og:image" content="${ogImage}" />
-<meta property="og:image:width" content="2246" />
-<meta property="og:image:height" content="1588" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:type" content="image/png" />
 <meta property="og:image:alt" content="${escHtml(ogImageAlt)}" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="${escHtml(post.title)} — Hariom Lohar" />

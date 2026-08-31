@@ -89,10 +89,10 @@ function ogSvg(project){
   const desc = (project.description||"").slice(0,108);
   const sub = project.statusLabel || (project.kind==="live" ? "Live demo in browser" : "Open source");
   return `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="2246" height="1588" viewBox="0 0 2246 1588" role="img" aria-label="${escSvg(project.name)}">
-<rect width="2246" height="1588" fill="#F6F4EE"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="${escSvg(project.name)}">
+<rect width="1200" height="630" fill="#F6F4EE"/>
 <defs><pattern id="g" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0 H0 V24" fill="none" stroke="#DAD5C6" stroke-width="1"/></pattern><pattern id="g2" width="120" height="120" patternUnits="userSpaceOnUse"><path d="M120 0 H0 V120" fill="none" stroke="#C4BEAC" stroke-width="1"/></pattern></defs>
-<rect width="2246" height="1588" fill="url(#g)"/><rect width="2246" height="1588" fill="url(#g2)"/>
+<rect width="1200" height="630" fill="url(#g)"/><rect width="1200" height="630" fill="url(#g2)"/>
 <rect x="0" y="0" width="1200" height="8" fill="#B93A13"/><rect x="0" y="8" width="1200" height="1" fill="#181611" opacity="0.12"/>
 <rect x="0" y="0" width="1200" height="40" fill="#181611"/>
 <text x="32" y="26" fill="#EFECE2" font-family="monospace" font-size="12" letter-spacing="1.2">LAB NOTEBOOK No.01 · HARIOM LOHAR — hariomlohardev · INDIA — UTC+5:30</text>
@@ -115,8 +115,8 @@ function projectPage(p, postsBySlug){
   const url = `${SITE}/projects/p/${slug}/`;
   const kindLabel = p.kind==="live" ? "Live · interactive" : "Code · repository";
   const kindBadge = p.kind==="live" ? '<span style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:4px 9px;border:1px solid var(--red);color:var(--red);background:var(--red-soft)">◉ Live · interactive</span>' : '<span style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:4px 9px;border:1px solid var(--green);color:var(--green);background:rgba(14,159,110,.10)">⑂ Code · repository</span>';
-  const ogSvgUrl = `${SITE}/og/${slug}.svg`;
-  const ogImage = p.cover ? (p.cover.startsWith("http") ? p.cover : SITE + (p.cover.startsWith("/") ? p.cover : "/"+p.cover)) : ogSvgUrl;
+  const ogPngUrl = `${SITE}/og/${slug}.png`; // rasterized from og/<slug>.svg — crawlers refuse svg
+  const ogImage = p.cover ? (p.cover.startsWith("http") ? p.cover : SITE + (p.cover.startsWith("/") ? p.cover : "/"+p.cover)) : ogPngUrl;
   const longHtml = p.longDescription ? mdToHtml(p.longDescription) : `<p>${escHtml(p.description)}</p>`;
   const chipsHtml = (p.chips||[]).map(c=>`<span style="font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;background:var(--paper-2);border:1px solid var(--line);padding:4px 8px;color:var(--muted)">${escHtml(c)}</span>`).join(" ");
   const highlightsHtml = (p.highlights||[]).map(h=>`<li>${escHtml(h)}</li>`).join("");
@@ -161,8 +161,9 @@ function projectPage(p, postsBySlug){
 <meta property="og:description" content="${escHtml(p.description)}" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="${ogImage}" />
-<meta property="og:image:width" content="2246" />
-<meta property="og:image:height" content="1588" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:type" content="image/png" />
 <meta property="og:image:alt" content="${escHtml(p.name)} — Hariom Lohar · Lab Notebook No.01" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Hariom Lohar — ${escHtml(p.name)}" />

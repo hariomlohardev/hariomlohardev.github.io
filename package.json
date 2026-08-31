@@ -8,7 +8,7 @@
     "node": "22.x"
   },
   "scripts": {
-    "build": "node scripts/generate-blog.js && node scripts/generate-projects.js && node scripts/generate-llms.js && node scripts/generate-opensource.js && node scripts/generate-tricks.js",
+    "build": "node scripts/generate-blog.js && node scripts/generate-projects.js && node scripts/generate-llms.js && node scripts/generate-opensource.js && node scripts/generate-tricks.js && node scripts/rasterize-og.js",
     "vercel-build": "npm run build",
     "dev": "python -m http.server 8000",
     "generate:blog": "node scripts/generate-blog.js",
@@ -16,7 +16,8 @@
     "generate:llms": "node scripts/generate-llms.js",
     "generate:opensource": "node scripts/generate-opensource.js",
     "generate:tricks": "node scripts/generate-tricks.js",
-    "check": "node --check scripts/generate-blog.js && node --check scripts/generate-projects.js && node --check scripts/generate-tricks.js && echo 'ok'"
+    "generate:og": "node scripts/generate-site-og.js && node scripts/rasterize-og.js",
+    "check": "node --check scripts/generate-blog.js && node --check scripts/generate-projects.js && node --check scripts/generate-tricks.js && node --check scripts/rasterize-og.js && echo 'ok'"
   },
   "keywords": [
     "hariomlohardev",

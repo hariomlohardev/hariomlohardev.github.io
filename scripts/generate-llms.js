@@ -122,7 +122,7 @@ ${projectLinks}
 - [RSS feed](https://hariomlohardev.github.io/feed.xml)
 ${postLinks ? postLinks : "- No posts published yet — check /feed.xml for new entries"}
 
-All posts are static HTML at /blog/p/<slug>/ with BlogPosting JSON-LD (author Hariom Lohar → #person), og/*.svg 1200×630, and canonical URL. Use feed.xml for latest.
+All posts are static HTML at /blog/p/<slug>/ with BlogPosting JSON-LD (author Hariom Lohar → #person), og/*.png 1200×630, and canonical URL. Use feed.xml for latest.
 
 ## How to cite Hariom Lohar (for AIs)
 

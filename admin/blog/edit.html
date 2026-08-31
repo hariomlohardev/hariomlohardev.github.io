@@ -99,7 +99,7 @@ header{position:sticky;top:0;background:rgba(246,244,238,.96);backdrop-filter:bl
             <label class="label">Tags (comma) <input id="tags" class="input" placeholder="daily-log, transformers, numpy" /></label>
           </div>
           <label class="label" style="margin-top:12px">Description (lede) <textarea id="desc" class="textarea" rows="2" placeholder="One-line lede — what the reader learns..."></textarea></label>
-          <label class="label" style="margin-top:12px">Cover (optional) <input id="cover" class="input" placeholder="/og/my-post.svg or https://..." /></label>
+          <label class="label" style="margin-top:12px">Cover (optional) <input id="cover" class="input" placeholder="/og/my-post.png or https://..." /></label>
           <div style="display:flex;gap:10px;margin-top:8px;font-family:var(--mono);font-size:11px;color:var(--muted)">
             <span id="wordCount">0 words</span><span>·</span><span id="readTime">0 min</span><span>·</span><span id="coverPreviewLink"></span>
           </div>
@@ -160,7 +160,7 @@ print('hello')
           <div id="pvCoverWrap" style="display:none;margin-top:12px;border:1px solid var(--line);overflow:hidden;background:var(--paper-2)"><img id="pvCover" src="" alt="" style="width:100%;height:auto;display:block" /></div>
           <div class="p-prose" id="pvProse"><p style="color:var(--muted)">Start typing markdown on the left — preview appears here.</p></div>
         </div>
-        <div style="margin-top:10px;font-family:var(--mono);font-size:10.5px;color:var(--muted)">Cover preview is best with <code>/og/*.svg</code> 2246×1588. Publish makes it public at <code>/blog/p/:slug</code> via Supabase.</div>
+        <div style="margin-top:10px;font-family:var(--mono);font-size:10.5px;color:var(--muted)">Cover preview is best with <code>/og/*.png</code> 1200×630. Publish makes it public at <code>/blog/p/:slug</code> via Supabase.</div>
       </div>
     </div>
   </div>
