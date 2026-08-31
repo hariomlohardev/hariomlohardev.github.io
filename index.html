@@ -849,7 +849,7 @@ function init(data){
       box.setAttribute('aria-busy','false');
       box.innerHTML='<div style="grid-column:1/-1;padding:22px;text-align:center;border:1px dashed var(--line-2);background:var(--sheet)"><div style="font-family:var(--mono);font-size:12px;color:var(--muted)">'+msg+'</div><div style="margin-top:10px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><a href="/blog" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);text-decoration:underline">Open blog →</a><span style="color:var(--muted)">·</span><a href="/feed.xml" style="font-family:var(--mono);font-size:11px;color:var(--accent);text-decoration:underline">RSS</a></div></div>';
     }
-    fetch('/api/admin/posts',{cache:'no-store'}).then(function(r){ if(!r.ok) throw new Error('api '+r.status); return r.json(); }).then(function(j){
+    (location.hostname==='hariomlohardev.github.io'?Promise.reject(new Error('no /api on pages')):fetch('/api/admin/posts',{cache:'no-store'})).then(function(r){ if(!r.ok) throw new Error('api '+r.status); return r.json(); }).then(function(j){
       var posts=j.posts||j||[];
       posts=posts.filter(function(p){ return p.published!==false; }).sort(function(a,b){ return String(b.date).localeCompare(String(a.date)); }).slice(0,3);
       renderLatest(posts);
