@@ -17,7 +17,7 @@
     "generate:opensource": "node scripts/generate-opensource.js",
     "generate:tricks": "node scripts/generate-tricks.js",
     "generate:og": "node scripts/generate-site-og.js && node scripts/rasterize-og.js",
-    "check": "node --check scripts/generate-blog.js && node --check scripts/generate-projects.js && node --check scripts/generate-tricks.js && node --check scripts/rasterize-og.js && echo 'ok'"
+    "check": "node --check scripts/generate-blog.js && node --check scripts/generate-projects.js && node --check scripts/generate-tricks.js && node --check scripts/rasterize-og.js && node scripts/check-vercel-json.js && echo 'ok'"
   },
   "keywords": [
     "hariomlohardev",

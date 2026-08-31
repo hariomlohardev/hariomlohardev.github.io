@@ -12,7 +12,6 @@
   },
   "headers": [
     {
-      "//": "hariomlohardev.vercel.app serves the same bytes as the canonical github.io site. Left indexable it is a duplicate competing with the original, so every vercel.app host — production and previews — stays out of the index. github.io is unaffected: it is not served by Vercel.",
       "source": "/(.*)",
       "has": [
         {
