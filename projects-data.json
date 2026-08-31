@@ -14,6 +14,7 @@
       "status": "in-progress",
       "statusLabel": "Daily log · in progress",
       "description": "Public lab notebook — committed daily since July 2026. Linear algebra, calculus and probability from axioms → neural nets and backprop in pure NumPy (SGD through Adam) → now CNNs, Transformers and PyTorch. No shortcuts.",
+      "metaDescription": "Public lab notebook, committed daily since July 2026 — linear algebra and calculus from axioms to neural nets and backprop in pure NumPy, now CNNs and Transformers.",
       "longDescription": "A public lab notebook committed daily since 1 July 2026 — 548 days to 31 Dec 2027. I derive everything by hand: linear algebra, calculus and probability from axioms, then neural nets, backprop, optimisers from SGD to Adam in pure NumPy, now CNNs and Transformers.\n\nEach day is a notebook with math, code and reflection — no autograd, no shortcuts. The repo is the research log; the portfolio shows the distilled logs. Follow along as the bench grows.",
       "chips": [
         "backprop ✓",
@@ -91,6 +92,7 @@
       "status": "shipped",
       "statusLabel": "On PyPI · shipped",
       "description": "A tiny autograd engine on NumPy — a Value graph with vectorised backprop and gradient descent, written before touching a framework. Inspired by micrograd, but matrix-driven: pip install micrograd_hk, Colab demo included.",
+      "metaDescription": "A tiny autograd engine on NumPy — a Value graph with vectorised backprop and gradient descent, written before touching a framework. pip install micrograd_hk.",
       "longDescription": "A tiny autograd engine built on NumPy for fast, matrix-driven backpropagation — the from-scratch work of the AGI notebook, packaged so anyone can install it.\n\nIt implements a minimal `Value` computation graph, inspired by [karpathy/micrograd](https://github.com/karpathy/micrograd), but where micrograd differentiates scalar by scalar, this one vectorises every operation over full NumPy matrices — so training is significantly faster. `@`, `+`, `-`, `**`, `sum` and `tanh` all carry a backward pass.\n\nOn top of the engine sit a small `DenseLayer` / `MLP` API and a `Trainer` with automatic checkpointing and five optimisers: SGD, Momentum, RMSProp, Adam, and **Adam-M** — a modified Adam derived and tuned as part of this project.\n\n```bash\npip install micrograd_hk\n```\n\n```python\nfrom micrograd_hk import Value, DenseLayer, MLP, Trainer\n\nm = MLP(shape=[1, 3], nouts=[8, 8, 1])\ntrainer = Trainer(m, xs_matrix, ys_matrix)\nfinal_loss, y_pred = trainer.train(lr=0.01, iterations=3000, optimizer=\"adam_m\")\n```\n\nThere is a runnable [Colab demo](https://colab.research.google.com/github/hariomlohardev/micrograd-hk/blob/main/demo.ipynb) if you would rather read it than install it. MIT licensed, Python 3.8+.",
       "chips": [
         "autograd",
