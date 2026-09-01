@@ -30,9 +30,18 @@ Keep this green — all $0, Lab Notebook No.01.
   Search Console's URL Inspection on the vercel.app property reports the honest
   "alternate page with proper canonical tag" instead of an indexing error, and there is
   no chance of the noindex being read against the github.io page it points at.
-- The rule still exists, narrowed by a `missing` host clause, so it covers every *other*
-  `*.vercel.app` host: preview deployments and the `-git-main-…` / `-solo-…` aliases,
-  which are byte-identical builds nobody should find in a search result.
+- There is no `X-Robots-Tag` rule in `vercel.json` at all now, and nothing is lost by that.
+  Vercel already sends `X-Robots-Tag: noindex` itself on deployment URLs and branch
+  aliases — measured on `…-ccr5midwh-solo-4426`, `…-git-main-solo-4426` and
+  `…-io-solo-4426` — so previews cannot surface in a result without our help. The two
+  clean production aliases, `hariomlohardev.vercel.app` and
+  `hariomlohardev-github-io.vercel.app`, get no automatic header and are consolidated by
+  their canonical, which is the intended mechanism.
+- Do not try to scope such a rule with `missing: [{ type: host }]`. It parses, deploys and
+  then matches nothing: after adding one, no `*.vercel.app` host sent the rule's
+  `noindex, nofollow` — only Vercel's own bare `noindex` on the preview hosts. A header
+  rule that cannot fire is worse than no rule, because the file claims a protection that
+  is not there.
 - `/admin` and `/api` do not depend on that header. robots.txt disallows both on every
   host, every admin page carries its own `noindex, nofollow` meta, and the two
   client-side viewers `/post` and `/trick` carry `noindex, follow`.
