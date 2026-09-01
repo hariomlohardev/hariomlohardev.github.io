@@ -580,7 +580,11 @@ html:not(.js) .rv{opacity:1;transform:none}
   <div class="wrap">
     <div class="sec-head rv"><span class="kicker"><i></i> 05b — Blog</span><h2 id="latestTitle">Latest <em>logs</em></h2><span class="sec-tag">Daily logs &amp; articles · <a href="/blog" style="text-decoration:underline;color:var(--accent)">View all →</a></span></div>
     <div id="latestList" class="latest-grid rv" aria-live="polite" aria-busy="true">
-      <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+      <!--ssg:latest-->
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+<!--/ssg:latest-->
     </div>
     <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap" class="rv">
       <a href="/blog" class="btn solid">Open blog →</a>

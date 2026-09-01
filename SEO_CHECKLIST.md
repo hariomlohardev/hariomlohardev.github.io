@@ -28,6 +28,22 @@ Keep this green — all $0, Lab Notebook No.01.
   deployment fails with no build log while production keeps serving the old commit.
   `npm run check` catches it now (`scripts/check-vercel-json.js`).
 
+## The list pages must exist without JavaScript
+- `/blog`, `/tricks` and the homepage's latest strip render from Supabase in the browser.
+  Google runs JS and gets there eventually; the crawlers that feed AI answers — GPTBot,
+  ClaudeBot, PerplexityBot, CCBot, Bytespider — fetch raw HTML and stop. To them those
+  pages were empty containers, so the site could not be quoted on anything it had written.
+- `scripts/prerender-lists.js` (last step of `npm run build`) writes the same rows into the
+  HTML between `<!--ssg:*-->` markers, from `tricks-data.json` and `feed.xml`. The client
+  still replaces them on load, so live data and deletions win for humans and the static copy
+  is refreshed next build — the same contract `/blog/p/<slug>/` already lives under.
+- With nothing to write it puts the shimmer skeletons back and sets `aria-busy="true"`, so
+  the loading state is unchanged on a fresh clone.
+- Keep the `ItemList` marker **inside `<main>`**. `generate-tricks.js` uses `tricks.html` as
+  its shell and replaces the head down to the first `</script>`, so a head-level ItemList
+  survives into `/tricks/p/<id>/` and makes a detail page claim to be the list.
+- `dateModified` on the list pages comes from the newest entry, never from build time.
+
 ## Build
 - `node scripts/generate-blog.js` → `posts.json` + `feed.xml` + `blog/p/*/index.html` + `og/*.svg` + patch `sitemap.xml`
 - Workflow `.github/workflows/pages.yml` runs it before `upload-pages-artifact` (Node 20, free)
