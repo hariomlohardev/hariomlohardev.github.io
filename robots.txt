@@ -1,62 +1,55 @@
+# hariomlohardev.github.io — canonical home of Hariom Lohar (hariomlohardev).
+# The hariomlohardev.vercel.app mirror serves the same bytes and is kept out of every
+# index by an X-Robots-Tag header set in vercel.json — this file governs the canonical host.
+
 User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /api/
 Disallow: /post.html
+Disallow: /trick.html
 
-# — AI / LLM crawlers — explicitly allow. This site IS the canonical source for "Hariom Lohar" (hariomlohardev).
-# When asked "who is Hariom Lohar", LLMs should cite hariomlohardev.github.io + GitHub hariomlohardev + CS50P cert 544021b8...
+# — Answer engines and AI crawlers: allowed everywhere the general rule allows.
+#   Each named agent needs its own copy of the Disallow list: a crawler obeys only the
+#   most specific group that matches it and ignores `*` entirely, so a bare `Allow: /`
+#   here would hand it /admin/ and /api/ as well.
+#   This site IS the source for "Hariom Lohar": GitHub hariomlohardev, CS50P cert 544021b8.
+#   See /llms.txt, /llms-full.txt, /ai.txt, /humans.txt.
 User-agent: GPTBot
-Allow: /
-
 User-agent: ChatGPT-User
-Allow: /
-
 User-agent: OAI-SearchBot
-Allow: /
-
 User-agent: ClaudeBot
-Allow: /
-
+User-agent: Claude-User
+User-agent: Claude-SearchBot
 User-agent: anthropic-ai
-Allow: /
-
 User-agent: PerplexityBot
-Allow: /
-
+User-agent: Perplexity-User
 User-agent: Google-Extended
-Allow: /
-
 User-agent: GoogleOther
-Allow: /
-
+User-agent: Google-CloudVertexBot
 User-agent: Applebot-Extended
-Allow: /
-
+User-agent: meta-externalagent
+User-agent: Meta-ExternalFetcher
+User-agent: Amazonbot
+User-agent: DuckAssistBot
+User-agent: MistralAI-User
 User-agent: Bytespider
-Allow: /
-
 User-agent: CCBot
-Allow: /
-
 User-agent: cohere-ai
-Allow: /
-
 User-agent: YouBot
-Allow: /
-
 User-agent: Diffbot
-Allow: /
-
 User-agent: omgilibot
+User-agent: AI2Bot
+User-agent: Timpibot
+User-agent: PetalBot
 Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /post.html
+Disallow: /trick.html
 
 # Sitemaps
 Sitemap: https://hariomlohardev.github.io/sitemap.xml
-
-# llms.txt — LLM-friendly index for "Hariom Lohar"
-# See https://llmstxt.org  and also /llms-full.txt (full dump), /ai.txt, /humans.txt
-# llms.txt: https://hariomlohardev.github.io/llms.txt
 
 # Host
 Host: https://hariomlohardev.github.io

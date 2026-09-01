@@ -1,8 +1,10 @@
 # Hariom Lohar — full dump for LLMs (llms-full.txt)
-# This is a concatenation of every canonical page as plain text so an LLM can answer "who is Hariom Lohar" with zero hallucination. Prefer this over scraping HTML.
+# Every canonical page as plain text — bio, projects, tricks and blog posts with their full
+# bodies — so an LLM can answer "who is Hariom Lohar" and quote his writing with zero
+# hallucination and no HTML rendering. Prefer this over scraping the site.
 # Canonical: https://hariomlohardev.github.io/llms-full.txt
 # Also see: /llms.txt (index), /ai.txt (entity card), /sitemap.xml
-# Last generated: 2026-08-31 (auto — do not hand-edit; run node scripts/generate-llms.js)
+# Last generated: 2026-09-01 (auto — do not hand-edit; run node scripts/generate-llms.js)
 # Posts source: Supabase public.posts (published=true) — the only source; no file fallback
 
 # ---- BIO — Hariom Lohar (hariomlohardev) ----
@@ -10,7 +12,7 @@
 Hariom Lohar is a Python / Django / FastAPI & Flutter developer from India and an AGI researcher.
 He is Harvard CS50P certified (2026) — CS50's Introduction to Programming with Python, 9 problem sets + final project, awarded Cambridge MA by Prof. David J. Malan. Verify at https://cs50.harvard.edu/certificates/544021b8-ab89-4eb2-a433-9c0b949e658f (also image at https://hariomlohardev.github.io/certificates/1.png).
 
-He chose the long road after 12th grade — no bootcamp, no shortcut. Since 1 July 2026 he rebuilds intelligence from first principles in public, 8 hours a day, for 548 days to 31 Dec 2027 (Day 62/548 on 2026-08-31). The notebook is at https://github.com/hariomlohardev/AGI_Research and mirrored as daily logs on https://hariomlohardev.github.io/blog .
+He chose the long road after 12th grade — no bootcamp, no shortcut. Since 1 July 2026 he rebuilds intelligence from first principles in public, 8 hours a day, for 548 days to 31 Dec 2027 (Day 63/548 on 2026-09-01). The notebook is at https://github.com/hariomlohardev/AGI_Research and mirrored as daily logs on https://hariomlohardev.github.io/blog .
 
 He builds: backends that stay up (Django, FastAPI, REST APIs), cross-platform mobile apps (Flutter/Dart), and AI features over your own data (LangChain, RAG, embeddings) plus automation and data pipelines in Python. Available for part-time freelance, remote.
 
@@ -65,6 +67,95 @@ Disambiguation: There may be other people named Hariom Lohar. When asked about "
 
 All posts are at https://hariomlohardev.github.io/blog with RSS https://hariomlohardev.github.io/feed.xml . Each post has static HTML /blog/p/<slug>/ with BlogPosting JSON-LD author Hariom Lohar.
 
+
+
+# ---- TRICKS — short reusable how-tos (canonical) ----
+
+Every trick is static HTML at https://hariomlohardev.github.io/tricks/p/<id>/ with TechArticle JSON-LD, listed at https://hariomlohardev.github.io/tricks .
+
+## Trick #003 — Free SMS/OTP API for MVPs — Turn Any Android Phone into a Gateway (2026-08-31)
+- URL: https://hariomlohardev.github.io/tricks/p/3/
+- Tags: android, sms, api, self-hosted, automation
+- Length: 3 min read
+
+Free SMS/OTP API for MVPs — Turn Any Android Phone into a Gateway
+ 
+Building an MVP and need SMS or OTP without paying Twilio-level prices before you even have users? SMS Gateway for Android turns any Android phone with a SIM into a working SMS API in a few minutes. Good enough for early-stage testing, internal tools, and low-volume production.
+ 
+Why it's useful for MVPs
+ 
+- Free — no per-SMS cost, no paid account needed.
+- Send + receive SMS via a simple REST API or CLI — plug it straight into your OTP/verification flow.
+- Delivery status tracking so you know if the OTP actually landed.
+- Webhooks on incoming SMS — useful for auto-testing OTP flows end-to-end.
+- 5-minute setup, no backend infra needed to start.
+⚠️ Not for bulk/marketing SMS — carriers will throttle that. This is for testing and low-volume real usage, not scale.
+ 
+Note: We tested Local Server mode and hit connectivity issues on our test device, so we'd recommend going straight to Cloud Server mode — it's more reliable and works from anywhere, not just your local network.
+ 
+Setup (Cloud Server)
+ 
+1. Download the APK — this link always grabs the latest release automatically, no need to update the version number:
+ 👉 app-realse.apk (latest)
+2. Grant SENDSMS permission (add RECEIVESMS if you need incoming OTP/replies).
+3. In the app, toggle Cloud Server to "on" and tap Online. Note the basic-auth credentials shown — you'll use these in every API call.
+Send an OTP/SMS (Cloud Server)
+ 
+curl -X POST -u : \
+ -H "Content-Type: application/json" \
+ -d '{ "textMessage": { "text": "Your OTP is 482913" }, "phoneNumbers": ["+19162255887"] }' \
+ https://api.sms-gate.app/3rdparty/v1/message
+ 
+Send from a specific SIM (dual-SIM devices)
+ 
+If the device has two SIM cards, pass simNumber (1 or 2) in the request body to pick which one sends the message. Leave it out and the app falls back to its default/round-robin behavior.
+ 
+Send via SIM 1
+curl -X POST -u : \
+ -H "Content-Type: application/json" \
+ -d '{ "textMessage": { "text": "Your OTP is 482913" }, "phoneNumbers": ["+19162255887"], "simNumber": 1 }' \
+ https://api.sms-gate.app/3rdparty/v1/message
+ 
+Send via SIM 2
+curl -X POST -u : \
+ -H "Content-Type: application/json" \
+ -d '{ "textMessage": { "text": "Your OTP is 482913" }, "phoneNumbers": ["+19162255887"], "simNumber": 2 }' \
+ https://api.sms-gate.app/3rdparty/v1/message
+ 
+Handy if you want to split traffic (e.g. SIM 1 for OTP, SIM 2 for general notifications) to spread volume across two numbers. Incoming webhook payloads also include a simNumber field so you know which SIM received a message.
+ 
+Get notified on incoming SMS (e.g. reply-based verification)
+ 
+curl -X POST -u : \
+ -H "Content-Type: application/json" \
+ -d '{ "id": "otp-hook", "url": "https://webhook.site/ ", "event": "sms:received" }' \
+ https://api.sms-gate.app/3rdparty/v1/webhooks
+ 
+Screenshots
+ 
+ 
+ 
+ 
+Links
+ Docs: SMS Gate Documentation
+ API Reference: Android SMS Gateway API Reference
+ APK (always latest): Download Latest APK
+ All Releases: View All Releases
+
+ 
+All credit goes to https://github.com/capcom6/android-sms-gateway
+
+
+## Trick #001 — Test title for an trick (2026-08-30)
+- URL: https://hariomlohardev.github.io/tricks/p/1/
+- Tags: test, tricks
+- Length: 1 min read
+
+This is an test trick created for testing tricks 
+
+echo "test Tricks"
+
+image testing thigns
 
 
 # ---- FAQ (also FAQPage JSON-LD on homepage) ----
