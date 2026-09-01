@@ -1,15 +1,30 @@
 {
-  "generated_at": "2026-09-01T05:45:41+05:30",
-  "generated_at_iso": "2026-09-01T05:45:41.509Z",
+  "generated_at": "2026-09-01T08:57:48+05:30",
+  "generated_at_iso": "2026-09-01T08:57:48.539Z",
   "user": "hariomlohardev",
   "site": "https://hariomlohardev.github.io",
   "stats": {
     "repos": 13,
     "prs": 30,
     "events": 30,
-    "stars_total": 5
+    "stars_total": 6
   },
   "repos": [
+    {
+      "id": 1282187550,
+      "name": "AGI_Research",
+      "full_name": "hariomlohardev/AGI_Research",
+      "html_url": "https://github.com/hariomlohardev/AGI_Research",
+      "description": "An Journy towards learning AGI",
+      "language": "Jupyter Notebook",
+      "stars": 1,
+      "forks": 0,
+      "updated_at": "2026-09-01",
+      "pushed_at": "2026-08-10",
+      "fork": false,
+      "topics": [],
+      "is_fork": false
+    },
     {
       "id": 1340644343,
       "name": "claude-system",
@@ -100,23 +115,8 @@
       "language": "HTML",
       "stars": 0,
       "forks": 0,
-      "updated_at": "2026-08-31",
-      "pushed_at": "2026-08-31",
-      "fork": false,
-      "topics": [],
-      "is_fork": false
-    },
-    {
-      "id": 1282187550,
-      "name": "AGI_Research",
-      "full_name": "hariomlohardev/AGI_Research",
-      "html_url": "https://github.com/hariomlohardev/AGI_Research",
-      "description": "An Journy towards learning AGI",
-      "language": "Jupyter Notebook",
-      "stars": 0,
-      "forks": 0,
-      "updated_at": "2026-08-10",
-      "pushed_at": "2026-08-10",
+      "updated_at": "2026-09-01",
+      "pushed_at": "2026-09-01",
       "fork": false,
       "topics": [],
       "is_fork": false
@@ -641,6 +641,22 @@
       "repo": "hariomlohardev/hariomlohardev.github.io",
       "title": "Pushed 1 commit(s)",
       "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-09-01"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
+      "at": "2026-09-01"
+    },
+    {
+      "type": "PushEvent",
+      "kind": "push",
+      "repo": "hariomlohardev/hariomlohardev.github.io",
+      "title": "Pushed 1 commit(s)",
+      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
       "at": "2026-08-31"
     },
     {
@@ -825,22 +841,6 @@
       "repo": "anthropics/claude-code",
       "title": "opened #89459 — [BUG] API Error: 400 reasoning `encrypted_content` was not issued to this caller",
       "url": "https://github.com/anthropics/claude-code/issues/89459",
-      "at": "2026-08-25"
-    },
-    {
-      "type": "PushEvent",
-      "kind": "push",
-      "repo": "hariomlohardev/hariomlohardev.github.io",
-      "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
-      "at": "2026-08-25"
-    },
-    {
-      "type": "PushEvent",
-      "kind": "push",
-      "repo": "hariomlohardev/hariomlohardev.github.io",
-      "title": "Pushed 1 commit(s)",
-      "url": "https://github.com/hariomlohardev/hariomlohardev.github.io/commits",
       "at": "2026-08-25"
     },
     {

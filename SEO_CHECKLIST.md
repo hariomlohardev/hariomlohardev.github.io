@@ -66,12 +66,27 @@ Keep this green — all $0, Lab Notebook No.01.
   survives into `/tricks/p/<id>/` and makes a detail page claim to be the list.
 - `dateModified` on the list pages comes from the newest entry, never from build time.
 
+## /favicon.ico has to exist even though nothing links to it
+- The head declares `favicon.svg` and `favicon.png`, so browsers and Google use those.
+  A browser still asks for `/favicon.ico` on its own whenever it has no parsed `<link
+  rel="icon">` to go on — a non-HTML response, an older browser, a feed reader, the
+  bookmark and history UIs — and that URL 404'd on both hosts because no such file
+  existed. It is the one icon path you do not get to opt out of.
+- `scripts/make-favicon-ico.js` writes it from `favicon.png` (512x512 RGBA, itself made by
+  `scripts/make-circle-favicon.ps1`) at 16, 32 and 48 px: zlib for the PNG, an
+  alpha-weighted box filter so the transparent corners do not bleed a dark ring into the
+  circle's edge, and a 32-bit BGRA ICO container. No dependencies, byte-identical on
+  re-run, so it sits in `npm run build` without churning the file.
+- Regenerate it whenever `favicon.png` changes: `npm run generate:favicon`.
+
 ## Build
+- `node scripts/make-favicon-ico.js` → `favicon.ico` (16/32/48, from `favicon.png`)
 - `node scripts/generate-blog.js` → `posts.json` + `feed.xml` + `blog/p/*/index.html` + `og/*.svg` + patch `sitemap.xml`
 - Workflow `.github/workflows/pages.yml` runs it before `upload-pages-artifact` (Node 20, free)
 
 ## Verify after push
 ```
+curl -I https://hariomlohardev.github.io/favicon.ico          # 200 image/vnd.microsoft.icon
 curl -I https://hariomlohardev.github.io/sitemap.xml
 curl -I https://hariomlohardev.github.io/feed.xml
 curl -s https://hariomlohardev.github.io/blog/p/<slug>/ | grep -i "og:image"   # <slug> from /feed.xml
