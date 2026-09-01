@@ -20,10 +20,23 @@ Keep this green — all $0, Lab Notebook No.01.
 
 ## Two hosts, one canonical
 - github.io is canonical; `hariomlohardev.vercel.app` serves the same bytes and would
-  compete with it as a duplicate, so `vercel.json`'s first header rule sends
-  `X-Robots-Tag: noindex, nofollow` on any `*.vercel.app` host, production and previews
-  alike. github.io is unaffected — Vercel does not serve it.
-- That rule cannot carry a `"//"` note beside it: Vercel validates `vercel.json` against
+  compete with it as a duplicate. Every page on both hosts carries
+  `<link rel="canonical">` pointing at the github.io copy, and that is what consolidates
+  them. github.io is unaffected by anything in `vercel.json` — Vercel does not serve it.
+- `hariomlohardev.vercel.app` deliberately does **not** send `X-Robots-Tag: noindex`.
+  A noindex on a page whose canonical points at another host is a pair of contradictory
+  instructions: canonical says "count this as that page", noindex says "count nothing",
+  and the documented way to fold duplicate hosts together is the canonical, not noindex.
+  Search Console's URL Inspection on the vercel.app property reports the honest
+  "alternate page with proper canonical tag" instead of an indexing error, and there is
+  no chance of the noindex being read against the github.io page it points at.
+- The rule still exists, narrowed by a `missing` host clause, so it covers every *other*
+  `*.vercel.app` host: preview deployments and the `-git-main-…` / `-solo-…` aliases,
+  which are byte-identical builds nobody should find in a search result.
+- `/admin` and `/api` do not depend on that header. robots.txt disallows both on every
+  host, every admin page carries its own `noindex, nofollow` meta, and the two
+  client-side viewers `/post` and `/trick` carry `noindex, follow`.
+- No rule in that file can carry a `"//"` note beside it: Vercel validates `vercel.json` against
   its schema before the build and rejects any property it does not define, so the
   deployment fails with no build log while production keeps serving the old commit.
   `npm run check` catches it now (`scripts/check-vercel-json.js`).
