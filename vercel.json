@@ -19,6 +19,12 @@
           "value": ".*\\.vercel\\.app"
         }
       ],
+      "missing": [
+        {
+          "type": "host",
+          "value": "hariomlohardev\\.vercel\\.app"
+        }
+      ],
       "headers": [
         {
           "key": "X-Robots-Tag",
