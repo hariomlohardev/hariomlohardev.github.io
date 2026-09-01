@@ -13,27 +13,6 @@
   "headers": [
     {
       "source": "/(.*)",
-      "has": [
-        {
-          "type": "host",
-          "value": ".*\\.vercel\\.app"
-        }
-      ],
-      "missing": [
-        {
-          "type": "host",
-          "value": "hariomlohardev\\.vercel\\.app"
-        }
-      ],
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, nofollow"
-        }
-      ]
-    },
-    {
-      "source": "/(.*)",
       "headers": [
         {
           "key": "X-Content-Type-Options",
