@@ -23,7 +23,7 @@
   </url>
   <url>
     <loc>https://hariomlohardev.github.io/blog</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -45,7 +45,7 @@
   </url>
   <url>
     <loc>https://hariomlohardev.github.io/opensource</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -120,10 +120,10 @@
       <image:caption>Hariom Lohar (hariomlohardev) — Lab Notebook No.01 — Open Graph image</image:caption>
     </image:image>
   </url>
-  <url><loc>https://hariomlohardev.github.io/tricks</loc><lastmod>2026-08-31</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://hariomlohardev.github.io/tricks/p/1/</loc><lastmod>2026-08-31</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://hariomlohardev.github.io/tricks</loc><lastmod>2026-09-01</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://hariomlohardev.github.io/tricks/p/1/</loc><lastmod>2026-09-01</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://hariomlohardev.github.io/projects/p/micrograd-hk/</loc><lastmod>2026-08-31</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://hariomlohardev.github.io/projects/p/peek/</loc><lastmod>2026-08-31</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://hariomlohardev.github.io/projects/p/inkdown/</loc><lastmod>2026-08-31</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://hariomlohardev.github.io/tricks/p/3/</loc><lastmod>2026-08-31</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://hariomlohardev.github.io/tricks/p/3/</loc><lastmod>2026-09-01</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
 </urlset>
