@@ -366,12 +366,12 @@ html:not(.js) .rv{opacity:1;transform:none}
   <!-- ══ HERO ══ -->
   <section class="hero">
     <div class="wrap">
-      <p class="eyebrow rv"><i aria-hidden="true"></i><span id="eyebrow" data-text="CONTRIBUTIONS TO OTHERS' REPOS · AUTO-SYNCED">CONTRIBUTIONS TO OTHERS' REPOS · AUTO-SYNCED</span></p>
+      <p class="eyebrow rv"><i aria-hidden="true"></i><span id="eyebrow" data-text="CURATED CONTRIBUTIONS TO OTHERS' REPOS">CURATED CONTRIBUTIONS TO OTHERS' REPOS</span></p>
       <h1>
         <span class="mask"><span class="line">Open</span></span>
         <span class="mask"><span class="line d2"><em>Source</em></span></span>
       </h1>
-      <p class="lede rv">Every pull request I've opened, every issue I've filed, every contribution to the projects I rely on — pulled live from <code>github.com/hariomlohardev</code>. Not my own repos; the work I've given back.</p>
+      <p class="lede rv">The pull requests and issues I choose to publish from my admin panel, loaded live from Supabase. Not my own repos; the work I've given back.</p>
       <div class="hero-actions rv">
         <a class="btn solid" href="https://github.com/hariomlohardev" target="_blank" rel="noopener">Open GitHub ↗</a>
         <a class="btn" href="https://github.com/search?q=author%3Ahariomlohardev+type%3Apr" target="_blank" rel="noopener">All my PRs ↗</a>
@@ -430,7 +430,7 @@ html:not(.js) .rv{opacity:1;transform:none}
     <div class="wrap">
       <div class="source-band rv">
         <div>
-          <p>This page lists <b>curated</b> contributions — PRs I choose to showcase via <code>opensource-curated.json</code>. External only; own projects live on My own projects live on <a href="/projects" style="color:var(--accent);text-decoration:underline;text-underline-offset:3px">Projects</a>. Data is read from <code>opensource-curated.json</code> at the repo root; edit that file (or run <code>node scripts/curate-opensource.js &lt;url&gt;</code>) and the list updates on push.</p>
+          <p>This page lists <b>curated</b> contributions selected in the admin panel and loaded directly from Supabase. External only; my own projects live on <a href="/projects" style="color:var(--accent);text-decoration:underline;text-underline-offset:3px">Projects</a>.</p>
         </div>
         <div class="src-actions">
           <a class="btn" href="https://github.com/search?q=author%3Ahariomlohardev+type%3Apr" target="_blank" rel="noopener">All PRs ↗</a>
@@ -483,105 +483,8 @@ html:not(.js) .rv{opacity:1;transform:none}
 var reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 document.getElementById('yr').textContent=new Date().getFullYear();
 
-/* ── DEMO JSON — replace later with /opensource-data.json
-   Format: only external contributions (PRs + issues to others' repos).
-   NO repos field — those are the user's own projects, listed on /projects.html.
-┌──────────────────────────────────────────────────────────────────────────┐
-│  {                                                                       │
-│    "generated_at": "2026-08-20T10:24:00+05:30",                          │
-│    "prs": [{ "title", "repo" (owner/name), "html_url", "state",          │
-│              "body", "updated_at" }],                                    │
-│    "issues": [{ "title", "repo", "html_url", "state",                    │
-│                "body", "updated_at" }]                                   │
-│  }                                                                       │
-└──────────────────────────────────────────────────────────────────────────┘ */
-var DEMO_DATA = {
-  "generated_at": "2026-08-20T10:24:00+05:30",
-  "prs": [
-    {
-      "title": "Fix retrieval edge case in Chain.from_messages",
-      "repo": "langchain-ai/langchain",
-      "html_url": "https://github.com/langchain-ai/langchain/pull/12345",
-      "state": "merged",
-      "body": "When the input message list is empty, Chain.from_messages silently dropped it. Added a guard and a regression test.",
-      "updated_at": "2026-08-18T14:00:00+05:30"
-    },
-    {
-      "title": "Docs: clarify usage of StratifiedKFold with sparse y",
-      "repo": "scikit-learn/scikit-learn",
-      "html_url": "https://github.com/scikit-learn/scikit-learn/pull/23456",
-      "state": "merged",
-      "body": "The docs were silent on sparse y arrays. Added a note and a doctest that exercises it.",
-      "updated_at": "2026-08-12T10:00:00+05:30"
-    },
-    {
-      "title": "Add reproducible example for Conv2d from scratch",
-      "repo": "pytorch/pytorch",
-      "html_url": "https://github.com/pytorch/pytorch/pull/98765",
-      "state": "open",
-      "body": "Pure-Python reference implementation of Conv2d with hand-written forward pass for the tutorial.",
-      "updated_at": "2026-08-10T17:00:00+05:30"
-    },
-    {
-      "title": "Typo fix in tutorial for tf-idf vectorizer",
-      "repo": "scikit-learn/scikit-learn",
-      "html_url": "https://github.com/scikit-learn/scikit-learn/pull/23400",
-      "state": "merged",
-      "body": "Corrected a typo in the sublinear_tf parameter description.",
-      "updated_at": "2026-08-02T11:00:00+05:30"
-    },
-    {
-      "title": "Add NumPy softmax reference implementation",
-      "repo": "numpy/numpy",
-      "html_url": "https://github.com/numpy/numpy/pull/45678",
-      "state": "merged",
-      "body": "A minimal, numerically stable softmax in pure NumPy for the docs — used as a baseline for scipy.",
-      "updated_at": "2026-07-25T16:00:00+05:30"
-    },
-    {
-      "title": "Clarify backprop chain-rule diagram",
-      "repo": "huggingface/transformers",
-      "html_url": "https://github.com/huggingface/transformers/pull/34567",
-      "state": "open",
-      "body": "The chain-rule diagram in the internals doc had a missing arrow. Re-drew with clearer notation.",
-      "updated_at": "2026-07-20T12:00:00+05:30"
-    },
-    {
-      "title": "Add test for edge case in np.dot broadcasting",
-      "repo": "numpy/numpy",
-      "html_url": "https://github.com/numpy/numpy/pull/45600",
-      "state": "merged",
-      "body": "Regression test for a broadcasting corner case in np.dot with 0-d arrays.",
-      "updated_at": "2026-07-11T09:00:00+05:30"
-    }
-  ],
-  "issues": [
-    {
-      "title": "Positional encodings tutorial: request for NumPy example",
-      "repo": "huggingface/transformers",
-      "html_url": "https://github.com/huggingface/transformers/issues/4567",
-      "state": "open",
-      "body": "The docs show PyTorch only. Would love a NumPy reference to mirror the attention-from-scratch tutorial.",
-      "updated_at": "2026-08-14T15:00:00+05:30"
-    },
-    {
-      "title": "Confusing error message when y is empty in StratifiedKFold",
-      "repo": "scikit-learn/scikit-learn",
-      "html_url": "https://github.com/scikit-learn/scikit-learn/issues/23399",
-      "state": "open",
-      "body": "Empty y array produces a cryptic IndexError — proposed a clearer ValueError.",
-      "updated_at": "2026-08-08T13:00:00+05:30"
-    },
-    {
-      "title": "Docs: mention PyTorch backend for conv2d tutorial",
-      "repo": "pytorch/pytorch",
-      "html_url": "https://github.com/pytorch/pytorch/issues/98760",
-      "state": "open",
-      "body": "Suggested a small note linking to a hand-written reference implementation.",
-      "updated_at": "2026-07-30T11:00:00+05:30"
-    }
-  ]
-};
+/* Empty state only — public data comes from curated or generated JSON. */
+var EMPTY_DATA = {"generated_at":"","prs":[],"issues":[]};
 
 /* ── clock ── */
 function tickClock(){
@@ -678,7 +581,8 @@ function render(){
   secTag.textContent=POSTS.length+' contributions · '+prs+' PRs · '+issues+' issues · '+repoCount+' repos';
 
   if(VIEW.length===0){
-    listEl.innerHTML='<div class="empty">No matches — try another search,<br>or <a href="#" id="clearAll">clear all filters</a>.<br>Browse directly on <a href="https://github.com/search?q=author%3Ahariomlohardev" target="_blank" rel="noopener">GitHub ↗</a>.</div>';
+    var emptyMessage=POSTS.length?'No matches — try another search,<br>or <a href="#" id="clearAll">clear all filters</a>.':'No Open Source contributions have been published yet.';
+    listEl.innerHTML='<div class="empty">'+emptyMessage+'<br>Browse directly on <a href="https://github.com/search?q=author%3Ahariomlohardev" target="_blank" rel="noopener">GitHub ↗</a>.</div>';
     var ca=document.getElementById('clearAll');
     if(ca)ca.addEventListener('click',function(e){e.preventDefault();Q='';FILTER='all';qEl.value='';location.hash='';
       document.querySelectorAll('.pill').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-filter')==='all'));});
@@ -759,31 +663,35 @@ window.addEventListener('hashchange',function(){applyHash();render();});
 document.addEventListener('keydown',function(e){if(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){e.preventDefault();qEl.focus();}});
 
 function init(j){
-  POSTS=flatten(j||DEMO_DATA);
+  j=j||EMPTY_DATA;
+  POSTS=flatten(j);
   try{
-    var gen=j.generated_at||DEMO_DATA.generated_at;
-    document.getElementById('syncDate').textContent='Synced '+fmtRel(gen);
+    var gen=j.generated_at||'';
+    document.getElementById('syncDate').textContent=gen?'Synced '+fmtRel(gen):'Sync unavailable';
     document.getElementById('syncCount').textContent=POSTS.length;
   }catch(e){}
   applyHash();render();observeReveals();
 }
 
-// Single loader — curated first, snapshot fallback; eliminates double-fetch duplication
+// Supabase is the only Open Source data source.
 function fetchContribs(){
-  return fetch('opensource-curated.json',{cache:'no-store'})
-    .then(function(r){if(!r.ok)throw 0;return r.json();})
-    .then(function(j){ if(j && ((j.prs&&j.prs.length)||(j.issues&&j.issues.length))) return j; throw 0; })
-    .catch(function(){
-      return fetch('opensource-data.json',{cache:'no-store'})
-        .then(function(r){if(!r.ok)throw new Error('no snapshot');return r.json();});
+  var anon='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJnbXZocHRlYmtzbGtqbGVvaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0NDQwMTAsImV4cCI6MjEwMzAyMDAxMH0.nnaZiyKNOx-eT_5JTQNDwk5b3PCDKZv4f9Yc6wQtk_k';
+  var url='https://rgmvhptebkslkjleoilc.supabase.co/rest/v1/site_content?select=data,updated_at&key=eq.opensource&limit=1';
+  return fetch(url,{headers:{apikey:anon,Authorization:'Bearer '+anon},cache:'no-store'})
+    .then(function(r){if(!r.ok)throw new Error('Supabase '+r.status);return r.json();})
+    .then(function(rows){
+      var row=rows&&rows[0],stored=row&&row.data;
+      var prs=Array.isArray(stored)?stored:(stored&&stored.prs);
+      if(!Array.isArray(prs))throw new Error('Open Source data unavailable');
+      return {generated_at:(stored&&stored.updated_at)||(row&&row.updated_at)||'',prs:prs,issues:(stored&&stored.issues)||[]};
     });
 }
-fetchContribs().then(init).catch(function(){init(DEMO_DATA);});
+fetchContribs().then(init).catch(function(){init(EMPTY_DATA);});
 
 document.getElementById('refreshBtn').addEventListener('click',function(){
   var btn=this;btn.disabled=true;btn.textContent='Refreshing…';
   fetchContribs().then(function(j){init(j);btn.disabled=false;btn.textContent='↻ Refresh';})
-    .catch(function(){init(DEMO_DATA);btn.disabled=false;btn.textContent='↻ Refresh';});
+    .catch(function(){init(EMPTY_DATA);btn.disabled=false;btn.textContent='↻ Refresh';});
 });
 })();
 </script>

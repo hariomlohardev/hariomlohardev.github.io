@@ -3,7 +3,7 @@
 /**
  * improve-readmes.js — fetch every non-fork repo README and render an improved version locally.
  * Saves to temp/readmes/<repo>/README.md (gitignored) + ORIGINAL.md + REPORT.md + _meta.json — no push.
- * Zero deps. Mirrors generate-opensource.js ghGet fallback logic.
+ * Zero deps; fetches repository metadata directly from GitHub.
  * Usage: node scripts/improve-readmes.js [--verbose] [--force]
  */
 const fs = require("fs");
@@ -14,7 +14,6 @@ const crypto = require("crypto");
 const ROOT = path.resolve(__dirname, "..");
 const OUT_ROOT = path.join(ROOT, "temp", "readmes");
 const AGi_SRC = path.join(ROOT, "temp", "agi_rearch.md");
-const OPEN_JSON = path.join(ROOT, "opensource-data.json");
 const PROJ_JSON = path.join(ROOT, "projects-data.json");
 const SITE = "https://hariomlohardev.github.io";
 const USER = "hariomlohardev";
@@ -71,16 +70,10 @@ function safeJson(s){ try{ return JSON.parse(s); }catch{ return null; } }
 function loadRepoList(){
   let repos=[];
   try{
-    const j = JSON.parse(fs.readFileSync(OPEN_JSON,"utf8"));
-    if(Array.isArray(j.repos)) repos = j.repos.filter(r=> !r.fork && !r.is_fork);
+    const pj = JSON.parse(fs.readFileSync(PROJ_JSON,"utf8"));
+    const arr = pj.projects||pj;
+    repos = arr.map(p=> ({ name: p.name || p.slug, full_name: `${USER}/${p.slug||p.id}`, html_url: p.repoUrl||p.url, description: p.description||"", language: (p.languages&&p.languages[0]&&p.languages[0].name)||"", stars:0 }));
   }catch{}
-  if(!repos.length){
-    try{
-      const pj = JSON.parse(fs.readFileSync(PROJ_JSON,"utf8"));
-      const arr = pj.projects||pj;
-      repos = arr.map(p=> ({ name: p.name || p.slug, full_name: `${USER}/${p.slug||p.id}`, html_url: p.repoUrl||p.url, description: p.description||"", language: (p.languages&&p.languages[0]&&p.languages[0].name)||"", stars:0 }));
-    }catch{}
-  }
   // priority: pushed_at desc, AGI_Research firstish — sort stable
   repos.sort((a,b)=> String(b.pushed_at||b.updated_at||"").localeCompare(String(a.pushed_at||a.updated_at||"")));
   // deduplicate by name lower
@@ -153,14 +146,12 @@ Lab Notebook No.01 — paper \`#FFFEFB\`, ink \`#0B1220\`, grid \`#E3ECFB\`, sig
 hariomlohardev.github.io/
 ├── index.html              # lab notebook — mission ruler, Day 041/548
 ├── projects.html           # All / Live / Code · opens → projects/p/<slug>/
-├── opensource.html         # auto-synced — repos · PRs · activity (6h cache)
+├── opensource.html         # admin-curated contributions — live from Supabase
 ├── blog.html + blog/p/<slug>/  # Supabase posts → static pages · feed.xml
 ├── projects-data.json      # 4 featured, kind live|repo, relatedSlugs
-├── opensource-data.json    # snapshot — 11 repos + 9 PRs + 30 events
 ├── scripts/
 │   ├── generate-blog.js        # Supabase posts → blog/p/* + og + feed + sitemap
 │   ├── generate-projects.js    # projects-data.json → projects/p/<slug>/ + FAQ JSON-LD
-│   ├── generate-opensource.js  # GitHub API → opensource-data.json + sitemap + og/opensource.png
 │   ├── generate-llms.js        # → llms.txt / llms-full.txt / ai.txt / humans.txt
 │   └── improve-readmes.js      # ← you are here — local README sweep (temp/readmes/)
 ├── og/*.svg → og/*.png  # 1200×630
@@ -175,7 +166,6 @@ git clone https://github.com/hariomlohardev/hariomlohardev.github.io.git
 cd hariomlohardev.github.io
 node scripts/generate-blog.js       # blogs
 node scripts/generate-projects.js   # detail pages + sitemap
-node scripts/generate-opensource.js # snapshot (needs GITHUB_TOKEN in CI, anon ok locally)
 node scripts/generate-llms.js       # llm index
 python -m http.server 8000          # open http://localhost:8000
 \`\`\`
@@ -418,7 +408,7 @@ async function main(){
   }catch{}
 
   const repos = loadRepoList();
-  if(!repos.length){ console.error("No repos found from opensource-data.json / projects-data.json"); process.exit(1); }
+  if(!repos.length){ console.error("No repos found in projects-data.json"); process.exit(1); }
   console.log(`[readmes] ${repos.length} non-fork repos — day ${dayLabel} — force=${force}`);
 
   // ensure out root
@@ -512,7 +502,7 @@ async function main(){
   const genAtIST = (()=>{ try{ const d=new Date(); const pad=n=>String(n).padStart(2,"0"); const utc=d.getTime()+(d.getTimezoneOffset()*60000); const ist=new Date(utc+5.5*3600000); return ist.toISOString().replace("Z","+05:30").slice(0,19)+"+05:30"; }catch{ return genAt; } })();
   const totalAfter = results.reduce((s,x)=> s+(x.afterBytes||0),0);
   let md = `# README sweep — hariomlohardev (${results.length} repos, ${today})\n\n`;
-  md += `> Generated ${genAtIST} (${genAt}) · Day ${dayLabel} · Lab Notebook No.01 · Source [\`opensource-data.json\`](../opensource-data.json) + GitHub API \`GET /repos/{owner}/{repo}/readme\` · Output [\`temp/readmes/\`](./) (gitignored) — **no remote push.** Review locally, then copy approved files to each clone and push manually.\n\n`;
+  md += `> Generated ${genAtIST} (${genAt}) · Day ${dayLabel} · Lab Notebook No.01 · Source [\`projects-data.json\`](../projects-data.json) + GitHub API \`GET /repos/{owner}/{repo}/readme\` · Output [\`temp/readmes/\`](./) (gitignored) — **no remote push.** Review locally, then copy approved files to each clone and push manually.\n\n`;
   md += `| Repo | Before | After | Lang | Stars | Status | Link |\n`;
   md += `| :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n`;
   for(const x of results){
