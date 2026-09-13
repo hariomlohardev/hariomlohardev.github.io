@@ -9,7 +9,7 @@ static output back to Pages so both stay in sync.
 ## What lives where
 
 - `../vercel.json` — Vercel project config (framework: null, output: `.`, build: `npm run build`)
-- `../package.json` — `build` = `generate-blog + generate-projects + generate-llms + generate-opensource` (same as `.github/workflows/pages.yml`)
+- `../package.json` — build scripts for blog, projects, LLM indexes, tricks, prerendering, and OG assets (same as `.github/workflows/pages.yml`)
 - `./README.md` — this file (how to link + deploy)
 - `./build.sh` — local mimic of Vercel's build (for debugging)
 - `../.vercelignore` — what Vercel shouldn't upload
@@ -28,7 +28,7 @@ vercel link
 # → In which directory is your code? ./
 # → Override settings? N (uses vercel.json)
 
-# 3) pull env (if you add GITHUB_TOKEN for opensource snapshot)
+# 3) pull Supabase env values
 vercel env pull .env.local
 
 # 4) preview deploy
@@ -41,7 +41,7 @@ vercel --prod
 Then in Vercel dashboard:
 - **Settings → Git → Connected Git Repository** → `hariomlohardev/hariomlohardev.github.io` → **Enable** (every `push to main` gets a Preview + Production deploy).
 - **Settings → Domains** → leave `hariomlohardev.vercel.app` as preview; **do NOT add** `hariomlohardev.github.io` (that stays on Pages). Vercel is the builder, Pages is the face.
-- **Settings → Environment Variables** → add `GITHUB_TOKEN` (classic PAT, `public_repo` scope) if you want live `opensource-data.json` from the GitHub API; otherwise the snapshot on disk is used.
+- **Settings → Environment Variables** → add `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY`. Open Source content is read only from Supabase `site_content (key=opensource)`.
 
 ## How the dual deploy stays in sync
 
@@ -49,7 +49,7 @@ Two paths, same `npm run build`:
 
 1. **GitHub Pages (existing, keeps working)**
    `.github/workflows/pages.yml` on `push: main` does:
-   `generate-blog → generate-projects → generate-llms → generate-opensource → upload-pages-artifact → deploy-pages`
+   `generate-blog → generate-projects → generate-llms → generate-tricks → upload-pages-artifact → deploy-pages`
    → `https://hariomlohardev.github.io`
 
 2. **Vercel (new, underneath)**
@@ -58,7 +58,7 @@ Two paths, same `npm run build`:
 
 Pick one:
 - **Keep them independent** (simplest): both build from the same commit, they will match 99% of the time — no extra wiring.
-- **Publish-triggered refresh** (what is wired now): saving in `/admin` writes Supabase and then POSTs a `content-changed` repository_dispatch, which re-runs `pages.yml`. Needs `GITHUB_TOKEN` in the Vercel project env; without it the 6-hourly cron in `pages.yml` is the only refresh.
+- **Supabase-backed publishing**: saving in `/admin` writes `site_content`; the public pages read that same row directly, so no rebuild or GitHub token is needed.
 
 ## Local Vercel build mimic
 
@@ -88,13 +88,13 @@ vercel --prod
 
 - **Build fails on Vercel but passes locally** → check Node 20 (`engines.node 20.x` in package.json) and that `scripts/generate-*.js` are zero-deps.
 - **OG images 404** → ensure `og/*.svg` is committed or generated before deploy (build does it).
-- **opensource-data.json stale** → set `GITHUB_TOKEN` in Vercel env, or run `node scripts/generate-opensource.js` locally before `vercel --prod`.
+- **Open Source data missing** → verify the `site_content` row with `key=opensource` exists and the public-select RLS policy from `supabase/admin.sql` is applied.
 - **Clean URLs 404 on Vercel but work on Pages** → `vercel.json → cleanUrls:true` + `rewrites` for `/blog/p/:slug` already handle it.
 
 ## Why this shape?
 
 - **Zero framework tax** (`framework: null`) — we ship the same static files Pages ships.
-- **One build command** — single source of truth, no drift between Pages and Vercel.
+- **Live content from one source** — Open Source entries are stored in Supabase and both hosts read that row directly.
 - **Edge + Pages** — Vercel gives instant rollback + preview URLs; Pages keeps the `github.io` canonical you already rank for.
 
 See also: `../vercel.json` (routing/headers), `../.vercelignore`, `../package.json` (build).

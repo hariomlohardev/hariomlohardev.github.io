@@ -8,13 +8,12 @@
     "node": "22.x"
   },
   "scripts": {
-    "build": "node scripts/make-favicon-ico.js && node scripts/generate-blog.js && node scripts/generate-projects.js && node scripts/generate-llms.js && node scripts/generate-opensource.js && node scripts/generate-tricks.js && node scripts/prerender-lists.js && node scripts/rasterize-og.js",
+    "build": "node scripts/make-favicon-ico.js && node scripts/generate-blog.js && node scripts/generate-projects.js && node scripts/generate-llms.js && node scripts/generate-tricks.js && node scripts/prerender-lists.js && node scripts/rasterize-og.js",
     "vercel-build": "npm run build",
     "dev": "python -m http.server 8000",
     "generate:blog": "node scripts/generate-blog.js",
     "generate:projects": "node scripts/generate-projects.js",
     "generate:llms": "node scripts/generate-llms.js",
-    "generate:opensource": "node scripts/generate-opensource.js",
     "generate:tricks": "node scripts/generate-tricks.js",
     "generate:prerender": "node scripts/prerender-lists.js",
     "generate:og": "node scripts/generate-site-og.js && node scripts/rasterize-og.js",

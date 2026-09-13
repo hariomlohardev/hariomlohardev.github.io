@@ -161,7 +161,7 @@ ${projectLinks}
 
 ## Open Source — auto-synced contributions
 
-- [Open Source (auto-synced)](https://hariomlohardev.github.io/opensource): every public repo, PR and recent activity pulled from api.github.com/users/hariomlohardev — snapshot at /opensource-data.json + live refresh (6h cache).
+- [Open Source (admin-curated)](https://hariomlohardev.github.io/opensource): curated public contributions loaded directly from Supabase \`site_content\` with \`key=opensource\`; no checked-in contribution snapshot or placeholder data.
 
 ## Tricks — short, reusable how-tos
 

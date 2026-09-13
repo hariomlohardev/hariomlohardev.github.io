@@ -1,11 +1,9 @@
 /**
  * /api/admin/opensource — GET returns curated PRs, POST saves (auth required)
- * Stores in Supabase site_content key='opensource' (and also keeps opensource-curated.json in sync via file fallback)
+ * Stores in Supabase site_content key='opensource', the only Open Source source of truth.
  */
 const jwt = require('jsonwebtoken');
 const cookie = require('cookie');
-const fs = require('fs');
-const path = require('path');
 
 function getToken(req){
   let t=null;
@@ -34,28 +32,15 @@ module.exports = async (req, res) => {
     try{
       const sb=await getSupabase();
       if(sb){
-        const { data, error } = await sb.from('site_content').select('data').eq('key','opensource').single();
+        const { data, error } = await sb.from('site_content').select('data,updated_at').eq('key','opensource').single();
         if(!error && data && data.data){
           const prs = Array.isArray(data.data) ? data.data : (data.data.prs || []);
-          if(prs.length) return res.status(200).json({ ok:true, source:'supabase', prs });
+          if(prs.length) return res.status(200).json({ ok:true, source:'supabase', updated_at:data.updated_at||(data.data&&data.data.updated_at)||null, prs });
         }
       }
-    }catch{}
-    // Fallback to opensource-curated.json
-    try{
-      const file=path.join(process.cwd(),'opensource-curated.json');
-      const raw=fs.readFileSync(file,'utf8');
-      const j=JSON.parse(raw);
-      return res.status(200).json({ ok:true, source:'file-curated', prs: j.prs||[] });
-    }catch{}
-    // Fallback to opensource-data.json
-    try{
-      const file=path.join(process.cwd(),'opensource-data.json');
-      const raw=fs.readFileSync(file,'utf8');
-      const j=JSON.parse(raw);
-      return res.status(200).json({ ok:true, source:'file-data', prs: j.prs||[] });
+      return res.status(200).json({ ok:true, source:'supabase-empty', prs: [] });
     }catch(e){
-      return res.status(200).json({ ok:true, source:'fallback', prs: [] });
+      return res.status(500).json({ ok:false, error:e.message });
     }
   }
 
@@ -73,15 +58,7 @@ module.exports = async (req, res) => {
     const { error } = await sb.from('site_content').upsert({ key:'opensource', data: payload, updated_at: new Date().toISOString() }, { onConflict:'key' });
     if(error) return res.status(500).json({ ok:false, error: error.message });
 
-    // Also update opensource-curated.json on disk if writable (for GitHub Pages fallback)
-    try{
-      const file=path.join(process.cwd(),'opensource-curated.json');
-      const existing = JSON.parse(fs.readFileSync(file,'utf8'));
-      existing.prs = prs;
-      existing.generated_at = new Date().toLocaleString('en-GB',{timeZone:'Asia/Kolkata'});
-      fs.writeFileSync(file, JSON.stringify(existing,null,2));
-    }catch{}
-
+    // Audit
     try{ await sb.from('admin_edits').insert({ key:'opensource', edited_by: verify(req).user||'admin' }); }catch{}
     return res.status(200).json({ ok:true, count: prs.length });
   }
