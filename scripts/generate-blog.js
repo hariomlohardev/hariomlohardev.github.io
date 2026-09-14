@@ -824,6 +824,22 @@ document.getElementById('copyBtn').addEventListener('click',function(){
   }); }
   if(textInput){ textInput.addEventListener('keydown',function(e){ if((e.metaKey||e.ctrlKey)&&e.key==='Enter'){ postBtn.click(); } }); }
 })();
+/* — Live refresh: this HTML is a build-time snapshot, Supabase is the truth.
+   Silently re-render from the backend when it answers; keep the snapshot otherwise. */
+(function(){
+  try{
+    var sEl=document.querySelector('[data-slug]');
+    var liveSlug=sEl?sEl.getAttribute('data-slug'):'';
+    if(!liveSlug)return;
+    var liveBase=(location.hostname==='hariomlohardev.github.io')?'https://hariomlohardev.vercel.app':'';
+    fetch(liveBase+'/api/blog/post?slug='+encodeURIComponent(liveSlug),{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){
+      var p=j&&j.post; if(!p)throw 0;
+      if(p.title){ var h=document.querySelector('.hero h1'); if(h)h.textContent=p.title; document.title=p.title+' — Hariom Lohar · Lab Notebook №01'; }
+      if(p.description){ var l=document.querySelector('.hero .lede'); if(l)l.textContent=p.description; var d=document.querySelector('meta[name="description"]'); if(d)d.setAttribute('content',p.description); }
+      if(p.html){ var pr=document.querySelector('.prose'); if(pr)pr.innerHTML=p.html; }
+    }).catch(function(){});
+  }catch(e){}
+})();
 })();
 </script>
 <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7c8c6879055d45ba894f6ac0ce1cc51a"}'></script>
