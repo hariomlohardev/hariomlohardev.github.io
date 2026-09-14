@@ -41,11 +41,11 @@ async function getSb(){
   return createClient(url,key,{ auth:{ persistSession:false, autoRefreshToken:false }, realtime:{ transport: undefined }});
 }
 
-// Publishing from /admin only writes Supabase; the static copy (feed.xml, /blog/p/*,
-// sitemap, llms.txt) is built by GitHub Actions. Nudge it so a new post is live in a
-// minute instead of waiting for the 6-hourly cron. Best effort by design — a failed
-// ping must never fail the save.
-async function pingRebuild(){
+// Publishing from /admin only writes Supabase; the static copies are built by
+// GitHub Actions (Pages) and Vercel (vercel.app). Nudge both so a new post is
+// live in a minute instead of waiting for the 6-hourly cron or the next push.
+// Best effort by design — a failed ping must never fail the save.
+async function pingPages(){
   const tok=process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
   const repo=process.env.GITHUB_REPO || 'hariomlohardev/hariomlohardev.github.io';
   if(!tok) return {ok:false, skipped:'no GITHUB_TOKEN'};
@@ -62,6 +62,20 @@ async function pingRebuild(){
     });
     return {ok:r.status===204, status:r.status};
   }catch(e){ return {ok:false, error:String(e && e.message || e)}; }
+}
+async function pingVercel(){
+  const hook=process.env.VERCEL_DEPLOY_HOOK_URL;
+  if(!hook) return {ok:false, skipped:'no VERCEL_DEPLOY_HOOK_URL'};
+  try{
+    const r=await fetch(hook,{ method:'POST' });
+    const ok=r.status===200||r.status===201||r.ok===true;
+    return {ok, status:r.status};
+  }catch(e){ return {ok:false, error:String(e && e.message || e)}; }
+}
+async function pingRebuild(){
+  const pages=await pingPages();
+  const vercel=await pingVercel();
+  return {ok:pages.ok||vercel.ok, status:pages.status, pages, vercel};
 }
 
 // ---- comments inbox: /admin reads them here, because notification mail needs a

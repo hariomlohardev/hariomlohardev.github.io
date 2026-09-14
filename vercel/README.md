@@ -56,9 +56,12 @@ Two paths, same `npm run build`:
    Vercel on `push: main` runs `vercel.json → buildCommand: npm run build` → `outputDirectory: .` → serves at `https://hariomlohardev.vercel.app`
    Vercel's own GitHub integration does this on every push, so no Actions workflow is involved.
 
-Pick one:
-- **Keep them independent** (simplest): both build from the same commit, they will match 99% of the time — no extra wiring.
-- **Supabase-backed publishing**: saving in `/admin` writes `site_content`; the public pages read that same row directly, so no rebuild or GitHub token is needed.
+Blog/tricks posts are static snapshots, so both hosts must rebuild on publish:
+- **GitHub Pages** rebuilds via `content-changed` repository_dispatch (needs `GITHUB_TOKEN` in the Vercel project env).
+- **Vercel** redeploys via a Deploy Hook (one-time setup below). Without it, vercel.app keeps serving its last build's `/blog/p/*` files while github.io is already fresh.
+- Open Source is the exception: both hosts read Supabase `site_content (key=opensource)` live, so no rebuild is needed there.
+
+One-time Vercel setup: Dashboard → Project → **Settings → Git → Deploy Hooks** → create one for `main` → **Settings → Environment Variables** → add it as `VERCEL_DEPLOY_HOOK_URL` → Redeploy once.
 
 ## Local Vercel build mimic
 
