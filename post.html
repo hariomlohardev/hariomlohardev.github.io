@@ -437,12 +437,9 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
     function showBody(html){ document.getElementById('prose').innerHTML = html; armImgs(); document.getElementById('article').style.display='block'; document.getElementById('status').style.display='none'; loadComments(post.slug); }
     var liveHtml = post.html && String(post.html).trim();
     if(liveHtml){ showBody(liveHtml); return; }
-    // Absolute path: works from both /post.html?slug=:slug and /blog/p/:slug clean URL
-    fetch('/blog/p/'+encodeURIComponent(post.slug)+'/',{cache:'no-store'}).then(function(r){ if(!r.ok) throw new Error('static '+r.status); return r.text(); }).then(function(html){
-      var m=html.match(/<div class="prose">([\s\S]*?)<\/div>\s*<\/article>/i) || html.match(/<div class="prose">([\s\S]*?)<\/div>/i);
-      if(m){ showBody(m[1]); return; } else throw new Error('no prose');
-    }).catch(function(){
-      // Static snapshot failed — render raw from the Supabase record (no posts/*.md fetch)
+    // Dynamic-only: the record already carries the body — no static snapshot,
+    // which can be older than the last admin edit. Render raw when html is empty.
+    (function(){
       var raw = post.raw || '';
       if(raw && String(raw).trim()){
         // one renderer for the whole site — see assets/md.js
@@ -450,7 +447,7 @@ footer{border-top:2px solid var(--ink);margin-top:28px;background:var(--paper-2)
         return;
       }
       document.getElementById('status').innerHTML='Post found but body not loaded from Supabase. Open canonical: <a href="'+esc(canon)+'" style="color:var(--blue);text-decoration:underline">'+esc(canon)+'</a>';
-    });
+    })();
   }).catch(function(err){
     document.getElementById('status').innerHTML='Failed to load post from Supabase: '+esc(err.message||String(err))+'. Try its <a href="/blog/p/'+esc(slug)+'/" style="color:var(--blue);text-decoration:underline">static page</a> or <a href="/blog" style="color:var(--blue);text-decoration:underline">/blog</a>.';
   });

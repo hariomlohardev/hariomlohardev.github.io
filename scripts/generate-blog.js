@@ -163,31 +163,15 @@ const OG_DIR = path.join(ROOT, "og");
 try{ fs.mkdirSync(OG_DIR, {recursive:true}); }catch{}
 
 // ── generate blog/p/<slug>/index.html ─────────────────────────────
+// Dynamic shell: only stable identifiers (slug, canonical URL) are baked in.
+// Every post-specific byte renders from the database at view time.
 function postPage(post){
-  const dFmt = fmtDate(post.date);
-  const tagsHtml = (post.tags||[]).map(t=>`<a href="/blog#tag=${encodeURIComponent(t)}">#${escHtml(t)}</a>`).join(" ");
-  const tagLinks = (post.tags||[]).map(t=>`<a href="/blog#tag=${encodeURIComponent(t)}">${escHtml(t)}</a>`).join("");
-  const isLog = (post.tags||[]).map(x=>String(x).toLowerCase()).includes('daily-log');
-  const typeLabel = isLog ? 'Daily Log' : 'Article';
-  const coverUrl = post.cover ? (post.cover.startsWith('http') ? post.cover : (post.cover.startsWith('/') ? SITE + post.cover : SITE + '/' + post.cover)) : null;
-  const ogPngUrl = `${SITE}/og/${post.slug}.png`; // rasterized from og/<slug>.svg — crawlers refuse svg
-  const ogImage = coverUrl || ogPngUrl;
-  const ogImageAlt = post.title + ' — Hariom Lohar · Lab Notebook No.01';
   const canonical = post.url;
-  const wordCount = post.wordCount;
-  const reading = post.readingMinutes;
-  const desc = post.description;
-  // Canonical JSON-LD graph: Person#person, WebSite#website, WebPage#webpage, BreadcrumbList#breadcrumb, BlogPosting#article — all reference #person, no duplicate @ids
+  // Site-level graph only — post nodes would be a stale snapshot.
   const personNode = {"@type":"Person","@id":SITE+"/#person","name":"Hariom Lohar","alternateName":["hariomlohardev","Hariom Lohar hariomlohardev"],"disambiguatingDescription":"The Hariom Lohar at hariomlohardev.github.io — GitHub hariomlohardev, Harvard CS50P 2026 cert 544021b8-ab89-4eb2-a433-9c0b949e658f — not any other person named Hariom Lohar.","identifier":"https://github.com/hariomlohardev","nationality":{"@type":"Country","name":"India"},"givenName":"Hariom","familyName":"Lohar","url":SITE+"/","image":SITE+"/certificates/1.png","jobTitle":"Python / Django / Flutter Developer & AGI Researcher","description":"Hariom Lohar — Harvard CS50P certified 2026. Python, Django, FastAPI & Flutter developer and AGI researcher from India, rebuilding intelligence from first principles since 1 July 2026 in public. GitHub: hariomlohardev. Canonical site hariomlohardev.github.io.","address":{"@type":"PostalAddress","addressCountry":"IN"},"sameAs":["https://github.com/hariomlohardev","https://x.com/HariomloharAGI","https://x.com/hariomlohardev","https://www.linkedin.com/in/hariomlohar","https://dev.to/hariomlohardev","https://huggingface.co/hariomlohardev","https://hashnode.com/@hariomlohardev","https://medium.com/@hariomlohardev",SITE+"/"],"knowsAbout":["Python","Django","FastAPI","Flutter","Dart","LangChain","RAG","NumPy","PyTorch","CNNs","Transformers","Computer Vision","Backpropagation","AGI","Attention","Residual Networks","LayerNorm","Harvard CS50P"],"hasCredential":{"@type":"EducationalOccupationalCredential","name":"CS50's Introduction to Programming with Python","credentialCategory":"certificate","recognizedBy":{"@type":"Organization","name":"Harvard University"},"url":"https://cs50.harvard.edu/certificates/544021b8-ab89-4eb2-a433-9c0b949e658f"}};
   const websiteNode = {"@type":"WebSite","@id":SITE+"/#website","url":SITE+"/","name":"Hariom Lohar — Lab Notebook No.01","alternateName":"hariomlohardev.github.io","description":"Official site of Hariom Lohar (hariomlohardev on GitHub) — Python/Django/Flutter, Harvard CS50P 2026, and AGI research lab notebook.","inLanguage":"en-IN","publisher":{"@id":SITE+"/#person"}};
-  const webpageNode = {"@type":"WebPage","@id":canonical+"#webpage","url":canonical,"name":post.title+" — Hariom Lohar","isPartOf":{"@id":SITE+"/#website"},"about":{"@id":SITE+"/#person"},"author":{"@id":SITE+"/#person"},"description":desc,"breadcrumb":{"@id":canonical+"#breadcrumb"},"inLanguage":"en-IN","primaryImageOfPage":{"@type":"ImageObject","contentUrl":ogImage},"datePublished":post.date+"T00:00:00+05:30","dateModified":post.date+"T00:00:00+05:30"};
-  const breadcrumbNode = {"@type":"BreadcrumbList","@id":canonical+"#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home — Hariom Lohar","item":SITE+"/"},{"@type":"ListItem","position":2,"name":"Blog","item":SITE+"/blog"},{"@type":"ListItem","position":3,"name":post.title,"item":canonical}]};
-  const blogPostingNode = {"@type":"BlogPosting","@id":canonical+"#article","headline":post.title,"name":post.title,"description":desc,"datePublished":post.date+"T00:00:00+05:30","dateModified":post.date+"T00:00:00+05:30","author":{"@id":SITE+"/#person"},"publisher":{"@id":SITE+"/#person"},"mainEntityOfPage":{"@id":canonical+"#webpage"},"url":canonical,"image":ogImage,"keywords":(post.tags||[]).join(", "),"wordCount":post.wordCount,"inLanguage":"en-IN","isPartOf":{"@id":SITE+"/#website"},"about":{"@id":SITE+"/#person"}};
-  const jsonLd = {"@context":"https://schema.org","@graph":[personNode, websiteNode, webpageNode, breadcrumbNode, blogPostingNode]};
-  // Split title for hero: keep full title, but also use first part for breadcrumb
-  const shortCur = post.title.length > 28 ? post.title.slice(0,26)+'…' : post.title;
-  const encUrl = encodeURIComponent(post.url);
-  const encTitle = encodeURIComponent(post.title + ' — by Hariom Lohar');
+  // Minimal stable graph — post nodes render client-side from the database.
+  const shellLd = {"@context":"https://schema.org","@graph":[personNode, websiteNode,{"@type":"WebPage","@id":canonical+"#webpage","url":canonical,"isPartOf":{"@id":SITE+"/#website"},"inLanguage":"en-IN"}]};
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -195,8 +179,8 @@ function postPage(post){
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#F6F4EE" />
 <meta name="color-scheme" content="light" />
-<title>${escHtml(post.title)} — Hariom Lohar · Lab Notebook №01</title>
-<meta name="description" content="${escHtml(desc)}" />
+<title>Post — Hariom Lohar · Lab Notebook №01</title>
+<meta name="description" content="Blog post by Hariom Lohar (hariomlohardev) — Lab Notebook №01. Content loads live from the database." />
 <meta name="author" content="Hariom Lohar" />
 <meta name="robots" content="index, follow, max-image-preview:large" />
 <link rel="canonical" href="${canonical}" />
@@ -210,21 +194,21 @@ function postPage(post){
 <meta property="og:site_name" content="Hariom Lohar — Lab Notebook №01" />
 <meta property="og:locale" content="en_IN" />
 <meta property="og:url" content="${canonical}" />
-<meta property="og:title" content="${escHtml(post.title)} — Hariom Lohar" />
-<meta property="og:description" content="${escHtml(desc)}" />
+<meta property="og:title" content="Blog post — Hariom Lohar" />
+<meta property="og:description" content="Blog post by Hariom Lohar (hariomlohardev) — Lab Notebook №01." />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="${post.date}" />
-<meta property="og:image" content="${ogImage}" />
+<meta property="og:image" content="${SITE}/og/blog.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:type" content="image/png" />
-<meta property="og:image:alt" content="${escHtml(ogImageAlt)}" />
+<meta property="og:image:alt" content="Blog post — Hariom Lohar — Lab Notebook №01" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="${escHtml(post.title)} — Hariom Lohar" />
-<meta name="twitter:description" content="${escHtml(desc)}" />
-<meta name="twitter:image" content="${ogImage}" />
+<meta name="twitter:title" content="Blog post — Hariom Lohar" />
+<meta name="twitter:description" content="Blog post by Hariom Lohar (hariomlohardev) — Lab Notebook №01." />
+<meta name="twitter:image" content="${SITE}/og/blog.png" />
 <meta name="twitter:creator" content="@HariomloharAGI" />
-<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+<script type="application/ld+json">${JSON.stringify(shellLd)}</script>
+<meta name="supabase-anon" content="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJnbXZocHRlYmtzbGtqbGVvaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0NDQwMTAsImV4cCI6MjEwMzAyMDAxMH0.nnaZiyKNOx-eT_5JTQNDwk5b3PCDKZv4f9Yc6wQtk_k" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="icon" type="image/png" href="/favicon.png" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -233,6 +217,7 @@ function postPage(post){
 <link rel="preload" href="/assets/fonts/archivo-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/fraunces-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/fonts.css?v=1">
+<script src="/assets/md.js?v=1"></script>
 <style>
 :root{
   --paper:#F6F4EE;--paper-2:#EFECE2;--sheet:#FBFAF6;
@@ -512,30 +497,28 @@ html:not(.js) .rv{opacity:1;transform:none}
     <div class="breadcrumb">
       <a href="/">Hariom Lohar</a><span class="sep">/</span>
       <a href="/blog">Blog</a><span class="sep">/</span>
-      <span class="cur">${escHtml(shortCur)}</span>
+      <span class="cur" id="postCrumb">Post</span>
     </div>
     <div class="hero">
       <p class="eyebrow rv"><i aria-hidden="true"></i>
-        <span>${escHtml(typeLabel)}</span><span class="dot">·</span>
-        <span>${escHtml(dFmt)}</span><span class="dot">·</span>
-        <span>${reading} min read</span>
+        <span id="postKicker">Loading…</span>
       </p>
-      <h1 class="rv">${escHtml(post.title)}</h1>
-      <p class="lede rv">${escHtml(desc)}</p>
+      <h1 class="rv" id="postTitle">Loading…</h1>
+      <p class="lede rv" id="postLede"></p>
       <div class="hero-foot rv">
-        <div class="meta">
-          <span><b>By Hariom Lohar</b> (hariomlohardev)</span>
-          <span class="sep">·</span><span>${wordCount} words</span>
-          <span class="sep">·</span><span>committed in public</span>
-        </div>
-        <div class="tags">${(post.tags||[]).map(t=>`<a href="/blog#tag=${encodeURIComponent(t)}">${escHtml(t)}</a>`).join("")}</div>
+        <div class="meta" id="postMeta"></div>
+        <div class="tags" id="postTags"></div>
       </div>
     </div>
     <div class="rule" aria-hidden="true"></div>
     <article class="rv">
-      <div class="prose">
-${post.html}
+      <div class="prose" id="postBody">
+        <div style="height:16px;background:var(--paper-2);border:1px solid var(--line);margin:10px 0"></div>
+        <div style="height:16px;background:var(--paper-2);border:1px solid var(--line);margin:10px 0;width:92%"></div>
+        <div style="height:16px;background:var(--paper-2);border:1px solid var(--line);margin:10px 0;width:78%"></div>
       </div>
+      <p id="postStatus" style="font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:12px">Loading post from the database…</p>
+      <noscript><p style="margin-top:12px">This post loads live from the database — enable JavaScript, or browse the <a href="/blog" style="text-decoration:underline">blog index</a>.</p></noscript>
       <div class="endmark" aria-hidden="true">◆</div>
     </article>
     <section class="flat-sec rv" id="hl-rating" aria-label="Rate this post" data-slug="${post.slug}">
@@ -586,8 +569,8 @@ ${post.html}
       <div class="kicker"><i></i> Share — Lab Notebook №01</div>
       <div class="share-row">
         <button type="button" class="share-btn" id="copyBtn">Copy link</button>
-        <a class="share-btn" href="https://twitter.com/intent/tweet?url=${encUrl}&text=${encTitle}" target="_blank" rel="noopener">X ↗</a>
-        <a class="share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=${encUrl}" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a class="share-btn" id="shareX" href="https://twitter.com/intent/tweet" target="_blank" rel="noopener">X ↗</a>
+        <a class="share-btn" id="shareLi" href="https://www.linkedin.com/sharing/share-offsite/" target="_blank" rel="noopener">LinkedIn ↗</a>
       </div>
     </section>
     <div class="post-nav rv">
@@ -824,21 +807,60 @@ document.getElementById('copyBtn').addEventListener('click',function(){
   }); }
   if(textInput){ textInput.addEventListener('keydown',function(e){ if((e.metaKey||e.ctrlKey)&&e.key==='Enter'){ postBtn.click(); } }); }
 })();
-/* — Live refresh: this HTML is a build-time snapshot, Supabase is the truth.
-   Silently re-render from the backend when it answers; keep the snapshot otherwise. */
+/* — Dynamic post shell: no baked content — everything renders from the database. */
 (function(){
-  try{
-    var sEl=document.querySelector('[data-slug]');
-    var liveSlug=sEl?sEl.getAttribute('data-slug'):'';
-    if(!liveSlug)return;
-    var liveBase=(location.hostname==='hariomlohardev.github.io')?'https://hariomlohardev.vercel.app':'';
-    fetch(liveBase+'/api/blog/post?slug='+encodeURIComponent(liveSlug),{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){
-      var p=j&&j.post; if(!p)throw 0;
-      if(p.title){ var h=document.querySelector('.hero h1'); if(h)h.textContent=p.title; document.title=p.title+' — Hariom Lohar · Lab Notebook №01'; }
-      if(p.description){ var l=document.querySelector('.hero .lede'); if(l)l.textContent=p.description; var d=document.querySelector('meta[name="description"]'); if(d)d.setAttribute('content',p.description); }
-      if(p.html){ var pr=document.querySelector('.prose'); if(pr)pr.innerHTML=p.html; }
-    }).catch(function(){});
-  }catch(e){}
+"use strict";
+var POST_SLUG='${post.slug}';
+var POST_URL='${canonical}';
+var API_BASE=(location.hostname==='hariomlohardev.github.io')?'https://hariomlohardev.vercel.app':'';
+var ANON=(document.querySelector('meta[name="supabase-anon"]')||{}).content||'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJnbXZocHRlYmtzbGtqbGVvaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0NDQwMTAsImV4cCI6MjEwMzAyMDAxMH0.nnaZiyKNOx-eT_5JTQNDwk5b3PCDKZv4f9Yc6wQtk_k';
+function fmtDay(d){try{return new Date(d+'T00:00:00+05:30').toLocaleDateString('en-GB',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric'}).toUpperCase();}catch(e){return d||'';}}
+function fail(msg){
+  var t=document.getElementById('postTitle'); if(t)t.textContent='Not available';
+  var k=document.getElementById('postKicker'); if(k)k.textContent='Supabase';
+  var s=document.getElementById('postStatus'); if(s)s.textContent=msg;
+}
+function render(p){
+  var tags=Array.isArray(p.tags)?p.tags:[];
+  var isLog=tags.map(function(t){return String(t).toLowerCase();}).indexOf('daily-log')!==-1;
+  var k=document.getElementById('postKicker');
+  if(k)k.textContent=(isLog?'Daily Log':'Article')+' · '+fmtDay(p.date)+' · '+(p.readingMinutes||p.reading_minutes||3)+' min · Hariom Lohar';
+  if(p.title){
+    var h=document.getElementById('postTitle'); if(h)h.textContent=p.title;
+    var c=document.getElementById('postCrumb'); if(c)c.textContent=p.title;
+    document.title=p.title+' — Hariom Lohar · Lab Notebook №01';
+  }
+  if(p.description){
+    var l=document.getElementById('postLede'); if(l)l.textContent=p.description;
+    var d=document.querySelector('meta[name="description"]'); if(d)d.setAttribute('content',p.description);
+  }
+  var words=p.wordCount||p.word_count||'—';
+  var m=document.getElementById('postMeta');
+  if(m)m.innerHTML='<span><b>By Hariom Lohar</b> (hariomlohardev)</span><span class="sep"> · </span><span>'+escHtml(String(words))+' words</span><span class="sep"> · </span><span>committed in public</span>';
+  var tg=document.getElementById('postTags');
+  if(tg)tg.innerHTML=tags.map(function(t){return '<a href="/blog#tag='+encodeURIComponent(t)+'">#'+escHtml(t)+'</a>';}).join(' ');
+  if(p.title){
+    var x=document.getElementById('shareX'); if(x)x.href='https://twitter.com/intent/tweet?url='+encodeURIComponent(POST_URL)+'&text='+encodeURIComponent(p.title+' — by Hariom Lohar');
+    var li=document.getElementById('shareLi'); if(li)li.href='https://www.linkedin.com/sharing/share-offsite/?url='+encodeURIComponent(POST_URL);
+  }
+  var html=(p.html&&String(p.html).trim())||'';
+  var raw=(p.raw&&String(p.raw).trim())||'';
+  if(!html&&raw&&(window.MD&&window.MD.mdToHtml)){ html=window.MD.mdToHtml(raw.replace(/^---[\s\S]*?---\s*/,'')); }
+  if(html){ var b=document.getElementById('postBody'); if(b)b.innerHTML=html; }
+  var s=document.getElementById('postStatus'); if(s)s.style.display='none';
+  try{observeReveals();}catch(e){}
+  try{enhanceCode();}catch(e){}
+  if(!html)fail('Post found but its body is empty in the database.');
+}
+fetch(API_BASE+'/api/blog/post?slug='+encodeURIComponent(POST_SLUG),{cache:'no-store'})
+  .then(function(r){if(!r.ok)throw 0;return r.json();})
+  .then(function(j){ if(j&&j.ok&&j.post)return j.post; throw 0; })
+  .catch(function(){
+    var url='https://rgmvhptebkslkjleoilc.supabase.co/rest/v1/posts?slug=eq.'+encodeURIComponent(POST_SLUG)+'&published=eq.true&select=slug,title,description,date,tags,cover,html,raw,word_count,reading_minutes,published';
+    return fetch(url,{headers:{apikey:ANON,Authorization:'Bearer '+ANON},cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(a){ if(a&&a.length)return a[0]; throw 0; });
+  })
+  .then(render)
+  .catch(function(){ fail('Could not load this post from the database. Try the blog index or RSS.'); });
 })();
 })();
 </script>
