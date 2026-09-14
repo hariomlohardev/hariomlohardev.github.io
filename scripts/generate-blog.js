@@ -685,6 +685,8 @@ document.getElementById('copyBtn').addEventListener('click',function(){
 /* — HL rating + comments (cookie hl_cid + optional name) — */
 (function(){
   var slug='${post.slug}';
+  // github.io is static-only (the Pages build deletes /api) — send API calls to the Vercel backend there
+  var API_BASE=(location.hostname==='hariomlohardev.github.io')?'https://hariomlohardev.vercel.app':'';
   function q(s){return document.querySelector(s)}
   function el(s){return document.getElementById(s)}
   // — cookie + client id —
@@ -732,7 +734,7 @@ document.getElementById('copyBtn').addEventListener('click',function(){
     var nm=(nameInput&&nameInput.value||'').trim().slice(0,32);
     if(nm) setName(nm);
     rateBtn.disabled=true; rateBtn.textContent='…';
-    fetch('/api/blog/social?type=ratings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug:slug,score:v,client_id:CID,author_name:nm||getName()||'Anonymous'})}).then(function(r){return r.json()}).then(function(j){
+    fetch(API_BASE+'/api/blog/social?type=ratings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug:slug,score:v,client_id:CID,author_name:nm||getName()||'Anonymous'})}).then(function(r){return r.json()}).then(function(j){
       if(!j||!j.ok) throw new Error(j&&j.error||'failed');
       rateBtn.textContent='Rated ✓';
       if(rateNote){ rateNote.textContent='thanks for rating'; rateNote.style.display=''; }
@@ -777,7 +779,7 @@ document.getElementById('copyBtn').addEventListener('click',function(){
     listEl.querySelectorAll('[data-reply]').forEach(function(b){ b.addEventListener('click',function(){ setReply(b.getAttribute('data-reply'), b.getAttribute('data-who')); window.scrollTo({top: document.getElementById('hlComposer').offsetTop - 88, behavior: reduced?'auto':'smooth'}); }); });
   }
   function fetchComments(){
-    fetch('/api/blog/social?type=comments&slug='+encodeURIComponent(slug)).then(function(r){return r.json()}).then(function(j){ if(j&&j.ok) renderComments(j.comments||[]); }).catch(function(){});
+    fetch(API_BASE+'/api/blog/social?type=comments&slug='+encodeURIComponent(slug)).then(function(r){return r.json()}).then(function(j){ if(j&&j.ok) renderComments(j.comments||[]); }).catch(function(){});
   }
   fetchComments();
   function showNameModal(){
@@ -801,7 +803,7 @@ document.getElementById('copyBtn').addEventListener('click',function(){
   if(nameInput) nameInput.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); if(nameContinue) nameContinue.click(); } });
   function doPost(content, replyId, authorName){
     postBtn.disabled=true; postBtn.textContent='Posting…'; postNote.textContent='';
-    fetch('/api/blog/social?type=comments',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug:slug,content:content,author_name:authorName,parent_id:replyId,client_id:CID})}).then(function(r){return r.json().then(function(j){ return {status:r.status, body:j};})}).then(function(x){
+    fetch(API_BASE+'/api/blog/social?type=comments',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug:slug,content:content,author_name:authorName,parent_id:replyId,client_id:CID})}).then(function(r){return r.json().then(function(j){ return {status:r.status, body:j};})}).then(function(x){
       if(!x.body||!x.body.ok) throw new Error(x.body&&x.body.error||'failed ('+x.status+')');
       if(textInput) textInput.value=''; clearReply(); postNote.textContent='posted ✓';
       fetchComments();
