@@ -141,11 +141,11 @@
     },
     {
       "source": "/blog/p/:slug",
-      "destination": "/post?slug=:slug"
+      "destination": "/api/blog/render?slug=:slug"
     },
     {
       "source": "/blog/p/:slug/",
-      "destination": "/post?slug=:slug"
+      "destination": "/api/blog/render?slug=:slug"
     },
     {
       "source": "/projects/p/:slug",

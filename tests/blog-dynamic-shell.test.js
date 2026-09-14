@@ -5,7 +5,6 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const gen = fs.readFileSync(path.join(__dirname, '..', 'scripts', 'generate-blog.js'), 'utf8');
-const postHtml = fs.readFileSync(path.join(__dirname, '..', 'post.html'), 'utf8');
 const Module = require('node:module');
 
 // Shell pages bake no post content — everything renders from the database.
@@ -22,15 +21,16 @@ assert.ok(gen.includes('id="postBody"'),
 assert.ok(gen.includes('/api/blog/post?slug=') && gen.includes('POST_SLUG'),
   'generated shell must fetch the post from the database');
 
-// post.html is dynamic-only: no static-snapshot fallback.
-assert.ok(!postHtml.includes("fetch('/blog/p/'"),
-  'post.html must not fall back to static snapshots');
+// The shell template is the single post UI — also served server-side by
+// api/blog/render, so it must be requireable without running the build.
+assert.ok(gen.includes('module.exports={postPage'),
+  'generate-blog.js must export postPage for the server renderer');
 
 // The shell template must actually render: mount points, baked identifiers,
 // loader with the slug — and no uninterpolated placeholders or post content.
 {
   const genPath = path.join(__dirname, '..', 'scripts', 'generate-blog.js');
-  const src = gen.replace(/main\(\)\.catch[\s\S]*$/, 'module.exports={postPage};');
+  const src = gen.replace(/if\(require\.main===module\)[\s\S]*$/, 'module.exports={postPage};');
   const m = new Module(genPath, module);
   m.filename = genPath;
   m.paths = Module._nodeModulePaths(path.dirname(genPath));
