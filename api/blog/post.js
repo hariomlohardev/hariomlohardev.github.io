@@ -2,6 +2,10 @@
  * GET /api/blog/post?slug=<slug> — fetch single post from Supabase (public)
  */
 module.exports = async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin','*');
+  res.setHeader('Access-Control-Allow-Methods','GET,POST,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers','Content-Type, Authorization');
+  if(req.method==='OPTIONS') return res.status(204).end();
   const slug = String(req.query.slug || '').toLowerCase().trim();
   if (!slug) return res.status(400).json({ ok:false, error:'slug required' });
   try{
