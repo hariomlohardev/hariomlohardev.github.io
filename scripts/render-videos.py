@@ -341,7 +341,7 @@ def frame_v1(i):
 def frame_v2(i):
     t = i / FPS
     img = base_frame()
-    img = grid(img, fade(t, 0.0, 0.6))
+    # plain paper ground only -- no engineering grid (V2 final look)
     # chrome label sits INSIDE the ruled frame (y=104), never struck by it
     img = hline(img, 0, W, 0, 12, ACCENT, fade(t, 0.1, 0.5))
     img = draw_tracked_alpha(img, W / 2, 104, "LAB NOTEBOOK No.01 - HARIOM LOHAR",
