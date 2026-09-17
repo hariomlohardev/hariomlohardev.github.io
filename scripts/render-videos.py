@@ -340,30 +340,143 @@ def frame_v1(i):
 
 # ------------------------------------------------------------------ v2
 
+# ---------------------------------------------------------- rubber motion
+# Squash & stretch, elastic overshoot, bounce drops and a jelly settle --
+# the editor-style physics pass for the mark. Strokes are sprites pasted
+# with volume-preserving squash driven by their own velocity.
+
+def ease_out_bounce(p):
+    p = min(1.0, max(0.0, p))
+    n1, d1 = 7.5625, 2.75
+    if p < 1 / d1:
+        return n1 * p * p
+    if p < 2 / d1:
+        p -= 1.5 / d1
+        return n1 * p * p + 0.75
+    if p < 2.5 / d1:
+        p -= 2.25 / d1
+        return n1 * p * p + 0.9375
+    p -= 2.625 / d1
+    return n1 * p * p + 0.984375
+
+
+def ease_out_elastic(p):
+    p = min(1.0, max(0.0, p))
+    if p <= 0:
+        return 0.0
+    if p >= 1:
+        return 1.0
+    c4 = (2 * math.pi) / 3
+    return pow(2, -10 * p) * math.sin((p * 10 - 0.75) * c4) + 1
+
+
+def _sprite(w, h, rgb):
+    lyr = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    ImageDraw.Draw(lyr).rectangle([0, 0, w - 1, h - 1], fill=rgb + (255,))
+    return lyr
+
+
+def _dot_sprite(r):
+    s = int(math.ceil(r)) + 4
+    lyr = Image.new("RGBA", (2 * s, 2 * s), (0, 0, 0, 0))
+    ImageDraw.Draw(lyr).ellipse([s - r, s - r, s + r, s + r], fill=ACCENT + (255,))
+    return lyr
+
+
+def _paste_anchor(canvas, sprite, cx, bottom, sx, sy):
+    w, h = sprite.size
+    nw, nh = max(1, int(round(w * sx))), max(1, int(round(h * sy)))
+    if (nw, nh) != (w, h):
+        sprite = sprite.resize((nw, nh), Image.BICUBIC)
+    canvas.paste(sprite, (int(round(cx - nw / 2)), int(round(bottom - nh))), sprite)
+
+
+def _fall_squash(off_fn, t):
+    dt = 1 / 240
+    v = (off_fn(t) - off_fn(t - dt)) / dt  # px/s, positive while falling
+    sy = 1 + min(0.55, max(-0.28, v / 4200))
+    return 1 / math.sqrt(sy), sy
+
+
+V2_TOP = 560
+V2_DROP, V2_DOT_DROP = 950, 720
+V2_JELLY_T = 2.02
+
+
+def _v2_bounce(a, b):
+    return lambda tt: -(1 - ease_out_bounce(seg(tt, a, b)))
+
+
+def _v2_mark(t):
+    sw = max(1, int(round(5 * MS)))
+    stem_h = int(round(32 * MS))
+    bar_w, foot_w = int(round(16 * MS)), int(round(15 * MS))
+    bl = mono_y(38, V2_TOP)   # stems' final bottom
+    dc = mono_y(7, V2_TOP)    # dot final center
+
+    lyr = layer()
+    stem = _sprite(sw, stem_h, INK)
+    o_l = _v2_bounce(0.05, 0.75)
+    o_r = _v2_bounce(0.20, 0.90)
+    _paste_anchor(lyr, stem, mono_x(7), bl + o_l(t) * V2_DROP,
+                  *_fall_squash(lambda tt: o_l(tt) * V2_DROP, t))
+    _paste_anchor(lyr, stem, mono_x(23), bl + o_r(t) * V2_DROP,
+                  *_fall_squash(lambda tt: o_r(tt) * V2_DROP, t))
+
+    # crossbar stretches from its left anchor, overshooting ~12% like a
+    # rubber band before snapping flush to the stem.
+    s = min(1.12, max(0.0, ease_out_elastic(seg(t, 0.75, 1.35))))
+    if s > 0:
+        sy_b = 1 - (s - 1) * 0.55
+        _paste_anchor(lyr, _sprite(bar_w, sw, ACCENT),
+                      mono_x(7) + bar_w * s / 2, mono_y(22, V2_TOP) + sw * sy_b / 2,
+                      s, sy_b)
+    s_f = min(1.08, max(0.0, ease_out_elastic(seg(t, 1.00, 1.55))))
+    if s_f > 0:
+        sy_f = 1 - (s_f - 1) * 0.55
+        _paste_anchor(lyr, _sprite(foot_w, sw, INK),
+                      mono_x(23) + foot_w * s_f / 2, mono_y(38, V2_TOP) + sw * sy_f / 2,
+                      s_f, sy_f)
+
+    # the dot drops from the sky, bouncing with squash on every impact.
+    o_d = _v2_bounce(1.30, 2.00)
+    dot = _dot_sprite(3.4 * MS)
+    sx, sy = _fall_squash(lambda tt: o_d(tt) * V2_DOT_DROP, t)
+    w, h = dot.size
+    nw, nh = max(1, int(round(w * sx))), max(1, int(round(h * sy)))
+    if (nw, nh) != (w, h):
+        dot = dot.resize((nw, nh), Image.BICUBIC)
+    cy = dc + o_d(t) * V2_DOT_DROP
+    lyr.paste(dot, (int(round(mono_x(37) - nw / 2)), int(round(cy - nh / 2))), dot)
+    return lyr
+
+
+def _jelly(lyr, t):
+    dt = t - V2_JELLY_T
+    if dt <= 0 or t > 2.62:
+        return lyr
+    dec = math.exp(-4.5 * dt)
+    ang = 2.0 * dec * math.sin(dt * 18)
+    s = 1 + 0.022 * dec * math.sin(dt * 15 + 1.2)
+    w, h = lyr.size
+    nw, nh = int(round(w * s)), int(round(h * s))
+    z = lyr.resize((nw, nh), Image.BICUBIC)
+    canvas = layer()
+    canvas.paste(z, ((w - nw) // 2, (h - nh) // 2), z)
+    return canvas.rotate(ang, resample=Image.BICUBIC, center=(W / 2, V2_TOP + 22 * MS))
+
+
 def frame_v2(i):
     t = i / FPS
     img = base_frame()
-    top = 560
-    # Act 1: twin stems draw with a stagger, left leading the right.
-    p_l = ease(seg(t, 0.15, 0.75))
-    p_r = ease(seg(t, 0.30, 0.90))
-    # Act 2: the vermilion crossbar sweeps with a whisper of overshoot --
-    # easeOutBack pushes ~8% past the stem, then settles flush.
-    p_bar = ease_out_back(seg(t, 0.80, 1.20)) * 1.0
-    bar_len = 16 * MS * min(p_bar, 1.08)
-    # Act 3: the L foot draws, then the dot stamps with a settle.
-    p_foot = ease(seg(t, 1.00, 1.35))
-    p_dot = seg(t, 1.25, 1.50)
-    img = draw_monogram(img, top, p_l, 0.0, p_foot, p_dot,
-                        alpha=fade(t, 0.10, 0.35), p_stem_r=p_r)
-    # ...except the bar is drawn here for the overshoot (draw_monogram's
-    # own bar stays parked at 0).
-    if p_bar > 0:
-        sw = max(1, int(round(5 * MS)))
-        img = hline(img, mono_x(7), mono_x(7) + bar_len, mono_y(22, top),
-                    sw, ACCENT, fade(t, 0.75, 0.95))
+    top = V2_TOP
+    # the full rubber assembly, jelly-settling once everything has landed
+    mark = _v2_mark(t)
+    if t >= V2_JELLY_T:
+        mark = _jelly(mark, t)
+    img = paste(img, mark)
     # Act 4: a thin vermilion ring breathes out of the stamp and dissolves.
-    pr = seg(t, 1.30, 1.90)
+    pr = seg(t, 1.66, 2.15)
     if 0 < pr < 1:
         lyr = layer()
         r0 = 3.4 * MS
@@ -416,7 +529,7 @@ def frame_v3(i):
 
 
 VERSIONS = {"v1": ("v1-name-merge", frame_v1),
-            "v2": ("v2-hl-mark", frame_v2),
+            "v2": ("v2-hl-rubber", frame_v2),
             "v3": ("v3-ink-stamp-outro", frame_v3)}
 
 
