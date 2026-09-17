@@ -341,40 +341,33 @@ def frame_v1(i):
 def frame_v2(i):
     t = i / FPS
     img = base_frame()
-    # plain paper ground only -- no engineering grid (V2 final look)
-    # chrome label sits INSIDE the ruled frame (y=104), never struck by it
-    img = hline(img, 0, W, 0, 12, ACCENT, fade(t, 0.1, 0.5))
-    img = draw_tracked_alpha(img, W / 2, 104, "LAB NOTEBOOK No.01 - HARIOM LOHAR",
-                             font("spacemono", 26), MUTED, 6, fade(t, 0.1, 0.5))
-
-    # hairline sheet frame draws clockwise, like a ruled card
-    p = ease(seg(t, 0.15, 0.9))
-    m = 72
-    per = p * 4
-    img = hline(img, m, m + (W - 2 * m) * min(1, per), m, 3, INK, fade(t, 0.15, 0.4))
-    img = vline(img, W - m, m, m + (H - 2 * m) * min(1, max(0, per - 1)), 3, INK, fade(t, 0.15, 0.4))
-    img = hline(img, W - m - (W - 2 * m) * min(1, max(0, per - 2)), W - m, H - m, 3, INK, fade(t, 0.15, 0.4))
-    img = vline(img, m, H - m - (H - 2 * m) * min(1, max(0, per - 3)), H - m, 3, INK, fade(t, 0.15, 0.4))
-
-    img = draw_tracked_alpha(img, W / 2, 150, "FIELD LOG - DRAWING No.01",
-                             font("spacemono", 28), MUTED, 7, fade(t, 0.3, 0.8))
-    # the mark draws itself: stems, vermilion bar, foot, stamp-dot
+    # only the mark draws itself: stems, vermilion bar, foot, stamp-dot
     top = 560
     img = draw_monogram(img, top,
-                        ease(seg(t, 0.6, 1.5)), ease(seg(t, 1.1, 1.7)),
-                        ease(seg(t, 1.3, 1.85)), seg(t, 1.7, 2.0),
-                        alpha=fade(t, 0.55, 0.8))
-    img = draw_tracked_alpha(img, W / 2, top + 44 * MS + 40, "Hariom Lohar",
-                             font("fraunces400i", 72), INK2, 2, fade(t, 1.9, 2.3))
-    # rotated stamp drops in last; end card holds handle + stamp
-    ps = seg(t, 2.0, 2.45)
-    if ps > 0:
-        sc = 1 + (1 - ease_out_back(ps)) * 0.0  # settle is in the rotation
-        _ = sc
-        img = stamp(img, W / 2, top + 44 * MS + 220, "SHIP - ONE LOG AT A TIME",
-                    font("spacemono", 30), angle=lerp(-14, -7, ease(ps)))
-        img = paste(img, layer())  # no-op keep pipeline uniform
-    img = handle_bottom(img, fade(t, 2.2, 2.6))
+                        ease(seg(t, 0.2, 1.0)), ease(seg(t, 0.6, 1.1)),
+                        ease(seg(t, 0.8, 1.25)), seg(t, 1.1, 1.35),
+                        alpha=fade(t, 0.15, 0.4))
+    # the site's hero terminal types itself below the mark:
+    # ink prompt, typed tagline, vermilion block caret
+    prompt = safe("~/hariom $ ", "spacemono")
+    phrase = safe("Rebuilding AGI from first principles.", "spacemono")
+    fnt_m = font("spacemono", 30)
+    n = int(len(phrase) * seg(t, 0.9, 2.5))
+    shown = phrase[:n]
+    wp = sum(fnt_m.getlength(ch) for ch in prompt)
+    ws = sum(fnt_m.getlength(ch) for ch in shown)
+    y = top + 44 * MS + 130
+    x0 = W / 2 - (wp + ws + 30) / 2
+    lyr = layer()
+    d = ImageDraw.Draw(lyr)
+    a_txt = fade(t, 0.85, 1.1)
+    if a_txt > 0:
+        d.text((x0, y), prompt, font=fnt_m, fill=INK + (int(255 * a_txt),))
+        d.text((x0 + wp, y), shown, font=fnt_m, fill=BODY + (int(255 * a_txt),))
+        if t < 2.6 and (i // 15) % 2 == 0 or t >= 2.6:  # caret blinks, rests on
+            d.rectangle([x0 + wp + ws + 8, y + 5, x0 + wp + ws + 28, y + 39],
+                        fill=ACCENT + (255,))
+    img = paste(img, lyr)
     return grain(img, i)
 
 
@@ -419,7 +412,7 @@ def frame_v3(i):
 
 
 VERSIONS = {"v1": ("v1-name-merge", frame_v1),
-            "v2": ("v2-blueprint-draw", frame_v2),
+            "v2": ("v2-hl-terminal", frame_v2),
             "v3": ("v3-ink-stamp-outro", frame_v3)}
 
 
