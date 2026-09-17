@@ -33,3 +33,9 @@ supabase/.temp/
 temp/readmes/
 .remember/
 .playwright-mcp/
+
+# generated slides: regenerate with node scripts/generate-carousel.js
+carousel/out/
+
+# generated logo videos: regenerate with python scripts/render-videos.py
+videos/
