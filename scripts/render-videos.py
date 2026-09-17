@@ -341,18 +341,18 @@ def frame_v1(i):
 def frame_v2(i):
     t = i / FPS
     img = base_frame()
-    # only the mark draws itself: stems, vermilion bar, foot, stamp-dot
+    # Act 1: the full mark draws and holds on its own first.
     top = 560
     img = draw_monogram(img, top,
-                        ease(seg(t, 0.2, 1.0)), ease(seg(t, 0.6, 1.1)),
-                        ease(seg(t, 0.8, 1.25)), seg(t, 1.1, 1.35),
-                        alpha=fade(t, 0.15, 0.4))
-    # the site's hero terminal types itself below the mark:
-    # ink prompt, typed tagline, vermilion block caret
+                        ease(seg(t, 0.15, 0.9)), ease(seg(t, 0.5, 0.95)),
+                        ease(seg(t, 0.65, 1.05)), seg(t, 0.9, 1.1),
+                        alpha=fade(t, 0.1, 0.35))
+    # Act 2: only once the HL stands complete, the site's hero terminal
+    # types itself below: ink prompt, typed tagline, vermilion block caret.
     prompt = safe("~/hariom $ ", "spacemono")
     phrase = safe("Rebuilding AGI from first principles.", "spacemono")
     fnt_m = font("spacemono", 30)
-    n = int(len(phrase) * seg(t, 0.9, 2.5))
+    n = int(len(phrase) * seg(t, 1.5, 2.6))
     shown = phrase[:n]
     wp = sum(fnt_m.getlength(ch) for ch in prompt)
     ws = sum(fnt_m.getlength(ch) for ch in shown)
@@ -360,7 +360,7 @@ def frame_v2(i):
     x0 = W / 2 - (wp + ws + 30) / 2
     lyr = layer()
     d = ImageDraw.Draw(lyr)
-    a_txt = fade(t, 0.85, 1.1)
+    a_txt = fade(t, 1.35, 1.55)
     if a_txt > 0:
         d.text((x0, y), prompt, font=fnt_m, fill=INK + (int(255 * a_txt),))
         d.text((x0 + wp, y), shown, font=fnt_m, fill=BODY + (int(255 * a_txt),))
