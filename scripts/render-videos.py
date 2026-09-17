@@ -275,11 +275,13 @@ def mono_y(v, top):
     return top + v * MS
 
 
-def draw_monogram(base, top, p_stem, p_bar, p_foot, p_dot, alpha=1.0):
+def draw_monogram(base, top, p_stem, p_bar, p_foot, p_dot, alpha=1.0, p_stem_r=None):
+    if p_stem_r is None:
+        p_stem_r = p_stem
     sw = max(1, int(round(5 * MS)))
-    # two ink stems grow top -> bottom
+    # twin ink stems grow top -> bottom (right stem may lag for stagger)
     base = vline(base, mono_x(7), mono_y(6, top), mono_y(6, top) + 32 * MS * p_stem, sw, INK, alpha)
-    base = vline(base, mono_x(23), mono_y(6, top), mono_y(6, top) + 32 * MS * p_stem, sw, INK, alpha)
+    base = vline(base, mono_x(23), mono_y(6, top), mono_y(6, top) + 32 * MS * p_stem_r, sw, INK, alpha)
     # vermilion crossbar draws left -> right at v=22
     base = hline(base, mono_x(7), mono_x(7) + 16 * MS * p_bar, mono_y(22, top), sw, ACCENT, alpha)
     # L foot draws left -> right at v=38
@@ -341,33 +343,35 @@ def frame_v1(i):
 def frame_v2(i):
     t = i / FPS
     img = base_frame()
-    # Act 1: the full mark draws and holds on its own first.
     top = 560
-    img = draw_monogram(img, top,
-                        ease(seg(t, 0.15, 0.9)), ease(seg(t, 0.5, 0.95)),
-                        ease(seg(t, 0.65, 1.05)), seg(t, 0.9, 1.1),
-                        alpha=fade(t, 0.1, 0.35))
-    # Act 2: only once the HL stands complete, the site's hero terminal
-    # types itself below: ink prompt, typed tagline, vermilion block caret.
-    prompt = safe("~/hariom $ ", "spacemono")
-    phrase = safe("Rebuilding AGI from first principles.", "spacemono")
-    fnt_m = font("spacemono", 30)
-    n = int(len(phrase) * seg(t, 1.5, 2.6))
-    shown = phrase[:n]
-    wp = sum(fnt_m.getlength(ch) for ch in prompt)
-    ws = sum(fnt_m.getlength(ch) for ch in shown)
-    y = top + 44 * MS + 130
-    x0 = W / 2 - (wp + ws + 30) / 2
-    lyr = layer()
-    d = ImageDraw.Draw(lyr)
-    a_txt = fade(t, 1.35, 1.55)
-    if a_txt > 0:
-        d.text((x0, y), prompt, font=fnt_m, fill=INK + (int(255 * a_txt),))
-        d.text((x0 + wp, y), shown, font=fnt_m, fill=BODY + (int(255 * a_txt),))
-        if t < 2.6 and (i // 15) % 2 == 0 or t >= 2.6:  # caret blinks, rests on
-            d.rectangle([x0 + wp + ws + 8, y + 5, x0 + wp + ws + 28, y + 39],
-                        fill=ACCENT + (255,))
-    img = paste(img, lyr)
+    # Act 1: twin stems draw with a stagger, left leading the right.
+    p_l = ease(seg(t, 0.15, 0.75))
+    p_r = ease(seg(t, 0.30, 0.90))
+    # Act 2: the vermilion crossbar sweeps with a whisper of overshoot --
+    # easeOutBack pushes ~8% past the stem, then settles flush.
+    p_bar = ease_out_back(seg(t, 0.80, 1.20)) * 1.0
+    bar_len = 16 * MS * min(p_bar, 1.08)
+    # Act 3: the L foot draws, then the dot stamps with a settle.
+    p_foot = ease(seg(t, 1.00, 1.35))
+    p_dot = seg(t, 1.25, 1.50)
+    img = draw_monogram(img, top, p_l, 0.0, p_foot, p_dot,
+                        alpha=fade(t, 0.10, 0.35), p_stem_r=p_r)
+    # ...except the bar is drawn here for the overshoot (draw_monogram's
+    # own bar stays parked at 0).
+    if p_bar > 0:
+        sw = max(1, int(round(5 * MS)))
+        img = hline(img, mono_x(7), mono_x(7) + bar_len, mono_y(22, top),
+                    sw, ACCENT, fade(t, 0.75, 0.95))
+    # Act 4: a thin vermilion ring breathes out of the stamp and dissolves.
+    pr = seg(t, 1.30, 1.90)
+    if 0 < pr < 1:
+        lyr = layer()
+        r0 = 3.4 * MS
+        ImageDraw.Draw(lyr).ellipse(
+            [mono_x(37) - r0 - 64 * pr, mono_y(7, top) - r0 - 64 * pr,
+             mono_x(37) + r0 + 64 * pr, mono_y(7, top) + r0 + 64 * pr],
+            outline=ACCENT + (int(110 * (1 - pr)),), width=3)
+        img = paste(img, lyr)
     return grain(img, i)
 
 
@@ -412,7 +416,7 @@ def frame_v3(i):
 
 
 VERSIONS = {"v1": ("v1-name-merge", frame_v1),
-            "v2": ("v2-hl-terminal", frame_v2),
+            "v2": ("v2-hl-mark", frame_v2),
             "v3": ("v3-ink-stamp-outro", frame_v3)}
 
 
