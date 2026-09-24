@@ -22,6 +22,8 @@ function getSb(which){
 }
 function isSlug(s){ return /^[a-z0-9-]{1,64}$/.test(String(s||'')); }
 function isUuid(s){ return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(s||'')); }
+function countWords(s){ return String(s||'').trim().split(/\s+/).filter(Boolean).length; }
+function parseLimit(post){ let v = post && (post.max_comment_words ?? post.maxCommentWords ?? post.comment_limit); if(v===undefined||v===null) return 2000; let n=parseInt(v,10); if(n===-1) return -1; if(isNaN(n)||n<1) return 2000; return n; }
 function normalizeCid(s){
   let v=String(s||'').trim();
   if(!v) return '';
@@ -152,14 +154,25 @@ async function handleComments(req,res,sbRead,sbWrite){
     if(!clientId && req.headers.cookie){ try{ const c=cookie.parse(req.headers.cookie); if(c.hl_cid) clientId=normalizeCid(c.hl_cid); }catch{} }
     const parentId=body.parent_id||body.parentId||null;
     if(!isSlug(slug)) return res.status(400).json({ok:false, error:'valid slug required'});
-    if(!content || content.length>2000) return res.status(400).json({ok:false, error:'content 1..2000 chars required'});
     if(!clientId || clientId.length<6) return res.status(400).json({ok:false, error:'client_id required (cookie hl_cid)'});
     if(parentId && !isUuid(parentId)) return res.status(400).json({ok:false, error:'invalid parent_id'});
-    if(content.length<2) return res.status(400).json({ok:false, error:'too short'});
     try{
-      const {data:post,error:postErr}=await sbRead.from('posts').select('slug,title,published').eq('slug',slug).eq('published',true).maybeSingle();
-      if(postErr) return res.status(500).json({ok:false, error:postErr.message});
+      let post=null, postErr=null;
+      try{
+        const r=await sbRead.from('posts').select('slug,title,published,max_comment_words').eq('slug',slug).eq('published',true).maybeSingle();
+        post=r.data; postErr=r.error;
+        if(postErr && /column|does not exist|schema cache/i.test(postErr.message||'')){
+          const r2=await sbRead.from('posts').select('slug,title,published').eq('slug',slug).eq('published',true).maybeSingle();
+          post=r2.data; postErr=r2.error;
+        }
+      }catch(e){ postErr=e; }
+      if(postErr) return res.status(500).json({ok:false, error:postErr.message||String(postErr)});
       if(!post) return res.status(404).json({ok:false, error:'post not found'});
+      const wordLimit=parseLimit(post); const wc=countWords(content);
+      if(!content) return res.status(400).json({ok:false, error:'content required'});
+      if(wc<1) return res.status(400).json({ok:false, error:'too short'});
+      if(content.length>100000) return res.status(400).json({ok:false, error:'content too long (100k chars max)'});
+      if(wordLimit!==-1 && wc>wordLimit) return res.status(400).json({ok:false, error:`too many words — ${wordLimit} max, got ${wc}`});
       const since=new Date(Date.now()-60*1000).toISOString();
       const {count}=await sbWrite.from('comments').select('id',{count:'exact', head:true}).eq('client_id', clientId).gte('created_at', since);
       if((count||0)>=5) return res.status(429).json({ok:false, error:'too many comments — wait a minute'});
@@ -174,7 +187,7 @@ async function handleComments(req,res,sbRead,sbWrite){
       }
       if(!authorName) authorName='Anonymous';
       authorName=authorName.replace(/[<>]/g,'').trim().slice(0,32) || 'Anonymous';
-      const row={post_slug:slug, parent_id: parentId||null, client_id: clientId, author_name: authorName, content: content.slice(0,2000)};
+      const row={post_slug:slug, parent_id: parentId||null, client_id: clientId, author_name: authorName, content: content};
       const {data,error}=await sbWrite.from('comments').insert(row).select('id,post_slug,parent_id,client_id,author_name,content,created_at').single();
       if(error) return res.status(500).json({ok:false, error:error.message});
       res.setHeader('Set-Cookie', cookie.serialize('hl_cid', clientId, {path:'/', maxAge:60*60*24*365, sameSite:'Lax'}));

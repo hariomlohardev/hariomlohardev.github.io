@@ -33,6 +33,7 @@ function verify(req){
   if(!tok) throw new Error('No token');
   return jwt.verify(tok,s);
 }
+function parseMaxCommentWords(v){ let n=parseInt(v,10); if(isNaN(n)) return 2000; if(n===-1) return -1; if(n<1) return 2000; return n }
 async function getSb(){
   const url=process.env.SUPABASE_URL, key=process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
   if(!url||!key) return null;
@@ -174,7 +175,7 @@ module.exports=async(req,res)=>{
     if(authed){
       q=sb.from('posts').select('*').order('date',{ascending:false});
     }else{
-      q=sb.from('posts').select('slug,title,description,date,tags,cover,word_count,reading_minutes,published').eq("published",true).order('date',{ascending:false}).limit(50);
+      q=sb.from('posts').select('slug,title,description,date,tags,cover,word_count,reading_minutes,published,max_comment_words').eq("published",true).order('date',{ascending:false}).limit(50);
     }
     const {data,error}=await q;
     if(error) return res.status(500).json({ok:false, error:error.message});
@@ -203,6 +204,8 @@ module.exports=async(req,res)=>{
       slug, title:String(post.title), description:String(post.description||''), date:post.date, tags: Array.isArray(post.tags)?post.tags:[], cover: post.cover||null,
       html, raw: String(post.raw||''), word_count:wc, reading_minutes:reading, published: post.published!==false
     };
+    let m=post.max_comment_words; if(m===undefined) m=post.comment_limit ?? post.maxCommentWords
+    row.max_comment_words=parseMaxCommentWords(m)
     if(action==='create'){
       const {data,error}=await sb.from('posts').insert(row).select().single();
       if(error) return res.status(500).json({ok:false, error:error.message});

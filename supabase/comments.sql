@@ -11,9 +11,23 @@ create table if not exists public.comments (
   parent_id uuid references public.comments(id) on delete cascade,
   client_id text not null,
   author_name text,
-  content text not null check (char_length(content) >= 1 and char_length(content) <= 2000),
+  content text not null check (char_length(content) >= 1),
   created_at timestamptz not null default now()
 );
+
+-- Relax 2000 char cap for existing tables (safe to re-run): drop any old char_length check then add new one without 2000 upper bound
+do $$ declare r record; begin
+  for r in select conname from pg_constraint where conrelid = 'public.comments'::regclass and contype = 'c' and pg_get_constraintdef(oid) like '%char_length(content)%' loop
+    execute 'alter table public.comments drop constraint ' || quote_ident(r.conname);
+  end loop;
+exception when undefined_table then null;
+end $$;
+alter table public.comments drop constraint if exists comments_content_check;
+do $$ begin
+  alter table public.comments add constraint comments_content_check check (char_length(content) >= 1);
+exception when duplicate_object then null;
+end $$;
+
 create index if not exists idx_comments_post_slug on public.comments(post_slug);
 create index if not exists idx_comments_parent_id on public.comments(parent_id);
 create index if not exists idx_comments_created_at on public.comments(created_at asc);

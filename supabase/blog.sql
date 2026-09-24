@@ -16,10 +16,20 @@ create table if not exists public.posts (
   raw text not null,
   word_count int not null default 0,
   reading_minutes int not null default 3,
+  max_comment_words integer not null default 2000,
   published boolean not null default true,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+-- Ensure column exists when re-running against an older table
+alter table public.posts add column if not exists max_comment_words integer not null default 2000;
+
+-- allow -1 for unlimited, otherwise >=1 (safe to re-run)
+do $$ begin
+  alter table public.posts add constraint chk_posts_max_comment_words check (max_comment_words = -1 or max_comment_words >= 1);
+exception when duplicate_object then null;
+end $$;
 
 -- Keep updated_at fresh
 create or replace function public.touch_updated_at()

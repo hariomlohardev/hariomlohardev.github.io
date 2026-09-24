@@ -83,7 +83,7 @@ async function loadPostsFromSupabase(){
   const key = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY;
   if(!url || !key) throw new Error("SUPABASE_URL + SUPABASE_ANON_KEY (or SERVICE_ROLE_KEY) required — Supabase is the only source of posts");
   {
-    const endpoint = `${url.replace(/\/$/,'')}/rest/v1/posts?select=slug,title,description,date,tags,cover,html,raw,word_count,reading_minutes,published&published=eq.true&order=date.desc`;
+    const endpoint = `${url.replace(/\/$/,'')}/rest/v1/posts?select=slug,title,description,date,tags,cover,html,raw,word_count,reading_minutes,published,max_comment_words&published=eq.true&order=date.desc`;
     const res = await fetch(endpoint, { headers: { apikey: key, Authorization: `Bearer ${key}` } });
     if(!res.ok){
       const txt = await res.text().catch(()=> '');
@@ -109,9 +109,15 @@ async function loadPostsFromSupabase(){
       const html = r.html ? String(r.html) : mdToHtml((raw || description).trim());
       const wc = r.word_count ?? r.wordCount ?? (raw ? wordCount(raw) : wordCount(description));
       const reading = r.reading_minutes ?? r.readingMinutes ?? Math.max(1, Math.ceil(wc/200));
+      let rawLimit = r.max_comment_words ?? r.maxCommentWords ?? r.comment_limit ?? 2000;
+      let n = parseInt(rawLimit, 10);
+      let maxCommentWords;
+      if (n === -1) maxCommentWords = -1;
+      else if (isNaN(n) || n < 1) maxCommentWords = 2000;
+      else maxCommentWords = n;
       const file = `${dateStr}-${slug}.md`;
       const postUrl = `${SITE}/blog/p/${slug}/`;
-      return { slug, title, date: dateStr, description, tags, html, raw, wordCount: wc, readingMinutes: reading, url: postUrl, file, cover };
+      return { slug, title, date: dateStr, description, tags, html, raw, wordCount: wc, readingMinutes: reading, url: postUrl, file, cover, max_comment_words: maxCommentWords };
     }).filter(p=> /^\d{4}-\d{2}-\d{2}$/.test(p.date));
     // Supabase already sorts date desc, but ensure
     posts.sort((a,b)=> b.date.localeCompare(a.date));
@@ -538,10 +544,10 @@ html:not(.js) .rv{opacity:1;transform:none}
         </div>
       </div>
     </section>
-    <section class="flat-sec rv" id="hl-comments" aria-label="Comments" data-slug="${post.slug}">
+    <section class="flat-sec rv" id="hl-comments" aria-label="Comments" data-slug="${post.slug}" data-max-words="${post.max_comment_words}">
       <div class="kicker"><i></i> Discuss — replies · rating <span class="sub" id="hlCSub">0 comments</span></div>
       <div class="hl-card hl-composer" id="hlComposer">
-        <textarea class="hl-textarea" id="hlText" maxlength="2000" placeholder="Share a thought — reply threads, plain text, 2000 max…"></textarea>
+        <textarea class="hl-textarea" id="hlText" placeholder="${post.max_comment_words===-1?'Share a thought — reply threads, plain text, unlimited…':'Share a thought — reply threads, plain text, '+post.max_comment_words+' words max…'}"></textarea>
         <div class="hl-row" style="align-items:center;justify-content:space-between">
           <span class="hl-hint" id="hlReplyHint" style="display:none">↳ Replying to <b id="hlReplyWho"></b> · <button type="button" class="hl-reply" id="hlCancelReply" style="border:none;background:none;padding:0;color:var(--accent)">cancel</button></span>
           <span class="hl-hint" id="hlHint">cookie hl_cid · name saved after first comment</span>
@@ -672,6 +678,8 @@ document.getElementById('copyBtn').addEventListener('click',function(){
   var API_BASE=(location.hostname==='hariomlohardev.github.io')?'https://hariomlohardev.vercel.app':'';
   function q(s){return document.querySelector(s)}
   function el(s){return document.getElementById(s)}
+  var WORD_LIMIT = parseInt(document.getElementById('hl-comments')?.getAttribute('data-max-words')||'2000',10); if(isNaN(WORD_LIMIT)) WORD_LIMIT=2000;
+  function countWords(s){ return String(s).trim().split(/\s+/).filter(Boolean).length; }
   // — cookie + client id —
   function getCookie(n){try{var m=document.cookie.match(new RegExp('(?:^|; )'+n.replace(/[-\\\\^$*+?.()|\\[\\]{}]/g,'\\\\$&')+'=([^;]*)'));return m?decodeURIComponent(m[1]):''}catch(e){return ''}}
   function setCookie(n,v){try{document.cookie=n+'='+encodeURIComponent(v)+'; path=/; max-age='+60*60*24*365+'; SameSite=Lax'}catch(e){} try{localStorage.setItem(n,v)}catch(e){}}
@@ -736,7 +744,7 @@ document.getElementById('copyBtn').addEventListener('click',function(){
   function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
   function timeAgo(iso){try{var d=new Date(iso),s=Math.floor((Date.now()-d)/1000); if(s<60) return 'just now'; if(s<3600) return Math.floor(s/60)+'m ago'; if(s<86400) return Math.floor(s/3600)+'h ago'; if(s<2592000) return Math.floor(s/86400)+'d ago'; return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}catch(e){return ''}}
   function setReply(id,name){ replyTo=id; replyWho.textContent=name||'Anonymous'; replyHint.style.display=''; if(textInput){textInput.focus(); textInput.placeholder='Reply to '+(name||'Anonymous')+'…'} }
-  function clearReply(){ replyTo=null; replyHint.style.display='none'; if(textInput) textInput.placeholder='Share a thought — reply threads, plain text, 2000 max…'; }
+  function clearReply(){ replyTo=null; replyHint.style.display='none'; if(textInput) textInput.placeholder = WORD_LIMIT===-1 ? 'Share a thought — reply threads, plain text, unlimited…' : 'Share a thought — reply threads, plain text, '+WORD_LIMIT+' words max…'; }
   if(cancelReply) cancelReply.addEventListener('click',clearReply);
   function renderComments(rows){
     if(!listEl) return;
@@ -796,7 +804,8 @@ document.getElementById('copyBtn').addEventListener('click',function(){
   if(postBtn){ postBtn.addEventListener('click',function(){
     var content=(textInput&&textInput.value||'').trim();
     if(!content){ postNote.textContent='write something first'; textInput.focus(); return; }
-    if(content.length>2000){ postNote.textContent='max 2000 chars'; return; }
+    try{ var _d=parseInt(document.getElementById('hl-comments')?.getAttribute('data-max-words')||'',10); if(!isNaN(_d) && (_d===-1||_d>=1)) WORD_LIMIT=_d; if(typeof window.HL_WORD_LIMIT==='number' && !isNaN(window.HL_WORD_LIMIT)) WORD_LIMIT=window.HL_WORD_LIMIT; }catch(e){}
+    var wc=countWords(content); if(WORD_LIMIT!==-1 && wc>WORD_LIMIT){ postNote.textContent='max '+WORD_LIMIT+' words (got '+wc+')'; return; } if(content.length>100000){ postNote.textContent='too long (100k chars max)'; return; }
     var stored=getName();
     if(!stored){
       pendingContent=content; pendingReplyTo=replyTo;
@@ -851,12 +860,24 @@ function render(p){
   try{observeReveals();}catch(e){}
   try{enhanceCode();}catch(e){}
   if(!html)fail('Post found but its body is empty in the database.');
+  // sync per-post WORD_LIMIT from fetched post (dynamic shell) — updates data-max-words + placeholder + global
+  try{
+    var rawLim = p.max_comment_words ?? p.maxCommentWords ?? p.comment_limit ?? 2000;
+    var _n = parseInt(rawLim, 10);
+    var lim; if(_n===-1) lim=-1; else if(isNaN(_n)||_n<1) lim=2000; else lim=_n;
+    var cEl=document.getElementById('hl-comments');
+    if(cEl) cEl.setAttribute('data-max-words', String(lim));
+    window.HL_WORD_LIMIT = lim;
+    var ta=document.getElementById('hlText');
+    if(ta && !ta.value) ta.placeholder = lim===-1 ? 'Share a thought — reply threads, plain text, unlimited…' : 'Share a thought — reply threads, plain text, '+lim+' words max…';
+    try{ WORD_LIMIT = lim; }catch(e){}
+  }catch(e){}
 }
 fetch(API_BASE+'/api/blog/post?slug='+encodeURIComponent(POST_SLUG),{cache:'no-store'})
   .then(function(r){if(!r.ok)throw 0;return r.json();})
   .then(function(j){ if(j&&j.ok&&j.post)return j.post; throw 0; })
   .catch(function(){
-    var url='https://rgmvhptebkslkjleoilc.supabase.co/rest/v1/posts?slug=eq.'+encodeURIComponent(POST_SLUG)+'&published=eq.true&select=slug,title,description,date,tags,cover,html,raw,word_count,reading_minutes,published';
+    var url='https://rgmvhptebkslkjleoilc.supabase.co/rest/v1/posts?slug=eq.'+encodeURIComponent(POST_SLUG)+'&published=eq.true&select=slug,title,description,date,tags,cover,html,raw,word_count,reading_minutes,published,max_comment_words';
     return fetch(url,{headers:{apikey:ANON,Authorization:'Bearer '+ANON},cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(a){ if(a&&a.length)return a[0]; throw 0; });
   })
   .then(render)
