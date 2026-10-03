@@ -92,6 +92,14 @@
   ],
   "rewrites": [
     {
+      "source": "/apps",
+      "destination": "/apps/index.html"
+    },
+    {
+      "source": "/apps/kyl",
+      "destination": "/apps/kyl/index.html"
+    },
+    {
       "source": "/api/blog/comments",
       "destination": "/api/blog/social?type=comments"
     },

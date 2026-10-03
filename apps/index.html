@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#F6F4EE" />
+<meta name="color-scheme" content="light" />
+<title>Apps — Hariom Lohar | Lab Notebook No.01</title>
+<meta name="description" content="Apps built by Hariom Lohar — useful tools and everyday experiments from Lab Notebook No.01." />
+<link rel="canonical" href="https://hariomlohardev.github.io/apps/" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="preload" href="/assets/fonts/fraunces-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/assets/fonts.css?v=1" />
+<link rel="stylesheet" href="/apps/styles.css" />
+</head>
+<body>
+<a href="#main" class="skip">Skip to content</a>
+<header id="top">
+  <div class="wrap"><div class="head-main">
+    <a class="logo" href="/" aria-label="Hariom Lohar — home">
+      <span class="logo-mark" aria-hidden="true"><svg viewBox="0 0 44 44" fill="none"><path d="M7 6 V38" stroke="#181611" stroke-width="5"/><path d="M23 6 V38" stroke="#181611" stroke-width="5"/><path d="M7 22 H23" stroke="#B93A13" stroke-width="5"/><path d="M23 38 H38" stroke="#181611" stroke-width="5"/><circle cx="37" cy="7" r="3.4" fill="#B93A13"/></svg></span>
+      <span class="logo-word">hariomlohardev<i>lab notebook №01</i></span>
+    </a>
+    <nav class="desk" aria-label="Primary">
+      <a href="/">Home</a><a href="/projects">Projects</a><a href="/opensource">Open Source</a><a href="/blog">Blog</a><a href="/apps/" class="active" aria-current="page">Apps</a><a href="/about">About</a><a href="/contact">Contact</a><a href="/community">Community</a>
+    </nav>
+    <div class="head-right"><a class="gh-pill" href="https://github.com/hariomlohardev" target="_blank" rel="noopener">Github ↗</a><button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobilePanel" aria-label="Open menu">☰ Menu</button></div>
+  </div></div>
+  <div class="mobile-panel" id="mobilePanel" aria-hidden="true">
+    <nav aria-label="Mobile primary">
+      <a href="/"><span>Home</span><span class="no">01</span></a><a href="/projects"><span>Projects</span><span class="no">02</span></a><a href="/opensource"><span>Open Source</span><span class="no">03</span></a><a href="/blog"><span>Blog</span><span class="no">04</span></a><a href="/apps/" class="active" aria-current="page"><span>Apps</span><span class="no">05</span></a><a href="/about"><span>About</span><span class="no">06</span></a><a href="/contact"><span>Contact</span><span class="no">07</span></a><a href="/community"><span>Community</span><span class="no">08</span></a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <div class="masthead"><div class="wrap">
+    <div class="crumb"><a href="/">Hariom Lohar</a><span>/</span><span aria-current="page">Apps</span></div>
+    <p class="eyebrow"><i aria-hidden="true"></i>Built by me · Made to be used</p>
+    <h1>Apps <em>&amp;</em><br><em>Experiments</em></h1>
+    <p class="lede">A home for the apps I build — useful tools, small ideas, and experiments that become something you can use.</p>
+  </div></div>
+  <section class="apps-section" id="apps" aria-labelledby="appsTitle"><div class="wrap">
+    <div class="sec-head"><span class="kicker"><i aria-hidden="true"></i>01 — Apps</span><h2 id="appsTitle">The <em>collection</em></h2><span class="sec-tag">1 app</span></div>
+    <!-- Hard-coded listing: edit app cards here and update the count above. -->
+    <div class="app-grid">
+      <a class="app-card" href="/apps/kyl/">
+        <span class="app-icon" aria-hidden="true">KYL</span>
+        <span class="app-meta">01 · Android only</span>
+        <h3>Know Your Label</h3>
+        <p>Understand food labels with AI photo scanning, ingredient and nutrition analysis, and personalized checks against your saved allergies and dietary preferences.</p>
+        <span class="app-open">Explore the app →</span>
+      </a>
+    </div>
+  </div></section>
+</main>
+<footer><div class="wrap"><div class="foot-base"><span>© <span id="yr"></span> Hariom Lohar — Lab Notebook №01</span><a href="#top">Back to top ↑</a></div></div></footer>
+<script>
+(function(){
+  document.getElementById('yr').textContent=new Date().getFullYear();
+  var button=document.getElementById('menuBtn'),panel=document.getElementById('mobilePanel');
+  function setMenu(open){button.setAttribute('aria-expanded',String(open));button.setAttribute('aria-label',open?'Close menu':'Open menu');panel.classList.toggle('open',open);panel.setAttribute('aria-hidden',String(!open));}
+  button.addEventListener('click',function(){setMenu(button.getAttribute('aria-expanded')!=='true');});
+  panel.querySelectorAll('a').forEach(function(link){link.addEventListener('click',function(){setMenu(false);});});
+  document.addEventListener('keydown',function(event){if(event.key==='Escape'){setMenu(false);button.focus();}});
+  document.addEventListener('click',function(event){if(panel.classList.contains('open')&&!panel.contains(event.target)&&!button.contains(event.target))setMenu(false);});
+  window.addEventListener('resize',function(){if(window.innerWidth>1100)setMenu(false);});
+})();
+</script>
+</body>
+</html>
