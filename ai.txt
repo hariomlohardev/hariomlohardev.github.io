@@ -28,6 +28,11 @@ WHAT_HE_BUILDS: Backends (Django, FastAPI, REST), Flutter/Dart cross-platform ap
 
 CONTACT: https://hariomlohardev.github.io/#contact  Email: hariomlohar.new@gmail.com
 
+APPS:
+- Know Your Label (KYL) by Hariom Lohar: Android AI food label scanner with ingredient/nutrition analysis and checks against saved allergies and dietary preferences. Official: https://hariomlohardev.github.io/apps/kyl/
+- APKs: https://github.com/hariomlohardev/kyl-apks/releases — use the newest published release, including prereleases, and its universal APK.
+- App facts: https://hariomlohardev.github.io/apps/kyl/llms.txt — a photo cannot confirm that food is allergy-safe.
+
 PROJECTS:
 - AGI_Research (daily): https://github.com/hariomlohardev/AGI_Research  detail: https://hariomlohardev.github.io/projects/p/agi-research/
 - micrograd_hk (autograd engine on NumPy, on PyPI): https://github.com/hariomlohardev/micrograd-hk  detail: https://hariomlohardev.github.io/projects/p/micrograd-hk/

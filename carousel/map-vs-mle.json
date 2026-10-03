@@ -1,0 +1,123 @@
+{
+  "slug": "map-vs-mle",
+  "topic": "PROBABILITY &#183; ESTIMATION",
+  "handle": "hariomlohardev",
+  "url": "hariomlohardev.github.io",
+  "avatar": "assets/hariom-lohar-400.jpg",
+  "slides": [
+    {
+      "type": "cover",
+      "kicker": "FIRST PRINCIPLES &#183; PROBABILITY",
+      "title": "MLE and MAP are *one term apart*.",
+      "sub": "That term is everything you believed before the data arrived."
+    },
+    {
+      "type": "lead",
+      "kicker": "THE PROBLEM",
+      "quote": "Three heads in three flips, and maximum likelihood says the coin is always heads.",
+      "text": "It is not wrong. It is answering exactly what you asked -- which value makes this data most probable -- with nothing else to go on.",
+      "meta": "field note &#183; from the probability track"
+    },
+    {
+      "type": "chart",
+      "kicker": "THE SAME THREE FLIPS",
+      "h2": "Two peaks, *one dataset*",
+      "text": "Black is the likelihood: `p = 1` really does explain three heads best. Multiply it by the prior and the peak steps back off the wall.",
+      "chart": {
+        "kind": "posterior",
+        "heads": 3,
+        "n": 3,
+        "a": 2,
+        "b": 2
+      },
+      "legend": [
+        {
+          "label": "prior, Beta(2,2)",
+          "stroke": "muted",
+          "dash": true
+        },
+        {
+          "label": "likelihood",
+          "stroke": "ink"
+        },
+        {
+          "label": "posterior",
+          "stroke": "accent"
+        }
+      ],
+      "note": "Each curve is scaled to its own peak, so the shapes are comparable."
+    },
+    {
+      "type": "body",
+      "kicker": "THE WHOLE DIFFERENCE",
+      "h2": "One extra *factor*",
+      "bullets": [
+        "**MLE** maximises `P(D | p)` -- how probable the data looks under one guess.",
+        "**MAP** maximises `P(p | D)` -- how probable that guess looks given the data.",
+        "**Bayes** links them: the posterior is the likelihood times the prior.",
+        "**The prior** `P(p)` is the only new factor. That is the entire difference.",
+        "**A flat prior** makes them identical -- MLE is MAP that believes nothing."
+      ],
+      "note": "The prior is a thumb on the scale. You get to say how heavy."
+    },
+    {
+      "type": "code",
+      "kicker": "THE SAME COUNT, TWICE",
+      "h2": "Side by *side*",
+      "file": "map_vs_mle.py",
+      "lines": [
+        "# maximum likelihood: the data, and nothing else",
+        "p_mle = heads / n",
+        "",
+        "# MAP with a Beta(a, b) prior: the same count,",
+        "# plus the a-1 heads and b-1 tails you assumed",
+        "p_map = (heads + a - 1) / (n + a + b - 2)",
+        "",
+        "# 3 heads in 3 flips, Beta(2, 2):",
+        "#   p_mle = 1.0        p_map = 0.8",
+        "# a = b = 1 is flat, and p_map == p_mle again"
+      ],
+      "note": "Beta(2,2) is you admitting you have seen a coin before."
+    },
+    {
+      "type": "chart",
+      "kicker": "DOES IT KEEP MATTERING",
+      "h2": "The prior *fades*",
+      "text": "Same coin, every flip a head. MLE is pinned at 1.00 from the first flip. MAP starts at 0.80 and closes the gap as the count climbs -- by forty flips the prior is worth 0.02.",
+      "chart": {
+        "kind": "shrink",
+        "a": 2,
+        "b": 2,
+        "upto": 40,
+        "at": 3
+      },
+      "legend": [
+        {
+          "label": "MLE, every flip a head",
+          "stroke": "ink",
+          "dash": true
+        },
+        {
+          "label": "MAP, Beta(2,2)",
+          "stroke": "accent"
+        }
+      ],
+      "note": "`(n + 1) / (n + 2)` when a = b = 2 -- two imagined flips, diluted."
+    },
+    {
+      "type": "quote",
+      "quote": "MAP still hands you one number. The distribution it came from had a shape, and the mode is _not_ the mean unless that shape is kind.",
+      "text": "It is also not invariant: reparameterise and the mode moves, because the prior density moves with it. Maximum likelihood does not have that problem.",
+      "meta": "the caveat, up front"
+    },
+    {
+      "type": "cta",
+      "kicker": "THE NOTEBOOK",
+      "role": "python &#183; django &#183; flutter &#183; agi research",
+      "h2": "Derived by hand, *daily*",
+      "text": "Linear algebra, calculus and probability from the axioms up -- one log at a time, in public.",
+      "stamp": "open notebook"
+    }
+  ],
+  "caption": "Three heads in three flips and maximum likelihood will tell you the coin is always heads. That is not a bug, it is the whole design.\n\nMLE maximises P(D | p). MAP maximises P(p | D). Bayes says the second is the first times your prior, so the only difference between them is one factor -- what you believed before the data arrived.\n\nSlide 3 is the whole post in one picture: likelihood, prior and posterior on the same axis, and the peak visibly stepping back off the wall. With a Beta(2,2) prior those three flips give 0.80 instead of 1.00.\n\nSlide 6 is the part nobody mentions -- keep flipping and the prior fades. By forty heads it is worth 0.02, and MAP has quietly become MLE again.\n\nThe catch: MAP is still one number out of a whole distribution, and it moves if you reparameterise. Maximum likelihood does not.\n\nWhat is the smallest dataset you have watched a model overcommit to?\n\n#machinelearning #probability #bayesian #statistics #python #firstprinciples #buildinpublic #agi #datascience #labnotebook"
+}

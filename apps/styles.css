@@ -62,6 +62,8 @@ h1{overflow-wrap:anywhere;font-size:clamp(2.5rem,9vw,7rem)}
 .download-note{color:var(--muted);font-size:14px;line-height:1.75}
 .label-note{max-width:65ch;margin-top:24px;padding:18px 22px;border-left:3px solid var(--accent);background:var(--paper-2);font-size:14px;line-height:1.75}
 .label-note strong{color:var(--ink)}
+.product-byline{font-size:14px;color:var(--muted);line-height:1.8;margin-top:18px}.product-byline a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+.app-faq{display:grid;gap:12px}.app-faq details{border:1px solid var(--line);background:var(--sheet);padding:18px 22px}.app-faq summary{cursor:pointer;color:var(--ink);font-weight:600;font-size:16px;line-height:1.5}.app-faq p{margin-top:14px;font-size:15px;line-height:1.8;max-width:75ch}
 .download-box{border:1px dashed var(--line-2);background:var(--sheet);padding:28px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
 .download-status{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
 @media(max-width:1020px){.feature-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}

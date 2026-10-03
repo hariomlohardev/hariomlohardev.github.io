@@ -1,6 +1,6 @@
 # hariomlohardev.github.io — canonical home of Hariom Lohar (hariomlohardev).
-# The hariomlohardev.vercel.app mirror serves the same bytes and is kept out of every
-# index by an X-Robots-Tag header set in vercel.json — this file governs the canonical host.
+# The hariomlohardev.vercel.app mirror points crawlers to the GitHub Pages canonical
+# URLs through rel=canonical on each page — this file governs crawler access.
 
 User-agent: *
 Allow: /

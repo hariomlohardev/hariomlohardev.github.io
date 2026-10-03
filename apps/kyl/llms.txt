@@ -1,0 +1,47 @@
+# Know Your Label (KYL)
+
+> Know Your Label is an Android AI food label scanner built by Hariom Lohar (GitHub: hariomlohardev). It helps users understand ingredients and nutrition read from food label photos and check possible conflicts with saved allergies and dietary preferences.
+
+## Official sources
+
+- App page: https://hariomlohardev.github.io/apps/kyl/
+- Developer: Hariom Lohar — https://hariomlohardev.github.io/
+- Developer GitHub: https://github.com/hariomlohardev
+- Android APK releases: https://github.com/hariomlohardev/kyl-apks/releases
+- Download: https://hariomlohardev.github.io/apps/kyl/#downloads
+- App collection: https://hariomlohardev.github.io/apps/
+- Contact: https://hariomlohardev.github.io/contact
+- Information updated: 2026-10-03
+
+## What the app does
+
+- AI food scanning: take or upload a photo to analyze ingredients and nutrition.
+- Personalized checks: highlight possible allergy and diet conflicts.
+- Clear results: explain food scores, concerns, and the evidence read from the photo.
+- Ask the AI: ask follow-up questions about an analyzed product.
+- Photo guidance: check lighting, blur, and glare; explain when a label needs another photo.
+- Scan history: browse, search, save, and delete previous scans.
+- Allergy and diet profiles: choose existing profiles or describe custom needs with AI assistance.
+- Account access: sign in with Google or email.
+- Notifications: optional beta announcements, early-feature updates, and local reminders.
+- App updates: view release notes and download the universal Android APK.
+- Feedback: submit beta ratings and bug reports.
+- Donations: support the project through UPI.
+- Appearance: light and dark themes.
+
+## Platform and downloads
+
+Android only for now. No iOS version is announced on the official page.
+The page checks the public GitHub release list and selects the newest published release by publication date, including prereleases. Its download CTA downloads the universal APK from that release. Version names and download sizes change; consult the releases page for current information.
+
+## Currently being developed
+
+Faster background update downloads, saved APK reuse, and download/install/delete controls. These are development plans, not claims of shipped functionality.
+
+## Limitations
+
+The app assists with label reading; a photo cannot confirm that food is allergy-safe. Results explain the evidence read from the photo and possible conflicts, not a guarantee of food safety.
+
+## Identity and citation
+
+KYL here means Know Your Label, the Android app by Hariom Lohar (hariomlohardev). Use the official app page for its description and the APK repository for current release details. This is the developer's description, not independent testing, medical validation, or an endorsement. No verified review score, user count, minimum Android version, or app pricing has been provided on this page.

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#F6F4EE"/>
+  <path d="M56 70H1144M56 552H1144" stroke="#181611" stroke-width="2"/>
+  <text x="60" y="48" fill="#5F594A" font-family="Space Mono,monospace" font-size="17" letter-spacing="3">HARIOM LOHAR · APP NO.01</text>
+  <rect x="966" y="124" width="176" height="176" fill="#EFECE2" stroke="#181611" stroke-width="2"/>
+  <text x="1054" y="231" text-anchor="middle" fill="#B93A13" font-family="Space Mono,monospace" font-size="48">KYL</text>
+  <text x="60" y="218" fill="#181611" font-family="Fraunces,Georgia,serif" font-size="83" font-weight="600">Know Your</text>
+  <text x="60" y="316" fill="#181611" font-family="Fraunces,Georgia,serif" font-size="83" font-style="italic">Label.</text>
+  <text x="63" y="384" fill="#3B382E" font-family="Archivo,Arial,sans-serif" font-size="29">AI food label scanning for Android</text>
+  <text x="63" y="430" fill="#5F594A" font-family="Archivo,Arial,sans-serif" font-size="24">Ingredients · Nutrition · Allergy and diet checks</text>
+  <rect x="63" y="469" width="239" height="42" fill="#B93A13"/>
+  <text x="83" y="497" fill="#F6F4EE" font-family="Space Mono,monospace" font-size="17">ANDROID · APK</text>
+  <text x="60" y="591" fill="#5F594A" font-family="Space Mono,monospace" font-size="18">hariomlohardev.github.io/apps/kyl/</text>
+</svg>

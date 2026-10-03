@@ -77,7 +77,7 @@
       links.forEach(function (link) {
         link.href = asset.url;
         link.textContent = 'Download for Android ↓';
-        link.setAttribute('aria-label', 'Download the latest Know Your Label universal Android APK');
+        link.setAttribute('aria-label', 'Download for Android — latest Know Your Label universal APK');
       });
       return asset;
     } catch (_) {

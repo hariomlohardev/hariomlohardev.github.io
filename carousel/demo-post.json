@@ -1,0 +1,93 @@
+{
+  "topic": "TRICK &#8470;03 &#183; SMS GATEWAY",
+  "handle": "hariomlohardev",
+  "url": "hariomlohardev.github.io/tricks",
+  "avatar": "assets/hariom-lohar-400.jpg",
+  "slides": [
+    {
+      "type": "cover",
+      "kicker": "TRICK &#8470;03 &#183; MVP TOOLING",
+      "title": "The spare Android in your drawer is a *working SMS gateway*.",
+      "sub": "Send and receive OTPs over a REST API in about five minutes, for nothing."
+    },
+    {
+      "type": "lead",
+      "kicker": "THE PROBLEM",
+      "quote": "Paying per message before you have a single user is the wrong order.",
+      "text": "Verification is the first wall every MVP hits, and the usual answer is a paid account you cannot justify yet.",
+      "meta": "field note &#183; picked up while wiring an OTP flow"
+    },
+    {
+      "type": "body",
+      "kicker": "WHAT YOU GET",
+      "h2": "One APK, a *whole API*",
+      "bullets": [
+        "**Free.** No per-SMS cost, no paid account, no card.",
+        "**Send and receive** over a plain REST call or the CLI.",
+        "**Delivery status**, so you know the OTP actually landed.",
+        "**Webhooks** on incoming SMS -- end-to-end tests get easy.",
+        "**Five-minute setup.** No backend of your own to stand up."
+      ],
+      "note": "app: SMS Gateway for Android (open source)"
+    },
+    {
+      "type": "code",
+      "kicker": "THE WHOLE INTEGRATION",
+      "h2": "Send an OTP",
+      "file": "send-otp.sh",
+      "lines": [
+        "# cloud mode - works from anywhere, not just your LAN",
+        "curl -X POST -u <user>:<pass> \\",
+        "  -H \"Content-Type: application/json\" \\",
+        "  -d '{\"textMessage\":{\"text\":\"Your OTP is 482913\"},",
+        "       \"phoneNumbers\":[\"+919000000000\"]}' \\",
+        "  https://api.sms-gate.app/3rdparty/v1/message"
+      ],
+      "note": "dual-sim device? add \"simNumber\": 1 or 2 to pick the sender."
+    },
+    {
+      "type": "ledger",
+      "kicker": "THE NUMBERS",
+      "h2": "What it costs, *plainly*",
+      "stats": [
+        {
+          "n": "0",
+          "sup": "&#8377;/sms",
+          "label": "per message"
+        },
+        {
+          "n": "5",
+          "sup": "min",
+          "label": "first send"
+        },
+        {
+          "n": "2",
+          "sup": "sims",
+          "label": "routing"
+        },
+        {
+          "n": "1",
+          "sup": "apk",
+          "label": "no backend"
+        }
+      ],
+      "note": "measured on a spare Android phone with a prepaid SIM"
+    },
+    {
+      "type": "quote",
+      "quote": "Good enough for testing, internal tools and low volume. _Not_ for bulk -- carriers throttle that, and they are right to.",
+      "text": "Local-server mode was flaky on my test device. Cloud mode is the shortcut past finding out why.",
+      "meta": "the caveat, up front"
+    },
+    {
+      "type": "cta",
+      "kicker": "READ THE FULL TRICK",
+      "role": "python &#183; django &#183; flutter &#183; agi research",
+      "h2": "Setup, *written out*",
+      "text": "Cloud-server mode, webhooks, delivery status and the dual-SIM flag -- the whole walkthrough is on the site, free to read.",
+      "button": "hariomlohardev.github.io/tricks",
+      "stamp": "open notebook"
+    }
+  ],
+  "caption": "An old phone with a SIM will send your OTPs for free. Mine has been doing it since I stopped paying for it.\n\nInstall one APK, turn on cloud mode, and you have a REST API: send, receive, delivery status, webhooks. Five minutes, no per-message bill, no backend.\n\nGood for testing, internal tools and low volume. Not for bulk -- carriers throttle that, and they are right to.\n\nFull walkthrough, curl included: hariomlohardev.github.io/tricks\n\nWhat did you use for OTPs before you had users?\n\n#buildinpublic #python #django #flutter #mvp #indiedev #api #otp #devtools #labnotebook"
+}

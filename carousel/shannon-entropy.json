@@ -1,0 +1,146 @@
+{
+  "slug": "shannon-entropy",
+  "topic": "INFORMATION &#183; ENTROPY",
+  "handle": "hariomlohardev",
+  "url": "hariomlohardev.github.io",
+  "avatar": "assets/hariom-lohar-400.jpg",
+  "slides": [
+    {
+      "type": "cover",
+      "kicker": "FIRST PRINCIPLES &#183; INFORMATION",
+      "title": "A fair coin holds *one bit*.",
+      "sub": "An unfair coin holds less. That sentence is the whole field."
+    },
+    {
+      "type": "lead",
+      "kicker": "THE QUESTION",
+      "quote": "A coin that always lands heads tells you nothing when it lands heads.",
+      "text": "Surprise is the thing to measure. An event of probability `p` carries `-log2 p` bits of it -- rare means surprising.",
+      "stamp": "surprise = -log2 p",
+      "meta": "field note &#183; from the information track"
+    },
+    {
+      "type": "chart",
+      "kicker": "SURPRISE, AVERAGED",
+      "h2": "Certainty is *worthless*",
+      "text": "Entropy peaks at the fair coin and dies at both walls. The certain coin surprises no one, so it informs no one.",
+      "chart": {
+        "kind": "binary",
+        "at": [
+          0.1,
+          0.5,
+          0.9
+        ]
+      },
+      "legend": [
+        {
+          "label": "binary entropy H(p)",
+          "stroke": "accent"
+        }
+      ],
+      "note": "H(p) = -p log2 p - (1-p) log2(1-p), sampled."
+    },
+    {
+      "type": "chart",
+      "kicker": "FOUR COINS, RANKED",
+      "h2": "Bias *deletes information*",
+      "text": "Same coin, different bias. The 90/10 coin pays less than half a bit per flip -- predictability is a discount.",
+      "chart": {
+        "kind": "mixbars",
+        "coins": [
+          {
+            "label": "99/1",
+            "p": 0.99
+          },
+          {
+            "label": "90/10",
+            "p": 0.9
+          },
+          {
+            "label": "75/25",
+            "p": 0.75
+          },
+          {
+            "label": "fair",
+            "p": 0.5
+          }
+        ]
+      },
+      "legend": [
+        {
+          "label": "bits per flip",
+          "stroke": "ink"
+        },
+        {
+          "label": "the fair one",
+          "stroke": "accent"
+        }
+      ],
+      "note": "Labels show two decimals; the bars use the full value."
+    },
+    {
+      "type": "code",
+      "kicker": "THE WHOLE FORMULA",
+      "h2": "Expected *surprise*",
+      "text": "Entropy is the average of `-log2 p`, weighted by `p`. Three lines, base two, answer in bits.",
+      "file": "entropy.py",
+      "lines": [
+        "import math",
+        "def H(ps):",
+        "    return -sum(p * math.log2(p) for p in ps if p)",
+        "H([0.5, 0.5])   # 1.0, the fair coin",
+        "H([0.75, 0.25]) # 0.811, the shy one",
+        "H([0.9, 0.1])   # 0.469, the loaded one",
+        "H([1.0])        # 0.0, the certain one"
+      ],
+      "note": "Guard the `if p`: log2(0) is not a number you want."
+    },
+    {
+      "type": "ledger",
+      "kicker": "BITS ARE QUESTIONS",
+      "h2": "Count the *questions*",
+      "text": "Uniform over N outcomes holds log2 N bits. Each bit is one yes-or-no question that halves the search.",
+      "stats": [
+        {
+          "n": "1",
+          "sup": "bit",
+          "label": "2 outcomes, one question"
+        },
+        {
+          "n": "2",
+          "sup": "bits",
+          "label": "4 outcomes, two questions"
+        },
+        {
+          "n": "3",
+          "sup": "bits",
+          "label": "8 outcomes, three questions"
+        },
+        {
+          "n": "5",
+          "sup": "bits",
+          "label": "32 outcomes, five questions"
+        }
+      ],
+      "note": "Eight doors, three questions, always enough."
+    },
+    {
+      "type": "lead",
+      "kicker": "THE CAVEAT",
+      "quote": "Entropy says how uncertain you are, never what it costs you. The bit does not know what it is about.",
+      "text": "Same math for a coin and a catastrophe. Importance lives outside the formula -- which is why compression uses it and decisions cannot.",
+      "stamp": "bits &#8800; meaning",
+      "meta": "the caveat, up front"
+    },
+    {
+      "type": "cta",
+      "kicker": "THE NOTEBOOK",
+      "role": "python &#183; probability &#183; agi research",
+      "h2": "Derived by hand, *daily*",
+      "text": "Linear algebra, calculus and probability from the axioms up -- one log at a time, in public.",
+      "button": "open notebook",
+      "stamp": "free daily"
+    }
+  ],
+  "caption": "A coin that always lands heads tells you nothing. That is not philosophy, it is arithmetic.\n\nSurprise is -log2 p and entropy is its average. A fair coin pays a full bit per flip, a 90/10 coin pays 0.47, a certain one pays nothing.\n\nAnd bits are questions: 8 doors need 3 yes-or-no questions, 32 need 5.\n\nThe catch: entropy never knows what the bit is about. Same math for a coin and a catastrophe.\n\nWhat is the most lopsided probability you deal with daily?\n\n#machinelearning #informationtheory #probability #statistics #python #firstprinciples #buildinpublic #agi #datascience #labnotebook"
+}
