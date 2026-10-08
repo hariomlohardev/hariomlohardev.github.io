@@ -32,7 +32,7 @@ Keep `seo-state.json` versioned. It records hashes and sitemap modification date
 
 Keep prerender markers in the templates. List JSON-LD markers belong inside `<main>` so the trick template splicer cannot accidentally copy list schema into a detail page. Published contributions remain sourced from Supabase rather than manually maintained fixtures.
 
-GitHub Pages publication occurs when this branch is merged into `main` and the Pages workflow succeeds. The existing content-change dispatch and six-hour scheduled builds refresh published database content. Vercel publication follows its existing deployment setup. No production deployment was performed for this change.
+Pushing the merged `main` branch starts the configured GitHub Pages deployment workflow. Publication completes when that workflow succeeds. The existing content-change dispatch and six-hour scheduled builds refresh published database content. Vercel publication follows its existing Git integration; check its deployment status separately.
 
 ## Verified locally on 8 October 2026
 
@@ -47,18 +47,19 @@ These are local artifact/browser checks, not a measurement of live Google rankin
 ## Free checks after publication
 
 1. Open the canonical sitemap and a published article. Confirm article text exists in the original response, the response is 200, and the canonical host is GitHub Pages.
-2. In the existing Google Search Console property, submit `/sitemap.xml` and inspect representative URLs. Use Google's rendered-page check to confirm indexing eligibility and monitor the actual chosen canonical and search performance.
+2. In Google Search Console, select the property `https://hariomlohardev.github.io/`. If it is not already verified, add a URL-prefix property for that exact URL and follow Google's HTML-file verification instructions. In Sitemaps, submit `sitemap.xml` or confirm the existing submission succeeds. Use URL Inspection to test the homepage, blog, app page and strongest articles, then request indexing for those representative URLs. The sitemap covers the remaining pages.
 3. Check the Vercel mirror's public article/trick response for complete HTML and a GitHub Pages canonical. Check a missing record for a real 404. Avoid adding a blanket mirror/API `noindex` rule that could reach rewritten public article responses.
 4. Check the Google Rich Results Test for relevant article/app markup. Valid schema supports understanding and eligibility; it does not guarantee a rich result.
 5. Keep public profile links consistent with the canonical site and continue publishing useful, original work. Technical improvements cannot guarantee first position for every query.
+6. Optionally add the site to Bing Webmaster Tools by importing the verified Google Search Console property. Confirm that the canonical sitemap was imported or submit it there. No paid domain or SEO subscription is needed.
 
-References: [Google AI search guidance](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide), [Google canonical guidance](https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls), [Google sitemap guidance](https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap).
+References: [Google AI search guidance](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide), [Google canonical guidance](https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls), [Google sitemap guidance](https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap), [Search Console property setup](https://support.google.com/webmasters/answer/34592), [Bing site import](https://www2.bing.com/webmasters/help/add-and-verify-site-12184f8b).
 
 ## Reversible branches
 
 Working branch: `codex/seo-ai-search`.
 
-Saved baseline: `codex/seo-baseline-2026-10-08`, at commit `1b6bb07a90a6a56a1e3ab6017081205c362b9c74`. `main` was left at this starting point.
+Saved baseline: `codex/seo-baseline-2026-10-08`, at commit `1b6bb07a90a6a56a1e3ab6017081205c362b9c74`. This original snapshot remains available after merging the improvement branch into `main`.
 
 After saving any subsequent work, switch to the old version with:
 
