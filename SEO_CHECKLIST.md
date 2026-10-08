@@ -47,13 +47,19 @@ These are local artifact/browser checks, not a measurement of live Google rankin
 ## Free checks after publication
 
 1. Open the canonical sitemap and a published article. Confirm article text exists in the original response, the response is 200, and the canonical host is GitHub Pages.
-2. In Google Search Console, select the property `https://hariomlohardev.github.io/`. If it is not already verified, add a URL-prefix property for that exact URL and follow Google's HTML-file verification instructions. In Sitemaps, submit `sitemap.xml` or confirm the existing submission succeeds. Use URL Inspection to test the homepage, blog, app page and strongest articles, then request indexing for those representative URLs. The sitemap covers the remaining pages.
+2. In Google Search Console, select the property `https://hariomlohardev.github.io/`. If it is not already verified, add a URL-prefix property for that exact URL and follow Google's HTML-file verification instructions. In Sitemaps, submit `sitemap.xml` (without a leading slash when the property prefix is already shown) or confirm the existing submission succeeds. This sitemap lists GitHub Pages canonical URLs, so use this property for the main submission. If a fetch fails, inspect the exact sitemap URL with **Test live URL**, expand **Page availability**, and check **Crawl allowed: Yes** and **Page fetch: Successful** before resubmitting. Use URL Inspection to test the homepage, blog, app page and strongest articles, then request indexing for those representative URLs. The sitemap covers the remaining pages.
 3. Check the Vercel mirror's public article/trick response for complete HTML and a GitHub Pages canonical. Check a missing record for a real 404. Avoid adding a blanket mirror/API `noindex` rule that could reach rewritten public article responses.
 4. Check the Google Rich Results Test for relevant article/app markup. Valid schema supports understanding and eligibility; it does not guarantee a rich result.
 5. Keep public profile links consistent with the canonical site and continue publishing useful, original work. Technical improvements cannot guarantee first position for every query.
 6. Optionally add the site to Bing Webmaster Tools by importing the verified Google Search Console property. Confirm that the canonical sitemap was imported or submit it there. No paid domain or SEO subscription is needed.
 
 References: [Google AI search guidance](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide), [Google canonical guidance](https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls), [Google sitemap guidance](https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap), [Search Console property setup](https://support.google.com/webmasters/answer/34592), [Bing site import](https://www2.bing.com/webmasters/help/add-and-verify-site-12184f8b).
+
+## Image sitemap compatibility fix — October 8, 2026
+
+The image extension must declare `xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"`. The previous `1.0` namespace caused Search Console's incorrect-namespace and missing `family_friendly` errors even though the XML was well formed. Each image needs `image:image` and an absolute `image:loc`; do not add the obsolete `family_friendly` tag. The final SEO build check now rejects the old namespace and missing image locations. See [Google's image sitemap specification](https://developers.google.com/search/docs/crawling-indexing/sitemaps/image-sitemaps).
+
+After the corrected sitemap is deployed, resubmit it in the GitHub Pages property. The Vercel image parsing error and GitHub Pages fetch error are separate findings; a successful HTTP response from a local check does not prove Google can fetch it. Use Google's live inspection to diagnose any remaining fetch failure. See [Google's sitemap report troubleshooting](https://support.google.com/webmasters/answer/7451001).
 
 ## Reversible branches
 

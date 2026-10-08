@@ -42,6 +42,15 @@ for(const file of publicPages()){
   }
 }
 const sitemap=read('sitemap.xml');
+const sitemapRoot=(sitemap.match(/<urlset\b[^>]*>/)||[])[0] || '';
+assert(sitemapRoot.includes('xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"'),'sitemap must declare the standard URL namespace');
+if(sitemap.includes('<image:image>')){
+  // Google image sitemap 1.1 requires image:loc; the old 1.0 schema causes parsing errors.
+  assert(sitemapRoot.includes('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"'),'sitemap must use Google image namespace 1.1');
+  for(const image of sitemap.matchAll(/<image:image>([\s\S]*?)<\/image:image>/g)){
+    assert(/<image:loc>https?:\/\/[^<]+<\/image:loc>/.test(image[1]),'sitemap image must contain an absolute image:loc');
+  }
+}
 const locations=[...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>m[1]);
 assert.deepEqual(locations.slice().sort(),[...canonicalPages.keys()].sort(),'sitemap must match all indexable canonical HTML');
 for(const lastmod of [...sitemap.matchAll(/<lastmod>(.*?)<\/lastmod>/g)].map(m=>m[1])){
