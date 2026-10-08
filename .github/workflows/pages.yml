@@ -34,27 +34,12 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-      - name: Build blog from Supabase (feed.xml / blog/p pages / og)
+          node-version: '22'
+      - name: Build complete portfolio (articles, lists, metadata, sitemap and AI indices)
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-        run: node scripts/generate-blog.js
-      - name: Build project detail pages (projects-data → projects/p/*/index.html)
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-        run: node scripts/generate-projects.js
-      - name: Build LLM index (llms.txt / llms-full.txt)
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-        run: node scripts/generate-llms.js
-      - name: Build tricks (Supabase/tricks-data → tricks/p/*/index.html + sitemap)
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-        run: node scripts/generate-tricks.js
+        run: npm run build
       - name: Keep /admin and /api off Pages (both need Vercel's functions)
         run: rm -rf admin api
       - name: Upload artifact

@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
     if(!url || !key) return res.status(500).json({ ok:false, error:'Supabase not configured' });
     const { createClient } = require('@supabase/supabase-js');
     const sb = createClient(url, key, { auth:{ persistSession:false } });
-    const { data, error } = await sb.from('posts').select('slug,title,description,date,tags,cover,html,raw,word_count,reading_minutes,published,max_comment_words').eq('slug', slug).eq("published",true).maybeSingle();
+    const { data, error } = await sb.from('posts').select('slug,title,description,date,tags,cover,html,raw,word_count,reading_minutes,published,max_comment_words,updated_at,created_at').eq('slug', slug).eq("published",true).maybeSingle();
     if(error) return res.status(500).json({ ok:false, error: error.message });
     if(!data) return res.status(404).json({ ok:false, error:'Not found' });
     // Normalize max_comment_words: -1 = unlimited, else >=1, fallback 2000
@@ -29,7 +29,7 @@ module.exports = async (req, res) => {
       slug: data.slug, title: data.title, description: data.description, date: data.date, tags: data.tags||[],
       cover: data.cover, html: data.html, raw: data.raw, wordCount: data.word_count, readingMinutes: data.reading_minutes,
       url: `https://hariomlohardev.github.io/blog/p/${data.slug}/`, file: data.slug+'.md', word_count: data.word_count, reading_minutes: data.reading_minutes,
-      max_comment_words, maxCommentWords: max_comment_words
+      max_comment_words, maxCommentWords: max_comment_words, updated_at: data.updated_at, created_at: data.created_at
     };
     return res.status(200).json({ ok:true, post });
   }catch(e){

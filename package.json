@@ -8,7 +8,7 @@
     "node": "22.x"
   },
   "scripts": {
-    "build": "node scripts/make-favicon-ico.js && node scripts/generate-blog.js && node scripts/generate-projects.js && node scripts/generate-llms.js && node scripts/generate-tricks.js && node scripts/prerender-lists.js && node scripts/rasterize-og.js",
+    "build": "node scripts/make-favicon-ico.js && node scripts/generate-blog.js && node scripts/generate-projects.js && node scripts/generate-tricks.js && node scripts/prerender-lists.js && node scripts/rasterize-og.js && node scripts/generate-seo.js && node scripts/generate-llms.js && node scripts/check-seo.js",
     "vercel-build": "npm run build",
     "dev": "python -m http.server 8000",
     "generate:blog": "node scripts/generate-blog.js",
@@ -18,7 +18,10 @@
     "generate:prerender": "node scripts/prerender-lists.js",
     "generate:og": "node scripts/generate-site-og.js && node scripts/rasterize-og.js",
     "generate:favicon": "node scripts/make-favicon-ico.js",
-    "check": "node --check scripts/generate-blog.js && node --check scripts/generate-projects.js && node --check scripts/generate-tricks.js && node --check scripts/rasterize-og.js && node --check scripts/generate-llms.js && node --check scripts/prerender-lists.js && node --check scripts/make-favicon-ico.js && node scripts/check-vercel-json.js && echo 'ok'"
+    "generate:seo": "node scripts/generate-seo.js",
+    "test": "node --test tests/*.test.js",
+    "check": "node --check assets/seo.js && node --check scripts/generate-seo.js && node --check api/blog/render.js && node --check api/blog/post.js && node --check scripts/generate-blog.js && node --check scripts/generate-projects.js && node --check scripts/generate-tricks.js && node --check scripts/rasterize-og.js && node --check scripts/generate-llms.js && node --check scripts/prerender-lists.js && node --check scripts/make-favicon-ico.js && node scripts/check-vercel-json.js && echo 'ok'",
+    "check:seo": "node scripts/check-seo.js"
   },
   "keywords": [
     "hariomlohardev",

@@ -1,10 +1,10 @@
 # Hariom Lohar — full dump for LLMs (llms-full.txt)
-# Every canonical page as plain text — bio, projects, tricks and blog posts with their full
-# bodies — so an LLM can answer "who is Hariom Lohar" and quote his writing with zero
-# hallucination and no HTML rendering. Prefer this over scraping the site.
+# Published bio, app facts, project notes, contributions, tricks and blog articles.
+# Full article bodies retain Markdown/code, with canonical URLs beside each source.
+# This export supplements the canonical HTML pages for readers that choose to use it.
 # Canonical: https://hariomlohardev.github.io/llms-full.txt
 # Also see: /llms.txt (index), /ai.txt (entity card), /sitemap.xml
-# Last generated: 2026-10-03 (auto — do not hand-edit; run node scripts/generate-llms.js)
+# Last generated: 2026-10-08 (auto — do not hand-edit; run node scripts/generate-llms.js)
 # Posts source: Supabase public.posts (published=true) — the only source; no file fallback
 
 # ---- BIO — Hariom Lohar (hariomlohardev) ----
@@ -12,7 +12,7 @@
 Hariom Lohar is a Python / Django / FastAPI & Flutter developer from India and an AGI researcher.
 He is Harvard CS50P certified (2026) — CS50's Introduction to Programming with Python, 9 problem sets + final project, awarded Cambridge MA by Prof. David J. Malan. Verify at https://cs50.harvard.edu/certificates/544021b8-ab89-4eb2-a433-9c0b949e658f (also image at https://hariomlohardev.github.io/certificates/1.png).
 
-He chose the long road after 12th grade — no bootcamp, no shortcut. Since 1 July 2026 he rebuilds intelligence from first principles in public, 8 hours a day, for 548 days to 31 Dec 2027 (Day 95/548 on 2026-10-03). The notebook is at https://github.com/hariomlohardev/AGI_Research and mirrored as daily logs on https://hariomlohardev.github.io/blog .
+He chose the long road after 12th grade — no bootcamp, no shortcut. Since 1 July 2026 he rebuilds intelligence from first principles in public, 8 hours a day, for 548 days to 31 Dec 2027 (Day 100/548 on 2026-10-08). The notebook is at https://github.com/hariomlohardev/AGI_Research and mirrored as daily logs on https://hariomlohardev.github.io/blog .
 
 He builds: backends that stay up (Django, FastAPI, REST APIs), cross-platform mobile apps (Flutter/Dart), and AI features over your own data (LangChain, RAG, embeddings) plus automation and data pipelines in Python. Available for part-time freelance, remote.
 
@@ -80,68 +80,340 @@ KYL here means Know Your Label, the Android app by Hariom Lohar (hariomlohardev)
 - Detail: https://hariomlohardev.github.io/projects/p/agi-research/
 - Repo/Live: https://github.com/hariomlohardev/AGI_Research
 - What: Public lab notebook — committed daily since July 2026. Linear algebra, calculus and probability from axioms → neural nets and backprop in pure NumPy (SGD through Adam) → now CNNs, Transformers and PyTorch. No shortcuts.
-  Long: A public lab notebook committed daily since 1 July 2026 — 548 days to 31 Dec 2027. I derive everything by hand: linear algebra, calculus and probability from axioms, then neural nets, backprop, optimisers from SGD to Adam in pure NumPy, now
+
+A public lab notebook committed daily since 1 July 2026 — 548 days to 31 Dec 2027. I derive everything by hand: linear algebra, calculus and probability from axioms, then neural nets, backprop, optimisers from SGD to Adam in pure NumPy, now CNNs and Transformers.
+
+Each day is a notebook with math, code and reflection — no autograd, no shortcuts. The repo is the research log; the portfolio shows the distilled logs. Follow along as the bench grows.
 
 ## micrograd_hk — On PyPI · shipped
 - Detail: https://hariomlohardev.github.io/projects/p/micrograd-hk/
 - Repo/Live: https://github.com/hariomlohardev/micrograd-hk
 - What: A tiny autograd engine on NumPy — a Value graph with vectorised backprop and gradient descent, written before touching a framework. Inspired by micrograd, but matrix-driven: pip install micrograd_hk, Colab demo included.
-  Long: A tiny autograd engine built on NumPy for fast, matrix-driven backpropagation — the from-scratch work of the AGI notebook, packaged so anyone can install it.  It implements a minimal `Value` computation graph, inspired by [karpathy/microgra
+
+A tiny autograd engine built on NumPy for fast, matrix-driven backpropagation — the from-scratch work of the AGI notebook, packaged so anyone can install it.
+
+It implements a minimal `Value` computation graph, inspired by [karpathy/micrograd](https://github.com/karpathy/micrograd), but where micrograd differentiates scalar by scalar, this one vectorises every operation over full NumPy matrices — so training is significantly faster. `@`, `+`, `-`, `**`, `sum` and `tanh` all carry a backward pass.
+
+On top of the engine sit a small `DenseLayer` / `MLP` API and a `Trainer` with automatic checkpointing and five optimisers: SGD, Momentum, RMSProp, Adam, and **Adam-M** — a modified Adam derived and tuned as part of this project.
+
+```bash
+pip install micrograd_hk
+```
+
+```python
+from micrograd_hk import Value, DenseLayer, MLP, Trainer
+
+m = MLP(shape=[1, 3], nouts=[8, 8, 1])
+trainer = Trainer(m, xs_matrix, ys_matrix)
+final_loss, y_pred = trainer.train(lr=0.01, iterations=3000, optimizer="adam_m")
+```
+
+There is a runnable [Colab demo](https://colab.research.google.com/github/hariomlohardev/micrograd-hk/blob/main/demo.ipynb) if you would rather read it than install it. MIT licensed, Python 3.8+.
 
 ## peek — On PyPI · shipped
 - Detail: https://hariomlohardev.github.io/projects/p/peek/
 - Repo/Live: https://github.com/hariomlohardev/peek
 - What: htop for codebases — understand any repo in five seconds. Languages, size and structure in one screen: pip install peek-code && peek .
-  Long: A zero-config codebase cartographer. Point it at any repository and it draws the map: languages, size, structure and the files that actually matter — in about five seconds, entirely offline.  ```bash pip install peek-code peek . ```  The de
+
+A zero-config codebase cartographer. Point it at any repository and it draws the map: languages, size, structure and the files that actually matter — in about five seconds, entirely offline.
+
+```bash
+pip install peek-code
+peek .
+```
+
+The default is an interactive TUI built on Rich and Textual — `j/k` to move, `/` to filter, `o` to open a file in `$EDITOR`, `enter` for details. `peek --no-tui` prints a static Rich report for screenshots, pipes and CI, and `peek --html -o map.html` writes a shareable page.
+
+Two commands go further than a summary. `peek --pack` selects the highest-signal files within a token budget and prints them as one LLM-ready bundle — `peek --pack --ask "auth"` narrows it to a topic. `peek trace` walks a function tree across files: what calls it, what it calls, and how deep, with `--html` for a browsable version.
+
+```bash
+peek find "token validation" . --limit 10
+peek trace scan --depth 3 --html
+```
+
+Python 3.11+, ten themes, 146 tests, MIT. Issues tagged **good first issue** are open if you want to build on it.
 
 ## inkdown — v1.1.0 · shipped
 - Detail: https://hariomlohardev.github.io/projects/p/inkdown/
 - Repo/Live: https://github.com/hariomlohardev/inkdown
 - What: Notion for Markdown — write in a clean editor, ship plain .md files. Local-first desktop app: no account, no lock-in.
-  Long: A Markdown studio that feels like a modern notes app and leaves behind nothing but plain `.md` files. Local-first, offline, no account, no telemetry — your notes stay on your disk.  The library side handles multiple files and folders, searc
+
+A Markdown studio that feels like a modern notes app and leaves behind nothing but plain `.md` files. Local-first, offline, no account, no telemetry — your notes stay on your disk.
+
+The library side handles multiple files and folders, search, archive and import from a file, a URL or the clipboard. The editor gives live preview, split and focus modes, a table of contents, a minimap and a word goal, with syntax highlighting for 180+ languages, KaTeX maths, mermaid diagrams, callouts and footnotes.
+
+Past writing, it adds day-based todos with a desktop widget and a streak, slide decks built straight from `##` headings with speaker notes, five-colour highlights, version history, a `Ctrl+P` command palette, and export to Markdown, HTML, PDF, PNG or a zip.
+
+```bash
+git clone https://github.com/hariomlohardev/inkdown && cd inkdown
+pip install -r requirements.txt
+python main.py
+```
+
+Built with PyWebView and vanilla JavaScript — Python 3.11+. Windows gets a one-click installer from Releases; any OS can run the web preview. MIT licensed.
 
 ## practice_code — Open source
 - Detail: https://hariomlohardev.github.io/projects/p/practice-code/
 - Repo/Live: https://github.com/hariomlohardev/practice_code
 - What: 60+ Python solutions for algorithms and data structures, grouped by topic. Each notes time and space. Fork it, add your approach, open a PR.
-  Long: 60+ Python solutions for algorithms and data structures, grouped by topic — arrays, strings, trees, graphs, DP, and more. Each solution notes time and space complexity.  Fork-friendly: add your approach in any language, keep the same folder
+
+60+ Python solutions for algorithms and data structures, grouped by topic — arrays, strings, trees, graphs, DP, and more. Each solution notes time and space complexity.
+
+Fork-friendly: add your approach in any language, keep the same folder structure, and open a PR. Built to stay readable and interview-ready.
 
 ## pkg_jupy — Open source
 - Detail: https://hariomlohardev.github.io/projects/p/pkg-jupy/
 - Repo/Live: https://github.com/hariomlohardev/pkg_jupy
 - What: Jupyter experiments that grew up — small Python packages, utility notebooks and visualisation scratches. Open for issues and PRs.
-  Long: Jupyter experiments that grew into small Python packages — utilities, visualisation scratches and notebook helpers that I actually reuse.  Not a framework — just focused tools. Open for issues and PRs if you find a rough edge.
 
+Jupyter experiments that grew into small Python packages — utilities, visualisation scratches and notebook helpers that I actually reuse.
+
+Not a framework — just focused tools. Open for issues and PRs if you find a rough edge.
+
+
+# ---- PUBLISHED CONTRIBUTIONS ----
+
+Source: https://hariomlohardev.github.io/opensource
+- [fix(upload): handle unknown event handlers](https://github.com/reflex-dev/reflex/pull/6861)
+- [docs: fix sumset docstring](https://github.com/TheAlgorithms/Python/pull/15014)
+- [MAINT: Handle overflow in i0 for large inputs like 713.0](https://github.com/numpy/numpy/pull/32223)
 
 # ---- BLOG — daily logs (canonical) ----
 
 All posts are at https://hariomlohardev.github.io/blog with RSS https://hariomlohardev.github.io/feed.xml . Each post has static HTML /blog/p/<slug>/ with BlogPosting JSON-LD author Hariom Lohar.
 
+## Python Basics: Arithmetic Operators & String Methods — 2026-10-04
+- URL: https://hariomlohardev.github.io/blog/p/python-basics-arithmetic-operators-string-methods/
+- Desc: Learn Python arithmetic operators, operator precedence and string methods with code examples, FAQs and a practice file by Hariom Lohar.
+- Tags: python, learn python, Arithmetic operstors, strings
+- Length: 1048 words, 6 min read
+
+## 👋 Introduction
+
+Hi, I'm **Hariom Lohar**. I'm currently learning AI, with the long-term goal of moving into **AGI Safety**. Right now, I'm on a personal challenge, and as part of it, I'm helping others (like you!) learn programming and AI fundamentals from scratch.
+
+This is Day 2 of our Python basics series. Yesterday we covered Variables and Data Types — today we move on to **Arithmetic Operators** and **String Methods**.
+
+---
+
+## 🎥 Watch the Video First
+
+Before reading further, watch this video:
+
+👉 **[String methods in Python are easy! 〰️](https://www.youtube.com/watch?v=tb6EYiHtcXU)**
+
+> ⚠️ **Important:** After watching the video, make sure to read the **rest of this blog post**. This video only covers String Methods — there is no video for Arithmetic Operators this time, so that part is explained fully in text below. Make sure you read through the Arithmetic Operators section carefully since you won't have a video to fall back on for it.
+
+---
+
+## 📖 What You'll Learn in This Post
+
+- Each arithmetic operator in Python, explained (text-only, no video for this part)
+- Operator precedence (the order Python calculates things in)
+- String methods, to go along with the video
+- Frequently Asked Questions (FAQs)
+- A practice Python file to test yourself
+
+---
+
+## ➕ Arithmetic Operators
+
+**Note:** There is no video for this topic — read this section carefully, it's your only source for it.
+
+Arithmetic operators are symbols used to perform mathematical calculations on numbers (and variables holding numbers).
+
+```python
+a = 10
+b = 3
+print(a + b)   # Output: 13
+```
+
+Here, `+` is the arithmetic operator doing the addition.
+
+### The Arithmetic Operators in Python
+
+**`+` — Addition** Adds two values together.
+
+```python
+5 + 2   # → 7
+```
+
+**`-` — Subtraction** Subtracts the right value from the left value.
+
+```python
+5 - 2   # → 3
+```
+
+`*` — Multiplication** Multiplies two values.
+
+```python
+5 * 2   # → 10
+```
+
+**`/` — Division** Divides the left value by the right value. Always returns a **float**, even if the result is a whole number.
+
+```python
+5 / 2   # → 2.5
+```
+
+**`//` — Floor Division** Divides and rounds **down** to the nearest whole number (drops anything after the decimal point).
+
+```python
+5 // 2   # → 2
+```
+
+**`%` — Modulus** Gives you the **remainder** left over after division.
+
+```python
+5 % 2   # → 1
+```
+
+`**` — Exponentiation** Raises the left value to the power of the right value.
+
+```python
+5 ** 2   # → 25
+```
+
+### Operator Precedence (Order of Operations)
+
+Just like in math class, Python doesn't calculate things strictly left to right — it follows an order of priority, often remembered using **PEMDAS**:
+
+1. **P**arentheses `()`
+2. **E**xponents `**`
+3. **M**ultiplication `*` and **D**ivision `/`, `//`, `%` (same priority, left to right)
+4. **A**ddition `+` and **S**ubtraction `-` (same priority, left to right)
+
+**Example:**
+
+```python
+result = 2 + 3 * 4
+print(result)   # Output: 14, not 20
+```
+
+Python calculates `3 * 4` first (because multiplication has higher priority), then adds `2`.
+
+If you want addition to happen first, use parentheses:
+
+```python
+result = (2 + 3) * 4
+print(result)   # Output: 20
+```
+
+---
+
+## ❓ FAQs (Arithmetic Operators)
+
+**Q1. Why does `/` always give a float, even for whole-number results?** Python's `/` is designed to always return a precise, decimal-accurate result (true division), unlike `//`, which intentionally rounds down.
+
+**Q2. What's the difference between `/` and `//`?** `/` gives the exact decimal result. `//` gives only the whole number part, rounded down (also called floor division).
+
+**Q3. When would I actually use `%` (modulus)?** It's commonly used to check if a number is even or odd (`num % 2 == 0` means even), or to figure out remainders, like converting seconds into minutes and leftover seconds.
+
+**Q4. Does Python follow the same order of operations as regular math?** Yes — Python follows PEMDAS, same as what you learned in school.
+
+**Q5. Can I combine arithmetic operators with variables?** Yes. Arithmetic operators work the same way whether you use raw numbers or variables holding numbers.
+
+---
+
+## 🔤 String Methods
+
+This is the part covered by the video above. Strings have built-in methods that let you change, check, or clean up text. A method is called using a dot after the variable name:
+
+```python
+text = "hello"
+print(text.upper())   # Output: HELLO
+```
+
+**`.upper()`** — Converts all characters to uppercase
+
+```python
+"hello".upper()   # → "HELLO"
+```
+
+**`.lower()`** — Converts all characters to lowercase
+
+```python
+"HELLO".lower()   # → "hello"
+```
+
+**`.strip()`** — Removes extra whitespace from the start and end of a string
+
+```python
+"   hello   ".strip()   # → "hello"
+```
+
+**`.replace(old, new)`** — Replaces one part of a string with another
+
+```python
+"I like cats".replace("cats", "dogs")   # → "I like dogs"
+```
+
+**`len()`** — Not technically a method, but a built-in function that gives you the length of a string (including spaces)
+
+```python
+len("hello")   # → 5
+```
+
+**`.startswith(text)`** — Checks whether a string starts with specific text, returns `True` or `False`
+
+```python
+"hello world".startswith("hello")   # → True
+```
+
+---
+
+## ❓ FAQs (String Methods)
+
+**Q1. Does `len()` count spaces as characters?** Yes. Every character, including spaces, counts toward the length.
+
+**Q2. Does `.upper()` or `.lower()` change the original variable?** No. Strings in Python are immutable — these methods return a *new* string. You need to store the result in a variable if you want to keep it.
+
+**Q3. What does `.strip()` actually remove?** Only whitespace (spaces, tabs, newlines) from the beginning and end — not from the middle of the string.
+
+---
+
+## 🐍 Practice File — Test Yourself
+
+Now that you've watched the video and read through this post, it's time to test what you've actually understood — both Arithmetic Operators and String Methods.
+
+Download the practice Python file below. It has guided comments and blank spaces — you need to write the code yourself.
+
+👉 **[Download the Practice File Here](https://github.com/hariomlohardev/learn-python/blob/main/basics/strings/main.py)**
+
+Once done, submit your completed file in the **comment section of this blog post**. I'll personally review it and give you feedback.
+
+---
+
+## ✅ Deadline Reminder
+
+This task/assignment should be completed within **2 days**. If you get stuck anywhere, don't hesitate to ask in the group — we're all learning together. 🙌
+
+
 ## Python Basics: Variables & Data Types — 2026-09-24
 - URL: https://hariomlohardev.github.io/blog/p/python-basics-variables-data-types/
-- Desc:
+- Desc: Learn Python variables, data types, type checking, conversions and user input with examples and practice exercises by Hariom Lohar.
 - Tags: python, basics, learn-python
 - Length: 1012 words, 6 min read
 
-👋 Introduction
+## 👋 Introduction
 
-Hi, I'm Hariom Lohar. I'm currently learning AI, with the long-term goal of moving into AGI Safety. Right now, I'm on a personal challenge, and as part of it, I'm helping others (like you!) learn programming and AI fundamentals from scratch.
+Hi, I'm **Hariom Lohar**. I'm currently learning AI, with the long-term goal of moving into **AGI Safety**. Right now, I'm on a personal challenge, and as part of it, I'm helping others (like you!) learn programming and AI fundamentals from scratch.
 
-This blog post is part of a series where we go from the absolute basics to advanced concepts, step by step. Today's topic: Variables and Data Types in Python — one of the very first building blocks you need before you can write any real program.
+This blog post is part of a series where we go from the absolute basics to advanced concepts, step by step. Today's topic: **Variables and Data Types in Python** — one of the very first building blocks you need before you can write any real program.
 
 ---
 
-🎥 Watch the Video First
+## 🎥 Watch the Video First
 
 Before reading further, watch this video. It covers the core basics of variables and data types in Python:
 
-👉 Python Variables for Beginners – Bro Code
+👉 **[Python Variables for Beginners – Bro Code](https://www.youtube.com/watch?v=LKFrQXaoSMQ)**
 
-⚠️ Important: After watching the video, make sure to read the rest of this blog post. The video covers the core basics, but it does not include everything (like Type Checking and User Input), which are explained in detail below. Reading the full post will fill those gaps and make sure your understanding is complete.
+> ⚠️ **Important:** After watching the video, make sure to read the **rest of this blog post**. The video covers the core basics, but it does **not** include everything (like Type Checking and User Input), which are explained in detail below. Reading the full post will fill those gaps and make sure your understanding is complete.
 
 ---
 
-📖 What You'll Learn in This Post
+## 📖 What You'll Learn in This Post
 
 - What a variable is
 - The core data types in Python
@@ -153,142 +425,166 @@ Before reading further, watch this video. It covers the core basics of variables
 
 ---
 
-🔤 What is a Variable?
+## 🔤 What is a Variable?
 
-A variable is simply a named container used to store data/information, so that it can be used later in your program.
+A variable is simply a **named container** used to store data/information, so that it can be used later in your program.
 
+```python
 name = "Hariom"
 age = 21
+```
 
-Here, name and age are variables. Python doesn't require you to mention the data type while creating a variable — it figures that out automatically based on the value you assign.
+Here, `name` and `age` are variables. Python doesn't require you to mention the data type while creating a variable — it figures that out automatically based on the value you assign.
 
 ---
 
-🔢 Core Data Types in Python
+## 🔢 Core Data Types in Python
 
-int — Integer Whole numbers, with no decimal point.
+**`int` — Integer** Whole numbers, with no decimal point.
 
+```python
 age = 21
+```
 
-float — Floating Point Number Numbers that include a decimal point.
+**`float` — Floating Point Number** Numbers that include a decimal point.
 
+```python
 price = 99.99
+```
 
-str — String Text, written inside single ' ' or double " " quotes.
+**`str` — String** Text, written inside single `' '` or double `" "` quotes.
 
+```python
 name = "Hariom"
+```
 
-bool — Boolean Can only be one of two values: True or False. Mostly used for conditions and comparisons.
+**`bool` — Boolean** Can only be one of two values: `True` or `False`. Mostly used for conditions and comparisons.
 
-islearning = True
+```python
+is_learning = True
+```
 
 ---
 
-🔍 Type Checking (Not Covered in the Video)
+## 🔍 Type Checking (Not Covered in the Video)
 
-The video does not cover this part, so pay close attention here.
+The video does **not** cover this part, so pay close attention here.
 
-Python has a built-in function called type() that tells you the data type of any variable.
+Python has a built-in function called `type()` that tells you the data type of any variable.
 
+```python
 x = 10
-print(type(x)) # Output:
+print(type(x))   # Output: <class 'int'>
+```
 
 This is useful when you're not sure what type of data a variable is holding — especially when working with user input or data from external sources.
 
 ---
 
-🔄 Type Conversion (Casting)
+## 🔄 Type Conversion (Casting)
 
-Sometimes the data you have is in one type, but you need it in another type to actually use it properly. Converting one data type into another like this is called Type Conversion, also known as Casting.
+Sometimes the data you have is in one type, but you need it in another type to actually use it properly. Converting one data type into another like this is called **Type Conversion**, also known as **Casting**.
 
-Why does this matter? If you take a number from the user using input(), Python stores it as a string (text), even if the user typed "25". If you try to do math on it directly, Python will throw an error — because you can't add a number to text. To fix this, you must convert that string into an integer or float first.
+**Why does this matter?** If you take a number from the user using `input()`, Python stores it as a **string** (text), even if the user typed `"25"`. If you try to do math on it directly, Python will throw an error — because you can't add a number to text. To fix this, you must convert that string into an integer or float first.
 
-Common conversion functions:
+**Common conversion functions:**
 
-int() — Converts a value into an integer
+**`int()`** — Converts a value into an integer
 
-int("5") # → 5
+```python
+int("5")   # → 5
+```
 
-float() — Converts a value into a float
+**`float()`** — Converts a value into a float
 
-float("5") # → 5.0
+```python
+float("5")   # → 5.0
+```
 
-str() — Converts a value into a string
+**`str()`** — Converts a value into a string
 
-str(5) # → "5"
+```python
+str(5)   # → "5"
+```
 
-bool() — Converts a value into a boolean
+**`bool()`** — Converts a value into a boolean
 
-bool(1) # → True
+```python
+bool(1)   # → True
+```
 
-Example:
+**Example:**
 
-numstr = "5" # this is a string, not a number
-numint = int(numstr) # now it's an actual integer: 5
-print(numint + 10) # Output: 15 — this works now!
-
----
-
-⌨️ Taking User Input (Not Covered in the Video)
-
-The video does not cover this part either, so read carefully.
-
-The input() function is used to take input directly from the user while the program is running.
-
-username = input("Enter your name: ")
-
-Important: input() always returns a string, even if the user types a number. So if you need to use that input as a number, you must convert it using int() or float() (see the Type Conversion section above).
+```python
+num_str = "5"             # this is a string, not a number
+num_int = int(num_str)    # now it's an actual integer: 5
+print(num_int + 10)       # Output: 15 — this works now!
+```
 
 ---
 
-❓ FAQs
+## ⌨️ Taking User Input (Not Covered in the Video)
 
-Q1. Do I need to tell Python what data type a variable is? No. Python automatically detects the data type based on the value you assign.
+The video does **not** cover this part either, so read carefully.
 
-Q2. Can a variable's data type change later in the program? Yes. Python variables are dynamically typed, meaning you can reassign a variable to a different type at any time.
+The `input()` function is used to take input directly from the user while the program is running.
 
-Q3. Why does input() always give a string? Because Python doesn't know if you intended to type a number or text — treating everything as a string by default is the safest option, and it's up to you to convert it if needed.
+```python
+user_name = input("Enter your name: ")
+```
 
-Q4. What does type(True) return? It returns , since True and False belong to the boolean data type.
-
-Q5. What happens if I try to add a string and a number without converting? Python will raise a TypeError, since it cannot combine incompatible data types directly.
+**Important:** `input()` **always** returns a string, even if the user types a number. So if you need to use that input as a number, you must convert it using `int()` or `float()` (see the Type Conversion section above).
 
 ---
 
-🐍 Practice File — Test Yourself
+## ❓ FAQs
+
+**Q1. Do I need to tell Python what data type a variable is?** No. Python automatically detects the data type based on the value you assign.
+
+**Q2. Can a variable's data type change later in the program?** Yes. Python variables are dynamically typed, meaning you can reassign a variable to a different type at any time.
+
+**Q3. Why does `input()` always give a string?** Because Python doesn't know if you intended to type a number or text — treating everything as a string by default is the safest option, and it's up to you to convert it if needed.
+
+**Q4. What does `type(True)` return?** It returns `<class 'bool'>`, since `True` and `False` belong to the boolean data type.
+
+**Q5. What happens if I try to add a string and a number without converting?** Python will raise a `TypeError`, since it cannot combine incompatible data types directly.
+
+---
+
+## 🐍 Practice File — Test Yourself
 
 Now that you've watched the video and read through this post, it's time to test what you've actually understood.
 
 Download the practice Python file below. It has guided comments and blank spaces — you need to write the code yourself.
 
-👉 Download the Practice File Here
+👉 **[Download the Practice File Here](https://github.com/hariomlohardev/learn-python/blob/refs/heads/main/basics/variables-and-datatypes/main.py)**
 
-Once done, submit your completed file in the comment section of this blog post. I'll personally review it and give you feedback.
+Once done, submit your completed file in the **comment section of this blog post**. I'll personally review it and give you feedback.
 
 ---
 
-✅ Deadline Reminder
+## ✅ Deadline Reminder
 
 This task/assignment should be completed within 2 days — by Saturday, September 26, 2026, 11:00 AM UTC. If you get stuck anywhere, don't hesitate to ask in the group — we're all learning together. 🙌
 
 
 ## Learn Python -Day 0 — 2026-09-16
 - URL: https://hariomlohardev.github.io/blog/p/learn-python-day-0/
-- Desc:
+- Desc: Set up Python, VS Code, Git and a GitHub account for Hariom Lohar’s beginner Python course. Day 0 covers the tools needed before the first lesson.
 - Tags: learn python, python
 - Length: 363 words, 2 min read
 
-Hi, I'm Hariom 👋
+# Hi, I'm Hariom 👋
 
 I'm a CS student at UoPeople, currently based in India. Right now, most of my time and curiosity goes into learning about AI and AGI — especially AI safety and research, which I find endlessly fascinating and important as this field keeps growing.
 
-This week, we're starting with the basics of Python — and today is Day 0. I'm excited to have you here, and I'm looking forward to learning and growing together over the next two months. Let's get started! 🐍
+This week, we're starting with the basics of Python — and today is **Day 0**. I'm excited to have you here, and I'm looking forward to learning and growing together over the next two months. Let's get started! 🐍
 
 ---
 
-📅 Day 0 — Setup Day
+## 📅 Day 0 — Setup Day
 
-Before we officially start Day 1, we need one setup day to get everything ready. This is Day 0 — a one-time day just for installing and setting up the tools we'll use throughout the course.
+Before we officially start Day 1, we need one setup day to get everything ready. This is **Day 0** — a one-time day just for installing and setting up the tools we'll use throughout the course.
 
 By the end of Day 0, you should have:
 
@@ -299,46 +595,180 @@ By the end of Day 0, you should have:
 
 Don't worry if this feels new — just follow the links below step by step, and we'll also go through it together in our live session.
 
-🎥 Join the Live Session
+## 🎥 Join the Live Session
 
-Python Day 0
+**Python Day 0**
 📅 Wednesday, 16 September · 9:30 – 10:30pm
 🌐 Time zone: Asia/Kolkata
 
-Google Meet joining info
-🔗 Video call link: https://meet.google.com/zjg-gxuk-cvz
+**Google Meet joining info**
+🔗 Video call link: [https://meet.google.com/zjg-gxuk-cvz](https://meet.google.com/zjg-gxuk-cvz)
 ---
 
-🔧 Below are links we refer in Live
+## 🔧 Below are links we refer in Live
 
-1. Python
-🔗 https://www.python.org/downloads/
+### 1. Python
+🔗 [https://www.python.org/downloads/](https://www.python.org/downloads/)
 
-2. VS Code (Code Editor)
+### 2. VS Code (Code Editor)
 This is the editor we'll use to write and run our Python code.
-🔗 https://code.visualstudio.com/download
+🔗 [https://code.visualstudio.com/download](https://code.visualstudio.com/download)
 
-3. Git
+### 3. Git
 Version control tool we'll use to track and share code.
-🔗 https://git-scm.com/downloads
+🔗 [https://git-scm.com/downloads](https://git-scm.com/downloads)
 
-4. GitHub Account
+### 4. GitHub Account
 Create a free account — this is where you'll submit your code for review.
-🔗 https://github.com/signup
+🔗 [https://github.com/signup](https://github.com/signup)
 
 ---
 
-👨‍💻 My GitHub
+## 👨‍💻 My GitHub
 
-You can find me on GitHub here: hariomlohardev
+You can find me on GitHub here: **[hariomlohardev](https://github.com/hariomlohardev)**
 
 ---
 
-📌 A Quick Note
+## 📌 A Quick Note
 
 You don't have to worry about getting everything perfect today — these links are here to help you get the tools installed. If you run into any issues, bring them to our Day 0 session and we'll sort it out together.
 
 See you soon — let's build something great! 🚀
+
+
+## Setup VS Code for Python — 2026-09-15
+- URL: https://hariomlohardev.github.io/blog/p/setup-vs-code-for-python/
+- Desc: A step-by-step guide to installing VS Code and setting it up to write and run Python code smoothly.
+- Tags: python, vscode, install guide, setup, beginners, code editor, cs50p
+- Length: 768 words, 4 min read
+
+Once Python is installed on your PC, the next step is picking a good place to actually write your code. That's where **VS Code** comes in — it's free, lightweight, and used by beginners and professionals alike.
+
+This guide will walk you through installing VS Code and setting it up properly for Python.
+
+---
+
+## ✅ Before You Start
+
+Make sure you've already installed Python on your PC. If you haven't done that yet, go back and follow the **Install Python on Windows** guide first — VS Code needs Python already installed to work with it.
+
+---
+
+## Step 1: Download VS Code
+
+Head over to the official website and download the installer for Windows:
+
+🔗 [Download VS Code](https://code.visualstudio.com/)
+
+---
+
+## Step 2: Run the Installer
+
+Open the downloaded file and go through the setup. On the way, you'll see a few checkboxes — make sure these are ticked:
+
+- ☑️ **Add "Open with Code" action to Windows Explorer file context menu**
+- ☑️ **Add "Open with Code" action to Windows Explorer directory context menu**
+- ☑️ **Add to PATH**
+
+These make VS Code much easier to open later, right from any folder. Then click **Install** and wait for it to finish.
+
+---
+
+## Step 3: Open VS Code
+
+Once installed, open VS Code. You'll see a clean welcome screen — this is your new coding home base.
+
+---
+
+## Step 4: Install the Python Extension
+
+VS Code is a general-purpose editor by default, so we need to add Python support to it:
+
+1. On the left sidebar, click the **Extensions** icon (it looks like four squares)
+2. Search for **"Python"**
+3. Look for the official extension published by **Microsoft**
+4. Click **Install**
+
+This adds things like code suggestions, error checking, and the ability to run Python files directly.
+
+---
+
+## Step 5: Make Sure VS Code Can Find Python
+
+1. Press **Ctrl + Shift + P** to open the Command Palette
+2. Type **"Python: Select Interpreter"** and press Enter
+3. Choose the Python version that shows up in the list (it should match the version you installed earlier)
+
+This tells VS Code exactly which Python installation to use when running your code.
+
+---
+
+## Step 6: Write and Run Your First Program
+
+1. Go to **File > New File**, and save it as `hello.py`
+2. Type:
+
+```python
+print("Hello, World!")
+```
+
+3. Run it in one of two ways:
+   - Click the **▶ Run** button in the top-right corner, or
+   - Right-click anywhere in the file and choose **"Run Python File in Terminal"**
+
+You'll see the output appear in the integrated terminal at the bottom of the screen:
+
+```
+Hello, World!
+```
+
+---
+
+## 🎁 Bonus: Handy Extensions and Tips
+
+- **Pylance** — usually installs automatically with the Python extension, and gives you smarter code suggestions
+- **Auto-formatting** — VS Code can automatically indent and clean up your code as you type
+- **Integrated Terminal** — open it anytime with **Ctrl + `** (backtick) to run Python commands without leaving the editor
+
+---
+
+## 🛠️ Common Problems & Fixes
+
+**"code" is not recognized in Command Prompt**
+This means "Add to PATH" wasn't checked during install. Reinstall VS Code and make sure that option is ticked, or add it manually via Windows Environment Variables.
+
+**Run button doesn't show up / errors about no interpreter**
+This usually means Python wasn't detected. Go back to Step 5 and manually select your Python interpreter.
+
+**Code runs but says "python is not recognized"**
+This is usually a Python PATH issue, not a VS Code issue — revisit the Python installation guide and make sure "Add python.exe to PATH" was checked when installing Python.
+
+---
+
+## ❓ Frequently Asked Questions
+
+**Is VS Code free?**
+Yes, completely free and works on Windows, Mac, and Linux.
+
+**Do I need the Python extension specifically?**
+Yes — without it, VS Code won't understand or run Python files properly.
+
+**Can I use VS Code without installing Python separately?**
+No, VS Code is just the editor — you still need Python installed on your system for it to actually run your code.
+
+**Is VS Code the same as PyCharm or other IDEs?**
+Not exactly — VS Code is lighter and more general-purpose, while tools like PyCharm are built specifically for Python. VS Code is a great, simple starting point.
+
+---
+
+## 🚀 You're Ready!
+
+You now have a proper coding setup — Python installed, and VS Code ready to write, run, and debug your programs. From here on, all your practice code can live right here.
+
+Stuck at any step? Ask away in the group:
+
+💬 [WhatsApp Group (Learn Python)](https://chat.whatsapp.com/Fep8bxG6E6M7HKKwp8gEpC)
 
 
 ## Install Python on Windows — 2026-09-15
@@ -351,7 +781,7 @@ If you have a Windows laptop or PC, this guide will walk you through installing 
 
 ---
 
-🤔 Why Install Python on Your PC?
+## 🤔 Why Install Python on Your PC?
 
 While apps like Pydroid 3 are great for phones, installing Python directly on your PC gives you:
 
@@ -361,7 +791,7 @@ While apps like Pydroid 3 are great for phones, installing Python directly on yo
 
 ---
 
-✅ Before You Start
+## ✅ Before You Start
 
 You just need:
 - A Windows laptop or PC
@@ -370,423 +800,323 @@ You just need:
 
 ---
 
-Step 1: Download Python
+## Step 1: Download Python
 
 Go to the official Python website and download the installer:
 
-🔗 Download Python (python.org)
+🔗 [Download Python (python.org)](https://www.python.org/downloads/)
 
-The site automatically detects that you're on Windows and shows you a "Download Python" button with the latest version. Click it.
-
----
-
-Step 2: Run the Installer
-
-Go to your Downloads folder and double-click the file you just downloaded (something like python-3.x.x-amd64.exe).
-
-⚠️ This step matters a lot: On the very first screen of the installer, you'll see a checkbox at the bottom that says:
-
-☑️ Add python.exe to PATH
-
-Make sure this is checked before clicking anything else. This is the single most common mistake beginners make, and skipping it causes errors later.
+The site automatically detects that you're on Windows and shows you a **"Download Python"** button with the latest version. Click it.
 
 ---
 
-Step 3: Install
+## Step 2: Run the Installer
 
-Click Install Now (the recommended option for most students). Wait for the installation to finish, then click Close.
+Go to your **Downloads** folder and double-click the file you just downloaded (something like `python-3.x.x-amd64.exe`).
+
+⚠️ **This step matters a lot:** On the very first screen of the installer, you'll see a checkbox at the bottom that says:
+
+> ☑️ **Add python.exe to PATH**
+
+**Make sure this is checked** before clicking anything else. This is the single most common mistake beginners make, and skipping it causes errors later.
 
 ---
 
-Step 4: Verify the Installation
+## Step 3: Install
+
+Click **Install Now** (the recommended option for most students). Wait for the installation to finish, then click **Close**.
+
+---
+
+## Step 4: Verify the Installation
 
 Now let's check that Python actually installed correctly.
 
-1. Press the Windows key, type cmd, and open Command Prompt
+1. Press the **Windows key**, type `cmd`, and open **Command Prompt**
 2. Type this and press Enter:
 
+```
 python --version
+```
 
 If everything worked, you'll see something like:
 
+```
 Python 3.12.4
+```
 
 ---
 
-Step 5: Check pip
+## Step 5: Check pip
 
-pip is Python's tool for installing extra libraries, and it comes bundled with Python automatically. Check it's there:
+`pip` is Python's tool for installing extra libraries, and it comes bundled with Python automatically. Check it's there:
 
+```
 pip --version
+```
 
 You should see a version number printed out.
 
 ---
 
-Step 6: Write and Run Your First Program
+## Step 6: Write and Run Your First Program
 
 You have two easy options:
 
-Option A: Using IDLE (comes free with Python)
+### Option A: Using IDLE (comes free with Python)
 
-1. Press the Windows key, type IDLE, and open it
-2. Go to File > New File
+1. Press the **Windows key**, type `IDLE`, and open it
+2. Go to **File > New File**
 3. Type:
 
+```python
 print("Hello, World!")
+```
 
-4. Save the file as hello.py
-5. Press F5 to run it — you'll see the output appear in the IDLE window
+4. Save the file as `hello.py`
+5. Press **F5** to run it — you'll see the output appear in the IDLE window
 
-Option B: Using Command Prompt directly
+### Option B: Using Command Prompt directly
 
 1. Open Command Prompt
-2. Type python and press Enter — this opens Python's interactive mode
+2. Type `python` and press Enter — this opens Python's interactive mode
 3. Type:
 
+```python
 print("Hello, World!")
+```
 
 4. Press Enter to see the output instantly
-5. Type exit() when you're done
+5. Type `exit()` when you're done
 
 ---
 
-🎁 Bonus: Installing a Proper Code Editor
+## 🎁 Bonus: Installing a Proper Code Editor
 
-Once you're comfortable, you'll probably want a better editor than IDLE. Most students (and professionals) use VS Code — it's free and works great with Python.
+Once you're comfortable, you'll probably want a better editor than IDLE. Most students (and professionals) use **VS Code** — it's free and works great with Python.
 
-🔗 Download VS Code
+🔗 [Download VS Code](https://code.visualstudio.com/)
 
 ---
 
-🛠️ Common Problems & Fixes
+## 🛠️ Common Problems & Fixes
 
-"'python' is not recognized as an internal or external command"
-This means Python wasn't added to your PATH during install. Fix it by reinstalling and making sure you check "Add python.exe to PATH" this time — or add it manually through Windows' Environment Variables settings.
+**"'python' is not recognized as an internal or external command"**
+This means Python wasn't added to your PATH during install. Fix it by reinstalling and making sure you check **"Add python.exe to PATH"** this time — or add it manually through Windows' Environment Variables settings.
 
-I installed Python but nothing changed
+**I installed Python but nothing changed**
 Try closing and reopening Command Prompt after installing — it needs a fresh window to recognize the update.
 
-Multiple Python versions causing confusion
-If you've installed Python more than once, it's best to uninstall the older versions first (via Settings > Apps) and keep just one clean version.
+**Multiple Python versions causing confusion**
+If you've installed Python more than once, it's best to uninstall the older versions first (via **Settings > Apps**) and keep just one clean version.
 
 ---
 
-❓ Frequently Asked Questions
+## ❓ Frequently Asked Questions
 
-Is Python free to install?
+**Is Python free to install?**
 Yes, completely free and open-source.
 
-Which version should I install?
+**Which version should I install?**
 Always go with the latest stable Python 3.x version shown on the official downloads page.
 
-Do I need admin rights on my PC?
+**Do I need admin rights on my PC?**
 Not necessarily — you can choose "Install for current user only" during setup if you don't have admin access.
 
-Do I need to install pip separately?
+**Do I need to install pip separately?**
 No, pip comes automatically with modern Python installations.
 
 ---
 
-🚀 You're Ready!
+## 🚀 You're Ready!
 
-That's it — Python is installed and working on your PC. Try tweaking the text inside print() and running it again to see it in action.
-
-Stuck at any step? Ask away in the group:
-
-💬 WhatsApp Group (Learn Python)
-
-
-## Setup VS Code for Python — 2026-09-15
-- URL: https://hariomlohardev.github.io/blog/p/setup-vs-code-for-python/
-- Desc: A step-by-step guide to installing VS Code and setting it up to write and run Python code smoothly.
-- Tags: python, vscode, install guide, setup, beginners, code editor, cs50p
-- Length: 768 words, 4 min read
-
-Once Python is installed on your PC, the next step is picking a good place to actually write your code. That's where VS Code comes in — it's free, lightweight, and used by beginners and professionals alike.
-
-This guide will walk you through installing VS Code and setting it up properly for Python.
-
----
-
-✅ Before You Start
-
-Make sure you've already installed Python on your PC. If you haven't done that yet, go back and follow the Install Python on Windows guide first — VS Code needs Python already installed to work with it.
-
----
-
-Step 1: Download VS Code
-
-Head over to the official website and download the installer for Windows:
-
-🔗 Download VS Code
-
----
-
-Step 2: Run the Installer
-
-Open the downloaded file and go through the setup. On the way, you'll see a few checkboxes — make sure these are ticked:
-
-- ☑️ Add "Open with Code" action to Windows Explorer file context menu
-- ☑️ Add "Open with Code" action to Windows Explorer directory context menu
-- ☑️ Add to PATH
-
-These make VS Code much easier to open later, right from any folder. Then click Install and wait for it to finish.
-
----
-
-Step 3: Open VS Code
-
-Once installed, open VS Code. You'll see a clean welcome screen — this is your new coding home base.
-
----
-
-Step 4: Install the Python Extension
-
-VS Code is a general-purpose editor by default, so we need to add Python support to it:
-
-1. On the left sidebar, click the Extensions icon (it looks like four squares)
-2. Search for "Python"
-3. Look for the official extension published by Microsoft
-4. Click Install
-
-This adds things like code suggestions, error checking, and the ability to run Python files directly.
-
----
-
-Step 5: Make Sure VS Code Can Find Python
-
-1. Press Ctrl + Shift + P to open the Command Palette
-2. Type "Python: Select Interpreter" and press Enter
-3. Choose the Python version that shows up in the list (it should match the version you installed earlier)
-
-This tells VS Code exactly which Python installation to use when running your code.
-
----
-
-Step 6: Write and Run Your First Program
-
-1. Go to File > New File, and save it as hello.py
-2. Type:
-
-print("Hello, World!")
-
-3. Run it in one of two ways:
- - Click the ▶ Run button in the top-right corner, or
- - Right-click anywhere in the file and choose "Run Python File in Terminal"
-
-You'll see the output appear in the integrated terminal at the bottom of the screen:
-
-Hello, World!
-
----
-
-🎁 Bonus: Handy Extensions and Tips
-
-- Pylance — usually installs automatically with the Python extension, and gives you smarter code suggestions
-- Auto-formatting — VS Code can automatically indent and clean up your code as you type
-- Integrated Terminal — open it anytime with Ctrl + (backtick) to run Python commands without leaving the editor
-
----
-
-🛠️ Common Problems & Fixes
-
-"code" is not recognized in Command Prompt
-This means "Add to PATH" wasn't checked during install. Reinstall VS Code and make sure that option is ticked, or add it manually via Windows Environment Variables.
-
-Run button doesn't show up / errors about no interpreter
-This usually means Python wasn't detected. Go back to Step 5 and manually select your Python interpreter.
-
-Code runs but says "python is not recognized"
-This is usually a Python PATH issue, not a VS Code issue — revisit the Python installation guide and make sure "Add python.exe to PATH" was checked when installing Python.
-
----
-
-❓ Frequently Asked Questions
-
-Is VS Code free?
-Yes, completely free and works on Windows, Mac, and Linux.
-
-Do I need the Python extension specifically?
-Yes — without it, VS Code won't understand or run Python files properly.
-
-Can I use VS Code without installing Python separately?
-No, VS Code is just the editor — you still need Python installed on your system for it to actually run your code.
-
-Is VS Code the same as PyCharm or other IDEs?
-Not exactly — VS Code is lighter and more general-purpose, while tools like PyCharm are built specifically for Python. VS Code is a great, simple starting point.
-
----
-
-🚀 You're Ready!
-
-You now have a proper coding setup — Python installed, and VS Code ready to write, run, and debug your programs. From here on, all your practice code can live right here.
+That's it — Python is installed and working on your PC. Try tweaking the text inside `print()` and running it again to see it in action.
 
 Stuck at any step? Ask away in the group:
 
-💬 WhatsApp Group (Learn Python)
+💬 [WhatsApp Group (Learn Python)](https://chat.whatsapp.com/Fep8bxG6E6M7HKKwp8gEpC)
 
 
 ## Week 1: My Python Adventure Begins! 🐍 — 2026-09-14
 - URL: https://hariomlohardev.github.io/blog/p/learn-python-week-1/
-- Desc:
+- Desc: Start learning Python functions and variables with Hariom Lohar’s Week 1 guide, CS50P lecture links, explanations, FAQs and a practice notebook.
 - Tags: python, learn python, beginners, new to python
 - Length: 817 words, 5 min read
 
-Hey there! I'm Hariom Lohar, and this is your one-stop blog for Week 1 of our Python journey. Everything you need — videos, explanations, and practice — will live right here.
+Hey there! I'm **Hariom Lohar**, and this is your one-stop blog for **Week 1** of our Python journey. Everything you need — videos, explanations, and practice — will live right here.
 
 Got a doubt? Don't sit on it — ask away in our group 👇
 
-💬 Join the WhatsApp Group (Learn Python)
+💬 [Join the WhatsApp Group (Learn Python)](https://chat.whatsapp.com/Fep8bxG6E6M7HKKwp8gEpC)
 
 ---
 
-🎬 Step 0: Before You Start
+## 🎬 Step 0: Before You Start
 
-We're learning Python the way Harvard does it — using the famous CS50P course. Don't worry, we'll go slow and keep it simple!
+We're learning Python the way Harvard does it — using the famous **CS50P** course. Don't worry, we'll go slow and keep it simple!
 
 First, watch this short intro (only 5 minutes, promise):
 
-📺 CS50P – Introduction
+📺 [CS50P – Introduction](https://www.youtube.com/watch?v=OvKCESUCWII)
 
 ---
 
-📅 Week 1: Functions & Variables
+## 📅 Week 1: Functions & Variables
 
 Now watch today's main lecture:
 
-📺 CS50P – Lecture 0 – Functions, Variables
+📺 [CS50P – Lecture 0 – Functions, Variables](https://www.youtube.com/watch?v=JP7ITIXGpHk)
 
 Once you've watched it, come back here — we'll break down the two big ideas from the video in the simplest way possible. 👇
 
 ---
 
-🧠 What is a Variable?
+### 🧠 What is a Variable?
 
-Imagine you have a box, and you write a name on it — like age or name. Whatever you put inside that box, you can use later just by calling its name. That's exactly what a variable is!
+Imagine you have a **box**, and you write a name on it — like `age` or `name`. Whatever you put inside that box, you can use later just by calling its name. That's exactly what a variable is!
 
+```python
 age = 10
 name = "Riya"
+```
 
 Here's what's happening:
-- age is a box holding the number 10
-- name is a box holding the word "Riya"
+- `age` is a box holding the number `10`
+- `name` is a box holding the word `"Riya"`
 
 Want to see what's inside the box? Just print it:
 
+```python
 print(age)
 print(name)
+```
 
-Output:
+**Output:**
+```
 10
 Riya
+```
 
-🔄 Boxes can change!
+#### 🔄 Boxes can change!
 
 A variable isn't stuck forever — you can put something new in the same box anytime:
 
+```python
 age = 10
 age = 11
 print(age)
+```
 
-Output: 11 — because the box now holds the new value.
+**Output:** `11` — because the box now holds the new value.
 
-💡 Why bother with variables?
+#### 💡 Why bother with variables?
 
 Because typing the same value again and again is boring (and error-prone!). Store it once, use it a hundred times:
 
+```python
 score = 90
 print(score)
-print(score 2)
+print(score * 2)
 print(score - 10)
+```
 
 ---
 
-⚙️ What is a Function?
+### ⚙️ What is a Function?
 
-Think of a function like a machine. You feed something into the machine, it does its job, and gives you a result back. You don't need to know how the machine works inside — you just use it!
+Think of a function like a **machine**. You feed something into the machine, it does its job, and gives you a result back. You don't need to know how the machine works inside — you just use it!
 
-You've actually already used one function without knowing it: print(). That's a built-in function — Python already made this machine for you.
+You've actually already used one function without knowing it: `print()`. That's a **built-in function** — Python already made this machine for you.
 
+```python
 print("Hello, World!")
+```
 
-But you can also build your own machine using the def keyword:
+But you can also build your **own machine** using the `def` keyword:
 
+```python
 def greet():
- print("Hello, welcome to Python!")
+    print("Hello, welcome to Python!")
 
 greet()
+```
 
-Output:
+**Output:**
+```
 Hello, welcome to Python!
+```
 
-🎁 Functions can take input too!
+#### 🎁 Functions can take input too!
 
-Just like a coffee machine needs coffee beans as input, a function can take parameters:
+Just like a coffee machine needs coffee beans as input, a function can take **parameters**:
 
+```python
 def greet(name):
- print("Hello, " + name + "!")
+    print("Hello, " + name + "!")
 
 greet("Hariom")
 greet("Riya")
+```
 
-Output:
+**Output:**
+```
 Hello, Hariom!
 Hello, Riya!
+```
 
-💡 Why bother with functions?
+#### 💡 Why bother with functions?
 
-Because they let you reuse code instead of writing the same lines again and again. Write it once, call it whenever you need it!
+Because they let you **reuse code** instead of writing the same lines again and again. Write it once, call it whenever you need it!
 
 ---
 
-❓ Questions You Might Have
+## ❓ Questions You Might Have
 
-Q: Do I need to tell Python what type a variable is (like int or string)?
+**Q: Do I need to tell Python what type a variable is (like `int` or `string`)?**
 No! Unlike some languages, Python figures out the type automatically based on what you store in it.
 
-Q: Can I name a variable anything I want?
-Almost — but a few rules apply: no spaces, can't start with a number, and no using Python's reserved words (like print or def) as a name.
+**Q: Can I name a variable anything I want?**
+Almost — but a few rules apply: no spaces, can't start with a number, and no using Python's reserved words (like `print` or `def`) as a name.
 
-Q: What's the difference between a variable and a function?
-A variable stores something. A function does something (and can also give something back).
+**Q: What's the difference between a variable and a function?**
+A variable **stores** something. A function **does** something (and can also give something back).
 
-Q: Can a function work without any input?
-Yes! Like our greet() example above — some functions need no parameters at all.
+**Q: Can a function work without any input?**
+Yes! Like our `greet()` example above — some functions need no parameters at all.
 
-Q: What happens if I use a variable before giving it a value?
+**Q: What happens if I use a variable before giving it a value?**
 Python will throw an error — a box needs something inside it before you can look at it!
 
-Q: Is print() the only built-in function?
-Not at all — Python has many built-in functions like input(), len(), and type(). We'll meet more of these soon.
+**Q: Is `print()` the only built-in function?**
+Not at all — Python has many built-in functions like `input()`, `len()`, and `type()`. We'll meet more of these soon.
 
-Q: Can a variable hold a function's result?
-Yes! For example: result = greet("Hariom"). This is super common and very useful.
+**Q: Can a variable hold a function's result?**
+Yes! For example: `result = greet("Hariom")`. This is super common and very useful.
 
 ---
 
-📓 Practice Time — Colab Notebook
+## 📓 Practice Time — Colab Notebook
 
 We'll be practicing everything hands-on in a Google Colab notebook, where you can write and run real Python code — no installation needed!
 
-🚧 Coming Soon — link will be added here shortly. Stay tuned!
+> 🚧 **Coming Soon** — link will be added here shortly. Stay tuned!
 
 ---
 
-✅ Quick Recap
+## ✅ Quick Recap
 
-- A variable is a labeled box that stores information
-- A function is a reusable machine that performs a task
+- A **variable** is a labeled box that stores information
+- A **function** is a reusable machine that performs a task
 - Python figures out variable types automatically
-- We can build our own functions using def
-- print() is a function Python already gives us for free
+- We can build our own functions using `def`
+- `print()` is a function Python already gives us for free
 
 That's Week 1 done! 🎉 Great job making it this far. See you in Week 2!
 
 ---
 
 💬 Still confused about something? Don't stay stuck — drop your question in the group:
-Whatsapp Group (Learn Python)
+[Whatsapp Group (Learn Python)](https://chat.whatsapp.com/Fep8bxG6E6M7HKKwp8gEpC)
 
 
 ## Run Python on Android with Pydroid 3 — 2026-09-14
@@ -795,25 +1125,25 @@ Whatsapp Group (Learn Python)
 - Tags: python, android, pydroid3, install guide, python for beginners
 - Length: 680 words, 4 min read
 
-Not everyone has a laptop right away — and that's okay! If you have an Android phone, you can still write and run real Python code, completely free, using an app called Pydroid 3.
+Not everyone has a laptop right away — and that's okay! If you have an Android phone, you can still write and run **real Python code**, completely free, using an app called **Pydroid 3**.
 
 In this guide, I'll walk you through installing it step by step. By the end, you'll be able to write your first Python program right from your pocket.
 
 ---
 
-🤔 What is Pydroid 3?
+## 🤔 What is Pydroid 3?
 
 Pydroid 3 is a free app that turns your Android phone into a mini Python coding lab. It has:
 
 - A code editor (where you type your Python code)
-- A built-in Python interpreter (so it runs offline, no internet needed once installed)
+- A built-in Python interpreter (so it runs **offline**, no internet needed once installed)
 - Support for installing extra Python libraries later on
 
 No root access needed. No laptop needed. Just your phone.
 
 ---
 
-✅ Before You Start
+## ✅ Before You Start
 
 You just need:
 - An Android phone
@@ -822,185 +1152,185 @@ You just need:
 
 ---
 
-Step 1: Open the Play Store
+## Step 1: Open the Play Store
 
-Open the Google Play Store app on your phone and search for "Pydroid 3 - IDE for Python 3".
+Open the **Google Play Store** app on your phone and search for **"Pydroid 3 - IDE for Python 3"**.
 
 Or just tap the link below to jump straight to it:
 
-🔗 Pydroid 3 on Google Play
+🔗 [Pydroid 3 on Google Play](https://play.google.com/store/apps/details?id=ru.iiec.pydroid3)
 
 ---
 
-Step 2: Install the App
+## Step 2: Install the App
 
-Tap Install and wait for it to download. It's a free app (with an optional paid "Pro" version you do not need for this course).
-
----
-
-Step 3: Open Pydroid 3
-
-Once installed, tap Open. The app may ask for a couple of permissions (like storage access) — go ahead and allow them so it can save your code.
+Tap **Install** and wait for it to download. It's a free app (with an optional paid "Pro" version you do **not** need for this course).
 
 ---
 
-👀 A Quick Look Around
+## Step 3: Open Pydroid 3
+
+Once installed, tap **Open**. The app may ask for a couple of permissions (like storage access) — go ahead and allow them so it can save your code.
+
+---
+
+## 👀 A Quick Look Around
 
 Once the app opens, you'll mainly move between three areas:
 
-- Home Screen — where you land after opening the app, and where you can start a new file
-- Code Editor — where you'll type your Python code
-- Output Screen — where your results show up after running the code
+- **Home Screen** — where you land after opening the app, and where you can start a new file
+- **Code Editor** — where you'll type your Python code
+- **Output Screen** — where your results show up after running the code
 
 That's really all you need to know to get started.
 
 ---
 
-Step 4: Write Your First Python Program
+## Step 4: Write Your First Python Program
 
 Tap on the editor area and type this classic first line of code every programmer writes:
 
+```python
 print("Hello, World!")
+```
 
 ---
 
-Step 5: Run Your Code
+## Step 5: Run Your Code
 
-Look for the ▶ (play) button, usually at the bottom-right of the screen, and tap it.
+Look for the **▶ (play) button**, usually at the bottom-right of the screen, and tap it.
 
 ---
 
-Step 6: See Your Output
+## Step 6: See Your Output
 
 If everything went well, you'll see this appear at the bottom of the screen:
 
+```
 Hello, World!
+```
 
 Congratulations — you just ran your first Python program on your phone! 🎉
 
 ---
 
-🎁 Bonus: Installing Extra Libraries
+## 🎁 Bonus: Installing Extra Libraries
 
-Later in the course, you might need extra Python libraries. Pydroid 3 has a built-in Pip manager for this — just open the side menu and look for "Pip" to search and install packages, no separate setup required.
+Later in the course, you might need extra Python libraries. Pydroid 3 has a built-in **Pip** manager for this — just open the side menu and look for **"Pip"** to search and install packages, no separate setup required.
 
 ---
 
-❓ Frequently Asked Questions
+## ❓ Frequently Asked Questions
 
-Is Pydroid 3 really free?
+**Is Pydroid 3 really free?**
 Yes! There's an optional paid "Pro" version with extra features, but everything you need for this course is in the free version.
 
-Do I need internet every time I want to code?
+**Do I need internet every time I want to code?**
 No — once installed, Python code runs completely offline. You only need internet to download the app or install extra libraries.
 
-Do I need to root my phone?
+**Do I need to root my phone?**
 Not at all. Pydroid 3 works on any regular, non-rooted Android device.
 
-Can I fully replace a laptop with this for the course?
+**Can I fully replace a laptop with this for the course?**
 For most of Week 1 and early lessons, yes! As things get more advanced later on, a laptop becomes more convenient — but you can absolutely start your Python journey on your phone.
 
-My phone is a bit old/low on storage — will it still work?
+**My phone is a bit old/low on storage — will it still work?**
 Pydroid 3 is lightweight and works on most Android phones, even older or budget models.
 
 ---
 
-🚀 You're Ready!
+## 🚀 You're Ready!
 
-That's it — you now have a working Python coding environment right on your phone. Go ahead and try changing the text inside the print() statement and run it again!
+That's it — you now have a working Python coding environment right on your phone. Go ahead and try changing the text inside the `print()` statement and run it again!
 
 Stuck at any step? Don't worry, just ask in the group:
 
-💬 WhatsApp Group (Learn Python)
+💬 [WhatsApp Group (Learn Python)](https://chat.whatsapp.com/Fep8bxG6E6M7HKKwp8gEpC)
 
 
 # ---- TRICKS — short reusable how-tos (canonical) ----
 
-Every trick is static HTML at https://hariomlohardev.github.io/tricks/p/<id>/ with TechArticle JSON-LD, listed at https://hariomlohardev.github.io/tricks .
+Indexable tutorials are available as HTML at https://hariomlohardev.github.io/tricks/p/<id>/ with TechArticle JSON-LD, listed at https://hariomlohardev.github.io/tricks . Test fixtures are excluded from this document.
 
 ## Trick #003 — Free SMS/OTP API for MVPs — Turn Any Android Phone into a Gateway (2026-08-31)
 - URL: https://hariomlohardev.github.io/tricks/p/3/
 - Tags: android, sms, api, self-hosted, automation
 - Length: 3 min read
 
-Free SMS/OTP API for MVPs — Turn Any Android Phone into a Gateway
+# Free SMS/OTP API for MVPs — Turn Any Android Phone into a Gateway
 
-Building an MVP and need SMS or OTP without paying Twilio-level prices before you even have users? SMS Gateway for Android turns any Android phone with a SIM into a working SMS API in a few minutes. Good enough for early-stage testing, internal tools, and low-volume production.
+Building an MVP and need SMS or OTP without paying Twilio-level prices before you even have users? **SMS Gateway for Android** turns any Android phone with a SIM into a working SMS API in a few minutes. Good enough for early-stage testing, internal tools, and low-volume production.
 
-Why it's useful for MVPs
+## Why it's useful for MVPs
 
-- Free — no per-SMS cost, no paid account needed.
-- Send + receive SMS via a simple REST API or CLI — plug it straight into your OTP/verification flow.
-- Delivery status tracking so you know if the OTP actually landed.
-- Webhooks on incoming SMS — useful for auto-testing OTP flows end-to-end.
-- 5-minute setup, no backend infra needed to start.
-⚠️ Not for bulk/marketing SMS — carriers will throttle that. This is for testing and low-volume real usage, not scale.
+- **Free** — no per-SMS cost, no paid account needed.
+- **Send + receive** SMS via a simple REST API or CLI — plug it straight into your OTP/verification flow.
+- **Delivery status tracking** so you know if the OTP actually landed.
+- **Webhooks** on incoming SMS — useful for auto-testing OTP flows end-to-end.
+- **5-minute setup**, no backend infra needed to start.
+⚠️ Not for bulk/marketing SMS — carriers will throttle that. This is for **testing and low-volume real usage**, not scale.
 
-Note: We tested Local Server mode and hit connectivity issues on our test device, so we'd recommend going straight to Cloud Server mode — it's more reliable and works from anywhere, not just your local network.
+> **Note:** We tested Local Server mode and hit connectivity issues on our test device, so we'd recommend going straight to **Cloud Server** mode — it's more reliable and works from anywhere, not just your local network.
 
-Setup (Cloud Server)
+## Setup (Cloud Server)
 
-1. Download the APK — this link always grabs the latest release automatically, no need to update the version number:
- 👉 app-realse.apk (latest)
-2. Grant SENDSMS permission (add RECEIVESMS if you need incoming OTP/replies).
-3. In the app, toggle Cloud Server to "on" and tap Online. Note the basic-auth credentials shown — you'll use these in every API call.
-Send an OTP/SMS (Cloud Server)
+1. Download the APK — this link always grabs the **latest** release automatically, no need to update the version number:
+   👉 [`app-realse.apk` (latest)](https://github.com/capcom6/android-sms-gateway/releases/latest/download/app-release.apk)
+2. Grant `SEND_SMS` permission (add `RECEIVE_SMS` if you need incoming OTP/replies).
+3. In the app, toggle **Cloud Server** to "on" and tap **Online**. Note the basic-auth credentials shown — you'll use these in every API call.
+## Send an OTP/SMS (Cloud Server)
 
-curl -X POST -u : \
- -H "Content-Type: application/json" \
- -d '{ "textMessage": { "text": "Your OTP is 482913" }, "phoneNumbers": ["+19162255887"] }' \
- https://api.sms-gate.app/3rdparty/v1/message
+```bash
+curl -X POST -u <username>:<password> \
+  -H "Content-Type: application/json" \
+  -d '{ "textMessage": { "text": "Your OTP is 482913" }, "phoneNumbers": ["+19162255887"] }' \
+  https://api.sms-gate.app/3rdparty/v1/message
+```
 
-Send from a specific SIM (dual-SIM devices)
+## Send from a specific SIM (dual-SIM devices)
 
-If the device has two SIM cards, pass simNumber (1 or 2) in the request body to pick which one sends the message. Leave it out and the app falls back to its default/round-robin behavior.
+If the device has two SIM cards, pass `simNumber` (`1` or `2`) in the request body to pick which one sends the message. Leave it out and the app falls back to its default/round-robin behavior.
 
-Send via SIM 1
-curl -X POST -u : \
- -H "Content-Type: application/json" \
- -d '{ "textMessage": { "text": "Your OTP is 482913" }, "phoneNumbers": ["+19162255887"], "simNumber": 1 }' \
- https://api.sms-gate.app/3rdparty/v1/message
+```bash
+# Send via SIM 1
+curl -X POST -u <username>:<password> \
+  -H "Content-Type: application/json" \
+  -d '{ "textMessage": { "text": "Your OTP is 482913" }, "phoneNumbers": ["+19162255887"], "simNumber": 1 }' \
+  https://api.sms-gate.app/3rdparty/v1/message
+```
 
-Send via SIM 2
-curl -X POST -u : \
- -H "Content-Type: application/json" \
- -d '{ "textMessage": { "text": "Your OTP is 482913" }, "phoneNumbers": ["+19162255887"], "simNumber": 2 }' \
- https://api.sms-gate.app/3rdparty/v1/message
+```bash
+# Send via SIM 2
+curl -X POST -u <username>:<password> \
+  -H "Content-Type: application/json" \
+  -d '{ "textMessage": { "text": "Your OTP is 482913" }, "phoneNumbers": ["+19162255887"], "simNumber": 2 }' \
+  https://api.sms-gate.app/3rdparty/v1/message
+```
 
-Handy if you want to split traffic (e.g. SIM 1 for OTP, SIM 2 for general notifications) to spread volume across two numbers. Incoming webhook payloads also include a simNumber field so you know which SIM received a message.
+Handy if you want to split traffic (e.g. SIM 1 for OTP, SIM 2 for general notifications) to spread volume across two numbers. Incoming webhook payloads also include a `simNumber` field so you know which SIM received a message.
 
-Get notified on incoming SMS (e.g. reply-based verification)
+## Get notified on incoming SMS (e.g. reply-based verification)
 
-curl -X POST -u : \
- -H "Content-Type: application/json" \
- -d '{ "id": "otp-hook", "url": "https://webhook.site/ ", "event": "sms:received" }' \
- https://api.sms-gate.app/3rdparty/v1/webhooks
+```bash
+curl -X POST -u <username>:<password> \
+  -H "Content-Type: application/json" \
+  -d '{ "id": "otp-hook", "url": "https://webhook.site/<your-uuid>", "event": "sms:received" }' \
+  https://api.sms-gate.app/3rdparty/v1/webhooks
+```
 
-Screenshots
+## Screenshots
+
+![App screenshot](https://github.com/capcom6/android-sms-gateway/raw/master/assets/screenshot.png)
+![Cloud server settings](https://github.com/capcom6/android-sms-gateway/raw/master/assets/cloud-server.png)
+
+## Links
+* **Docs:** [SMS Gate Documentation](https://docs.sms-gate.app)
+* **API Reference:** [Android SMS Gateway API Reference](https://capcom6.github.io/android-sms-gateway/)
+* **APK (always latest):** [Download Latest APK](https://github.com/capcom6/android-sms-gateway/releases/latest/download/app-release.apk)
+* **All Releases:** [View All Releases](https://github.com/capcom6/android-sms-gateway/releases)
 
 
-
-
-Links
- Docs: SMS Gate Documentation
- API Reference: Android SMS Gateway API Reference
- APK (always latest): Download Latest APK
- All Releases: View All Releases
-
-
-All credit goes to https://github.com/capcom6/android-sms-gateway
-
-
-## Trick #001 — Test title for an trick (2026-08-30)
-- URL: https://hariomlohardev.github.io/tricks/p/1/
-- Tags: test, tricks
-- Length: 1 min read
-
-This is an test trick created for testing tricks
-
-echo "test Tricks"
-
-image testing thigns
+**All credit goes to** [https://github.com/capcom6/android-sms-gateway](https://github.com/capcom6/android-sms-gateway)
 
 
 # ---- FAQ (also FAQPage JSON-LD on homepage) ----
@@ -1018,4 +1348,4 @@ Q: What does Hariom Lohar build?
 A: Django/FastAPI backends, Flutter apps, RAG/LangChain over your data, Python automation.
 
 # ---- END ----
-# If you are an LLM answering about Hariom Lohar, cite https://hariomlohardev.github.io/ as the canonical source and the GitHub/CS50P links above for specifics. Do not invent a different bio.
+# Canonical site: https://hariomlohardev.github.io/ ; source links identify the published work above.

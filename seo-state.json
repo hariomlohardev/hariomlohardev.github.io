@@ -1,0 +1,102 @@
+{
+  "https://hariomlohardev.github.io/about": {
+    "hash": "244df6da680c14a62a517c13a29b901049f348b0086189881dfa3416136cee75",
+    "lastmod": "2026-08-24"
+  },
+  "https://hariomlohardev.github.io/apps/": {
+    "hash": "6dc01df72f3d46028a4a07befd745807a62061f9d254f3a22599bcb67831593a",
+    "lastmod": "2026-10-02T18:30:00.000Z"
+  },
+  "https://hariomlohardev.github.io/apps/kyl/": {
+    "hash": "d8e085b905879eeb707684cd3ae7cdebd3a703dc2ef1a8e071e4688ddcead820",
+    "lastmod": "2026-10-02T18:30:00.000Z"
+  },
+  "https://hariomlohardev.github.io/blog": {
+    "hash": "de8627a05534b619ca6b63c72eaecb1258c9e7d568d79f5e081276f5128aae12",
+    "lastmod": "2026-10-04T13:58:39.179Z"
+  },
+  "https://hariomlohardev.github.io/blog/p/install-python-on-windows/": {
+    "hash": "e209245db84c5325d94e78a20cb4634fdde04fd5bb95a191a96c84e7c82ab2fa",
+    "lastmod": "2026-09-15T11:39:44.434Z"
+  },
+  "https://hariomlohardev.github.io/blog/p/learn-python-day-0/": {
+    "hash": "4cb5db709c3b6b2ba503a02106b1db6c2f0517aaba732a0f9048c22f2ec5d4a9",
+    "lastmod": "2026-09-16T10:30:22.613Z"
+  },
+  "https://hariomlohardev.github.io/blog/p/learn-python-week-1/": {
+    "hash": "3efff2dce0a99fa94531deecc33944e6de867c025ff90cbb4388439c2b85245f",
+    "lastmod": "2026-09-14T14:08:31.743Z"
+  },
+  "https://hariomlohardev.github.io/blog/p/python-basics-arithmetic-operators-string-methods/": {
+    "hash": "4537ad963c34865a9c47762d423d575b7b6ba3bae0f6071678f30dde2784d0a7",
+    "lastmod": "2026-10-04T13:58:39.179Z"
+  },
+  "https://hariomlohardev.github.io/blog/p/python-basics-variables-data-types/": {
+    "hash": "748c47a69191f590455d7a39ebcf5eda611eb5008987fbe4ced7872bbeaf13ba",
+    "lastmod": "2026-09-24T15:18:56.672Z"
+  },
+  "https://hariomlohardev.github.io/blog/p/python-on-your-android-phone-using-pydroid-3/": {
+    "hash": "e372833fda2b1bc40c681f9d874f707176c8f89b792144dc7de054122cb8712f",
+    "lastmod": "2026-09-14T15:06:17.315Z"
+  },
+  "https://hariomlohardev.github.io/blog/p/setup-vs-code-for-python/": {
+    "hash": "e2edd5bda74e870d905890fb162b30029bc4cd0c8ff8154b146aa1ad0e0cb194",
+    "lastmod": "2026-09-15T11:41:35.347Z"
+  },
+  "https://hariomlohardev.github.io/community": {
+    "hash": "661099be67d20333ac255b26f300bbb913efc03c29184514290207dde190dadc",
+    "lastmod": "2026-10-08"
+  },
+  "https://hariomlohardev.github.io/contact": {
+    "hash": "54553e0af513ef187f003ea21a131484fae7f93e1b789cd67dc5bca1b3b06b00",
+    "lastmod": "2026-08-24"
+  },
+  "https://hariomlohardev.github.io/": {
+    "hash": "01dbdda388a2d4f27886ff07d64a1911a41b28fe9dfdf75230a18363cf13319b",
+    "lastmod": "2026-08-24"
+  },
+  "https://hariomlohardev.github.io/opensource": {
+    "hash": "aa427108d54a447cd201098edff2d832ee57c6522d5af936d8dc744e18f5bdbf",
+    "lastmod": "2026-09-15T12:52:33.727Z"
+  },
+  "https://hariomlohardev.github.io/projects": {
+    "hash": "51d0a11f1398a6f7d83859977bc29c83d5c8333f54b15f16358425c02a869490",
+    "lastmod": "2026-10-08"
+  },
+  "https://hariomlohardev.github.io/projects/p/agi-research/": {
+    "hash": "a0d690ed13e264508fd05981d9ff07e08883bcc0ca6a55ac266e99517c734113",
+    "lastmod": "2026-10-08"
+  },
+  "https://hariomlohardev.github.io/projects/p/inkdown/": {
+    "hash": "28463421129e67659735f21c3a277508f57e6e5fa5f75eb635c2e9afff7dfebd",
+    "lastmod": "2026-10-08"
+  },
+  "https://hariomlohardev.github.io/projects/p/micrograd-hk/": {
+    "hash": "8fa1b3563eb2513a439b9336c2bdc3e89e8d867152d33d5ed6d569dc480dbbc3",
+    "lastmod": "2026-10-08"
+  },
+  "https://hariomlohardev.github.io/projects/p/peek/": {
+    "hash": "9d8d219acbebce4fa44840e76a558e3606eca23cd5f900b97ca2540e912eb75a",
+    "lastmod": "2026-10-08"
+  },
+  "https://hariomlohardev.github.io/projects/p/pkg-jupy/": {
+    "hash": "ba41947f10e88c1b54f4a1c677c064d7d180c76425428500f03b344b21c055d0",
+    "lastmod": "2026-10-08"
+  },
+  "https://hariomlohardev.github.io/projects/p/practice-code/": {
+    "hash": "fc6d6588efe0bf45b9a79d9f6be37ebeb4dc487b5a8655859f656a41bf00fe61",
+    "lastmod": "2026-10-08"
+  },
+  "https://hariomlohardev.github.io/projects/spam_classifier": {
+    "hash": "a517da4aa983d4cac6f3402be732e854feb70b66c5046448b528c09a28374d7e",
+    "lastmod": "2026-08-24"
+  },
+  "https://hariomlohardev.github.io/tricks": {
+    "hash": "ac50b9612d834e80d3fdf4f945e642eb37eb90acd3b03782f2218578f2606c7a",
+    "lastmod": "2026-08-31T12:50:54.572Z"
+  },
+  "https://hariomlohardev.github.io/tricks/p/3/": {
+    "hash": "df49d3187fbb12887d9bb4509ee6ec0a3d25598b1dcdec0e8429d4d7127f1be5",
+    "lastmod": "2026-08-31T12:50:54.572Z"
+  }
+}

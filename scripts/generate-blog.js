@@ -12,7 +12,7 @@
  * build fails loudly instead of quietly wiping pages.
  *
  * Reads Supabase posts → feed.xml + blog/p/<slug>/index.html + og/<slug>.svg,
- * prunes whatever no longer exists, and patches sitemap.xml.
+ * prunes whatever no longer exists. generate-seo.js owns the final sitemap.
  * Run locally: SUPABASE_URL=... SUPABASE_ANON_KEY=... node scripts/generate-blog.js
  * Also invoked by .github/workflows/pages.yml before deploy.
  */
@@ -26,6 +26,7 @@ const FEED_XML = path.join(ROOT, "feed.xml");
 const SITEMAP_XML = path.join(ROOT, "sitemap.xml");
 const PROJECTS_JSON = path.join(ROOT, "projects-data.json");
 const SITE = "https://hariomlohardev.github.io";
+const SEO = require('../assets/seo.js');
 
 // ── helpers ──────────────────────────────────────────────────────────
 function escHtml(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
@@ -83,7 +84,7 @@ async function loadPostsFromSupabase(){
   const key = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY;
   if(!url || !key) throw new Error("SUPABASE_URL + SUPABASE_ANON_KEY (or SERVICE_ROLE_KEY) required — Supabase is the only source of posts");
   {
-    const endpoint = `${url.replace(/\/$/,'')}/rest/v1/posts?select=slug,title,description,date,tags,cover,html,raw,word_count,reading_minutes,published,max_comment_words&published=eq.true&order=date.desc`;
+    const endpoint = `${url.replace(/\/$/,'')}/rest/v1/posts?select=slug,title,description,date,tags,cover,html,raw,word_count,reading_minutes,published,max_comment_words,updated_at,created_at&published=eq.true&order=date.desc`;
     const res = await fetch(endpoint, { headers: { apikey: key, Authorization: `Bearer ${key}` } });
     if(!res.ok){
       const txt = await res.text().catch(()=> '');
@@ -117,7 +118,7 @@ async function loadPostsFromSupabase(){
       else maxCommentWords = n;
       const file = `${dateStr}-${slug}.md`;
       const postUrl = `${SITE}/blog/p/${slug}/`;
-      return { slug, title, date: dateStr, description, tags, html, raw, wordCount: wc, readingMinutes: reading, url: postUrl, file, cover, max_comment_words: maxCommentWords };
+      return { slug, title, date: dateStr, description, tags, html, raw, wordCount: wc, readingMinutes: reading, url: postUrl, file, cover, max_comment_words: maxCommentWords, updated_at: r.updated_at, created_at: r.created_at };
     }).filter(p=> /^\d{4}-\d{2}-\d{2}$/.test(p.date));
     // Supabase already sorts date desc, but ensure
     posts.sort((a,b)=> b.date.localeCompare(a.date));
@@ -169,15 +170,19 @@ const OG_DIR = path.join(ROOT, "og");
 try{ fs.mkdirSync(OG_DIR, {recursive:true}); }catch{}
 
 // ── generate blog/p/<slug>/index.html ─────────────────────────────
-// Dynamic shell: only stable identifiers (slug, canonical URL) are baked in.
-// Every post-specific byte renders from the database at view time.
+// Same UI on both hosts: complete HTML first, then live database hydration.
 function postPage(post){
+  const body = post.html || mdToHtml(parseFrontmatter(post.raw || '').body);
+  const generatedImage = /^[a-z0-9-]+$/.test(post.slug) && fs.existsSync(path.join(OG_DIR, post.slug + '.png')) ? SITE + '/og/' + post.slug + '.png' : undefined;
+  post = SEO.normalizePost({ image: generatedImage, ...post, html: body });
   const canonical = post.url;
-  // Site-level graph only — post nodes would be a stale snapshot.
+  const title = SEO.titleForPost(post);
+  const isLog = post.tags.some(t => String(t).toLowerCase() === 'daily-log');
+  const kicker = (isLog ? 'Daily Log' : 'Article') + ' · ' + fmtDate(String(post.date || '').slice(0,10)) + ' · ' + post.readingMinutes + ' min · Hariom Lohar';
   const personNode = {"@type":"Person","@id":SITE+"/#person","name":"Hariom Lohar","alternateName":["hariomlohardev","Hariom Lohar hariomlohardev"],"disambiguatingDescription":"The Hariom Lohar at hariomlohardev.github.io — GitHub hariomlohardev, Harvard CS50P 2026 cert 544021b8-ab89-4eb2-a433-9c0b949e658f — not any other person named Hariom Lohar.","identifier":"https://github.com/hariomlohardev","nationality":{"@type":"Country","name":"India"},"givenName":"Hariom","familyName":"Lohar","url":SITE+"/","image":SITE+"/certificates/1.png","jobTitle":"Python / Django / Flutter Developer & AGI Researcher","description":"Hariom Lohar — Harvard CS50P certified 2026. Python, Django, FastAPI & Flutter developer and AGI researcher from India, rebuilding intelligence from first principles since 1 July 2026 in public. GitHub: hariomlohardev. Canonical site hariomlohardev.github.io.","address":{"@type":"PostalAddress","addressCountry":"IN"},"sameAs":["https://github.com/hariomlohardev","https://x.com/HariomloharAGI","https://x.com/hariomlohardev","https://www.linkedin.com/in/hariomlohar","https://dev.to/hariomlohardev","https://huggingface.co/hariomlohardev","https://hashnode.com/@hariomlohardev","https://medium.com/@hariomlohardev",SITE+"/"],"knowsAbout":["Python","Django","FastAPI","Flutter","Dart","LangChain","RAG","NumPy","PyTorch","CNNs","Transformers","Computer Vision","Backpropagation","AGI","Attention","Residual Networks","LayerNorm","Harvard CS50P"],"hasCredential":{"@type":"EducationalOccupationalCredential","name":"CS50's Introduction to Programming with Python","credentialCategory":"certificate","recognizedBy":{"@type":"Organization","name":"Harvard University"},"url":"https://cs50.harvard.edu/certificates/544021b8-ab89-4eb2-a433-9c0b949e658f"}};
   const websiteNode = {"@type":"WebSite","@id":SITE+"/#website","url":SITE+"/","name":"Hariom Lohar — Lab Notebook No.01","alternateName":"hariomlohardev.github.io","description":"Official site of Hariom Lohar (hariomlohardev on GitHub) — Python/Django/Flutter, Harvard CS50P 2026, and AGI research lab notebook.","inLanguage":"en-IN","publisher":{"@id":SITE+"/#person"}};
-  // Minimal stable graph — post nodes render client-side from the database.
-  const shellLd = {"@context":"https://schema.org","@graph":[personNode, websiteNode,{"@type":"WebPage","@id":canonical+"#webpage","url":canonical,"isPartOf":{"@id":SITE+"/#website"},"inLanguage":"en-IN"}]};
+  personNode.image = SITE + '/assets/hariom-lohar.jpg';
+  const shellLd = {"@context":"https://schema.org","@graph":[personNode, websiteNode, ...SEO.postNodes(post)]};
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -185,10 +190,10 @@ function postPage(post){
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#F6F4EE" />
 <meta name="color-scheme" content="light" />
-<title>Post — Hariom Lohar · Lab Notebook №01</title>
-<meta name="description" content="Blog post by Hariom Lohar (hariomlohardev) — Lab Notebook №01. Content loads live from the database." />
+<title>${escHtml(title)}</title>
+<meta name="description" content="${escHtml(post.seoDescription)}" />
 <meta name="author" content="Hariom Lohar" />
-<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 <link rel="canonical" href="${canonical}" />
 <link rel="author" href="https://github.com/hariomlohardev" />
 <link rel="me" href="https://github.com/hariomlohardev" />
@@ -200,20 +205,23 @@ function postPage(post){
 <meta property="og:site_name" content="Hariom Lohar — Lab Notebook №01" />
 <meta property="og:locale" content="en_IN" />
 <meta property="og:url" content="${canonical}" />
-<meta property="og:title" content="Blog post — Hariom Lohar" />
-<meta property="og:description" content="Blog post by Hariom Lohar (hariomlohardev) — Lab Notebook №01." />
+<meta property="og:title" content="${escHtml(title)}" />
+<meta property="og:description" content="${escHtml(post.seoDescription)}" />
 <meta property="og:type" content="article" />
-<meta property="og:image" content="${SITE}/og/blog.png" />
+<meta property="og:image" content="${escHtml(post.image)}" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:type" content="image/png" />
-<meta property="og:image:alt" content="Blog post — Hariom Lohar — Lab Notebook №01" />
+<meta property="og:image:alt" content="${escHtml(post.title)}" />
+${post.datePublished ? '<meta property="article:published_time" content="' + post.datePublished + '" />' : ''}
+${post.dateModified ? '<meta property="article:modified_time" content="' + post.dateModified + '" />' : ''}
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Blog post — Hariom Lohar" />
-<meta name="twitter:description" content="Blog post by Hariom Lohar (hariomlohardev) — Lab Notebook №01." />
-<meta name="twitter:image" content="${SITE}/og/blog.png" />
+<meta name="twitter:title" content="${escHtml(title)}" />
+<meta name="twitter:description" content="${escHtml(post.seoDescription)}" />
+<meta name="twitter:image" content="${escHtml(post.image)}" />
+<meta name="twitter:image:alt" content="${escHtml(post.title)}" />
 <meta name="twitter:creator" content="@HariomloharAGI" />
-<script type="application/ld+json">${JSON.stringify(shellLd)}</script>
+<script type="application/ld+json" id="postStructuredData">${SEO.safeJson(shellLd)}</script>
 <meta name="supabase-anon" content="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJnbXZocHRlYmtzbGtqbGVvaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0NDQwMTAsImV4cCI6MjEwMzAyMDAxMH0.nnaZiyKNOx-eT_5JTQNDwk5b3PCDKZv4f9Yc6wQtk_k" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="icon" type="image/png" href="/favicon.png" />
@@ -224,6 +232,7 @@ function postPage(post){
 <link rel="preload" href="/assets/fonts/fraunces-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/fonts.css?v=1">
 <script src="/assets/md.js?v=1"></script>
+<script src="/assets/seo.js?v=1"></script>
 <style>
 :root{
   --paper:#F6F4EE;--paper-2:#EFECE2;--sheet:#FBFAF6;
@@ -503,28 +512,25 @@ html:not(.js) .rv{opacity:1;transform:none}
     <div class="breadcrumb">
       <a href="/">Hariom Lohar</a><span class="sep">/</span>
       <a href="/blog">Blog</a><span class="sep">/</span>
-      <span class="cur" id="postCrumb">Post</span>
+      <span class="cur" id="postCrumb">${escHtml(post.title)}</span>
     </div>
     <div class="hero">
       <p class="eyebrow rv"><i aria-hidden="true"></i>
-        <span id="postKicker">Loading…</span>
+        <span id="postKicker">${escHtml(kicker)}</span>
       </p>
-      <h1 class="rv" id="postTitle">Loading…</h1>
-      <p class="lede rv" id="postLede"></p>
+      <h1 class="rv" id="postTitle">${escHtml(post.title)}</h1>
+      <p class="lede rv" id="postLede">${escHtml(post.description)}</p>
       <div class="hero-foot rv">
-        <div class="meta" id="postMeta"></div>
-        <div class="tags" id="postTags"></div>
+        <div class="meta" id="postMeta"><span><b>By Hariom Lohar</b> (hariomlohardev)</span><span class="sep"> · </span><span>${post.wordCount} words</span><span class="sep"> · </span><span>committed in public</span></div>
+        <div class="tags" id="postTags">${post.tags.map(t => '<a href="/blog#tag=' + encodeURIComponent(t) + '">#' + escHtml(t) + '</a>').join(' ')}</div>
       </div>
     </div>
     <div class="rule" aria-hidden="true"></div>
     <article class="rv">
       <div class="prose" id="postBody">
-        <div style="height:16px;background:var(--paper-2);border:1px solid var(--line);margin:10px 0"></div>
-        <div style="height:16px;background:var(--paper-2);border:1px solid var(--line);margin:10px 0;width:92%"></div>
-        <div style="height:16px;background:var(--paper-2);border:1px solid var(--line);margin:10px 0;width:78%"></div>
+        ${body}
       </div>
-      <p id="postStatus" style="font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:12px">Loading post from the database…</p>
-      <noscript><p style="margin-top:12px">This post loads live from the database — enable JavaScript, or browse the <a href="/blog" style="text-decoration:underline">blog index</a>.</p></noscript>
+      <p id="postStatus" style="font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:12px;display:none"></p>
       <div class="endmark" aria-hidden="true">◆</div>
     </article>
     <section class="flat-sec rv" id="hl-rating" aria-label="Rate this post" data-slug="${post.slug}">
@@ -816,20 +822,22 @@ document.getElementById('copyBtn').addEventListener('click',function(){
   }); }
   if(textInput){ textInput.addEventListener('keydown',function(e){ if((e.metaKey||e.ctrlKey)&&e.key==='Enter'){ postBtn.click(); } }); }
 })();
-/* — Dynamic post shell: no baked content — everything renders from the database. */
+/* — Refresh the pre-rendered article from the database. */
 (function(){
 "use strict";
-var POST_SLUG='${post.slug}';
-var POST_URL='${canonical}';
+var POST_SLUG=${SEO.safeJson(post.slug)};
+var POST_URL=${SEO.safeJson(canonical)};
 var API_BASE=(location.hostname==='hariomlohardev.github.io')?'https://hariomlohardev.vercel.app':'';
 var ANON=(document.querySelector('meta[name="supabase-anon"]')||{}).content||'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJnbXZocHRlYmtzbGtqbGVvaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0NDQwMTAsImV4cCI6MjEwMzAyMDAxMH0.nnaZiyKNOx-eT_5JTQNDwk5b3PCDKZv4f9Yc6wQtk_k';
 function fmtDay(d){try{return new Date(d+'T00:00:00+05:30').toLocaleDateString('en-GB',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric'}).toUpperCase();}catch(e){return d||'';}}
 function fail(msg){
+  if(document.getElementById('postBody').textContent.trim())return;
   var t=document.getElementById('postTitle'); if(t)t.textContent='Not available';
   var k=document.getElementById('postKicker'); if(k)k.textContent='Supabase';
   var s=document.getElementById('postStatus'); if(s)s.textContent=msg;
 }
 function render(p){
+  if(window.SEO)window.SEO.applyPost(document,p);
   var tags=Array.isArray(p.tags)?p.tags:[];
   var isLog=tags.map(function(t){return String(t).toLowerCase();}).indexOf('daily-log')!==-1;
   var k=document.getElementById('postKicker');
@@ -837,12 +845,9 @@ function render(p){
   if(p.title){
     var h=document.getElementById('postTitle'); if(h)h.textContent=p.title;
     var c=document.getElementById('postCrumb'); if(c)c.textContent=p.title;
-    document.title=p.title+' — Hariom Lohar · Lab Notebook №01';
+    if(!window.SEO)document.title=p.title+' — Hariom Lohar';
   }
-  if(p.description){
-    var l=document.getElementById('postLede'); if(l)l.textContent=p.description;
-    var d=document.querySelector('meta[name="description"]'); if(d)d.setAttribute('content',p.description);
-  }
+  var l=document.getElementById('postLede'); if(l)l.textContent=p.description||'';
   var words=p.wordCount||p.word_count||'—';
   var m=document.getElementById('postMeta');
   if(m)m.innerHTML='<span><b>By Hariom Lohar</b> (hariomlohardev)</span><span class="sep"> · </span><span>'+escHtml(String(words))+' words</span><span class="sep"> · </span><span>committed in public</span>';
@@ -877,7 +882,7 @@ fetch(API_BASE+'/api/blog/post?slug='+encodeURIComponent(POST_SLUG),{cache:'no-s
   .then(function(r){if(!r.ok)throw 0;return r.json();})
   .then(function(j){ if(j&&j.ok&&j.post)return j.post; throw 0; })
   .catch(function(){
-    var url='https://rgmvhptebkslkjleoilc.supabase.co/rest/v1/posts?slug=eq.'+encodeURIComponent(POST_SLUG)+'&published=eq.true&select=slug,title,description,date,tags,cover,html,raw,word_count,reading_minutes,published,max_comment_words';
+    var url='https://rgmvhptebkslkjleoilc.supabase.co/rest/v1/posts?slug=eq.'+encodeURIComponent(POST_SLUG)+'&published=eq.true&select=slug,title,description,date,tags,cover,html,raw,word_count,reading_minutes,published,max_comment_words,updated_at,created_at';
     return fetch(url,{headers:{apikey:ANON,Authorization:'Bearer '+ANON},cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(a){ if(a&&a.length)return a[0]; throw 0; });
   })
   .then(render)
@@ -901,12 +906,15 @@ async function main(){
     <title>${escXml(p.title)}</title>
     <link>${escXml(p.url)}</link>
     <guid isPermaLink="true">${escXml(p.url)}</guid>
-    <description>${escXml(p.description)}</description>
+    <description>${escXml(SEO.descriptionFor(p))}</description>
     <pubDate>${rssDate(p.date)}</pubDate>
     <category>${(p.tags||[]).map(t=>escXml(t)).join("</category>\n    <category>")}</category>
+    <dcterms:modified>${SEO.normalizePost(p).dateModified}</dcterms:modified>
+    <portfolio:description>${escXml(p.description)}</portfolio:description>
+    <content:encoded>${escXml(p.html)}</content:encoded>
   </item>`).join("\n");
   const feed = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:portfolio="https://hariomlohardev.github.io/rss/">
 <channel>
   <title>Hariom Lohar — Lab Notebook No.01 · Blog &amp; Daily Logs</title>
   <link>${SITE}/blog</link>
@@ -941,7 +949,7 @@ ${feedItems}
   // A deleted post has to disappear from the site, not linger as a static page.
   const live = new Set(posts.map(p=>p.slug));
   // og/ also holds page and project images — only a post's own svg may go
-  const keepOg = new Set(["404","about","avatar-circle","blog","community","contact","home","opensource","projects","thanks","tricks"]);
+  const keepOg = new Set(["404","about","avatar-circle","blog","community","contact","home","opensource","projects","thanks","tricks","kyl"]);
   try{
     const pj = JSON.parse(fs.readFileSync(PROJECTS_JSON,"utf8"));
     (Array.isArray(pj) ? pj : (pj.projects||[])).forEach(x=>{ if(x && x.slug) keepOg.add(String(x.slug)); });
@@ -975,34 +983,8 @@ ${feedItems}
       return "";
     });
     if(droppedUrls) console.log(`✕ sitemap.xml — dropped ${droppedUrls} url block(s) for deleted posts`);
-    const hasBlog = sitemap.includes("/blog");
-    const today = new Date().toISOString().slice(0,10);
-    if(!hasBlog){
-      const entries = [`  <url><loc>${SITE}/blog</loc><lastmod>${today}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>`]
-        .concat(posts.map(p=>`  <url><loc>${escXml(p.url)}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>`))
-        .join("\n");
-      sitemap = sitemap.replace("</urlset>", entries+"\n</urlset>");
-      fs.writeFileSync(SITEMAP_XML, sitemap);
-      console.log(`→ patched ${SITEMAP_XML} (+${posts.length+1} urls from ${source})`);
-    } else {
-      // inject any missing post urls incrementally and refresh lastmod to today
-      let added=0;
-      for(const p of posts){
-        if(!sitemap.includes(p.url)){
-          sitemap = sitemap.replace("</urlset>", `  <url><loc>${escXml(p.url)}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n</urlset>`);
-          added++;
-        } else {
-          // ensure lastmod is today
-          const re = new RegExp(`(<loc>${escXml(p.url)}<\\/loc>\\s*<lastmod>)[^<]+(<\\/lastmod>)`);
-          if(re.test(sitemap)) sitemap = sitemap.replace(re, `$1${today}$2`);
-        }
-      }
-      // also ensure /blog entry lastmod is today
-      const blogRe = new RegExp(`(<loc>${escXml(SITE)}/blog<\\/loc>\\s*<lastmod>)[^<]+(<\\/lastmod>)`);
-      if(blogRe.test(sitemap)) sitemap = sitemap.replace(blogRe, `$1${today}$2`);
-      if(added){ fs.writeFileSync(SITEMAP_XML, sitemap); console.log(`→ patched ${SITEMAP_XML} (+${added} missing post urls from ${source}, refreshed lastmod → ${today})`); }
-      else { fs.writeFileSync(SITEMAP_XML, sitemap); console.log(`sitemap already has blog entries (${posts.length} from ${source}), refreshed lastmod → ${today}`); }
-    }
+    // generate-seo.js owns the canonical sitemap and content modification dates.
+    fs.writeFileSync(SITEMAP_XML, sitemap);
   }
 
   console.log(`done — ${posts.length} posts from ${source}${pruned ? `, ${pruned} pruned` : ""}`);

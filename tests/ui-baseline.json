@@ -1,0 +1,15 @@
+{
+  "index.html": "17a88e85d26ad1a228aa374a3922a1f2d256b9d648c9beaf5890f400f8b3e756",
+  "about.html": "403f3d18d03b2494e5ea46cb3a56bd7c500bc2568eb3345e02b955e6f9cd5cde",
+  "blog.html": "65b30457da219ed5936fed88b17b4eac128e34d0a099139efcbcb1a08c14bda6",
+  "projects.html": "f1d96c85ed7edf37dc9c7adb18eee05b6ad7b2b566085cec9b0ebeaa770d1aff",
+  "opensource.html": "b943e07c84e86a1df3d958a416fba932337aaf6508afc3cfd28cccff76aeb3c7",
+  "community.html": "4ca4e6cd7603fcfa646bc7bcbb107b65749a020800ff1cbb46c6c2cdd9b5f696",
+  "contact.html": "364820c27644078972ca6ee644523e230565c8705c01cfd11828b43ed76a76f5",
+  "apps/index.html": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "apps/kyl/index.html": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "projects/spam_classifier.html": "3977411573efb8298e69f05b5f8d7b7479a8df1066de707bd04b41b0850a65cb",
+  "scripts/generate-blog.js": "de1185de933465421708520931dd1fb52f79d94cc1592f47d5ed2ad7abcb05d7",
+  "scripts/generate-projects.js": "cbb11126ec5c140ff635cba7054a36903b3e8f644c3e750638785fb325432ed1",
+  "scripts/generate-tricks.js": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+}

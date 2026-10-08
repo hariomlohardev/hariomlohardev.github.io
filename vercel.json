@@ -67,7 +67,7 @@
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
+          "value": "public, max-age=3600, must-revalidate"
         }
       ]
     },
@@ -85,9 +85,13 @@
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
+          "value": "public, max-age=3600, must-revalidate"
         }
       ]
+    },
+    {
+      "source": "/admin/:path*",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
     }
   ],
   "rewrites": [
@@ -141,11 +145,11 @@
     },
     {
       "source": "/tricks/p/:id",
-      "destination": "/trick?id=:id"
+      "destination": "/api/blog/render?type=trick&id=:id"
     },
     {
       "source": "/tricks/p/:id/",
-      "destination": "/trick?id=:id"
+      "destination": "/api/blog/render?type=trick&id=:id"
     },
     {
       "source": "/blog/p/:slug",

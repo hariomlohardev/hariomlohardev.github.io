@@ -8,6 +8,10 @@ Disallow: /admin/
 Disallow: /api/
 Disallow: /post.html
 Disallow: /trick.html
+Disallow: /scripts/
+Disallow: /tests/
+Disallow: /supabase/
+Disallow: /vercel/
 
 # — Answer engines and AI crawlers: allowed everywhere the general rule allows.
 #   Each named agent needs its own copy of the Disallow list: a crawler obeys only the
@@ -47,9 +51,10 @@ Disallow: /admin/
 Disallow: /api/
 Disallow: /post.html
 Disallow: /trick.html
+Disallow: /scripts/
+Disallow: /tests/
+Disallow: /supabase/
+Disallow: /vercel/
 
 # Sitemaps
 Sitemap: https://hariomlohardev.github.io/sitemap.xml
-
-# Host
-Host: https://hariomlohardev.github.io
