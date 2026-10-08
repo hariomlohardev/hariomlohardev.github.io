@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.0">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url><loc>https://hariomlohardev.github.io/about</loc><lastmod>2026-08-24</lastmod><image:image><image:loc>https://hariomlohardev.github.io/og/about.png</image:loc></image:image></url>
   <url><loc>https://hariomlohardev.github.io/apps/</loc><lastmod>2026-10-02T18:30:00.000Z</lastmod><image:image><image:loc>https://hariomlohardev.github.io/og/kyl.png</image:loc></image:image></url>
   <url><loc>https://hariomlohardev.github.io/apps/kyl/</loc><lastmod>2026-10-02T18:30:00.000Z</lastmod><image:image><image:loc>https://hariomlohardev.github.io/og/kyl.png</image:loc></image:image></url>

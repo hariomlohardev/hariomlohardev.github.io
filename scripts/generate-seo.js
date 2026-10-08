@@ -106,7 +106,7 @@ function main(){
     entries.push('  <url><loc>'+esc(meta.canonical)+'</loc><lastmod>'+lastmod+'</lastmod>' +
       (image ? '<image:image><image:loc>'+esc(image)+'</image:loc></image:image>' : '') + '</url>');
   }
-  write('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.0">\n'+entries.join('\n')+'\n</urlset>\n');
+  write('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n'+entries.join('\n')+'\n</urlset>\n');
   write('seo-state.json',JSON.stringify(state,null,2)+'\n');
   console.log('SEO: '+entries.length+' canonical pages; accurate metadata and stable sitemap dates');
 }
