@@ -25,15 +25,17 @@ function escHtml(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
 function escXml(s){ return escHtml(s); }
 function escSvg(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function toSlug(s){ return String(s).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,64) || "project"; }
-// Google truncates a <title> past ~65 chars and a description past ~165, so
-// build both to fit: the title sheds its least useful parts, and a project can
-// carry a hand-written `metaDescription` when its full one runs long.
+// Describe the actual project topic in search results; visible headings stay unchanged.
 function pageTitle(p){
-  const full = `Hariom Lohar — ${p.name} · ${p.statusLabel} | hariomlohardev`;
-  if(full.length <= 65) return full;
-  const noHandle = `Hariom Lohar — ${p.name} · ${p.statusLabel}`;
-  if(noHandle.length <= 65) return noHandle;
-  return `Hariom Lohar — ${p.name} | hariomlohardev`.slice(0,65);
+  const topics={
+    'agi-research':'Neural Networks from Scratch',
+    'micrograd-hk':'NumPy Autograd Engine',
+    'peek':'Codebase Explorer CLI',
+    'inkdown':'Local Markdown Editor',
+    'practice-code':'Python Algorithms & DSA',
+    'pkg-jupy':'Jupyter & Python Packages'
+  };
+  return `${p.name} — ${topics[p.slug] || p.statusLabel || 'Project'} | Hariom Lohar`;
 }
 function metaDesc(p){
   const d = p.metaDescription || p.description || "";
@@ -334,23 +336,7 @@ async function main(){
     }
   }
 
-  // patch sitemap.xml
-  if(fs.existsSync(SITEMAP_XML)){
-    let sitemap = fs.readFileSync(SITEMAP_XML,"utf8");
-    let added=0;
-    const today = new Date().toISOString().slice(0,10);
-    for(const p of projects){
-      const slug = p.slug ? toSlug(p.slug) : toSlug(p.id);
-      const loc = `${SITE}/projects/p/${slug}/`;
-      if(!sitemap.includes(loc)){
-        const priority = p.kind==="live" ? "0.8" : "0.6";
-        sitemap = sitemap.replace("</urlset>", `  <url><loc>${escXml(loc)}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>${priority}</priority></url>\n</urlset>`);
-        added++;
-      }
-    }
-    if(added){ fs.writeFileSync(SITEMAP_XML, sitemap); console.log(`→ patched ${SITEMAP_XML} (+${added} project detail urls)`); }
-    else console.log(`sitemap already has project detail entries, skipping patch`);
-  }
+  // Canonical sitemap generation runs after all pages have been written.
 
   console.log(`done — ${projects.length} project detail pages (${Object.keys(postsBySlug).length} posts available for related links)`);
 }

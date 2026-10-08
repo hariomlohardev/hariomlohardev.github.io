@@ -5,16 +5,13 @@
  * Writes:
  *   tricks-data.json           — static list fallback for /tricks
  *   tricks/p/<id>/index.html   — one static page per published trick
- *   trick.html                 — dynamic shell (?id=N) that vercel.json rewrites
- *                                /tricks/p/:id to, for tricks created after the
- *                                last build (filesystem wins when the static
- *                                page already exists)
- *   sitemap.xml                — + /tricks and every /tricks/p/<id>
+ *   trick.html                 — legacy client viewer (?id=N), excluded from search
+ *   Vercel's shared renderer reuses pageFor for live, complete trick HTML.
  *
  * The design is never re-typed: tricks.html is read as the shell and only the
  * <head> SEO block, <main> and the page script are swapped, so header, footer,
  * tokens, prose styles and reveal behaviour can't drift from the list page.
- * Runs last in the build chain so its sitemap entries survive the other steps.
+ * generate-seo.js owns the final sitemap and indexing exclusions.
  * No npm deps (GitHub Pages CI runs the generators without `npm install`).
  */
 const fs = require("fs");
@@ -28,6 +25,7 @@ const TRICKS_P_DIR = path.join(ROOT, "tricks", "p");
 const DYN_HTML = path.join(ROOT, "trick.html");
 const DATA_JSON = path.join(ROOT, "tricks-data.json");
 const SITEMAP_XML = path.join(ROOT, "sitemap.xml");
+const SEO = require('../assets/seo.js');
 
 const escHtml = s => String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const escAttr = s => escHtml(s).replace(/'/g, "&#39;");
@@ -159,7 +157,7 @@ function swapScript(s, jsBody){
 const PERSON = SITE + "/#person";
 const WEBSITE = SITE + "/#website";
 function personNode(){
-  return {"@type":"Person","@id":PERSON,"name":"Hariom Lohar","alternateName":["hariomlohardev","Hariom Lohar hariomlohardev"],"identifier":"https://github.com/hariomlohardev","givenName":"Hariom","familyName":"Lohar","url":SITE+"/","image":SITE+"/certificates/1.png","jobTitle":"Python / Django / Flutter Developer & AGI Researcher","address":{"@type":"PostalAddress","addressCountry":"IN"},"sameAs":["https://github.com/hariomlohardev","https://x.com/HariomloharAGI","https://www.linkedin.com/in/hariomlohar","https://dev.to/hariomlohardev","https://huggingface.co/hariomlohardev","https://hashnode.com/@hariomlohardev","https://medium.com/@hariomlohardev",SITE+"/"]};
+  return {"@type":"Person","@id":PERSON,"name":"Hariom Lohar","alternateName":["hariomlohardev","Hariom Lohar hariomlohardev"],"identifier":"https://github.com/hariomlohardev","givenName":"Hariom","familyName":"Lohar","url":SITE+"/","image":SITE+"/assets/hariom-lohar.jpg","jobTitle":"Python / Django / Flutter Developer & AGI Researcher","address":{"@type":"PostalAddress","addressCountry":"IN"},"sameAs":["https://github.com/hariomlohardev","https://x.com/HariomloharAGI","https://www.linkedin.com/in/hariomlohar","https://dev.to/hariomlohardev","https://huggingface.co/hariomlohardev","https://hashnode.com/@hariomlohardev","https://medium.com/@hariomlohardev",SITE+"/"]};
 }
 function websiteNode(){
   return {"@type":"WebSite","@id":WEBSITE,"url":SITE+"/","name":"Hariom Lohar — Lab Notebook No.01","alternateName":"hariomlohardev.github.io","inLanguage":"en-IN","publisher":{"@id":PERSON}};
@@ -180,12 +178,13 @@ function headFor(t){
   const webpage = {"@type":"WebPage","@id":canonical+"#webpage","url":canonical,"name":t.title+" — Trick — Hariom Lohar","isPartOf":{"@id":WEBSITE},"about":{"@id":PERSON},"author":{"@id":PERSON},"description":desc,"breadcrumb":{"@id":canonical+"#breadcrumb"},"inLanguage":"en-IN","primaryImageOfPage":{"@type":"ImageObject","contentUrl":ogImg},"datePublished":iso,"dateModified":mod};
   const crumbs = {"@type":"BreadcrumbList","@id":canonical+"#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home — Hariom Lohar","item":SITE+"/"},{"@type":"ListItem","position":2,"name":"Tricks","item":SITE+"/tricks"},{"@type":"ListItem","position":3,"name":t.title,"item":canonical}]};
   const article = {"@type":"TechArticle","@id":canonical+"#article","headline":t.title,"name":t.title,"description":desc,"datePublished":iso,"dateModified":mod,"author":{"@id":PERSON},"publisher":{"@id":PERSON},"mainEntityOfPage":{"@id":canonical+"#webpage"},"url":canonical,"image":ogImg,"keywords":(t.tags||[]).join(", "),"wordCount":t.wordCount,"inLanguage":"en-IN","isPartOf":{"@id":WEBSITE},"about":{"@id":PERSON},"proficiencyLevel":"Beginner"};
+  delete article.about;
   const jsonLd = {"@context":"https://schema.org","@graph":[personNode(), websiteNode(), webpage, crumbs, article]};
   return [
     "<title>" + escHtml(pageTitle(t)) + "</title>",
     '<meta name="description" content="' + escAttr(desc) + '" />',
     '<meta name="author" content="Hariom Lohar" />',
-    '<meta name="robots" content="index, follow, max-image-preview:large" />',
+    '<meta name="robots" content="' + (SEO.indexableTrick(t) ? 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' : 'noindex, follow') + '" />',
     '<link rel="canonical" href="' + canonical + '" />',
     '<link rel="alternate" type="application/rss+xml" title="Hariom Lohar — Blog &amp; Daily Logs" href="' + SITE + '/feed.xml" />',
     '<link rel="author" href="https://github.com/hariomlohardev" />',
@@ -197,13 +196,15 @@ function headFor(t){
     '<meta property="og:description" content="' + escAttr(desc) + '" />',
     '<meta property="og:type" content="article" />',
     '<meta property="article:published_time" content="' + iso + '" />',
+    '<meta property="article:modified_time" content="' + mod + '" />',
     '<meta property="og:image" content="' + ogImg + '" />',
     '<meta name="twitter:card" content="summary_large_image" />',
     '<meta name="twitter:title" content="' + escAttr(t.title) + ' — Trick — Hariom Lohar" />',
     '<meta name="twitter:description" content="' + escAttr(desc) + '" />',
+    '<meta name="twitter:image" content="' + ogImg + '" />',
     '<meta name="twitter:creator" content="@HariomloharAGI" />',
     '<meta name="twitter:site" content="@HariomloharAGI" />',
-    '<script type="application/ld+json">' + JSON.stringify(jsonLd) + "</script>"
+    '<script type="application/ld+json">' + SEO.safeJson(jsonLd) + "</script>"
   ].join("\n");
 }
 
@@ -451,28 +452,7 @@ function writeStatic(shell, tricks, newsband){
   console.log("→ tricks/p/<id>/index.html — " + tricks.length + " pages (" + written + " rewritten" + (pruned ? ", " + pruned + " pruned" : "") + ")");
 }
 
-function patchSitemap(tricks){
-  if(!fs.existsSync(SITEMAP_XML)) return;
-  let sm = fs.readFileSync(SITEMAP_XML, "utf8");
-  const today = new Date().toISOString().slice(0, 10);
-  const listUrl = SITE + "/tricks";
-  let added = 0;
-  const push = (loc, freq, pri) => {
-    const key = "<loc>" + escXml(loc) + "</loc>";
-    const at = sm.indexOf(key);
-    if(at >= 0){
-      const a = sm.indexOf("<lastmod>", at), b = sm.indexOf("</lastmod>", a);
-      if(a > 0 && b > a && a < at + key.length + 40) sm = sm.slice(0, a + 9) + today + sm.slice(b);
-      return;
-    }
-    sm = sm.replace("</urlset>", "  <url>" + key + "<lastmod>" + today + "</lastmod><changefreq>" + freq + "</changefreq><priority>" + pri + "</priority></url>\n</urlset>");
-    added++;
-  };
-  push(listUrl, "weekly", "0.8");
-  for(const t of tricks) push(t.url, "monthly", "0.6");
-  fs.writeFileSync(SITEMAP_XML, sm);
-  console.log("→ patched sitemap.xml (" + (added ? "+" + added + " urls, " : "") + "lastmod → " + today + ")");
-}
+// The final SEO build derives the sitemap from actual indexable HTML.
 
 async function main(){
   const { tricks, source } = await getTricks();
@@ -484,13 +464,12 @@ async function main(){
   if(source === "none"){
     const why = process.env.SUPABASE_URL ? "Supabase unreachable/table missing and no tricks-data.json" : "no SUPABASE_URL/key and no tricks-data.json";
     console.warn("tricks: no source available (" + why + ") — kept existing pages, wrote the dynamic shell only");
-    patchSitemap([]);
     return;
   }
   writeData(tricks);
   writeStatic(shell, tricks, newsband);
-  patchSitemap(tricks);
   console.log("done — " + tricks.length + " tricks from " + source);
 }
 
-main().catch(e => { console.error(e); process.exit(1); });
+if(require.main===module) main().catch(e => { console.error(e); process.exit(1); });
+module.exports={normalize,readShell,newsbandOf,pageFor};

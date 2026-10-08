@@ -1,52 +1,19 @@
 'use strict';
-
 const assert = require('node:assert/strict');
-const fs = require('node:fs');
-const path = require('node:path');
-
-const gen = fs.readFileSync(path.join(__dirname, '..', 'scripts', 'generate-blog.js'), 'utf8');
-const Module = require('node:module');
-
-// Shell pages bake no post content — everything renders from the database.
-assert.ok(!gen.includes('${post.html}'),
-  'generated post pages must not bake the post body');
-assert.ok(!gen.includes('<title>${escHtml(post.title)}'),
-  'generated post pages must not bake the post title');
-assert.ok(!gen.includes('"@type":"BlogPosting"'),
-  'generated post pages must not bake per-post structured data');
-
-// The shell mounts empty containers and loads the post from the database.
-assert.ok(gen.includes('id="postBody"'),
-  'generated shell must have a body mount point');
-assert.ok(gen.includes('/api/blog/post?slug=') && gen.includes('POST_SLUG'),
-  'generated shell must fetch the post from the database');
-
-// The shell template is the single post UI — also served server-side by
-// api/blog/render, so it must be requireable without running the build.
-assert.ok(gen.includes('module.exports={postPage'),
-  'generate-blog.js must export postPage for the server renderer');
-
-// The shell template must actually render: mount points, baked identifiers,
-// loader with the slug — and no uninterpolated placeholders or post content.
-{
-  const genPath = path.join(__dirname, '..', 'scripts', 'generate-blog.js');
-  const src = gen.replace(/if\(require\.main===module\)[\s\S]*$/, 'module.exports={postPage};');
-  const m = new Module(genPath, module);
-  m.filename = genPath;
-  m.paths = Module._nodeModulePaths(path.dirname(genPath));
-  m._compile(src, genPath);
-  const html = m.exports.postPage({
-    slug: 'probe-post', url: 'https://hariomlohardev.github.io/blog/p/probe-post/',
-    title: 'Probe Title', description: 'Probe desc', date: '2026-09-14',
-    tags: ['test'], html: '<p>STALE-BODY-MUST-NOT-APPEAR</p>', raw: '',
-    wordCount: 5, readingMinutes: 1, cover: null
-  });
-  assert.ok(html.includes('id="postBody"'), 'rendered shell must mount the body');
-  assert.ok(html.includes('id="postTitle"'), 'rendered shell must mount the title');
-  assert.ok(html.includes("var POST_SLUG='probe-post'"), 'rendered shell must bake the slug');
-  assert.ok(html.includes('rel="canonical" href="https://hariomlohardev.github.io/blog/p/probe-post/"'),
-    'rendered shell must bake the canonical URL');
-  assert.ok(!html.includes('${'), 'rendered shell must have no uninterpolated placeholders');
-  assert.ok(!html.includes('STALE-BODY-MUST-NOT-APPEAR'), 'rendered shell must not bake the body');
-  assert.ok(!html.includes('Probe Title — Hariom Lohar'), 'rendered shell must not bake the title');
-}
+const { postPage } = require('../scripts/generate-blog');
+const post = { slug: 'probe-post', title: 'Probe Title', description: 'Probe description', date: '2026-09-14', updated_at: '2026-10-06T12:00:00Z', tags: ['test'], html: '<p>Actual article body, available without JavaScript.</p>', wordCount: 8, readingMinutes: 1, max_comment_words: 2000 };
+const html = postPage(post);
+assert.ok(html.includes('id="postBody"'));
+assert.ok(html.includes('id="postTitle">Probe Title</h1>'));
+assert.ok(html.includes('Actual article body, available without JavaScript.'));
+assert.ok(html.includes('<title>Probe Title — Hariom Lohar'));
+assert.ok(html.includes('var POST_SLUG="probe-post"'));
+assert.ok(html.includes('/api/blog/post?slug='), 'live refresh remains available');
+assert.ok(!html.includes('Loading post from the database'));
+const graph = JSON.parse(html.match(/<script[^>]*id="postStructuredData"[^>]*>([\s\S]*?)<\/script>/)[1]);
+const article = graph['@graph'].find(n => n['@type'] === 'BlogPosting');
+assert.equal(article.headline, post.title);
+assert.equal(article.description, post.description);
+assert.equal(article.dateModified, '2026-10-06T12:00:00.000Z');
+assert.equal(article.mainEntityOfPage['@id'], 'https://hariomlohardev.github.io/blog/p/probe-post/#webpage');
+assert.equal(graph['@graph'].find(n => n['@type'] === 'Person').image, 'https://hariomlohardev.github.io/assets/hariom-lohar.jpg');

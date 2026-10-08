@@ -22,6 +22,8 @@
  */
 const fs = require("fs");
 const path = require("path");
+require('./load-env')();
+const SEO = require('../assets/seo.js');
 
 const ROOT = path.resolve(__dirname, "..");
 const SITE = "https://hariomlohardev.github.io";
@@ -121,7 +123,7 @@ function itemList(name, url, items){
       name: it.title,
     })),
   };
-  return '\n<script type="application/ld+json">' + JSON.stringify(node) + "</script>\n";
+  return '\n<script type="application/ld+json">' + SEO.safeJson(node) + "</script>\n";
 }
 
 /* ── tricks ─────────────────────────────────────────────────────── */
@@ -146,8 +148,9 @@ function tricks(){
   }).join("\n");
   const changed = inject("tricks.html", "list", rows ? "\n" + rows + "\n" : SKELETON(4, "        ", " aria-hidden=\"true\""));
   setBusy("tricks.html", "list", !rows);
-  const ld = list.length ? itemList("Tricks — Hariom Lohar", SITE + "/tricks", list.map(t => ({ url: SITE + "/tricks/p/" + t.id + "/", title: t.title }))) : "\n";
-  const newest = list.length ? String(list[0].created_at || "").slice(0, 10) : "";
+  const indexed = list.filter(SEO.indexableTrick);
+  const ld = indexed.length ? itemList("Tricks — Hariom Lohar", SITE + "/tricks", indexed.map(t => ({ url: SITE + "/tricks/p/" + t.id + "/", title: t.title }))) : "\n";
+  const newest = list.map(t => String(t.updated_at || t.created_at || '')).sort().pop() || '';
   const dm = setDateModified("tricks.html", SITE + "/tricks#webpage", newest);
   return [changed, inject("tricks.html", "list-jsonld", ld) || dm, list.length];
 }
@@ -167,7 +170,8 @@ function feedItems(){
       title: unesc(one(b, "title")),
       url: link,
       href: link.replace(SITE, "") || "/blog",
-      description: unesc(one(b, "description")),
+      description: unesc(b.includes('<portfolio:description>') ? one(b, 'portfolio:description') : one(b, "description")),
+      modified: unesc(one(b, "dcterms:modified")),
       date: pub ? new Date(pub).toISOString().slice(0, 10) : "",
       tags: cats,
     });
@@ -195,7 +199,7 @@ function blog(){
   setBusy("blog.html", "list", !rows);
   const ld = items.length ? itemList("Blog & daily logs — Hariom Lohar", SITE + "/blog", items.slice(0, MAX_ROWS)) : "\n";
   const changedLd = inject("blog.html", "list-jsonld", ld);
-  const changedDm = setDateModified("blog.html", SITE + "/blog#webpage", items.length ? items[0].date : "");
+  const changedDm = setDateModified("blog.html", SITE + "/blog#webpage", items.map(p => p.modified || p.date).sort().pop() || '');
 
   const cards = items.slice(0, 3).map(p => {
     const isLog = p.tags.some(t => t.toLowerCase() === "daily-log");
@@ -208,7 +212,72 @@ function blog(){
   return [changed || changedLd || changedDm || changedHome, items.length];
 }
 
-const [tChanged, tLd, tCount] = tricks();
-const [bChanged, bCount] = blog();
-console.log("prerender-lists: " + tCount + " tricks, " + bCount + " posts" +
-  ((tChanged || tLd || bChanged) ? " — html updated" : " — no change"));
+/* Build the same project cards that renderArchive() uses, with the same classes. */
+function projects(){
+  const data = JSON.parse(read(path.join(ROOT, 'projects-data.json')));
+  const list = data.projects || data;
+  const rows = list.map((p, i) => {
+    const live = (p.kind || (p.demoUrl ? 'live' : 'repo')) === 'live';
+    const href = p.detailUrl ? p.detailUrl.replace(SITE, '') : '/projects/p/' + (p.slug || p.id) + '/';
+    const status = live ? '<span class="status live"><i></i>' + esc(p.statusLabel) + '</span>' :
+      '<span class="status ' + (p.status === 'shipped' ? 'shipped' : p.status === 'open-source' ? 'oss' : 'log') + '">' + esc(p.statusLabel) + '</span>';
+    const langs = p.languages || [];
+    const bar = langs.length > 1 ? '<div class="langbar">' + langs.map(l => '<i style="width:' + Number(l.pct) + '%;background:' + esc(l.color || '#6E6858') + '"></i>').join('') + '</div>' : '';
+    const meta = langs.map(l => '<span style="display:inline-flex;align-items:center;gap:6px"><i class="dot" style="background:' + esc(l.color || '#6E6858') + '"></i>' + esc(l.name) + '</span>').join(' · ');
+    return '<a class="proj-card rv" href="' + esc(href) + '" style="transition-delay:' + Math.min(i,6)*45 + 'ms" aria-label="' + esc(p.name + ' — ' + p.statusLabel) + '">' +
+      '<span class="proj-arrow" aria-hidden="true">↗</span><div class="proj-top"><span class="proj-idx">0' + (i+1) + '</span>' + status +
+      (live ? '<span class="kind live">Live</span>' : '<span class="kind code">Code</span>') + '</div><h3>' + esc(p.name) + '</h3><p>' + esc(p.description) + '</p>' +
+      '<div class="chips">' + (p.chips || []).map(c => '<span>' + esc(c) + '</span>').join('') + '</div>' + bar + (meta ? '<div class="proj-meta">' + meta + '</div>' : '') + '</a>';
+  }).join('\n');
+  inject('projects.html', 'projects', '\n' + rows + '\n');
+  setBusy('projects.html', 'archiveGrid', false);
+  inject('projects.html', 'projects-jsonld', itemList('Projects — Hariom Lohar', SITE + '/projects', list.map(p => ({ title: p.name, url: p.detailUrl || SITE + '/projects/p/' + (p.slug || p.id) + '/' }))));
+  const home = JSON.parse(read(path.join(ROOT, 'data.json')));
+  inject('index.html', 'projects', '\n' + (home.projects || []).map((p,i) => {
+    const ext = /^https?:/.test(p.url);
+    return '<a class="repo-card rv" href="' + esc(p.url) + '"' + (ext ? ' target="_blank" rel="noopener"' : '') + ' style="transition-delay:' + i*60 + 'ms">' +
+      '<span class="repo-arrow" aria-hidden="true">↗</span><div class="repo-top"><span class="repo-idx">0' + (i+1) + '</span><span class="repo-status">' + esc(p.status) + '</span></div><h3>' + esc(p.name) + '</h3><p>' + esc(p.description) + '</p></a>';
+  }).join('\n') + '\n');
+}
+
+/* Supabase remains the only source of contributions; no manual snapshot/fake data. */
+async function contributions(){
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if(!url || !key) throw new Error('Supabase credentials required to pre-render public contributions');
+  const res = await fetch(url.replace(/\/$/, '') + '/rest/v1/site_content?select=data,updated_at&key=eq.opensource&limit=1', {
+    headers: { apikey: key, Authorization: 'Bearer ' + key }, signal: AbortSignal.timeout(20000)
+  });
+  if(!res.ok) throw new Error('Contribution pre-render failed: HTTP ' + res.status);
+  const records = await res.json(), row = records[0], stored = row && row.data;
+  const prs = Array.isArray(stored) ? stored : (stored && stored.prs) || [];
+  const items = prs.map(p => ({ type:'pr', title:p.title, repo:p.repo || '', desc:p.body || '', url:p.html_url,
+    state:p.merged ? 'merged' : p.state || 'open', updated:p.updated_at || p.created_at || '' })).concat(
+    ((stored && stored.issues) || []).map(p => ({ type:'issue', title:p.title, repo:p.repo || '', desc:p.body || '', url:p.html_url, state:p.state || 'open', updated:p.updated_at || '' }))
+  ).filter(p => !p.repo.startsWith('hariomlohardev/')).sort((a,b) => b.updated.localeCompare(a.updated));
+  const rows = items.map((it,i) => '<a class="row rv" href="' + esc(it.url) + '" target="_blank" rel="noopener" style="transition-delay:' + Math.min(i,8)*35 + 'ms">' +
+    '<div class="row-left"><span class="type-icon ' + it.type + ' ' + esc(it.state) + '" aria-hidden="true"></span><span>No.' + String(i+1).padStart(3,'0') + '</span></div>' +
+    '<div class="row-body"><div class="row-meta"><span class="tag ' + (it.state === 'merged' ? 'merged' : it.state === 'closed' ? 'closed' : it.type === 'issue' ? 'type-issue' : 'open') + '">' + (it.type === 'pr' ? 'PR' : 'Issue') + ' · ' + esc(it.state) + '</span><span>' + esc(it.repo) + '</span></div>' +
+    '<h3>' + esc(it.title) + '<span class="repo-path">' + esc(it.repo) + '</span></h3>' + (it.desc ? '<p>' + esc(it.desc) + '</p>' : '') + '</div><div class="row-right">' +
+    (it.updated ? '<span class="date">' + esc(fmtDate(it.updated)) + '</span>' : '') + '<span class="arrow" aria-hidden="true">→</span></div></a>').join('\n');
+  inject('opensource.html', 'contributions', '\n' + (rows || '<div class="empty">No Open Source contributions have been published yet.</div>') + '\n');
+  setBusy('opensource.html', 'list', false);
+  inject('opensource.html', 'contributions-jsonld', items.length ? itemList('Open Source — Hariom Lohar', SITE + '/opensource', items.map(p => ({ title:p.title, url:p.url }))) : '\n');
+  setDateModified('opensource.html', SITE + '/opensource#webpage', (row && row.updated_at) || '');
+  const home = prs.slice().sort((a,b) => String(b.updated_at || '').localeCompare(String(a.updated_at || ''))).slice(0,4).map((p,i) =>
+    '<a class="repo-card rv" href="' + esc(p.html_url) + '" target="_blank" rel="noopener" style="transition-delay:' + i*60 + 'ms"><span class="repo-arrow" aria-hidden="true">↗</span>' +
+    '<div class="repo-top"><span class="oss-repo">' + esc(p.repo) + '</span><span class="repo-status">PR · ' + esc(p.merged ? 'merged' : p.state || 'open') + '</span></div>' +
+    '<h3>' + esc(p.title) + '</h3><p>' + esc(String(p.body || '').slice(0,140).replace(/\s+/g,' ').trim() || p.title) + '</p></a>').join('\n');
+  inject('index.html', 'contributions', '\n' + (home || '<div class="empty" style="grid-column:1/-1">No Open Source contributions published yet.</div>') + '\n');
+  return items.length;
+}
+
+async function main(){
+  const [tChanged, tLd, tCount] = tricks();
+  const [bChanged, bCount] = blog();
+  projects();
+  const cCount = await contributions();
+  console.log('prerender-lists: ' + tCount + ' tricks, ' + bCount + ' posts, projects and ' + cCount + ' contributions');
+}
+if(require.main === module) main().catch(e => { console.error(e.message); process.exit(1); });
+module.exports = { feedItems, projects, contributions };

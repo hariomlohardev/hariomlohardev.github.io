@@ -1,12 +1,1062 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:portfolio="https://hariomlohardev.github.io/rss/">
 <channel>
   <title>Hariom Lohar — Lab Notebook No.01 · Blog &amp; Daily Logs</title>
   <link>https://hariomlohardev.github.io/blog</link>
   <atom:link href="https://hariomlohardev.github.io/feed.xml" rel="self" type="application/rss+xml" />
   <description>Daily AGI research logs and articles by Hariom Lohar (hariomlohardev) — Python, Django, Flutter, Harvard CS50P 2026.</description>
   <language>en-IN</language>
-  <lastBuildDate>Tue, 01 Sep 2026 08:57:39 GMT</lastBuildDate>
+  <lastBuildDate>Thu, 08 Oct 2026 07:05:28 GMT</lastBuildDate>
+  <item>
+    <title>Python Basics: Arithmetic Operators &amp; String Methods</title>
+    <link>https://hariomlohardev.github.io/blog/p/python-basics-arithmetic-operators-string-methods/</link>
+    <guid isPermaLink="true">https://hariomlohardev.github.io/blog/p/python-basics-arithmetic-operators-string-methods/</guid>
+    <description>Learn Python arithmetic operators, operator precedence and string methods with code examples, FAQs and a practice file by Hariom Lohar.</description>
+    <pubDate>Sat, 03 Oct 2026 18:30:00 GMT</pubDate>
+    <category>python</category>
+    <category>learn python</category>
+    <category>Arithmetic operstors</category>
+    <category>strings</category>
+    <dcterms:modified>2026-10-04T13:58:39.179Z</dcterms:modified>
+    <portfolio:description></portfolio:description>
+    <content:encoded>&lt;h2&gt;👋 Introduction&lt;/h2&gt;
 
+&lt;p&gt;Hi, I'm &lt;strong&gt;Hariom Lohar&lt;/strong&gt;. I'm currently learning AI, with the long-term goal of moving into &lt;strong&gt;AGI Safety&lt;/strong&gt;. Right now, I'm on a personal challenge, and as part of it, I'm helping others (like you!) learn programming and AI fundamentals from scratch.&lt;/p&gt;
+
+&lt;p&gt;This is Day 2 of our Python basics series. Yesterday we covered Variables and Data Types — today we move on to &lt;strong&gt;Arithmetic Operators&lt;/strong&gt; and &lt;strong&gt;String Methods&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;🎥 Watch the Video First&lt;/h2&gt;
+
+&lt;p&gt;Before reading further, watch this video:&lt;/p&gt;
+
+&lt;p&gt;👉 &lt;strong&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=tb6EYiHtcXU&quot; rel=&quot;noopener&quot;&gt;String methods in Python are easy! 〰️&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;⚠️ &lt;strong&gt;Important:&lt;/strong&gt; After watching the video, make sure to read the &lt;strong&gt;rest of this blog post&lt;/strong&gt;. This video only covers String Methods — there is no video for Arithmetic Operators this time, so that part is explained fully in text below. Make sure you read through the Arithmetic Operators section carefully since you won't have a video to fall back on for it.&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;📖 What You'll Learn in This Post&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Each arithmetic operator in Python, explained (text-only, no video for this part)&lt;/li&gt;
+&lt;li&gt;Operator precedence (the order Python calculates things in)&lt;/li&gt;
+&lt;li&gt;String methods, to go along with the video&lt;/li&gt;
+&lt;li&gt;Frequently Asked Questions (FAQs)&lt;/li&gt;
+&lt;li&gt;A practice Python file to test yourself&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;➕ Arithmetic Operators&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; There is no video for this topic — read this section carefully, it's your only source for it.&lt;/p&gt;
+
+&lt;p&gt;Arithmetic operators are symbols used to perform mathematical calculations on numbers (and variables holding numbers).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;a = 10
+b = 3
+print(a + b)   # Output: 13&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here, &lt;code&gt;+&lt;/code&gt; is the arithmetic operator doing the addition.&lt;/p&gt;
+
+&lt;h3&gt;The Arithmetic Operators in Python&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;+&lt;/code&gt; — Addition&lt;/strong&gt; Adds two values together.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;5 + 2   # → 7&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;-&lt;/code&gt; — Subtraction&lt;/strong&gt; Subtracts the right value from the left value.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;5 - 2   # → 3&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;*&lt;/code&gt; — Multiplication&lt;strong&gt; Multiplies two values.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;5 * 2   # → 10&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;/strong&gt;&lt;code&gt;/&lt;/code&gt; — Division&lt;strong&gt; Divides the left value by the right value. Always returns a &lt;/strong&gt;float&lt;strong&gt;, even if the result is a whole number.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;5 / 2   # → 2.5&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;/strong&gt;&lt;code&gt;//&lt;/code&gt; — Floor Division&lt;strong&gt; Divides and rounds &lt;/strong&gt;down&lt;strong&gt; to the nearest whole number (drops anything after the decimal point).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;5 // 2   # → 2&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;/strong&gt;&lt;code&gt;%&lt;/code&gt; — Modulus&lt;strong&gt; Gives you the &lt;/strong&gt;remainder&lt;strong&gt; left over after division.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;5 % 2   # → 1&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;&lt;/strong&gt;&lt;/code&gt; — Exponentiation&lt;strong&gt; Raises the left value to the power of the right value.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;5 ** 2   # → 25&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3&gt;Operator Precedence (Order of Operations)&lt;/h3&gt;
+
+&lt;p&gt;Just like in math class, Python doesn't calculate things strictly left to right — it follows an order of priority, often remembered using &lt;/strong&gt;PEMDAS&lt;strong&gt;:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;/strong&gt;P&lt;strong&gt;arentheses &lt;code&gt;()&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;/strong&gt;E&lt;strong&gt;xponents &lt;code&gt;&lt;/strong&gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;M&lt;/strong&gt;ultiplication &lt;code&gt;*&lt;/code&gt; and &lt;strong&gt;D&lt;/strong&gt;ivision &lt;code&gt;/&lt;/code&gt;, &lt;code&gt;//&lt;/code&gt;, &lt;code&gt;%&lt;/code&gt; (same priority, left to right)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;A&lt;/strong&gt;ddition &lt;code&gt;+&lt;/code&gt; and &lt;strong&gt;S&lt;/strong&gt;ubtraction &lt;code&gt;-&lt;/code&gt; (same priority, left to right)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;result = 2 + 3 * 4
+print(result)   # Output: 14, not 20&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Python calculates &lt;code&gt;3 * 4&lt;/code&gt; first (because multiplication has higher priority), then adds &lt;code&gt;2&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;If you want addition to happen first, use parentheses:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;result = (2 + 3) * 4
+print(result)   # Output: 20&lt;/code&gt;&lt;/pre&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;❓ FAQs (Arithmetic Operators)&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Q1. Why does &lt;code&gt;/&lt;/code&gt; always give a float, even for whole-number results?&lt;/strong&gt; Python's &lt;code&gt;/&lt;/code&gt; is designed to always return a precise, decimal-accurate result (true division), unlike &lt;code&gt;//&lt;/code&gt;, which intentionally rounds down.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q2. What's the difference between &lt;code&gt;/&lt;/code&gt; and &lt;code&gt;//&lt;/code&gt;?&lt;/strong&gt; &lt;code&gt;/&lt;/code&gt; gives the exact decimal result. &lt;code&gt;//&lt;/code&gt; gives only the whole number part, rounded down (also called floor division).&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q3. When would I actually use &lt;code&gt;%&lt;/code&gt; (modulus)?&lt;/strong&gt; It's commonly used to check if a number is even or odd (&lt;code&gt;num % 2 == 0&lt;/code&gt; means even), or to figure out remainders, like converting seconds into minutes and leftover seconds.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q4. Does Python follow the same order of operations as regular math?&lt;/strong&gt; Yes — Python follows PEMDAS, same as what you learned in school.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q5. Can I combine arithmetic operators with variables?&lt;/strong&gt; Yes. Arithmetic operators work the same way whether you use raw numbers or variables holding numbers.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;🔤 String Methods&lt;/h2&gt;
+
+&lt;p&gt;This is the part covered by the video above. Strings have built-in methods that let you change, check, or clean up text. A method is called using a dot after the variable name:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;text = &quot;hello&quot;
+print(text.upper())   # Output: HELLO&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;.upper()&lt;/code&gt;&lt;/strong&gt; — Converts all characters to uppercase&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;&quot;hello&quot;.upper()   # → &quot;HELLO&quot;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;.lower()&lt;/code&gt;&lt;/strong&gt; — Converts all characters to lowercase&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;&quot;HELLO&quot;.lower()   # → &quot;hello&quot;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;.strip()&lt;/code&gt;&lt;/strong&gt; — Removes extra whitespace from the start and end of a string&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;&quot;   hello   &quot;.strip()   # → &quot;hello&quot;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;.replace(old, new)&lt;/code&gt;&lt;/strong&gt; — Replaces one part of a string with another&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;&quot;I like cats&quot;.replace(&quot;cats&quot;, &quot;dogs&quot;)   # → &quot;I like dogs&quot;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;len()&lt;/code&gt;&lt;/strong&gt; — Not technically a method, but a built-in function that gives you the length of a string (including spaces)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;len(&quot;hello&quot;)   # → 5&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;.startswith(text)&lt;/code&gt;&lt;/strong&gt; — Checks whether a string starts with specific text, returns &lt;code&gt;True&lt;/code&gt; or &lt;code&gt;False&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;&quot;hello world&quot;.startswith(&quot;hello&quot;)   # → True&lt;/code&gt;&lt;/pre&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;❓ FAQs (String Methods)&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Q1. Does &lt;code&gt;len()&lt;/code&gt; count spaces as characters?&lt;/strong&gt; Yes. Every character, including spaces, counts toward the length.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q2. Does &lt;code&gt;.upper()&lt;/code&gt; or &lt;code&gt;.lower()&lt;/code&gt; change the original variable?&lt;/strong&gt; No. Strings in Python are immutable — these methods return a &lt;em&gt;new&lt;/em&gt; string. You need to store the result in a variable if you want to keep it.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q3. What does &lt;code&gt;.strip()&lt;/code&gt; actually remove?&lt;/strong&gt; Only whitespace (spaces, tabs, newlines) from the beginning and end — not from the middle of the string.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;🐍 Practice File — Test Yourself&lt;/h2&gt;
+
+&lt;p&gt;Now that you've watched the video and read through this post, it's time to test what you've actually understood — both Arithmetic Operators and String Methods.&lt;/p&gt;
+
+&lt;p&gt;Download the practice Python file below. It has guided comments and blank spaces — you need to write the code yourself.&lt;/p&gt;
+
+&lt;p&gt;👉 &lt;strong&gt;&lt;a href=&quot;https://github.com/hariomlohardev/learn-python/blob/main/basics/strings/main.py&quot; rel=&quot;noopener&quot;&gt;Download the Practice File Here&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Once done, submit your completed file in the &lt;strong&gt;comment section of this blog post&lt;/strong&gt;. I'll personally review it and give you feedback.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;✅ Deadline Reminder&lt;/h2&gt;
+
+&lt;p&gt;This task/assignment should be completed within &lt;strong&gt;2 days&lt;/strong&gt;. If you get stuck anywhere, don't hesitate to ask in the group — we're all learning together. 🙌&lt;/p&gt;</content:encoded>
+  </item>
+  <item>
+    <title>Python Basics: Variables &amp; Data Types</title>
+    <link>https://hariomlohardev.github.io/blog/p/python-basics-variables-data-types/</link>
+    <guid isPermaLink="true">https://hariomlohardev.github.io/blog/p/python-basics-variables-data-types/</guid>
+    <description>Learn Python variables, data types, type checking, conversions and user input with examples and practice exercises by Hariom Lohar.</description>
+    <pubDate>Wed, 23 Sep 2026 18:30:00 GMT</pubDate>
+    <category>python</category>
+    <category>basics</category>
+    <category>learn-python</category>
+    <dcterms:modified>2026-09-24T15:18:56.672Z</dcterms:modified>
+    <portfolio:description></portfolio:description>
+    <content:encoded>&lt;h2&gt;👋 Introduction&lt;/h2&gt;
+
+&lt;p&gt;Hi, I'm &lt;strong&gt;Hariom Lohar&lt;/strong&gt;. I'm currently learning AI, with the long-term goal of moving into &lt;strong&gt;AGI Safety&lt;/strong&gt;. Right now, I'm on a personal challenge, and as part of it, I'm helping others (like you!) learn programming and AI fundamentals from scratch.&lt;/p&gt;
+
+&lt;p&gt;This blog post is part of a series where we go from the absolute basics to advanced concepts, step by step. Today's topic: &lt;strong&gt;Variables and Data Types in Python&lt;/strong&gt; — one of the very first building blocks you need before you can write any real program.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;🎥 Watch the Video First&lt;/h2&gt;
+
+&lt;p&gt;Before reading further, watch this video. It covers the core basics of variables and data types in Python:&lt;/p&gt;
+
+&lt;p&gt;👉 &lt;strong&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=LKFrQXaoSMQ&quot; rel=&quot;noopener&quot;&gt;Python Variables for Beginners – Bro Code&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;⚠️ &lt;strong&gt;Important:&lt;/strong&gt; After watching the video, make sure to read the &lt;strong&gt;rest of this blog post&lt;/strong&gt;. The video covers the core basics, but it does &lt;strong&gt;not&lt;/strong&gt; include everything (like Type Checking and User Input), which are explained in detail below. Reading the full post will fill those gaps and make sure your understanding is complete.&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;📖 What You'll Learn in This Post&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;What a variable is&lt;/li&gt;
+&lt;li&gt;The core data types in Python&lt;/li&gt;
+&lt;li&gt;How to check a variable's data type&lt;/li&gt;
+&lt;li&gt;How to convert one data type into another&lt;/li&gt;
+&lt;li&gt;How to take input from a user&lt;/li&gt;
+&lt;li&gt;Frequently Asked Questions (FAQs)&lt;/li&gt;
+&lt;li&gt;A practice Python file to test yourself&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;🔤 What is a Variable?&lt;/h2&gt;
+
+&lt;p&gt;A variable is simply a &lt;strong&gt;named container&lt;/strong&gt; used to store data/information, so that it can be used later in your program.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;name = &quot;Hariom&quot;
+age = 21&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here, &lt;code&gt;name&lt;/code&gt; and &lt;code&gt;age&lt;/code&gt; are variables. Python doesn't require you to mention the data type while creating a variable — it figures that out automatically based on the value you assign.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;🔢 Core Data Types in Python&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;int&lt;/code&gt; — Integer&lt;/strong&gt; Whole numbers, with no decimal point.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;age = 21&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;float&lt;/code&gt; — Floating Point Number&lt;/strong&gt; Numbers that include a decimal point.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;price = 99.99&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;str&lt;/code&gt; — String&lt;/strong&gt; Text, written inside single &lt;code&gt;' '&lt;/code&gt; or double &lt;code&gt;&quot; &quot;&lt;/code&gt; quotes.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;name = &quot;Hariom&quot;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;bool&lt;/code&gt; — Boolean&lt;/strong&gt; Can only be one of two values: &lt;code&gt;True&lt;/code&gt; or &lt;code&gt;False&lt;/code&gt;. Mostly used for conditions and comparisons.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;is_learning = True&lt;/code&gt;&lt;/pre&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;🔍 Type Checking (Not Covered in the Video)&lt;/h2&gt;
+
+&lt;p&gt;The video does &lt;strong&gt;not&lt;/strong&gt; cover this part, so pay close attention here.&lt;/p&gt;
+
+&lt;p&gt;Python has a built-in function called &lt;code&gt;type()&lt;/code&gt; that tells you the data type of any variable.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;x = 10
+print(type(x))   # Output: &amp;lt;class 'int'&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This is useful when you're not sure what type of data a variable is holding — especially when working with user input or data from external sources.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;🔄 Type Conversion (Casting)&lt;/h2&gt;
+
+&lt;p&gt;Sometimes the data you have is in one type, but you need it in another type to actually use it properly. Converting one data type into another like this is called &lt;strong&gt;Type Conversion&lt;/strong&gt;, also known as &lt;strong&gt;Casting&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Why does this matter?&lt;/strong&gt; If you take a number from the user using &lt;code&gt;input()&lt;/code&gt;, Python stores it as a &lt;strong&gt;string&lt;/strong&gt; (text), even if the user typed &lt;code&gt;&quot;25&quot;&lt;/code&gt;. If you try to do math on it directly, Python will throw an error — because you can't add a number to text. To fix this, you must convert that string into an integer or float first.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Common conversion functions:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;int()&lt;/code&gt;&lt;/strong&gt; — Converts a value into an integer&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;int(&quot;5&quot;)   # → 5&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;float()&lt;/code&gt;&lt;/strong&gt; — Converts a value into a float&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;float(&quot;5&quot;)   # → 5.0&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;str()&lt;/code&gt;&lt;/strong&gt; — Converts a value into a string&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;str(5)   # → &quot;5&quot;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;bool()&lt;/code&gt;&lt;/strong&gt; — Converts a value into a boolean&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;bool(1)   # → True&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;num_str = &quot;5&quot;             # this is a string, not a number
+num_int = int(num_str)    # now it's an actual integer: 5
+print(num_int + 10)       # Output: 15 — this works now!&lt;/code&gt;&lt;/pre&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;⌨️ Taking User Input (Not Covered in the Video)&lt;/h2&gt;
+
+&lt;p&gt;The video does &lt;strong&gt;not&lt;/strong&gt; cover this part either, so read carefully.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;input()&lt;/code&gt; function is used to take input directly from the user while the program is running.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;user_name = input(&quot;Enter your name: &quot;)&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Important:&lt;/strong&gt; &lt;code&gt;input()&lt;/code&gt; &lt;strong&gt;always&lt;/strong&gt; returns a string, even if the user types a number. So if you need to use that input as a number, you must convert it using &lt;code&gt;int()&lt;/code&gt; or &lt;code&gt;float()&lt;/code&gt; (see the Type Conversion section above).&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;❓ FAQs&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Q1. Do I need to tell Python what data type a variable is?&lt;/strong&gt; No. Python automatically detects the data type based on the value you assign.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q2. Can a variable's data type change later in the program?&lt;/strong&gt; Yes. Python variables are dynamically typed, meaning you can reassign a variable to a different type at any time.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q3. Why does &lt;code&gt;input()&lt;/code&gt; always give a string?&lt;/strong&gt; Because Python doesn't know if you intended to type a number or text — treating everything as a string by default is the safest option, and it's up to you to convert it if needed.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q4. What does &lt;code&gt;type(True)&lt;/code&gt; return?&lt;/strong&gt; It returns &lt;code&gt;&amp;lt;class 'bool'&gt;&lt;/code&gt;, since &lt;code&gt;True&lt;/code&gt; and &lt;code&gt;False&lt;/code&gt; belong to the boolean data type.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q5. What happens if I try to add a string and a number without converting?&lt;/strong&gt; Python will raise a &lt;code&gt;TypeError&lt;/code&gt;, since it cannot combine incompatible data types directly.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;🐍 Practice File — Test Yourself&lt;/h2&gt;
+
+&lt;p&gt;Now that you've watched the video and read through this post, it's time to test what you've actually understood.&lt;/p&gt;
+
+&lt;p&gt;Download the practice Python file below. It has guided comments and blank spaces — you need to write the code yourself.&lt;/p&gt;
+
+&lt;p&gt;👉 &lt;strong&gt;&lt;a href=&quot;https://github.com/hariomlohardev/learn-python/blob/refs/heads/main/basics/variables-and-datatypes/main.py&quot; rel=&quot;noopener&quot;&gt;Download the Practice File Here&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Once done, submit your completed file in the &lt;strong&gt;comment section of this blog post&lt;/strong&gt;. I'll personally review it and give you feedback.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;✅ Deadline Reminder&lt;/h2&gt;
+
+&lt;p&gt;This task/assignment should be completed within 2 days — by Saturday, September 26, 2026, 11:00 AM UTC. If you get stuck anywhere, don't hesitate to ask in the group — we're all learning together. 🙌&lt;/p&gt;</content:encoded>
+  </item>
+  <item>
+    <title>Learn Python -Day 0</title>
+    <link>https://hariomlohardev.github.io/blog/p/learn-python-day-0/</link>
+    <guid isPermaLink="true">https://hariomlohardev.github.io/blog/p/learn-python-day-0/</guid>
+    <description>Set up Python, VS Code, Git and a GitHub account for Hariom Lohar’s beginner Python course. Day 0 covers the tools needed before the first lesson.</description>
+    <pubDate>Tue, 15 Sep 2026 18:30:00 GMT</pubDate>
+    <category>learn python</category>
+    <category>python</category>
+    <dcterms:modified>2026-09-16T10:30:22.613Z</dcterms:modified>
+    <portfolio:description></portfolio:description>
+    <content:encoded>&lt;h1&gt;Hi, I'm Hariom 👋&lt;/h1&gt;
+
+&lt;p&gt;I'm a CS student at UoPeople, currently based in India. Right now, most of my time and curiosity goes into learning about AI and AGI — especially AI safety and research, which I find endlessly fascinating and important as this field keeps growing.&lt;/p&gt;
+
+&lt;p&gt;This week, we're starting with the basics of Python — and today is &lt;strong&gt;Day 0&lt;/strong&gt;. I'm excited to have you here, and I'm looking forward to learning and growing together over the next two months. Let's get started! 🐍&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;📅 Day 0 — Setup Day&lt;/h2&gt;
+
+&lt;p&gt;Before we officially start Day 1, we need one setup day to get everything ready. This is &lt;strong&gt;Day 0&lt;/strong&gt; — a one-time day just for installing and setting up the tools we'll use throughout the course.&lt;/p&gt;
+
+&lt;p&gt;By the end of Day 0, you should have:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;✅ Python installed on your computer&lt;/li&gt;
+&lt;li&gt;✅ A code editor (VS Code) installed and ready&lt;/li&gt;
+&lt;li&gt;✅ Git installed&lt;/li&gt;
+&lt;li&gt;✅ A GitHub account created&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Don't worry if this feels new — just follow the links below step by step, and we'll also go through it together in our live session.&lt;/p&gt;
+
+&lt;h2&gt;🎥 Join the Live Session&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Python Day 0&lt;/strong&gt;&lt;br /&gt;
+📅 Wednesday, 16 September · 9:30 – 10:30pm&lt;br /&gt;
+🌐 Time zone: Asia/Kolkata&lt;br /&gt;
+ &lt;br /&gt;
+&lt;strong&gt;Google Meet joining info&lt;/strong&gt;&lt;br /&gt;
+🔗 Video call link: &lt;a href=&quot;https://meet.google.com/zjg-gxuk-cvz&quot; rel=&quot;noopener&quot;&gt;https://meet.google.com/zjg-gxuk-cvz&lt;/a&gt; &lt;br /&gt;
+&lt;hr /&gt;&lt;/p&gt;
+
+&lt;h2&gt;🔧 Below are links we refer in Live&lt;/h2&gt;
+
+&lt;h3&gt;1. Python&lt;/h3&gt;
+&lt;p&gt;🔗 &lt;a href=&quot;https://www.python.org/downloads/&quot; rel=&quot;noopener&quot;&gt;https://www.python.org/downloads/&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3&gt;2. VS Code (Code Editor)&lt;/h3&gt;
+&lt;p&gt;This is the editor we'll use to write and run our Python code.&lt;br /&gt;
+🔗 &lt;a href=&quot;https://code.visualstudio.com/download&quot; rel=&quot;noopener&quot;&gt;https://code.visualstudio.com/download&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3&gt;3. Git&lt;/h3&gt;
+&lt;p&gt;Version control tool we'll use to track and share code.&lt;br /&gt;
+🔗 &lt;a href=&quot;https://git-scm.com/downloads&quot; rel=&quot;noopener&quot;&gt;https://git-scm.com/downloads&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3&gt;4. GitHub Account&lt;/h3&gt;
+&lt;p&gt;Create a free account — this is where you'll submit your code for review.&lt;br /&gt;
+🔗 &lt;a href=&quot;https://github.com/signup&quot; rel=&quot;noopener&quot;&gt;https://github.com/signup&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;👨‍💻 My GitHub&lt;/h2&gt;
+
+&lt;p&gt;You can find me on GitHub here: &lt;strong&gt;&lt;a href=&quot;https://github.com/hariomlohardev&quot; rel=&quot;noopener&quot;&gt;hariomlohardev&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;📌 A Quick Note&lt;/h2&gt;
+
+&lt;p&gt;You don't have to worry about getting everything perfect today — these links are here to help you get the tools installed. If you run into any issues, bring them to our Day 0 session and we'll sort it out together.&lt;/p&gt;
+
+&lt;p&gt;See you soon — let's build something great! 🚀&lt;/p&gt;</content:encoded>
+  </item>
+  <item>
+    <title>Setup VS Code for Python</title>
+    <link>https://hariomlohardev.github.io/blog/p/setup-vs-code-for-python/</link>
+    <guid isPermaLink="true">https://hariomlohardev.github.io/blog/p/setup-vs-code-for-python/</guid>
+    <description>A step-by-step guide to installing VS Code and setting it up to write and run Python code smoothly.</description>
+    <pubDate>Mon, 14 Sep 2026 18:30:00 GMT</pubDate>
+    <category>python</category>
+    <category>vscode</category>
+    <category>install guide</category>
+    <category>setup</category>
+    <category>beginners</category>
+    <category>code editor</category>
+    <category>cs50p</category>
+    <dcterms:modified>2026-09-15T11:41:35.347Z</dcterms:modified>
+    <portfolio:description>A step-by-step guide to installing VS Code and setting it up to write and run Python code smoothly.</portfolio:description>
+    <content:encoded>&lt;p&gt;Once Python is installed on your PC, the next step is picking a good place to actually write your code. That's where &lt;strong&gt;VS Code&lt;/strong&gt; comes in — it's free, lightweight, and used by beginners and professionals alike.&lt;/p&gt;
+
+&lt;p&gt;This guide will walk you through installing VS Code and setting it up properly for Python.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;✅ Before You Start&lt;/h2&gt;
+
+&lt;p&gt;Make sure you've already installed Python on your PC. If you haven't done that yet, go back and follow the &lt;strong&gt;Install Python on Windows&lt;/strong&gt; guide first — VS Code needs Python already installed to work with it.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;Step 1: Download VS Code&lt;/h2&gt;
+
+&lt;p&gt;Head over to the official website and download the installer for Windows:&lt;/p&gt;
+
+&lt;p&gt;🔗 &lt;a href=&quot;https://code.visualstudio.com/&quot; rel=&quot;noopener&quot;&gt;Download VS Code&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;Step 2: Run the Installer&lt;/h2&gt;
+
+&lt;p&gt;Open the downloaded file and go through the setup. On the way, you'll see a few checkboxes — make sure these are ticked:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;☑️ &lt;strong&gt;Add &quot;Open with Code&quot; action to Windows Explorer file context menu&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;☑️ &lt;strong&gt;Add &quot;Open with Code&quot; action to Windows Explorer directory context menu&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;☑️ &lt;strong&gt;Add to PATH&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;These make VS Code much easier to open later, right from any folder. Then click &lt;strong&gt;Install&lt;/strong&gt; and wait for it to finish.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;Step 3: Open VS Code&lt;/h2&gt;
+
+&lt;p&gt;Once installed, open VS Code. You'll see a clean welcome screen — this is your new coding home base.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;Step 4: Install the Python Extension&lt;/h2&gt;
+
+&lt;p&gt;VS Code is a general-purpose editor by default, so we need to add Python support to it:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;On the left sidebar, click the &lt;strong&gt;Extensions&lt;/strong&gt; icon (it looks like four squares)&lt;/li&gt;
+&lt;li&gt;Search for &lt;strong&gt;&quot;Python&quot;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Look for the official extension published by &lt;strong&gt;Microsoft&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Click &lt;strong&gt;Install&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This adds things like code suggestions, error checking, and the ability to run Python files directly.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;Step 5: Make Sure VS Code Can Find Python&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Press &lt;strong&gt;Ctrl + Shift + P&lt;/strong&gt; to open the Command Palette&lt;/li&gt;
+&lt;li&gt;Type &lt;strong&gt;&quot;Python: Select Interpreter&quot;&lt;/strong&gt; and press Enter&lt;/li&gt;
+&lt;li&gt;Choose the Python version that shows up in the list (it should match the version you installed earlier)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This tells VS Code exactly which Python installation to use when running your code.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;Step 6: Write and Run Your First Program&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Go to &lt;strong&gt;File &gt; New File&lt;/strong&gt;, and save it as &lt;code&gt;hello.py&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Type:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;print(&quot;Hello, World!&quot;)&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Run it in one of two ways:&lt;/li&gt;
+&lt;li&gt;Click the &lt;strong&gt;▶ Run&lt;/strong&gt; button in the top-right corner, or&lt;/li&gt;
+&lt;li&gt;Right-click anywhere in the file and choose &lt;strong&gt;&quot;Run Python File in Terminal&quot;&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You'll see the output appear in the integrated terminal at the bottom of the screen:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-&quot;&gt;Hello, World!&lt;/code&gt;&lt;/pre&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;🎁 Bonus: Handy Extensions and Tips&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Pylance&lt;/strong&gt; — usually installs automatically with the Python extension, and gives you smarter code suggestions&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Auto-formatting&lt;/strong&gt; — VS Code can automatically indent and clean up your code as you type&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Integrated Terminal&lt;/strong&gt; — open it anytime with &lt;strong&gt;Ctrl + `&lt;/strong&gt; (backtick) to run Python commands without leaving the editor&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;🛠️ Common Problems &amp;amp; Fixes&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;&quot;code&quot; is not recognized in Command Prompt&lt;/strong&gt;&lt;br /&gt;
+This means &quot;Add to PATH&quot; wasn't checked during install. Reinstall VS Code and make sure that option is ticked, or add it manually via Windows Environment Variables.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Run button doesn't show up / errors about no interpreter&lt;/strong&gt;&lt;br /&gt;
+This usually means Python wasn't detected. Go back to Step 5 and manually select your Python interpreter.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Code runs but says &quot;python is not recognized&quot;&lt;/strong&gt;&lt;br /&gt;
+This is usually a Python PATH issue, not a VS Code issue — revisit the Python installation guide and make sure &quot;Add python.exe to PATH&quot; was checked when installing Python.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;❓ Frequently Asked Questions&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Is VS Code free?&lt;/strong&gt;&lt;br /&gt;
+Yes, completely free and works on Windows, Mac, and Linux.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Do I need the Python extension specifically?&lt;/strong&gt;&lt;br /&gt;
+Yes — without it, VS Code won't understand or run Python files properly.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Can I use VS Code without installing Python separately?&lt;/strong&gt;&lt;br /&gt;
+No, VS Code is just the editor — you still need Python installed on your system for it to actually run your code.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Is VS Code the same as PyCharm or other IDEs?&lt;/strong&gt;&lt;br /&gt;
+Not exactly — VS Code is lighter and more general-purpose, while tools like PyCharm are built specifically for Python. VS Code is a great, simple starting point.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;🚀 You're Ready!&lt;/h2&gt;
+
+&lt;p&gt;You now have a proper coding setup — Python installed, and VS Code ready to write, run, and debug your programs. From here on, all your practice code can live right here.&lt;/p&gt;
+
+&lt;p&gt;Stuck at any step? Ask away in the group:&lt;/p&gt;
+
+&lt;p&gt;💬 &lt;a href=&quot;https://chat.whatsapp.com/Fep8bxG6E6M7HKKwp8gEpC&quot; rel=&quot;noopener&quot;&gt;WhatsApp Group (Learn Python)&lt;/a&gt;&lt;/p&gt;</content:encoded>
+  </item>
+  <item>
+    <title>Install Python on Windows</title>
+    <link>https://hariomlohardev.github.io/blog/p/install-python-on-windows/</link>
+    <guid isPermaLink="true">https://hariomlohardev.github.io/blog/p/install-python-on-windows/</guid>
+    <description>A simple step-by-step guide to installing Python on your Windows PC and running your first program.</description>
+    <pubDate>Mon, 14 Sep 2026 18:30:00 GMT</pubDate>
+    <category>python</category>
+    <category>windows</category>
+    <category>install guide</category>
+    <category>beginners</category>
+    <category>python setup</category>
+    <category>cs50p</category>
+    <dcterms:modified>2026-09-15T11:39:44.434Z</dcterms:modified>
+    <portfolio:description>A simple step-by-step guide to installing Python on your Windows PC and running your first program.</portfolio:description>
+    <content:encoded>&lt;p&gt;If you have a Windows laptop or PC, this guide will walk you through installing Python properly — step by step — so you can start writing and running real Python code on your own computer.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;🤔 Why Install Python on Your PC?&lt;/h2&gt;
+
+&lt;p&gt;While apps like Pydroid 3 are great for phones, installing Python directly on your PC gives you:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;More power for bigger projects later in the course&lt;/li&gt;
+&lt;li&gt;Access to popular code editors like VS Code&lt;/li&gt;
+&lt;li&gt;A setup closer to what real developers use&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;✅ Before You Start&lt;/h2&gt;
+
+&lt;p&gt;You just need:&lt;br /&gt;
+&lt;ul&gt;&lt;br /&gt;
+&lt;li&gt;A Windows laptop or PC&lt;/li&gt;&lt;br /&gt;
+&lt;li&gt;About 100–150 MB of free storage&lt;/li&gt;&lt;br /&gt;
+&lt;li&gt;An internet connection (only for downloading)&lt;/li&gt;&lt;br /&gt;
+&lt;/ul&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;Step 1: Download Python&lt;/h2&gt;
+
+&lt;p&gt;Go to the official Python website and download the installer:&lt;/p&gt;
+
+&lt;p&gt;🔗 &lt;a href=&quot;https://www.python.org/downloads/&quot; rel=&quot;noopener&quot;&gt;Download Python (python.org)&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The site automatically detects that you're on Windows and shows you a &lt;strong&gt;&quot;Download Python&quot;&lt;/strong&gt; button with the latest version. Click it.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;Step 2: Run the Installer&lt;/h2&gt;
+
+&lt;p&gt;Go to your &lt;strong&gt;Downloads&lt;/strong&gt; folder and double-click the file you just downloaded (something like &lt;code&gt;python-3.x.x-amd64.exe&lt;/code&gt;).&lt;/p&gt;
+
+&lt;p&gt;⚠️ &lt;strong&gt;This step matters a lot:&lt;/strong&gt; On the very first screen of the installer, you'll see a checkbox at the bottom that says:&lt;/p&gt;
+
+&lt;blockquote&gt;☑️ &lt;strong&gt;Add python.exe to PATH&lt;/strong&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;Make sure this is checked&lt;/strong&gt; before clicking anything else. This is the single most common mistake beginners make, and skipping it causes errors later.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;Step 3: Install&lt;/h2&gt;
+
+&lt;p&gt;Click &lt;strong&gt;Install Now&lt;/strong&gt; (the recommended option for most students). Wait for the installation to finish, then click &lt;strong&gt;Close&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;Step 4: Verify the Installation&lt;/h2&gt;
+
+&lt;p&gt;Now let's check that Python actually installed correctly.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Press the &lt;strong&gt;Windows key&lt;/strong&gt;, type &lt;code&gt;cmd&lt;/code&gt;, and open &lt;strong&gt;Command Prompt&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Type this and press Enter:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-&quot;&gt;python --version&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If everything worked, you'll see something like:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-&quot;&gt;Python 3.12.4&lt;/code&gt;&lt;/pre&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;Step 5: Check pip&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;pip&lt;/code&gt; is Python's tool for installing extra libraries, and it comes bundled with Python automatically. Check it's there:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-&quot;&gt;pip --version&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You should see a version number printed out.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;Step 6: Write and Run Your First Program&lt;/h2&gt;
+
+&lt;p&gt;You have two easy options:&lt;/p&gt;
+
+&lt;h3&gt;Option A: Using IDLE (comes free with Python)&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Press the &lt;strong&gt;Windows key&lt;/strong&gt;, type &lt;code&gt;IDLE&lt;/code&gt;, and open it&lt;/li&gt;
+&lt;li&gt;Go to &lt;strong&gt;File &gt; New File&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Type:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;print(&quot;Hello, World!&quot;)&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Save the file as &lt;code&gt;hello.py&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Press &lt;strong&gt;F5&lt;/strong&gt; to run it — you'll see the output appear in the IDLE window&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;Option B: Using Command Prompt directly&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Open Command Prompt&lt;/li&gt;
+&lt;li&gt;Type &lt;code&gt;python&lt;/code&gt; and press Enter — this opens Python's interactive mode&lt;/li&gt;
+&lt;li&gt;Type:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;print(&quot;Hello, World!&quot;)&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Press Enter to see the output instantly&lt;/li&gt;
+&lt;li&gt;Type &lt;code&gt;exit()&lt;/code&gt; when you're done&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;🎁 Bonus: Installing a Proper Code Editor&lt;/h2&gt;
+
+&lt;p&gt;Once you're comfortable, you'll probably want a better editor than IDLE. Most students (and professionals) use &lt;strong&gt;VS Code&lt;/strong&gt; — it's free and works great with Python.&lt;/p&gt;
+
+&lt;p&gt;🔗 &lt;a href=&quot;https://code.visualstudio.com/&quot; rel=&quot;noopener&quot;&gt;Download VS Code&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;🛠️ Common Problems &amp;amp; Fixes&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;&quot;'python' is not recognized as an internal or external command&quot;&lt;/strong&gt;&lt;br /&gt;
+This means Python wasn't added to your PATH during install. Fix it by reinstalling and making sure you check &lt;strong&gt;&quot;Add python.exe to PATH&quot;&lt;/strong&gt; this time — or add it manually through Windows' Environment Variables settings.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;I installed Python but nothing changed&lt;/strong&gt;&lt;br /&gt;
+Try closing and reopening Command Prompt after installing — it needs a fresh window to recognize the update.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Multiple Python versions causing confusion&lt;/strong&gt;&lt;br /&gt;
+If you've installed Python more than once, it's best to uninstall the older versions first (via &lt;strong&gt;Settings &gt; Apps&lt;/strong&gt;) and keep just one clean version.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;❓ Frequently Asked Questions&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Is Python free to install?&lt;/strong&gt;&lt;br /&gt;
+Yes, completely free and open-source.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Which version should I install?&lt;/strong&gt;&lt;br /&gt;
+Always go with the latest stable Python 3.x version shown on the official downloads page.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Do I need admin rights on my PC?&lt;/strong&gt;&lt;br /&gt;
+Not necessarily — you can choose &quot;Install for current user only&quot; during setup if you don't have admin access.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Do I need to install pip separately?&lt;/strong&gt;&lt;br /&gt;
+No, pip comes automatically with modern Python installations.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;🚀 You're Ready!&lt;/h2&gt;
+
+&lt;p&gt;That's it — Python is installed and working on your PC. Try tweaking the text inside &lt;code&gt;print()&lt;/code&gt; and running it again to see it in action.&lt;/p&gt;
+
+&lt;p&gt;Stuck at any step? Ask away in the group:&lt;/p&gt;
+
+&lt;p&gt;💬 &lt;a href=&quot;https://chat.whatsapp.com/Fep8bxG6E6M7HKKwp8gEpC&quot; rel=&quot;noopener&quot;&gt;WhatsApp Group (Learn Python)&lt;/a&gt;&lt;/p&gt;</content:encoded>
+  </item>
+  <item>
+    <title>Week 1: My Python Adventure Begins! 🐍</title>
+    <link>https://hariomlohardev.github.io/blog/p/learn-python-week-1/</link>
+    <guid isPermaLink="true">https://hariomlohardev.github.io/blog/p/learn-python-week-1/</guid>
+    <description>Start learning Python functions and variables with Hariom Lohar’s Week 1 guide, CS50P lecture links, explanations, FAQs and a practice notebook.</description>
+    <pubDate>Sun, 13 Sep 2026 18:30:00 GMT</pubDate>
+    <category>python</category>
+    <category>learn python</category>
+    <category>beginners</category>
+    <category>new to python</category>
+    <dcterms:modified>2026-09-14T14:08:31.743Z</dcterms:modified>
+    <portfolio:description></portfolio:description>
+    <content:encoded>&lt;p&gt;Hey there! I'm &lt;strong&gt;Hariom Lohar&lt;/strong&gt;, and this is your one-stop blog for &lt;strong&gt;Week 1&lt;/strong&gt; of our Python journey. Everything you need — videos, explanations, and practice — will live right here.&lt;/p&gt;
+
+&lt;p&gt;Got a doubt? Don't sit on it — ask away in our group 👇&lt;/p&gt;
+
+&lt;p&gt;💬 &lt;a href=&quot;https://chat.whatsapp.com/Fep8bxG6E6M7HKKwp8gEpC&quot; rel=&quot;noopener&quot;&gt;Join the WhatsApp Group (Learn Python)&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;🎬 Step 0: Before You Start&lt;/h2&gt;
+
+&lt;p&gt;We're learning Python the way Harvard does it — using the famous &lt;strong&gt;CS50P&lt;/strong&gt; course. Don't worry, we'll go slow and keep it simple!&lt;/p&gt;
+
+&lt;p&gt;First, watch this short intro (only 5 minutes, promise):&lt;/p&gt;
+
+&lt;p&gt;📺 &lt;a href=&quot;https://www.youtube.com/watch?v=OvKCESUCWII&quot; rel=&quot;noopener&quot;&gt;CS50P – Introduction&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;📅 Week 1: Functions &amp;amp; Variables&lt;/h2&gt;
+
+&lt;p&gt;Now watch today's main lecture:&lt;/p&gt;
+
+&lt;p&gt;📺 &lt;a href=&quot;https://www.youtube.com/watch?v=JP7ITIXGpHk&quot; rel=&quot;noopener&quot;&gt;CS50P – Lecture 0 – Functions, Variables&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Once you've watched it, come back here — we'll break down the two big ideas from the video in the simplest way possible. 👇&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3&gt;🧠 What is a Variable?&lt;/h3&gt;
+
+&lt;p&gt;Imagine you have a &lt;strong&gt;box&lt;/strong&gt;, and you write a name on it — like &lt;code&gt;age&lt;/code&gt; or &lt;code&gt;name&lt;/code&gt;. Whatever you put inside that box, you can use later just by calling its name. That's exactly what a variable is!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;age = 10
+name = &quot;Riya&quot;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here's what's happening:&lt;br /&gt;
+&lt;ul&gt;&lt;br /&gt;
+&lt;li&gt;&lt;code&gt;age&lt;/code&gt; is a box holding the number &lt;code&gt;10&lt;/code&gt;&lt;/li&gt;&lt;br /&gt;
+&lt;li&gt;&lt;code&gt;name&lt;/code&gt; is a box holding the word &lt;code&gt;&quot;Riya&quot;&lt;/code&gt;&lt;/li&gt;&lt;br /&gt;
+&lt;/ul&gt;&lt;/p&gt;
+
+&lt;p&gt;Want to see what's inside the box? Just print it:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;print(age)
+print(name)&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Output:&lt;/strong&gt;&lt;br /&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-&quot;&gt;10
+Riya&lt;/code&gt;&lt;/pre&gt;&lt;/p&gt;
+
+&lt;h4&gt;🔄 Boxes can change!&lt;/h4&gt;
+
+&lt;p&gt;A variable isn't stuck forever — you can put something new in the same box anytime:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;age = 10
+age = 11
+print(age)&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Output:&lt;/strong&gt; &lt;code&gt;11&lt;/code&gt; — because the box now holds the new value.&lt;/p&gt;
+
+&lt;h4&gt;💡 Why bother with variables?&lt;/h4&gt;
+
+&lt;p&gt;Because typing the same value again and again is boring (and error-prone!). Store it once, use it a hundred times:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;score = 90
+print(score)
+print(score * 2)
+print(score - 10)&lt;/code&gt;&lt;/pre&gt;
+
+&lt;hr /&gt;
+
+&lt;h3&gt;⚙️ What is a Function?&lt;/h3&gt;
+
+&lt;p&gt;Think of a function like a &lt;strong&gt;machine&lt;/strong&gt;. You feed something into the machine, it does its job, and gives you a result back. You don't need to know how the machine works inside — you just use it!&lt;/p&gt;
+
+&lt;p&gt;You've actually already used one function without knowing it: &lt;code&gt;print()&lt;/code&gt;. That's a &lt;strong&gt;built-in function&lt;/strong&gt; — Python already made this machine for you.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;print(&quot;Hello, World!&quot;)&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;But you can also build your &lt;strong&gt;own machine&lt;/strong&gt; using the &lt;code&gt;def&lt;/code&gt; keyword:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;def greet():
+    print(&quot;Hello, welcome to Python!&quot;)
+
+greet()&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Output:&lt;/strong&gt;&lt;br /&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-&quot;&gt;Hello, welcome to Python!&lt;/code&gt;&lt;/pre&gt;&lt;/p&gt;
+
+&lt;h4&gt;🎁 Functions can take input too!&lt;/h4&gt;
+
+&lt;p&gt;Just like a coffee machine needs coffee beans as input, a function can take &lt;strong&gt;parameters&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;def greet(name):
+    print(&quot;Hello, &quot; + name + &quot;!&quot;)
+
+greet(&quot;Hariom&quot;)
+greet(&quot;Riya&quot;)&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Output:&lt;/strong&gt;&lt;br /&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-&quot;&gt;Hello, Hariom!
+Hello, Riya!&lt;/code&gt;&lt;/pre&gt;&lt;/p&gt;
+
+&lt;h4&gt;💡 Why bother with functions?&lt;/h4&gt;
+
+&lt;p&gt;Because they let you &lt;strong&gt;reuse code&lt;/strong&gt; instead of writing the same lines again and again. Write it once, call it whenever you need it!&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;❓ Questions You Might Have&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Q: Do I need to tell Python what type a variable is (like &lt;code&gt;int&lt;/code&gt; or &lt;code&gt;string&lt;/code&gt;)?&lt;/strong&gt;&lt;br /&gt;
+No! Unlike some languages, Python figures out the type automatically based on what you store in it.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q: Can I name a variable anything I want?&lt;/strong&gt;&lt;br /&gt;
+Almost — but a few rules apply: no spaces, can't start with a number, and no using Python's reserved words (like &lt;code&gt;print&lt;/code&gt; or &lt;code&gt;def&lt;/code&gt;) as a name.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q: What's the difference between a variable and a function?&lt;/strong&gt;&lt;br /&gt;
+A variable &lt;strong&gt;stores&lt;/strong&gt; something. A function &lt;strong&gt;does&lt;/strong&gt; something (and can also give something back).&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q: Can a function work without any input?&lt;/strong&gt;&lt;br /&gt;
+Yes! Like our &lt;code&gt;greet()&lt;/code&gt; example above — some functions need no parameters at all.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q: What happens if I use a variable before giving it a value?&lt;/strong&gt;&lt;br /&gt;
+Python will throw an error — a box needs something inside it before you can look at it!&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q: Is &lt;code&gt;print()&lt;/code&gt; the only built-in function?&lt;/strong&gt;&lt;br /&gt;
+Not at all — Python has many built-in functions like &lt;code&gt;input()&lt;/code&gt;, &lt;code&gt;len()&lt;/code&gt;, and &lt;code&gt;type()&lt;/code&gt;. We'll meet more of these soon.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q: Can a variable hold a function's result?&lt;/strong&gt;&lt;br /&gt;
+Yes! For example: &lt;code&gt;result = greet(&quot;Hariom&quot;)&lt;/code&gt;. This is super common and very useful.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;📓 Practice Time — Colab Notebook&lt;/h2&gt;
+
+&lt;p&gt;We'll be practicing everything hands-on in a Google Colab notebook, where you can write and run real Python code — no installation needed!&lt;/p&gt;
+
+&lt;blockquote&gt;🚧 &lt;strong&gt;Coming Soon&lt;/strong&gt; — link will be added here shortly. Stay tuned!&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;✅ Quick Recap&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;A &lt;strong&gt;variable&lt;/strong&gt; is a labeled box that stores information&lt;/li&gt;
+&lt;li&gt;A &lt;strong&gt;function&lt;/strong&gt; is a reusable machine that performs a task&lt;/li&gt;
+&lt;li&gt;Python figures out variable types automatically&lt;/li&gt;
+&lt;li&gt;We can build our own functions using &lt;code&gt;def&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;print()&lt;/code&gt; is a function Python already gives us for free&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;That's Week 1 done! 🎉 Great job making it this far. See you in Week 2!&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;💬 Still confused about something? Don't stay stuck — drop your question in the group:&lt;br /&gt;
+&lt;a href=&quot;https://chat.whatsapp.com/Fep8bxG6E6M7HKKwp8gEpC&quot; rel=&quot;noopener&quot;&gt;Whatsapp Group (Learn Python)&lt;/a&gt;&lt;/p&gt;</content:encoded>
+  </item>
+  <item>
+    <title>Run Python on Android with Pydroid 3</title>
+    <link>https://hariomlohardev.github.io/blog/p/python-on-your-android-phone-using-pydroid-3/</link>
+    <guid isPermaLink="true">https://hariomlohardev.github.io/blog/p/python-on-your-android-phone-using-pydroid-3/</guid>
+    <description>A quick guide to installing Pydroid 3 so you can write and run Python code free, right from your Android phone.</description>
+    <pubDate>Sun, 13 Sep 2026 18:30:00 GMT</pubDate>
+    <category>python</category>
+    <category>android</category>
+    <category>pydroid3</category>
+    <category>install guide</category>
+    <category>python for beginners</category>
+    <dcterms:modified>2026-09-14T15:06:17.315Z</dcterms:modified>
+    <portfolio:description>A quick guide to installing Pydroid 3 so you can write and run Python code free, right from your Android phone.</portfolio:description>
+    <content:encoded>&lt;p&gt;Not everyone has a laptop right away — and that's okay! If you have an Android phone, you can still write and run &lt;strong&gt;real Python code&lt;/strong&gt;, completely free, using an app called &lt;strong&gt;Pydroid 3&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;In this guide, I'll walk you through installing it step by step. By the end, you'll be able to write your first Python program right from your pocket.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;🤔 What is Pydroid 3?&lt;/h2&gt;
+
+&lt;p&gt;Pydroid 3 is a free app that turns your Android phone into a mini Python coding lab. It has:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;A code editor (where you type your Python code)&lt;/li&gt;
+&lt;li&gt;A built-in Python interpreter (so it runs &lt;strong&gt;offline&lt;/strong&gt;, no internet needed once installed)&lt;/li&gt;
+&lt;li&gt;Support for installing extra Python libraries later on&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;No root access needed. No laptop needed. Just your phone.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;✅ Before You Start&lt;/h2&gt;
+
+&lt;p&gt;You just need:&lt;br /&gt;
+&lt;ul&gt;&lt;br /&gt;
+&lt;li&gt;An Android phone&lt;/li&gt;&lt;br /&gt;
+&lt;li&gt;About 150–200 MB of free storage&lt;/li&gt;&lt;br /&gt;
+&lt;li&gt;Internet connection (only for downloading the app)&lt;/li&gt;&lt;br /&gt;
+&lt;/ul&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;Step 1: Open the Play Store&lt;/h2&gt;
+
+&lt;p&gt;Open the &lt;strong&gt;Google Play Store&lt;/strong&gt; app on your phone and search for &lt;strong&gt;&quot;Pydroid 3 - IDE for Python 3&quot;&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Or just tap the link below to jump straight to it:&lt;/p&gt;
+
+&lt;p&gt;🔗 &lt;a href=&quot;https://play.google.com/store/apps/details?id=ru.iiec.pydroid3&quot; rel=&quot;noopener&quot;&gt;Pydroid 3 on Google Play&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;Step 2: Install the App&lt;/h2&gt;
+
+&lt;p&gt;Tap &lt;strong&gt;Install&lt;/strong&gt; and wait for it to download. It's a free app (with an optional paid &quot;Pro&quot; version you do &lt;strong&gt;not&lt;/strong&gt; need for this course).&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;Step 3: Open Pydroid 3&lt;/h2&gt;
+
+&lt;p&gt;Once installed, tap &lt;strong&gt;Open&lt;/strong&gt;. The app may ask for a couple of permissions (like storage access) — go ahead and allow them so it can save your code.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;👀 A Quick Look Around&lt;/h2&gt;
+
+&lt;p&gt;Once the app opens, you'll mainly move between three areas:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Home Screen&lt;/strong&gt; — where you land after opening the app, and where you can start a new file&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Code Editor&lt;/strong&gt; — where you'll type your Python code&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Output Screen&lt;/strong&gt; — where your results show up after running the code&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;That's really all you need to know to get started.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;Step 4: Write Your First Python Program&lt;/h2&gt;
+
+&lt;p&gt;Tap on the editor area and type this classic first line of code every programmer writes:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;print(&quot;Hello, World!&quot;)&lt;/code&gt;&lt;/pre&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;Step 5: Run Your Code&lt;/h2&gt;
+
+&lt;p&gt;Look for the &lt;strong&gt;▶ (play) button&lt;/strong&gt;, usually at the bottom-right of the screen, and tap it.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;Step 6: See Your Output&lt;/h2&gt;
+
+&lt;p&gt;If everything went well, you'll see this appear at the bottom of the screen:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-&quot;&gt;Hello, World!&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Congratulations — you just ran your first Python program on your phone! 🎉&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;🎁 Bonus: Installing Extra Libraries&lt;/h2&gt;
+
+&lt;p&gt;Later in the course, you might need extra Python libraries. Pydroid 3 has a built-in &lt;strong&gt;Pip&lt;/strong&gt; manager for this — just open the side menu and look for &lt;strong&gt;&quot;Pip&quot;&lt;/strong&gt; to search and install packages, no separate setup required.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;❓ Frequently Asked Questions&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Is Pydroid 3 really free?&lt;/strong&gt;&lt;br /&gt;
+Yes! There's an optional paid &quot;Pro&quot; version with extra features, but everything you need for this course is in the free version.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Do I need internet every time I want to code?&lt;/strong&gt;&lt;br /&gt;
+No — once installed, Python code runs completely offline. You only need internet to download the app or install extra libraries.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Do I need to root my phone?&lt;/strong&gt;&lt;br /&gt;
+Not at all. Pydroid 3 works on any regular, non-rooted Android device.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Can I fully replace a laptop with this for the course?&lt;/strong&gt;&lt;br /&gt;
+For most of Week 1 and early lessons, yes! As things get more advanced later on, a laptop becomes more convenient — but you can absolutely start your Python journey on your phone.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;My phone is a bit old/low on storage — will it still work?&lt;/strong&gt;&lt;br /&gt;
+Pydroid 3 is lightweight and works on most Android phones, even older or budget models.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;🚀 You're Ready!&lt;/h2&gt;
+
+&lt;p&gt;That's it — you now have a working Python coding environment right on your phone. Go ahead and try changing the text inside the &lt;code&gt;print()&lt;/code&gt; statement and run it again!&lt;/p&gt;
+
+&lt;p&gt;Stuck at any step? Don't worry, just ask in the group:&lt;/p&gt;
+
+&lt;p&gt;💬 &lt;a href=&quot;https://chat.whatsapp.com/Fep8bxG6E6M7HKKwp8gEpC&quot; rel=&quot;noopener&quot;&gt;WhatsApp Group (Learn Python)&lt;/a&gt;&lt;/p&gt;</content:encoded>
+  </item>
 </channel>
 </rss>

@@ -33,7 +33,7 @@ Module._load = function(request, parent, isMain){
               maybeSingle(){
                 const hit = q._eq.find(([k]) => k === 'slug');
                 if(hit && hit[1] === 'render-probe'){
-                  return Promise.resolve({ data: { slug: 'render-probe' }, error: null });
+                  return Promise.resolve({ data: { slug: 'render-probe', title: 'Server rendered article', description: 'Server rendered description', date: '2026-10-06', html: '<p>Fresh server article body.</p>' }, error: null });
                 }
                 return Promise.resolve({ data: null, error: null });
               }
@@ -70,9 +70,12 @@ function response(){
     assert.equal(res.statusCode, 200);
     assert.match(res.headers['Content-Type'] || '', /text\/html/);
     assert.ok(res.body.includes('id="postBody"'), 'renderer must serve the shell');
-    assert.ok(res.body.includes("var POST_SLUG='render-probe'"), 'shell must carry the live slug');
+    assert.ok(res.body.includes('var POST_SLUG="render-probe"'), 'shell must carry the live slug');
     assert.ok(res.body.includes('https://hariomlohardev.github.io/blog/p/render-probe/'), 'shell must carry the canonical URL');
 
+    assert.ok(res.body.includes('Fresh server article body.'), 'server response must include the actual article');
+    assert.ok(res.body.includes('<title>Server rendered article — Hariom Lohar'));
+    assert.ok(res.body.includes('BlogPosting'));
     const res404 = response();
     await handler({ method: 'GET', query: { slug: 'no-such-post-xyz' }, url: '/api/blog/render?slug=no-such-post-xyz', headers: {} }, res404);
     assert.equal(res404.statusCode, 404);
