@@ -17,7 +17,7 @@ Location: India (IST, UTC+5:30)
 Standards: HTML5, CSS3, vanilla JS — static on GitHub Pages
 Design: Lab Notebook No.01 — paper #FFFEFB, ink #0B1220, signal #FFD400, grid #E3ECFB
 Build: node scripts/generate-blog.js + node scripts/generate-projects.js → posts.json/feed.xml/blog/p/*/og/*.svg/projects/p/*/sitemap.xml
-Mission: 1 July 2026 → 31 Dec 2027 (548 days, 8h/day, derive-before-import)
+Mission: 1 August 2026 → 1 Feb 2028 (549 days, 8h/day, derive-before-import)
 Credential: Harvard CS50P 2026 — David J. Malan — https://cs50.harvard.edu/certificates/544021b8-ab89-4eb2-a433-9c0b949e658f
 AI: See /llms.txt + /llms-full.txt + /ai.txt for LLM-grounded identity
 

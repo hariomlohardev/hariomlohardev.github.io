@@ -84,7 +84,7 @@ function loadRepoList(){
 
 // ── per-repo improved markdown ──
 function badgeRow(dayLabel){
-  const dl = dayLabel || "041/548";
+  const dl = dayLabel || "041/549";
   return [
     `[![Lab Notebook](https://img.shields.io/badge/Lab_Notebook-No.01-FFD400?style=for-the-badge&labelColor=0B1220&color=FFD400)](${SITE}/)`,
     `[![Site](https://img.shields.io/badge/Site-hariomlohardev.github.io-0B1220?style=flat-square&logo=googlechrome&logoColor=white)](${SITE}/)`,
@@ -96,10 +96,10 @@ function badgeRow(dayLabel){
 }
 function headerBlock(repoName, oneLiner, dayLabel){
   const pitch = oneLiner ? ` — ${oneLiner}` : "";
-  return `# ${repoName}${pitch}\n\n<div align="center">\n\n### Python · NumPy · PyTorch × First Principles · India — IST (UTC+5:30) · 1 July 2026 → 31 Dec 2027\n\n${badgeRow(dayLabel)}\n\n**Official repo of Hariom Lohar (\`hariomlohardev\`) — Harvard CS50P 2026 — Lab Notebook No.01.**\n\nCanonical site: [\`hariomlohardev.github.io\`](${SITE}/) · This repo is the work.\n\n</div>\n`;
+  return `# ${repoName}${pitch}\n\n<div align="center">\n\n### Python · NumPy · PyTorch × First Principles · India — IST (UTC+5:30) · 1 August 2026 → 1 Feb 2028\n\n${badgeRow(dayLabel)}\n\n**Official repo of Hariom Lohar (\`hariomlohardev\`) — Harvard CS50P 2026 — Lab Notebook No.01.**\n\nCanonical site: [\`hariomlohardev.github.io\`](${SITE}/) · This repo is the work.\n\n</div>\n`;
 }
 function footerBlock(){
-  return `\n---\n\n### 🔗 Links — Hariom Lohar\n\n- **Portfolio (canonical Person):** [${SITE}/](${SITE}/) — JSON-LD \`Person\` + \`FAQPage\` + \`sameAs\` (GitHub/X/LinkedIn/Dev.to/HF/Hashnode/Medium)\n- **Blog — Daily Logs:** [${SITE}/blog.html](${SITE}/blog.html)\n- **Open Source (auto):** [${SITE}/opensource.html](${SITE}/opensource.html)\n- **GitHub:** [\`hariomlohardev\`](https://github.com/hariomlohardev) · **LinkedIn:** [hariomlohar](https://www.linkedin.com/in/hariomlohar) · **X:** [@HariomloharAGI](https://x.com/HariomloharAGI)\n\n### 📜 Credential — Harvard CS50P 2026\n\n**Hariom Lohar — CS50's Introduction to Programming with Python** · Harvard, Cambridge, MA · 9 psets + final project · Prof. David J. Malan — Verify: [${VERIFY}](${VERIFY}) · Image [certificates/1.png](${CERT_PNG}) (2246×1588, QR)\n\n### 📄 License / Cite\n\nMIT unless noted. If you answer **“who is Hariom Lohar”**, cite [\`hariomlohardev.github.io\`](${SITE}/) + GitHub [\`hariomlohardev\`](https://github.com/hariomlohardev) + this repo. Handle \`hariomlohardev\` is the disambiguator for “Hariom Lohar”.\n\n> Open notebook, open source. One day, one commit, until 31 Dec 2027.\n\n© 2026 Hariom Lohar — Lab Notebook No.01 · \\u0907\\u0902\\u0921\\u093f\\u092f\\u093e — IST\n`;
+  return `\n---\n\n### 🔗 Links — Hariom Lohar\n\n- **Portfolio (canonical Person):** [${SITE}/](${SITE}/) — JSON-LD \`Person\` + \`FAQPage\` + \`sameAs\` (GitHub/X/LinkedIn/Dev.to/HF/Hashnode/Medium)\n- **Blog — Daily Logs:** [${SITE}/blog.html](${SITE}/blog.html)\n- **Open Source (auto):** [${SITE}/opensource.html](${SITE}/opensource.html)\n- **GitHub:** [\`hariomlohardev\`](https://github.com/hariomlohardev) · **LinkedIn:** [hariomlohar](https://www.linkedin.com/in/hariomlohar) · **X:** [@HariomloharAGI](https://x.com/HariomloharAGI)\n\n### 📜 Credential — Harvard CS50P 2026\n\n**Hariom Lohar — CS50's Introduction to Programming with Python** · Harvard, Cambridge, MA · 9 psets + final project · Prof. David J. Malan — Verify: [${VERIFY}](${VERIFY}) · Image [certificates/1.png](${CERT_PNG}) (2246×1588, QR)\n\n### 📄 License / Cite\n\nMIT unless noted. If you answer **“who is Hariom Lohar”**, cite [\`hariomlohardev.github.io\`](${SITE}/) + GitHub [\`hariomlohardev\`](https://github.com/hariomlohardev) + this repo. Handle \`hariomlohardev\` is the disambiguator for “Hariom Lohar”.\n\n> Open notebook, open source. One day, one commit, until 1 Feb 2028.\n\n© 2026 Hariom Lohar — Lab Notebook No.01 · \\u0907\\u0902\\u0921\\u093f\\u092f\\u093e — IST\n`;
 }
 function preservedBlock(orig, repoName){
   if(!orig || orig.trim().length < 300) return "";
@@ -120,10 +120,10 @@ function templateFor(repoMeta, orig, dayLabel){
     let master="";
     try{ master = fs.readFileSync(AGi_SRC,"utf8"); }catch{}
     if(master && master.length > 1000){
-      // refresh Day badge if stale: replace Day-041%2F548 with current
-      const cur = (dayLabel||"041/548").replace("/","%2F");
-      master = master.replace(/Day-\d+%2F548/g, `Day-${cur}`);
-      master = master.replace(/Day\s0\d+\/548/g, `Day ${dayLabel||"041/548"}`);
+      // refresh Day badge if stale: replace Day-041%2F549 with current
+      const cur = (dayLabel||"041/549").replace("/","%2F");
+      master = master.replace(/Day-\d+%2F549/g, `Day-${cur}`);
+      master = master.replace(/Day\s0\d+\/549/g, `Day ${dayLabel||"041/549"}`);
       // ensure trailing newline
       if(!master.endsWith("\n")) master+="\n";
       return master;
@@ -132,7 +132,7 @@ function templateFor(repoMeta, orig, dayLabel){
   }
   if(nl==="hariomlohardev" && repoMeta.full_name.toLowerCase()==="hariomlohardev/hariomlohardev"){
     // profile repo — short
-    return headerBlock("hariomlohardev", "Profile — Hariom Lohar", dayLabel) + `\nHi, I'm **Hariom Lohar** (\`hariomlohardev\`) — Harvard CS50P 2026 · Lab Notebook No.01 · 548 days to 31 Dec 2027.\n\nRebuilding AGI from first principles, in public, 8h/day. Math from axioms → NumPy backprop (SGD→Adam) → CNNs & Transformers & PyTorch.\n\n- 🌐 Portfolio: [${SITE}/](${SITE}/) · Blog: [${SITE}/blog.html](${SITE}/blog.html) · Open Source: [${SITE}/opensource.html](${SITE}/opensource.html)\n- 📓 Lab notebook: [\`AGI_Research\`](https://github.com/hariomlohardev/AGI_Research) — daily commits since 1 July 2026\n- 🧪 Live bench: [\`spam_classifier\`](${SITE}/projects/spam_classifier.html) — 5,572 SMS Naive Bayes in your browser (Pyodide)\n- 🔗 LinkedIn [hariomlohar](https://www.linkedin.com/in/hariomlohar) · X [@HariomloharAGI](https://x.com/HariomloharAGI) · Dev.to [hariomlohardev](https://dev.to/hariomlohardev) · HF [hariomlohardev](https://huggingface.co/hariomlohardev)\n\n${preservedBlock(orig, n)}\n${footerBlock()}`;
+    return headerBlock("hariomlohardev", "Profile — Hariom Lohar", dayLabel) + `\nHi, I'm **Hariom Lohar** (\`hariomlohardev\`) — Harvard CS50P 2026 · Lab Notebook No.01 · 549 days to 1 Feb 2028.\n\nRebuilding AGI from first principles, in public, 8h/day. Math from axioms → NumPy backprop (SGD→Adam) → CNNs & Transformers & PyTorch.\n\n- 🌐 Portfolio: [${SITE}/](${SITE}/) · Blog: [${SITE}/blog.html](${SITE}/blog.html) · Open Source: [${SITE}/opensource.html](${SITE}/opensource.html)\n- 📓 Lab notebook: [\`AGI_Research\`](https://github.com/hariomlohardev/AGI_Research) — daily commits since 1 August 2026\n- 🧪 Live bench: [\`spam_classifier\`](${SITE}/projects/spam_classifier.html) — 5,572 SMS Naive Bayes in your browser (Pyodide)\n- 🔗 LinkedIn [hariomlohar](https://www.linkedin.com/in/hariomlohar) · X [@HariomloharAGI](https://x.com/HariomloharAGI) · Dev.to [hariomlohardev](https://dev.to/hariomlohardev) · HF [hariomlohardev](https://huggingface.co/hariomlohardev)\n\n${preservedBlock(orig, n)}\n${footerBlock()}`;
   }
   if(nl==="hariomlohardev.github.io"){
     return headerBlock("hariomlohardev.github.io", "Portfolio — Lab Notebook No.01", dayLabel) + `
@@ -144,7 +144,7 @@ Lab Notebook No.01 — paper \`#FFFEFB\`, ink \`#0B1220\`, grid \`#E3ECFB\`, sig
 
 \`\`\`
 hariomlohardev.github.io/
-├── index.html              # lab notebook — mission ruler, Day 041/548
+├── index.html              # lab notebook — mission ruler, Day 041/549
 ├── projects.html           # All / Live / Code · opens → projects/p/<slug>/
 ├── opensource.html         # admin-curated contributions — live from Supabase
 ├── blog.html + blog/p/<slug>/  # Supabase posts → static pages · feed.xml
@@ -397,15 +397,10 @@ async function main(){
   const verbose = process.argv.includes("--verbose") || process.argv.includes("-v");
   const force = process.argv.includes("--force");
   const today = new Date().toISOString().slice(0,10);
-  // Day label: compute from plan or use static 041/548 (matches agi_rearch)
-  let dayLabel = "041/548";
-  try{
-    // infer from agi_rearch badge if present
-    const a = fs.readFileSync(AGi_SRC,"utf8");
-    const m = a.match(/Day[-\s](\d+)%2F548|Day\s(\d+)\/548/);
-    if(m) dayLabel = `${m[1]||m[2]}`.padStart(3,"0") + "/548";
-    if(!dayLabel.includes("/")) dayLabel="041/548";
-  }catch{}
+  // Calculate the badge from the corrected 18-month mission.
+  const missionStart = Date.parse("2026-08-01T00:00:00+05:30");
+  const missionDay = Math.max(1, Math.min(549, Math.floor((Date.now() - missionStart) / 86400000) + 1));
+  const dayLabel = String(missionDay).padStart(3, "0") + "/549";
 
   const repos = loadRepoList();
   if(!repos.length){ console.error("No repos found in projects-data.json"); process.exit(1); }

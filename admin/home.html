@@ -52,8 +52,8 @@ header{position:sticky;top:0;background:rgba(246,244,238,.94);backdrop-filter:bl
     <div class="box">
       <h2 style="font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase">Mission</h2>
       <div class="grid2" style="margin-top:12px">
-        <label class="label">Start Date <input id="startDate" class="input" placeholder="2026-07-01" /></label>
-        <label class="label">Total Days <input id="totalDays" class="input" type="number" placeholder="548" /></label>
+        <label class="label">Start Date <input id="startDate" class="input" placeholder="2026-08-01" /></label>
+        <label class="label">Total Days <input id="totalDays" class="input" type="number" placeholder="549" /></label>
       </div>
       <label class="label" style="margin-top:12px">Note <textarea id="note" class="textarea" placeholder="Rebuilding intelligence from scratch — one day at a time."></textarea></label>
       <label class="label" style="margin-top:12px">Repo URL <input id="repoUrl" class="input" placeholder="https://github.com/hariomlohardev/AGI_Research" /></label>
@@ -130,8 +130,8 @@ async function load(){
   const d=j.data||j;
   dataCache=d;
   // Mission
-  document.getElementById('startDate').value = d.mission?.startDate || '2026-07-01';
-  document.getElementById('totalDays').value = d.mission?.totalDays || 548;
+  document.getElementById('startDate').value = d.mission?.startDate || '2026-08-01';
+  document.getElementById('totalDays').value = d.mission?.totalDays || 549;
   document.getElementById('note').value = d.mission?.note || '';
   document.getElementById('repoUrl').value = d.mission?.repoUrl || '';
   // Stats
@@ -164,7 +164,7 @@ document.getElementById('syncToRaw').addEventListener('click', ()=>{
     const taglines=document.getElementById('taglines').value.split('\n').map(s=>s.trim()).filter(Boolean);
     let raw;
     try{ raw=JSON.parse(document.getElementById('rawJson').value); }catch{ raw={...dataCache}; }
-    raw.mission = { ...raw.mission, startDate: document.getElementById('startDate').value.trim() || '2026-07-01', totalDays: parseInt(document.getElementById('totalDays').value,10) || 548, note: document.getElementById('note').value.trim(), repoUrl: document.getElementById('repoUrl').value.trim() };
+    raw.mission = { ...raw.mission, startDate: document.getElementById('startDate').value.trim() || '2026-08-01', totalDays: parseInt(document.getElementById('totalDays').value,10) || 549, note: document.getElementById('note').value.trim(), repoUrl: document.getElementById('repoUrl').value.trim() };
     raw.stats = stats;
     raw.taglines = taglines;
     document.getElementById('rawJson').value = JSON.stringify(raw, null, 2);
@@ -197,7 +197,7 @@ document.getElementById('form').addEventListener('submit', async (e)=>{
     const raw = JSON.parse(document.getElementById('rawJson').value);
     payload = raw;
     // Ensure structured fields overwrite raw (so top form always wins)
-    payload.mission = { ...payload.mission, startDate: document.getElementById('startDate').value.trim() || '2026-07-01', totalDays: parseInt(document.getElementById('totalDays').value,10) || 548, note: document.getElementById('note').value.trim(), repoUrl: document.getElementById('repoUrl').value.trim() };
+    payload.mission = { ...payload.mission, startDate: document.getElementById('startDate').value.trim() || '2026-08-01', totalDays: parseInt(document.getElementById('totalDays').value,10) || 549, note: document.getElementById('note').value.trim(), repoUrl: document.getElementById('repoUrl').value.trim() };
     payload.stats = stats;
     payload.taglines = taglines;
   }catch(e){
@@ -206,8 +206,8 @@ document.getElementById('form').addEventListener('submit', async (e)=>{
       ...dataCache,
       mission: {
         ...dataCache.mission,
-        startDate: document.getElementById('startDate').value.trim() || '2026-07-01',
-        totalDays: parseInt(document.getElementById('totalDays').value,10) || 548,
+        startDate: document.getElementById('startDate').value.trim() || '2026-08-01',
+        totalDays: parseInt(document.getElementById('totalDays').value,10) || 549,
         note: document.getElementById('note').value.trim(),
         repoUrl: document.getElementById('repoUrl').value.trim(),
       },

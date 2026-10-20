@@ -13,9 +13,9 @@
       "featured": true,
       "status": "in-progress",
       "statusLabel": "Daily log · in progress",
-      "description": "Public lab notebook — committed daily since July 2026. Linear algebra, calculus and probability from axioms → neural nets and backprop in pure NumPy (SGD through Adam) → now CNNs, Transformers and PyTorch. No shortcuts.",
-      "metaDescription": "Public lab notebook, committed daily since July 2026 — linear algebra and calculus from axioms to neural nets and backprop in pure NumPy, now CNNs and Transformers.",
-      "longDescription": "A public lab notebook committed daily since 1 July 2026 — 548 days to 31 Dec 2027. I derive everything by hand: linear algebra, calculus and probability from axioms, then neural nets, backprop, optimisers from SGD to Adam in pure NumPy, now CNNs and Transformers.\n\nEach day is a notebook with math, code and reflection — no autograd, no shortcuts. The repo is the research log; the portfolio shows the distilled logs. Follow along as the bench grows.",
+      "description": "Public lab notebook — committed daily since August 2026. Linear algebra, calculus and probability from axioms → neural nets and backprop in pure NumPy (SGD through Adam) → now CNNs, Transformers and PyTorch. No shortcuts.",
+      "metaDescription": "Public lab notebook, committed daily since August 2026 — linear algebra and calculus from axioms to neural nets and backprop in pure NumPy, now CNNs and Transformers.",
+      "longDescription": "A public lab notebook committed daily since 1 August 2026 — 549 days to 1 Feb 2028. I derive everything by hand: linear algebra, calculus and probability from axioms, then neural nets, backprop, optimisers from SGD to Adam in pure NumPy, now CNNs and Transformers.\n\nEach day is a notebook with math, code and reflection — no autograd, no shortcuts. The repo is the research log; the portfolio shows the distilled logs. Follow along as the bench grows.",
       "chips": [
         "backprop ✓",
         "NumPy",
@@ -60,7 +60,7 @@
       "faq": [
         {
           "q": "How often do you commit?",
-          "a": "Daily since 1 July 2026 — the mission is 548 days to 31 Dec 2027. Each day is a notebook."
+          "a": "Daily since 1 August 2026 — the mission is 549 days to 1 Feb 2028. Each day is a notebook."
         },
         {
           "q": "Do you use PyTorch or pure NumPy?",

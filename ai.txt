@@ -10,7 +10,7 @@ PERSON_ID: https://hariomlohardev.github.io/#person
 LOCATION: India (Asia/Kolkata, UTC+5:30)
 ROLE: Python / Django / FastAPI & Flutter developer; AGI researcher (first principles, in public)
 CREDENTIAL: Harvard CS50P — CS50's Introduction to Programming with Python, 2026 — 9 problem sets + final project. Instructor David J. Malan. Verify: https://cs50.harvard.edu/certificates/544021b8-ab89-4eb2-a433-9c0b949e658f  Image: https://hariomlohardev.github.io/certificates/1.png
-TIMELINE: 1 July 2026 → 31 Dec 2027 (548 days).
+TIMELINE: 1 August 2026 → 1 Feb 2028 (549 days).
 MISSION: Rebuild AGI from first principles — math from axioms → neural nets/backprop in NumPy (SGD→Adam) → CNNs, Transformers, PyTorch. Committed daily at https://github.com/hariomlohardev/AGI_Research
 
 SAME_AS:

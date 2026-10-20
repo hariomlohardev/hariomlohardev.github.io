@@ -1,7 +1,7 @@
 {
   "https://hariomlohardev.github.io/about": {
-    "hash": "244df6da680c14a62a517c13a29b901049f348b0086189881dfa3416136cee75",
-    "lastmod": "2026-08-24"
+    "hash": "5b2808d436c07ba66c819a9d2860ba7fc8c2f871d53276779bdb55c5fa648994",
+    "lastmod": "2026-10-20"
   },
   "https://hariomlohardev.github.io/apps/": {
     "hash": "6dc01df72f3d46028a4a07befd745807a62061f9d254f3a22599bcb67831593a",
@@ -12,7 +12,7 @@
     "lastmod": "2026-10-02T18:30:00.000Z"
   },
   "https://hariomlohardev.github.io/blog": {
-    "hash": "de8627a05534b619ca6b63c72eaecb1258c9e7d568d79f5e081276f5128aae12",
+    "hash": "65e8c57bdc97be4cf8d15336908f3337c86e9dc0a9605564fc16311ac3a3ce24",
     "lastmod": "2026-10-04T13:58:39.179Z"
   },
   "https://hariomlohardev.github.io/blog/p/install-python-on-windows/": {
@@ -52,20 +52,20 @@
     "lastmod": "2026-08-24"
   },
   "https://hariomlohardev.github.io/": {
-    "hash": "01dbdda388a2d4f27886ff07d64a1911a41b28fe9dfdf75230a18363cf13319b",
-    "lastmod": "2026-08-24"
+    "hash": "c38e98ab86c75eb14875e5bfb0173003de60dba4d8ac0e93c52e43f51f2a4f7c",
+    "lastmod": "2026-10-20"
   },
   "https://hariomlohardev.github.io/opensource": {
-    "hash": "aa427108d54a447cd201098edff2d832ee57c6522d5af936d8dc744e18f5bdbf",
+    "hash": "1d9e341b5832cc5f8fd1d474624d2ac050d13d4a087889248ccdbfbd69fa343d",
     "lastmod": "2026-09-15T12:52:33.727Z"
   },
   "https://hariomlohardev.github.io/projects": {
-    "hash": "51d0a11f1398a6f7d83859977bc29c83d5c8333f54b15f16358425c02a869490",
-    "lastmod": "2026-10-08"
+    "hash": "dcd889b882fb180e9298c73a2d09cba3614fb3027efcf355fb621e346b2ced1d",
+    "lastmod": "2026-10-20"
   },
   "https://hariomlohardev.github.io/projects/p/agi-research/": {
-    "hash": "a0d690ed13e264508fd05981d9ff07e08883bcc0ca6a55ac266e99517c734113",
-    "lastmod": "2026-10-08"
+    "hash": "40bcddab216ad5ff76ace08c116e073f24fd19ca243f34055df802e4a055c51c",
+    "lastmod": "2026-10-20"
   },
   "https://hariomlohardev.github.io/projects/p/inkdown/": {
     "hash": "28463421129e67659735f21c3a277508f57e6e5fa5f75eb635c2e9afff7dfebd",
@@ -89,7 +89,7 @@
   },
   "https://hariomlohardev.github.io/projects/spam_classifier": {
     "hash": "a517da4aa983d4cac6f3402be732e854feb70b66c5046448b528c09a28374d7e",
-    "lastmod": "2026-08-24"
+    "lastmod": "2026-10-20"
   },
   "https://hariomlohardev.github.io/tricks": {
     "hash": "ac50b9612d834e80d3fdf4f945e642eb37eb90acd3b03782f2218578f2606c7a",

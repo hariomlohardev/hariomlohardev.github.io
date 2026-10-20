@@ -99,7 +99,7 @@ function renderBatches(batches){
         <label class="label">Name <input class="input" data-k="name" value="${(b.name||'').replace(/"/g,'&quot;')}" placeholder="Batch 01" /></label>
       </div>
       <label class="label">Label <input class="input" data-k="label" value="${(b.label||'').replace(/"/g,'&quot;')}" placeholder="Batch 01 — Foundations" /></label>
-      <label class="label">Span <input class="input" data-k="span" value="${(b.span||'').replace(/"/g,'&quot;')}" placeholder="Jul 2026 → Sep 2026" /></label>
+      <label class="label">Span <input class="input" data-k="span" value="${(b.span||'').replace(/"/g,'&quot;')}" placeholder="Aug 2026 → Sep 2026" /></label>
       <label class="label">Desc <textarea class="textarea" data-k="desc" rows="2">${b.desc||''}</textarea></label>
       <button type="button" class="btn" onclick="this.closest('.batch-row').remove(); syncToRaw();">Remove</button>
     </div>`).join('');
