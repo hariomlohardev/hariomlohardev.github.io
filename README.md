@@ -2,7 +2,7 @@
 
 <div align="center">
 
-### Python · Django · Flutter × AGI Research · India — IST (UTC+5:30) · 1 August 2026 → 1 Feb 2028
+### Python · Django · Flutter × AGI Research · India — IST (UTC+5:30) · 1 September 2026 → 1 Mar 2028
 
 [![Website](https://img.shields.io/badge/Website-hariomlohardev.github.io-0B1220?style=flat-square&logo=googlechrome&logoColor=white)](https://hariomlohardev.github.io/)
 [![Blog](https://img.shields.io/badge/Blog-Daily%20Logs-FFD400?style=flat-square&logo=rss&logoColor=0B1220)](https://hariomlohardev.github.io/blog.html)
@@ -22,7 +22,7 @@
 
 ### ◎ What this repo is
 
-Official source for **Hariom Lohar** (`hariomlohardev` on GitHub) — Harvard **CS50P certified 2026**, Python/Django/FastAPI & Flutter builder by day, AGI researcher rebuilding intelligence from first principles since **1 August 2026**, daily in public (India, IST).
+Official source for **Hariom Lohar** (`hariomlohardev` on GitHub) — Harvard **CS50P certified 2026**, Python/Django/FastAPI & Flutter builder by day, AGI researcher rebuilding intelligence from first principles since **1 September 2026**, daily in public (India, IST).
 
 - **Lab Notebook No.01** design — `FFFEFB` paper, `F3F0E8` paper-2, `FFFFFF` sheet, `0B1220` ink, `FFD400` signal, graph `24px/120px`, washi tape, sticky header. No template.
 - **Static, $0, own CMS** — GitHub Pages (`main` branch, `.nojekyll`), vanilla HTML/CSS/JS, zero deps. Posts live in Supabase (`public.posts`), written at `/admin/blog`; `scripts/generate-blog.js` mirrors them into `feed.xml` + `blog/p/<slug>/` + `og/<slug>.svg` + `sitemap.xml`.
@@ -32,7 +32,7 @@ Official source for **Hariom Lohar** (`hariomlohardev` on GitHub) — Harvard **
 
 ### 🧠 Lab Notebook No.01 — First Principles
 
-> **AGI Mission — 1 August 2026 → 1 Feb 2028 · 549 days · 8h/day · derive before import**
+> **AGI Mission — 1 September 2026 → 1 Mar 2028 · 547 days · 8h/day · derive before import**
 
 | Phase | Title | Detail | State |
 | :--- | :--- | :--- | :--- |
@@ -90,7 +90,7 @@ Live on site: [`#stack`](https://hariomlohardev.github.io/#stack) · [`#services
 ├── blog/p/<slug>/index.html    # SEO-crawlable static pages (BlogPosting JSON-LD, canonical)
 ├── og/<slug>.svg               # Per-post OG 1200×630 Lab Notebook (no cover → auto)
 ├── certificates/1.png          # Harvard CS50P cert 2246×1588 (verify via QR / link)
-├── data.json / projects-data.json # Lab notebook data (mission 2026-08-01, 549 days)
+├── data.json / projects-data.json # Lab notebook data (mission 2026-09-01, 547 days)
 ├── sitemap.xml / robots.txt / site.webmanifest / humans.txt / 404.html / .nojekyll
 ├── google36e315fd4176dd3d.html # Search Console verification
 ├── SEO_CHECKLIST.md            # Entity closure checklist

@@ -111,7 +111,7 @@ function Make-Variant01 {
   $g.DrawString("Harvard CS50P  2026  -  9 psets + final", $fontSansBold, $brushInk, 940, 104)
   $g.DrawString("hariomlohardev  on  GitHub  -  @HariomloharAGI", $fontMono, $brushMuted, 940, 138)
   $fontMonoSmall2 = New-Font $monoPrefs 9
-  $g.DrawString("549 DAYS  :  1 AUG 2026  ->  1 FEB 2028  -  DAILY LOGS  -  INDEXNOW", $fontMonoSmall2, $brushMuted, 940, 172)
+  $g.DrawString("547 DAYS  :  1 SEP 2026  ->  1 MAR 2028  -  DAILY LOGS  -  INDEXNOW", $fontMonoSmall2, $brushMuted, 940, 172)
   # pill LIVE
   $pillRect = New-Object System.Drawing.RectangleF(940, 202, 110, 24)
   $g.FillRectangle((New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(14,159,110))), $pillRect.X, $pillRect.Y, $pillRect.Width, $pillRect.Height)
@@ -161,7 +161,7 @@ function Make-Variant02 {
   $fontSans = New-Font $sansPrefs 14
   $g.DrawString("Python  |  Django  |  Flutter  x  AGI Research", $fontSans, $brushInk, $cardX+22, $cardY+116)
   $fontMono2 = New-Font $monoPrefs 11
-  $g.DrawString("Harvard CS50P 2026  -  9 psets + final  -  Verify: cs50.harvard.edu  -  549 days log", $fontMono2, $brushMuted, $cardX+22, $cardY+146)
+  $g.DrawString("Harvard CS50P 2026  -  9 psets + final  -  Verify: cs50.harvard.edu  -  547 days log", $fontMono2, $brushMuted, $cardX+22, $cardY+146)
   # signal pill bottom of card
   $g.FillRectangle((New-Object System.Drawing.SolidBrush($signal)), $cardX+22, $cardY+182, 420, 28)
   $g.DrawRectangle((New-Object System.Drawing.Pen($ink,1)), [int]($cardX+22), [int]($cardY+182), 420, 28)
@@ -211,7 +211,7 @@ function Make-Variant03 {
   $g.DrawString("hariomlohardev  on  GitHub  -  X @HariomloharAGI", $fontMonoSmall, $brushMuted, 900, 68)
   $fontSansBold = New-Font $sansPrefs 17 ([System.Drawing.FontStyle]::Bold)
   $g.DrawString("Python  |  Django  |  Flutter  x  AGI Research", $fontSansBold, $brushPaper, 900, 92)
-  $g.DrawString("Harvard CS50P 2026  -  549 days  (1 Aug 2026 -> 1 Feb 2028)", $fontMonoSmall, $brushPaper, 900, 124)
+  $g.DrawString("Harvard CS50P 2026  -  547 days  (1 Sep 2026 -> 1 Mar 2028)", $fontMonoSmall, $brushPaper, 900, 124)
   $g.DrawString("Portfolio: hariomlohardev.github.io  -  9 psets + final verified", $fontMonoSmall, $brushMuted, 900, 150)
   # bottom signal bar with repeating words
   $g.FillRectangle($brushSignal, 0, $H-34, $W, 34)
@@ -264,7 +264,7 @@ function Make-Variant04 {
   # bottom line 1px ink — safe
   $g.FillRectangle((New-Object System.Drawing.SolidBrush($ink)), 360, $H-56, $W-390, 1)
   $fontMonoTiny = New-Font $monoPrefs 8
-  $g.DrawString("549 DAYS: 1 AUG 2026 -> 1 FEB 2028  -  DAILY LOGS  -  FILE-BASED  -  RSS  -  INDEXNOW  -  PYODIDE BENCH", $fontMonoTiny, $brushMuted, 360, $H-38)
+  $g.DrawString("547 DAYS: 1 SEP 2026 -> 1 MAR 2028  -  DAILY LOGS  -  FILE-BASED  -  RSS  -  INDEXNOW  -  PYODIDE BENCH", $fontMonoTiny, $brushMuted, 360, $H-38)
   $fontMonoTiny2 = New-Font $monoPrefs 8
   $brushInk2 = New-Object System.Drawing.SolidBrush($ink)
   $g.DrawString("NAIVE BAYES  -  CNN FROM SCRATCH  -  ATTENTION BY HAND", $fontMonoTiny2, $brushInk2, 360, $H-20)
@@ -326,7 +326,7 @@ function Make-Variant05 {
   $g.FillRectangle((New-Object System.Drawing.SolidBrush($ink)), $cardX, $cardY+$cardH-42, $cardW, 42)
   $brushPaper = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(230,240,255))
   $fontMonoTiny = New-Font $monoPrefs 8
-  $g.DrawString("PORTFOLIO  hariomlohardev.github.io  -  BLOG  /blog.html  -  FEED  /feed.xml  -  549 DAYS  1 AUG 2026 -> 1 FEB 2028  -  SITEMAP  -  INDEXNOW", $fontMonoTiny, $brushPaper, 360, $cardY+$cardH-26)
+  $g.DrawString("PORTFOLIO  hariomlohardev.github.io  -  BLOG  /blog.html  -  FEED  /feed.xml  -  547 DAYS  1 SEP 2026 -> 1 MAR 2028  -  SITEMAP  -  INDEXNOW", $fontMonoTiny, $brushPaper, 360, $cardY+$cardH-26)
   $g.Dispose()
   $path = Join-Path $absOut "05-data-strip-inspect.png"
   $bmp.Save($path, [System.Drawing.Imaging.ImageFormat]::Png)

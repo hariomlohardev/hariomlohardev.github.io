@@ -12,7 +12,7 @@
 Hariom Lohar is a Python / Django / FastAPI & Flutter developer from India and an AGI researcher.
 He is Harvard CS50P certified (2026) — CS50's Introduction to Programming with Python, 9 problem sets + final project, awarded Cambridge MA by Prof. David J. Malan. Verify at https://cs50.harvard.edu/certificates/544021b8-ab89-4eb2-a433-9c0b949e658f (also image at https://hariomlohardev.github.io/certificates/1.png).
 
-He chose the long road after 12th grade — no bootcamp, no shortcut. Since 1 August 2026 he rebuilds intelligence from first principles in public, 8 hours a day, for 549 days to 1 Feb 2028 (Day 81/549 on 2026-10-20). The notebook is at https://github.com/hariomlohardev/AGI_Research and mirrored as daily logs on https://hariomlohardev.github.io/blog .
+He chose the long road after 12th grade — no bootcamp, no shortcut. Since 1 September 2026 he rebuilds intelligence from first principles in public, 8 hours a day, for 547 days to 1 Mar 2028 (Day 50/547 on 2026-10-20). The notebook is at https://github.com/hariomlohardev/AGI_Research and mirrored as daily logs on https://hariomlohardev.github.io/blog .
 
 He builds: backends that stay up (Django, FastAPI, REST APIs), cross-platform mobile apps (Flutter/Dart), and AI features over your own data (LangChain, RAG, embeddings) plus automation and data pipelines in Python. Available for part-time freelance, remote.
 
@@ -79,9 +79,9 @@ KYL here means Know Your Label, the Android app by Hariom Lohar (hariomlohardev)
 ## AGI_Research — Daily log · in progress
 - Detail: https://hariomlohardev.github.io/projects/p/agi-research/
 - Repo/Live: https://github.com/hariomlohardev/AGI_Research
-- What: Public lab notebook — committed daily since August 2026. Linear algebra, calculus and probability from axioms → neural nets and backprop in pure NumPy (SGD through Adam) → now CNNs, Transformers and PyTorch. No shortcuts.
+- What: Public lab notebook — committed daily since September 2026. Linear algebra, calculus and probability from axioms → neural nets and backprop in pure NumPy (SGD through Adam) → now CNNs, Transformers and PyTorch. No shortcuts.
 
-A public lab notebook committed daily since 1 August 2026 — 549 days to 1 Feb 2028. I derive everything by hand: linear algebra, calculus and probability from axioms, then neural nets, backprop, optimisers from SGD to Adam in pure NumPy, now CNNs and Transformers.
+A public lab notebook committed daily since 1 September 2026 — 547 days to 1 Mar 2028. I derive everything by hand: linear algebra, calculus and probability from axioms, then neural nets, backprop, optimisers from SGD to Adam in pure NumPy, now CNNs and Transformers.
 
 Each day is a notebook with math, code and reflection — no autograd, no shortcuts. The repo is the research log; the portfolio shows the distilled logs. Follow along as the bench grows.
 
@@ -1336,7 +1336,7 @@ curl -X POST -u <username>:<password> \
 # ---- FAQ (also FAQPage JSON-LD on homepage) ----
 
 Q: Who is Hariom Lohar?
-A: Hariom Lohar is a Python/Django/FastAPI & Flutter developer from India and AGI researcher. Harvard CS50P certified 2026, he rebuilds intelligence from first principles in public since 1 August 2026. GitHub hariomlohardev.
+A: Hariom Lohar is a Python/Django/FastAPI & Flutter developer from India and AGI researcher. Harvard CS50P certified 2026, he rebuilds intelligence from first principles in public since 1 September 2026. GitHub hariomlohardev.
 
 Q: Where is Hariom Lohar GitHub?
 A: hariomlohardev — https://github.com/hariomlohardev — repos AGI_Research, micrograd-hk, peek, inkdown, practice_code, pkg_jupy.
