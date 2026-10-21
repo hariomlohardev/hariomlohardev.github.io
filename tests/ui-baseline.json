@@ -10,6 +10,6 @@
   "apps/kyl/index.html": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
   "projects/spam_classifier.html": "3977411573efb8298e69f05b5f8d7b7479a8df1066de707bd04b41b0850a65cb",
   "scripts/generate-blog.js": "de1185de933465421708520931dd1fb52f79d94cc1592f47d5ed2ad7abcb05d7",
-  "scripts/generate-projects.js": "cbb11126ec5c140ff635cba7054a36903b3e8f644c3e750638785fb325432ed1",
+  "scripts/generate-projects.js": "7fbb5e73bb7c7191a16634e7026ba4dc307e579566fd3ecbbffc0b8c1404f481",
   "scripts/generate-tricks.js": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
 }
