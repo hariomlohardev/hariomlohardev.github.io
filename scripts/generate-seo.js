@@ -47,8 +47,8 @@ function contentHash(html){
   return crypto.createHash('sha256').update(JSON.stringify([meta.title,meta.description,content])).digest('hex');
 }
 function modifiedDate(previous, hash, sourceDate, fallback, today){
-  if(previous && previous.hash === hash) return sourceDate || previous.lastmod;
-  if(previous) return sourceDate || today;
+  if(previous && previous.hash === hash) return previous.lastmod;
+  if(previous) return today;
   return sourceDate || fallback || today;
 }
 function main(){

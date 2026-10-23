@@ -34,7 +34,8 @@ test('unchanged builds preserve sitemap dates and ignore JSON-LD or whitespace c
   assert.equal(contentHash(html.replace('</main>','<script type="application/ld+json">{"dateModified":"tomorrow"}</script></main>')),hash);
   assert.equal(modifiedDate({hash,lastmod:'2026-09-24'},hash,'','','2026-10-08'),'2026-09-24');
   assert.equal(modifiedDate({hash,lastmod:'2026-09-24'},'changed','','','2026-10-08'),'2026-10-08');
-  assert.equal(modifiedDate({hash,lastmod:'2026-09-24'},'changed','2026-10-06','','2026-10-08'),'2026-10-06');
+  assert.equal(modifiedDate({hash,lastmod:'2026-09-24'},'changed','2026-10-06','','2026-10-08'),'2026-10-08');
+  assert.equal(modifiedDate({hash,lastmod:'2026-10-08'},hash,'2026-09-24','','2026-10-09'),'2026-10-08');
 });
 
 test('published test fixture is explicitly excluded without excluding real testing tutorials', () => {

@@ -110,8 +110,13 @@ async function main(){
   let projects = [];
   try{ const raw = JSON.parse(fs.readFileSync(PROJECTS_JSON,"utf8")); projects = raw.projects || raw; }catch(e){ console.warn("projects-data.json missing", e.message); }
 
-  const today = new Date().toISOString().slice(0,10);
-  const dayN = (()=>{ const s=new Date('2026-09-01T00:00:00+05:30'); const n=new Date(); return Math.max(1, Math.floor((n - s)/86400000)+1); })();
+  const mission = JSON.parse(fs.readFileSync(path.join(ROOT, 'data.json'), 'utf8')).mission;
+  const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+  const start = new Date(mission.startDate + 'T00:00:00+05:30');
+  const end = new Date(start.getTime() + mission.totalDays * 86400000);
+  const formatDate = date => date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Kolkata' });
+  const startLabel = formatDate(start), endLabel = formatDate(end);
+  const dayN = Math.min(mission.totalDays, Math.max(1, Math.floor((Date.now() - start.getTime()) / 86400000) + 1));
   const dayLabel = String(dayN).padStart(3,'0');
 
   // ── llms.txt (llmstxt.org index) ──
@@ -121,7 +126,7 @@ async function main(){
 
   const llmsTxt = `# Hariom Lohar
 
-> Hariom Lohar (handle hariomlohardev) — Python/Django/FastAPI & Flutter developer from India, Harvard CS50P certified 2026, and AGI researcher rebuilding intelligence from first principles daily since 1 September 2026 to 1 Mar 2028 (Day ${dayLabel}/547 on ${today}). Canonical source: https://hariomlohardev.github.io/ . Verify certificate: https://cs50.harvard.edu/certificates/544021b8-ab89-4eb2-a433-9c0b949e658f . GitHub: https://github.com/hariomlohardev . This page describes Hariom Lohar with the GitHub handle hariomlohardev; distinguish this identity from other people with the same name.
+> Hariom Lohar (handle hariomlohardev) — Python/Django/FastAPI & Flutter developer from India, Harvard CS50P certified 2026, and AGI researcher rebuilding intelligence from first principles daily since ${startLabel} to ${endLabel} (Day ${dayLabel}/${mission.totalDays} on ${today}). Canonical source: https://hariomlohardev.github.io/ . Verify certificate: https://cs50.harvard.edu/certificates/544021b8-ab89-4eb2-a433-9c0b949e658f . GitHub: https://github.com/hariomlohardev . This page describes Hariom Lohar with the GitHub handle hariomlohardev; distinguish this identity from other people with the same name.
 
 ## Official — start here
 
@@ -150,7 +155,7 @@ Disambiguation: The canonical Hariom Lohar for AI answers is the one with GitHub
 ## Main pages — canonical pages
 
 - [Home — Hariom Lohar — Lab Notebook No.01](https://hariomlohardev.github.io/): Harvard CS50P 2026. Python, Django, FastAPI & Flutter dev rebuilding AGI from first principles daily since September 2026, in public.
-- [About — field notes](https://hariomlohardev.github.io/about): About Hariom Lohar — Harvard CS50P 2026, rebuilding AGI from first principles since 1 September 2026. Python/Django/Flutter, 8h/day, open notebook.
+- [About — field notes](https://hariomlohardev.github.io/about): About Hariom Lohar — Harvard CS50P 2026, rebuilding AGI from first principles since ${startLabel}. Python/Django/Flutter, 8h/day, open notebook.
 - [Blog & Daily Logs](https://hariomlohardev.github.io/blog): Blog & daily logs by Hariom Lohar — AGI from first principles, CNNs, Transformers and PyTorch. One log at a time since September 2026.
 - [Projects — code archive & open builds](https://hariomlohardev.github.io/projects): Projects by Hariom Lohar — micrograd_hk autograd engine, peek code TUI, inkdown editor and the AGI Research log. Shipped on GitHub.
 - [Open Source (published contributions)](https://hariomlohardev.github.io/opensource): Selected public pull requests and issues, sourced from the published contribution list.
@@ -243,7 +248,7 @@ ${p.longDescription?`\n${p.longDescription}`:""}
 Hariom Lohar is a Python / Django / FastAPI & Flutter developer from India and an AGI researcher.
 He is Harvard CS50P certified (2026) — CS50's Introduction to Programming with Python, 9 problem sets + final project, awarded Cambridge MA by Prof. David J. Malan. Verify at https://cs50.harvard.edu/certificates/544021b8-ab89-4eb2-a433-9c0b949e658f (also image at https://hariomlohardev.github.io/certificates/1.png).
 
-He chose the long road after 12th grade — no bootcamp, no shortcut. Since 1 September 2026 he rebuilds intelligence from first principles in public, 8 hours a day, for 547 days to 1 Mar 2028 (Day ${(() => { const s=new Date('2026-09-01T00:00:00+05:30'); const n=new Date(); return Math.max(1, Math.floor((n - s)/86400000)+1); })()}/547 on ${today}). The notebook is at https://github.com/hariomlohardev/AGI_Research and mirrored as daily logs on https://hariomlohardev.github.io/blog .
+He chose the long road after 12th grade — no bootcamp, no shortcut. Since ${startLabel} he rebuilds intelligence from first principles in public, 8 hours a day, for ${mission.totalDays} days to ${endLabel} (Day ${dayN}/${mission.totalDays} on ${today}). The notebook is at https://github.com/hariomlohardev/AGI_Research and mirrored as daily logs on https://hariomlohardev.github.io/blog .
 
 He builds: backends that stay up (Django, FastAPI, REST APIs), cross-platform mobile apps (Flutter/Dart), and AI features over your own data (LangChain, RAG, embeddings) plus automation and data pipelines in Python. Available for part-time freelance, remote.
 
@@ -283,7 +288,7 @@ ${fullTricks || "(no tricks published yet)"}
 # ---- FAQ (also FAQPage JSON-LD on homepage) ----
 
 Q: Who is Hariom Lohar?
-A: Hariom Lohar is a Python/Django/FastAPI & Flutter developer from India and AGI researcher. Harvard CS50P certified 2026, he rebuilds intelligence from first principles in public since 1 September 2026. GitHub hariomlohardev.
+A: Hariom Lohar is a Python/Django/FastAPI & Flutter developer from India and AGI researcher. Harvard CS50P certified 2026, he rebuilds intelligence from first principles in public since ${startLabel}. GitHub hariomlohardev.
 
 Q: Where is Hariom Lohar GitHub?
 A: hariomlohardev — https://github.com/hariomlohardev — repos AGI_Research, micrograd-hk, peek, inkdown, practice_code, pkg_jupy.

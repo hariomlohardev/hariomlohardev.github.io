@@ -1,13 +1,9 @@
 name: ping-search
 on:
-  push:
+  workflow_run:
+    workflows: ["Deploy to GitHub Pages"]
+    types: [completed]
     branches: [main]
-    paths:
-      - "sitemap.xml"
-      - "blog/p/**"
-      - "index.html"
-      - "blog.html"
-      - "**.html"
   workflow_dispatch:
 
 permissions:
@@ -15,12 +11,13 @@ permissions:
 
 jobs:
   ping:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: "20" }
-      - name: Ping Google + Bing + IndexNow
+        with: { node-version: "22" }
+      - name: Check published sitemap and submit IndexNow when configured
         env:
           INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
         run: node scripts/ping-search.js --verbose
